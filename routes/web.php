@@ -14,3 +14,6 @@
 Route::get('/', function () {
 	return view('index');
 });
+
+/* Lab */
+Route::get('/lab', 'LabController@index')->name('lab');

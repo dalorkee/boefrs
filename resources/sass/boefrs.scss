@@ -1,0 +1,44 @@
+@import 'vendor/index';
+.page-wrapper-custom {
+	background-color: #fff;
+}
+.card {
+	font-family: 'Motosansthai-Light' !important;
+	font-style: normal;
+}
+.bd-callout {
+	padding: 1.25rem;
+	margin-top: 1rem;
+	margin-bottom: 1.25rem;
+	border: 1px solid #eee;
+	border-left-width: .25rem;
+	border-radius: .25rem;
+}
+.bd-callout-warning {
+	border-left-color: #f0ad4e;
+	background-color: #FFE8D4;
+}
+.bd-callout-danger {
+	border-left-color: #d9534f;
+}
+.bd-callout-custom-1 {
+	border-left-color: #5A6268;
+}
+.bd-callout-custom-2 {
+	border-left-color: #F7A6A7;
+}
+.bd-callout-danger h4 {
+	color: #d9534f;
+}
+.bd-callout p:last-child {
+	margin-bottom: 0;
+}
+.custom-form-legend legend {
+	font-size: 1.275em;
+	margin: 0;
+	padding: 0;
+	font-weight: 600;
+}
+.custom-label {
+	font-weight: normal;
+}

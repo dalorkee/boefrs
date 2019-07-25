@@ -1,0 +1,78 @@
+@font-face {
+  font-family: "Prompt";
+  src: url(../fonts/prompt-regular-webfont.eot?f1b422e52494ad8f73d1387cb2f5994f);
+  src: url(../fonts/prompt-regular-webfont.eot?f1b422e52494ad8f73d1387cb2f5994f) format("embedded-opentype"), url(../fonts/prompt-regular-webfont.woff2?3e904f9ba7834485f646c929569121dc) format("woff2"), url(../fonts/prompt-regular-webfont.woff?7f3a833f2dfab2beaac3c681179a8564) format("woff"), url(../fonts/prompt-regular-webfont.ttf?c9e8b4b6ac6091233c7a80e14cee65a5) format("truetype"), url(../fonts/prompt-regular-webfont.svg?b48069a9c0ed088b23a3ffeadda9a47a) format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Motosansthai-Light";
+  src: url(../fonts/notosansthai-light-webfont.eot?a24a97140b8f73d457e92cf6a1ceb6dd);
+  src: url(../fonts/notosansthai-light-webfont.eot?a24a97140b8f73d457e92cf6a1ceb6dd) format("embedded-opentype"), url(../fonts/notosansthai-light-webfont.woff2?9dd858670bdef73a43a69ce109403267) format("woff2"), url(../fonts/notosansthai-light-webfont.woff?1067f0d3089eed55c13d45b7e587313d) format("woff"), url(../fonts/notosansthai-light-webfont.ttf?90c09b7060904c87e5ac34d6666ceff7) format("truetype"), url(../fonts/notosansthai-light-webfont.svg?9b6b96fafdded665fd847f9528c6d6bd) format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Motoserifthai-Light";
+  src: url(../fonts/notoserifthai-light-webfont.eot?4b59520ebfad9f6d909d5c82f19f141f);
+  src: url(../fonts/notoserifthai-light-webfont.eot?4b59520ebfad9f6d909d5c82f19f141f) format("embedded-opentype"), url(../fonts/notoserifthai-light-webfont.woff2?cb0fe740ec666a15b406f4bbbb84ef0b) format("woff2"), url(../fonts/notoserifthai-light-webfont.woff?a415eebec0aa193c3f2fc475c2295832) format("woff"), url(../fonts/notoserifthai-light-webfont.ttf?25fc01416ab9b9618686e86f2c28f1cd) format("truetype"), url(../fonts/notoserifthai-light-webfont.svg?e0f57592522126455e766e4527a15661) format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.page-wrapper-custom {
+  background-color: #fff;
+}
+
+.card {
+  font-family: "Motosansthai-Light" !important;
+  font-style: normal;
+}
+
+.bd-callout {
+  padding: 1.25rem;
+  margin-top: 1rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #eee;
+  border-left-width: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.bd-callout-warning {
+  border-left-color: #f0ad4e;
+  background-color: #FFE8D4;
+}
+
+.bd-callout-danger {
+  border-left-color: #d9534f;
+}
+
+.bd-callout-custom-1 {
+  border-left-color: #5A6268;
+}
+
+.bd-callout-custom-2 {
+  border-left-color: #F7A6A7;
+}
+
+.bd-callout-danger h4 {
+  color: #d9534f;
+}
+
+.bd-callout p:last-child {
+  margin-bottom: 0;
+}
+
+.custom-form-legend legend {
+  font-size: 1.275em;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+}
+
+.custom-label {
+  font-weight: normal;
+}
+
