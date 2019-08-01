@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-
-class LabController extends Controller
+class LabController extends BoeFrsController
 {
 	/**
 	* Display a listing of the resource.
@@ -14,7 +10,13 @@ class LabController extends Controller
 	* @return \Illuminate\Http\Response
 	*/
 	public function index() {
-		return view('admin.lab.index');
+		$symptoms = $this->symptomsList();
+		return view(
+			'admin.lab.index',
+			[
+				'symptoms'=>$symptoms
+			]
+		);
 	}
 
 	/**
@@ -82,4 +84,9 @@ class LabController extends Controller
     {
         //
     }
+
+	public function symptomsList() {
+		return LabController::getSymptoms();
+	}
+
 }

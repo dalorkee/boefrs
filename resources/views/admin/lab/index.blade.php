@@ -1,4 +1,7 @@
 @extends('layouts.index')
+@section('topScript')
+
+@endsection
 @section('contents')
 <div class="page-breadcrumb">
 	<div class="row">
@@ -20,246 +23,157 @@
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
-					{{ Form::open(['class'=>'needs-validation custom-form-legend', 'novalidate'=>'novalidate']) }}
+					<Form action="#" method="POST" class="needs-validation custom-form-legend" novalidate>
 						<fieldset>
 							<legend>1. ข้อมูลทั่วไปของผู้ป่วย</legend>
 							<div class="bd-callout">
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-										{{ Form::label('firstNameInput', 'ชื่อ') }}
-										{{ Form::text('firstNameInput', null, [
-											'class'=>'form-control',
-											'id'=>'first_name_input',
-											'placeholder'=>'First name',
-											'required'=>'required'])
-										}}
+										{{ csrf_field() }}
+										<label for="firstNameInput">ชื่อ</label>
+										<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="First name" required>
 										<div class="valid-feedback">Looks good!</div>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-										{{ Form::label('lastNameInput', 'นามสกุล') }}
-										{{ Form::text('lastNameInput', null, [
-											'class'=>'form-control',
-											'id'=>'last_name_input',
-											'placeholder'=>'Last name',
-											'required'=>'required'])
-										}}
+										<label for="lastNameInput">นามสกุล</label>
+										<input type="text" name="lastNameInput" class="form-control" id="last_name_input" placeholder="Last name" required>
 										<div class="valid-feedback">Looks good!</div>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('hnInput', 'HN') }}
-										{{ Form::text('hnInput', null, [
-											'class'=>'form-control',
-											'id'=>'hn_input',
-											'placeholder'=>'HN',
-											'required'=>'required'])
-										}}
+										<label for="hnInput">HN</label>
+										<input type="text" name="hnInput" class="form-control" id="hn_input" placeholder="HN" required>
 										<div class="valid-feedback">Looks good!</div>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('anInput', 'AN') }}
-										{{ Form::text('anInput', null, [
-											'class'=>'form-control',
-											'id'=>'an_input',
-											'placeholder'=>'AN',
-											'required'=>'required'])
-										}}
+										<label for="anInput">AN</label>
+										<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN">
 										<div class="valid-feedback">Looks good!</div>
-									</div>
-								</div>
-								<!--
-								<div class="form-row">
-									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-										{ Form::label('sexInput', 'เพศ') }}
-										<div class="form-group">
-											<div class="custom-control custom-checkbox custom-control-inline">
-												{ Form::checkbox('sexCheckbox', 'male', false, ['class'=>'custom-control-input', 'id'=>'maleCheckbox']) }}
-												{ Form::label('maleCheckbox', 'ชาย', ['class'=>'custom-control-label']) }}
-											</div>
-											<div class="custom-control custom-checkbox custom-control-inline">
-												{ Form::checkbox('sexCheckbox', 'female', false, ['class'=>'custom-control-input', 'id'=>'femaleCheckbox']) }}
-												{ Form::label('femaleCheckbox', 'หญิง', ['class'=>'custom-control-label']) }}
-											</div>
-										</div>
-									</div>
-								</div>
-								-->
-								<div class="form-row">
-									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-3">
-										{{ Form::label('sexInput', 'เพศ') }}
-										<div class="form-group">
-											{{ Form::select('sexInput', [
-												'null'=>'-- โปรดเลือก --',
-												'male'=>'ชาย',
-												'female'=>'หญิง'],
-												null,
-												['class'=>'custom-select'])
-											}}
-										</div>
-									</div>
-									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-3">
-										{{ Form::label('birthDateInput', 'ว/ด/ป เกิด') }}
-										{{ Form::text('birthDateInput', null, [
-											'class'=>'form-control',
-											'id'=>'birthDateInput',
-											'placeholder'=>'dateOfBirth',
-											'required'=>'required'])
-										}}
-									</div>
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
-										{{ Form::label('ageYearInput', 'อายุ/ปี') }}
-										{{ Form::number('ageYearInput', 0, [
-											'class'=>'form-control',
-											'id'=>'ageInput',
-											'placeholder'=>'Year',
-											'required'=>'required'])
-										}}
-										<div class="valid-feedback">Looks good!</div>
-									</div>
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
-										{{ Form::label('ageMonthInput', 'อายุ/เดือน') }}
-										{{ Form::number('ageMonthInput', 0, [
-											'class'=>'form-control',
-											'id'=>'ageInput',
-											'placeholder'=>'Month',
-											'required'=>'required'])
-										}}
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('nationalityInput', 'สัญชาติ') }}
+										<label for="sexInput">เพศ</label>
 										<div class="form-group">
-											{{ Form::select('nationalityInput', [
-												'null'=>'-- โปรดเลือก --',
-												'Thai'=>'ไทย',
-												'Burmese'=>'พม่า',
-												'Laotian/Lao'=>'ลาว',
-												'Cambodian'=>'กัมพูชา',
-												'Vietnamese'=>'เวียดนาม',
-												'Bruneian'=>'บรูไน ดารุสซาลาม',
-												'Indonesian'=>'อินโดนีเซีย',
-												'Malaysia'=>'มาเลเซีย',
-												'Filipino'=>'ฟิลิปปินส์',
-												'Singaporean'=>'สิงคโปร์',
-												'Other'=>'อื่นๆ ระบุ'
-												],
-												null,
-												['class'=>'custom-select'])
-											}}
+											<select name="sexInput" class="custom-select">
+												<option value="null">-- โปรดเลือก --</option>
+												<option value="male">ชาย</option>
+												<option value="female">หญิง</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<label for="birthDateInput">ว/ด/ป เกิด</label>
+										<div class="form-group">
+											<div class="input-group date" data-provide="datepicke" id="birthDateInput">
+												<input type="text" name="birthDateInput" class="form-control" required>
+												<div class="input-group-addon">
+													<span class=""></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
+										<label for="ageYearInput">อายุ/ปี</label>
+										<input type="number" name="ageYearInput" class="form-control" id="ageYearInput" value="0" required>
+										<div class="valid-feedback">Looks good!</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
+										<label for="ageMonthInput">อายุ/เดือน</label>
+										<input type="number" name="ageMonthInput" class="form-control" id="ageMonthInput" value="0" required>
+										<div class="valid-feedback">Looks good!</div>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<label for="nationalityInput">สัญชาติ</label>
+										<div class="form-group">
+											<select name="nationalityInput" class="custom-select">
+												<option value="null">-- โปรดเลือก --</option>
+												<option value="Thai">ไทย</option>
+												<option value="Burmese">พม่า</option>
+												<option value="Laotian/Lao">ลาว</option>
+												<option value="Cambodian">กัมพูชา</option>
+												<option value="Vietnamese">เวียดนาม</option>
+												<option value="Bruneian">บรูไน ดารุสซาลาม</option>
+												<option value="Indonesian">อินโดนีเซีย</option>
+												<option value="Malaysia">มาเลเซีย</option>
+												<option value="Filipino">ฟิลิปปินส์</option>
+												<option value="Singaporean">สิงคโปร์</option>
+												<option value="Other">อื่นๆ ระบุ'</option>
+											</select>
 										</div>
 										<div class="valid-feedback">Looks good!</div>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('otherNationalityInput', 'สัญชาติ อื่นๆ ระบุ ') }}
-										{{ Form::text('otherNationalityInput', null, [
-											'class'=>'form-control',
-											'id'=>'otherNationality_input',
-											'placeholder'=>'สัญชาติอื่นๆ'])
-										}}
+										<label for="otherNationalityInput">สัญชาติ อื่นๆ ระบุ</label>
+										<input type="text" name="otherNationalityInput" class="form-control" id="otherNationality_input" placeholder="สัญชาติอื่นๆ">
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-										{{ Form::label('hospitalInput', 'โรงพยาบาล') }}
-										{{ Form::text('hospitalInput', null, [
-											'class'=>'form-control',
-											'id'=>'hospital_input',
-											'placeholder'=>'โรงพยาบาล'])
-										}}
+										<label for="hospitalInput">โรงพยาบาล</label>
+										<input type="text" name="hospitalInput" class="form-control" placeholder="โรงพยาบาล">
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('houseNoInput', 'ที่อยู่ปัจจุบัน/ขณะป่วย เลขที่') }}
-										{{ Form::text('houseNoInput', null, [
-											'class'=>'form-control',
-											'id'=>'houseNo_input',
-											'placeholder'=>'บ้านเลขที่'])
-										}}
+										<label for="houseNoInput">ที่อยู่ปัจจุบัน/ขณะป่วย เลขที่</label>
+										<input type="text" name="houseNoInput" class="form-control" placeholder="บ้านเลขที่">
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-3">
-										{{ Form::label('villageNoInput', 'หมู่ที่') }}
-										{{ Form::text('villageNoInput', null, [
-											'class'=>'form-control',
-											'id'=>'villageNo_input',
-											'placeholder'=>'หมู่ที่'])
-										}}
+										<label for="villageNoInput">หมู่ที่></label>
+										<input type="text" name="villageNoInput" class="form-control" placeholder="หมู่ที่">
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-										{{ Form::label('villageInput', 'หมู่บ้าน') }}
-										{{ Form::text('villageInput', null, [
-											'class'=>'form-control',
-											'id'=>'village_input',
-											'placeholder'=>'หมู่บ้าน'])
-										}}
+										<label for="villageInput">หมู่บ้าน</label>
+										<input type="text" name="villageInput" class="form-control" placeholder="หมู่บ้าน">
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-										{{ Form::label('laneInput', 'ซอย') }}
-										{{ Form::text('laneInput', null, [
-											'class'=>'form-control',
-											'id'=>'lane_input',
-											'placeholder'=>'ซอย'])
-										}}
+										<label for="laneInput">ซอย</label>
+										<input type="text" name="laneInput" class="form-control" placeholder="ซอย">
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('subDistrictInput', 'ตำบล') }}
+										<label for="subDistrictInput">ตำบล</label>
 										<div class="form-group">
-											{{ Form::select('subDistrictInput', [
-												'null'=>'-- โปรดเลือก --'
-												],
-												null,
-												['class'=>'custom-select'])
-											}}
+											<select name="subDistrictInput" class="custom-select">
+												<option value="null">-- โปรดเลือก --</option>
+											</select>
 										</div>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('districtInput', 'อำเภอ') }}
+										<label for="districtInput">อำเภอ</label>
 										<div class="form-group">
-											{{ Form::select('districtInput', [
-												'null'=>'-- โปรดเลือก --'
-												],
-												null,
-												['class'=>'custom-select'])
-											}}
+											<select name="districtInput" class="custom-select">
+												<option value="null">-- โปรดเลือก --</option>
+											</select>
 										</div>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('provinceInput', 'จังหวัด') }}
+										<label for="provinceInput">จังหวัด</label>
 										<div class="form-group">
-											{{ Form::select('provinceInput', [
-												'null'=>'-- โปรดเลือก --'
-												],
-												null,
-												['class'=>'custom-select'])
-											}}
+											<select name="provinceInput" class="custom-select">
+												<option value="null">-- โปรดเลือก --</option>
+											</select>
 										</div>
 									</div>
 								</div>
-
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('occupationInput', 'อาชีพ') }}
+										<label for="occupationInput">อาชีพ</label>
 										<div class="form-group">
-											{{ Form::select('occupationInput', [
-												'null'=>'-- โปรดเลือก --',
-												'-1'=>'อื่นๆ ระบุ'
-												],
-												null,
-												['class'=>'custom-select'])
-											}}
+											<select name="occupationInput" class="custom-select">
+												<option value="null">-- โปรดเลือก --</option>
+												<option value="-1">อื่นๆ ระบุ</option>
+											</select>
 										</div>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
-										{{ Form::label('occupationOtherInput', 'อาชีพ อื่นๆ ระบุ') }}
-										{{ Form::text('occupationOtherInput', null, [
-											'class'=>'form-control',
-											'id'=>'occ_input',
-											'placeholder'=>'อาชีพ อื่นๆ'])
-										}}
+										<label for="occupationOtherInput">อาชีพ อื่นๆ ระบุ</label>
+										<input type="text" name="occupationOtherInput" class="form-control" placeholder="อาชีพ อื่นๆ">
 									</div>
 								</div>
 							</div>
@@ -269,64 +183,48 @@
 							<div class="bd-callout">
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-										{{ Form::label('patientInput', 'ผู้ป่วย') }}
+										<label for="patientInput">ผู้ป่วย</label>
 										<div class="form-group">
 											<div class="custom-control custom-checkbox custom-control-inline">
-												{{ Form::checkbox('patientCheckbox', 'opd', false, ['class'=>'custom-control-input', 'id'=>'opdCheckbox']) }}
-												{{ Form::label('opdCheckbox', 'ผู้ป่วยนอก (OPD)/ILI', ['class'=>'custom-control-label custom-label']) }}
+												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="opdCheckbox">
+												<label for="opdCheckbox" class="custom-control-label custom-label">ผู้ป่วยนอก (OPD)/ILI</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
-												{{ Form::checkbox('patientCheckbox', 'ipd', false, ['class'=>'custom-control-input', 'id'=>'ipdCheckbox']) }}
-												{{ Form::label('ipdCheckbox', 'ผู้ป่วยใน (IPD)/SARI', ['class'=>'custom-control-label custom-label']) }}
+												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="ipdCheckbox">
+												<label for="ipdCheckbox" class="custom-control-label custom-label">ผู้ป่วยใน (IPD)/SARI</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
-												{{ Form::checkbox('patientCheckbox', 'icu', false, ['class'=>'custom-control-input', 'id'=>'icuCheckbox']) }}
-												{{ Form::label('icuCheckbox', 'ผู้ป่วยหนัก/ICU', ['class'=>'custom-control-label custom-label']) }}
+												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="icuCheckbox">
+												<label for="icuCheckbox" class="custom-control-label custom-label">ผู้ป่วยหนัก/ICU</label>
 											</div>
 										</div>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('sickDateInput', 'วันที่เริ่มป่วย') }}
-										{{ Form::text('sickDateInput', null, [
-											'class'=>'form-control',
-											'id'=>'sickDateInput',
-											'required'=>'required'])
-										}}
+										<label for="sickDateInput">วันที่เริ่มป่วย</label>
+										<input type="text" name="sickDateInput" class="form-control" required>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('sickDateInput', 'วันที่รักษาครั้งแรก') }}
-										{{ Form::text('sickDateInput', null, [
-											'class'=>'form-control',
-											'id'=>'sickDateInput',
-											'required'=>'required'])
-										}}
+										<label for="sickDateInput">วันที่รักษาครั้งแรก</label>
+										<input type="text" name="sickDateInput" class="form-control" required>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('sickDateInput', 'วันที่นอนโรงพยาบาล') }}
-										{{ Form::text('sickDateInput', null, [
-											'class'=>'form-control',
-											'id'=>'sickDateInput',
-											'required'=>'required'])
-										}}
+										<label for="sickDateInput">วันที่นอนโรงพยาบาล</label>
+										<input type="sickDateInput" class="form-control" required>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										{{ Form::label('sickDateInput', 'อุณหภูมิร่างกายแรกรับ') }}
-										{{ Form::text('sickDateInput', null, [
-											'class'=>'form-control',
-											'id'=>'sickDateInput',
-											'required'=>'required'])
-										}}
+										<label for="sickDateInput">อุณหภูมิร่างกายแรกรับ</label>
+										<input type="text" name="sickDateInput" class="form-control" required>
 									</div>
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-12 col-xl-12 mb-3">
-										{{ Form::label('sickDateInput', 'อาการและอาการแสดง') }}
+										<label for="sickDateInput">อาการและอาการแสดง</label>
 										<div class="table-responsive">
-											<table class="table">
+											<table class="table" id="symptoms_table">
 												<thead>
 													<tr>
 														<th scope="col">อาการ</th>
@@ -336,74 +234,103 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>ไข้</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('feverishCheckbox', 'N', false, ['class'=>'custom-control-input feverishInput', 'id'=>'feverishYes']) }}
-																{{ Form::label('feverishYes', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('feverishCheckbox', 'N', false, ['class'=>'custom-control-input feverishInput', 'id'=>'feverishNo']) }}
-																{{ Form::label('feverishNo', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('feverishCheckbox', 'N', false, ['class'=>'custom-control-input feverishInput', 'id'=>'feverishUnknown']) }}
-																{{ Form::label('feverishUnknown', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-													</tr>
-													<tr>
-														<td>ไอ (cough)</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('coughCheckbox', 'N', false, ['class'=>'custom-control-input coughInput', 'id'=>'coughYes']) }}
-																{{ Form::label('coughYes', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('coughCheckbox', 'N', false, ['class'=>'custom-control-input coughInput', 'id'=>'coughNo']) }}
-																{{ Form::label('coughNo', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('coughCheckbox', 'N', false, ['class'=>'custom-control-input coughInput', 'id'=>'coughUnknown']) }}
-																{{ Form::label('coughUnknown', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-													</tr>
-													<tr>
-														<td>เจ็บคอ (sore throat)</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('soreThroatCheckbox', 'N', false, ['class'=>'custom-control-input soreThroatInput', 'id'=>'soreThroatYes']) }}
-																{{ Form::label('soreThroatYes', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('coughCheckbox', 'N', false, ['class'=>'custom-control-input soreThroatInput', 'id'=>'soreThroatNo']) }}
-																{{ Form::label('soreThroatNo', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-														<td>
-															<div class="custom-control custom-checkbox">
-																{{ Form::checkbox('soreThroatCheckbox', 'N', false, ['class'=>'custom-control-input soreThroatInput', 'id'=>'soreThroatUnknown']) }}
-																{{ Form::label('soreThroatUnknown', '&nbsp;', ['class'=>'custom-control-label']) }}
-															</div>
-														</td>
-													</tr>
+													@php
+														$symptoms->each(function ($item, $key) {
+															if ($item->id == 19) {
+																$other_symptom = "<input type=\"text\" name=\"symptom_other\" class=\"form-control\" id=\"symptom_other\" disabled>";
+															} else {
+																$other_symptom = null;
+															}
+															echo "<tr id=\"symptoms_table_tr".$item->id."\">";
+																echo "<td>".$item->symptom_name_th."&nbsp;&#40;".$item->symptom_name_en."&#41;".$other_symptom."</td>";
+																echo "<td>";
+																	echo "<div class=\"custom-control custom-checkbox\">";
+																		echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"No\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_yes\">";
+																		echo "<label for=\"symptom_".$item->id."_yes\" class=\"custom-control-label\">&nbsp;</label>";
+																	echo "</div>";
+																echo "</td>";
+																echo "<td>";
+																	echo "<div class=\"custom-control custom-checkbox\">";
+																		echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"No\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_no\">";
+																		echo "<label for=\"symptom_".$item->id."_no\" class=\"custom-control-label\"></label>";
+																	echo "</div>";
+																echo "</td>";
+																echo "<td>";
+																	echo "<div class=\"custom-control custom-checkbox\">";
+																		echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"No\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_unknown\">";
+																		echo "<label for=\"symptom_".$item->id."_unknown\" class=\"custom-control-label\"></label>";
+																	echo "</div>";
+																echo "</td>";
+															echo "</tr>\n";
+														})
+													@endphp
 												</tbody>
 											</table>
 										</div>
 									</div>
 								</div>
+								<div class="form-row">
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<label for="patientInput">เอกซเรย์ปอด (ครั้งแรก)</label>
+										<div class="form-group">
+											<div class="custom-control custom-checkbox custom-control-inline">
+												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="opdCheckbox">
+												<label for="opdCheckbox" class="custom-control-label custom-label">ไม่ได้ทำ</label>
+											</div>
+											<div class="custom-control custom-checkbox custom-control-inline">
+												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="ipdCheckbox">
+												<label for="ipdCheckbox" class="custom-control-label custom-label">ทำ</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<label for="xRayDateInput">ระบุวันที่</label>
+										<div class="form-group">
+											<div class="input-group date" data-provide="datepicke" id="xRayDateInput">
+												<input type="text" name="xRayDateInput" class="form-control" required>
+												<div class="input-group-addon">
+													<span class=""></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-8 mb-2">
+										<label for="sickDateInput">ระบุผล</label>
+										<input type="text" name="sickDateInput" class="form-control" required>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<label for="patientInput">เอกซเรย์ปอด (ครั้งแรก)</label>
+										<div class="form-group">
+											<div class="custom-control custom-checkbox custom-control-inline">
+												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="opdCheckbox">
+												<label for="opdCheckbox" class="custom-control-label custom-label">ไม่ได้ทำ</label>
+											</div>
+											<div class="custom-control custom-checkbox custom-control-inline">
+												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="ipdCheckbox">
+												<label for="ipdCheckbox" class="custom-control-label custom-label">ทำ</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<label for="xRayDateInput">ระบุวันที่</label>
+										<div class="form-group">
+											<div class="input-group date" data-provide="datepicke" id="xRayDateInput">
+												<input type="text" name="xRayDateInput" class="form-control" required>
+												<div class="input-group-addon">
+													<span class=""></span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-8 mb-2">
+										<label for="sickDateInput">ระบุผล</label>
+										<input type="text" name="sickDateInput" class="form-control" required>
+									</div>
+								</div>
+
+
 							</div>
 						</fieldset>
 						<button class="btn btn-primary mt-3" type="submit">Submit form</button>
@@ -415,37 +342,40 @@
 </div>
 @endsection
 @section('script')
-	<script>
-	$(document).ready(function(){
-		$('.feverishInput').click(function() {
-			$('.feverishInput').not(this).prop('checked', false);
-		});
-		$('.coughInput').click(function() {
-			$('.coughInput').not(this).prop('checked', false);
-		});
-		$('.soreThroatInput').click(function() {
-			$('.soreThroatInput').not(this).prop('checked', false);
-		});
-	});
-	</script>
 <script>
-	// Example starter JavaScript for disabling form submissions if there are invalid fields
-	(function() {
-		'use strict';
-		window.addEventListener('load', function() {
-			// Fetch all the forms we want to apply custom Bootstrap validation styles to
-			var forms = document.getElementsByClassName('needs-validation');
-			// Loop over them and prevent submission
-			var validation = Array.prototype.filter.call(forms, function(form) {
-				form.addEventListener('submit', function(event) {
-					if (form.checkValidity() === false) {
-						event.preventDefault();
-						event.stopPropagation();
+$(document).ready(function() {
+	@php
+	$symptoms->each(function ($item, $key) {
+		echo "
+			$('.symptom-".$item->id."').click(function() {
+				$('.symptom-".$item->id."').not(this).prop('checked', false);
+				let number = $('.symptom-".$item->id."').filter(':checked').length;
+				if (number === 1) {
+					let hasClass = $('#symptoms_table_tr".$item->id."').hasClass('highlight');
+					if (!hasClass) {
+						$('#symptoms_table_tr".$item->id."').addClass('highlight');
 					}
-					form.classList.add('was-validated');
-				}, false);
+					if (".$item->id." == 19) {
+						$('#symptom_other').prop('disabled', false);
+					}
+				} else {
+					$('#symptoms_table_tr".$item->id."').removeClass('highlight');
+					if (".$item->id." == 19) {
+						$('#symptom_other').prop('disabled', true);
+					}
+				}
 			});
-		}, false);
-		})();
+		\n";
+	});
+	@endphp
+
+});
+</script>
+<script>
+$('#birthDateInput').datepicker({
+	format: 'dd/mm/yyyy',
+	todayHighlight: true,
+	todayBtn: true
+});
 </script>
 @endsection

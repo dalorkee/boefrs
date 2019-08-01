@@ -10,9 +10,8 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
 	<title>BOE - Flu Right Site</title>
 	@include('layouts.mainStyle')
-	{{ Html::script('public/assets/libs/jquery/dist/jquery.min.js') }}
+	@include('layouts.mainScript')
 	@yield('style')
-
 </head>
 <body>
 	<div class="preloader">
@@ -30,6 +29,5 @@
 		</div>
 	</div>
 	@yield('script');
-	@include('layouts.mainScript')
 </body>
 </html>
