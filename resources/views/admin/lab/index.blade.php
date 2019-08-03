@@ -67,9 +67,11 @@
 										<label for="birthDateInput">ว/ด/ป เกิด</label>
 										<div class="form-group">
 											<div class="input-group date" data-provide="datepicke" id="birthDateInput">
-												<input type="text" name="birthDateInput" class="form-control" required>
-												<div class="input-group-addon">
-													<span class=""></span>
+												<div class="input-group">
+													<input type="text" name="birthDateInput" class="form-control" required>
+													<div class="input-group-append">
+														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -287,9 +289,11 @@
 										<label for="xRayDateInput">ระบุวันที่</label>
 										<div class="form-group">
 											<div class="input-group date" data-provide="datepicke" id="xRayDateInput">
-												<input type="text" name="xRayDateInput" class="form-control" required>
-												<div class="input-group-addon">
-													<span class=""></span>
+												<div class="input-group">
+													<input type="text" name="xRayDateInput" class="form-control" required>
+													<div class="input-group-append">
+														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -301,35 +305,115 @@
 								</div>
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										<label for="patientInput">เอกซเรย์ปอด (ครั้งแรก)</label>
+										<label for="cbcInput">CBC (ครั้งแรก): วันที่</label>
 										<div class="form-group">
-											<div class="custom-control custom-checkbox custom-control-inline">
-												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="opdCheckbox">
-												<label for="opdCheckbox" class="custom-control-label custom-label">ไม่ได้ทำ</label>
-											</div>
-											<div class="custom-control custom-checkbox custom-control-inline">
-												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="ipdCheckbox">
-												<label for="ipdCheckbox" class="custom-control-label custom-label">ทำ</label>
-											</div>
-										</div>
-									</div>
-									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-										<label for="xRayDateInput">ระบุวันที่</label>
-										<div class="form-group">
-											<div class="input-group date" data-provide="datepicke" id="xRayDateInput">
-												<input type="text" name="xRayDateInput" class="form-control" required>
+											<div class="input-group date" data-provide="datepicke" id="cbcDateInput">
+												<input type="text" name="cbcDateInput" class="form-control" required>
 												<div class="input-group-addon">
 													<span class=""></span>
 												</div>
 											</div>
 										</div>
 									</div>
-									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-8 mb-2">
-										<label for="sickDateInput">ระบุผล</label>
-										<input type="text" name="sickDateInput" class="form-control" required>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="hbInput">ผล Hb</label>
+										<div class="input-group">
+											<input type="text" name="hbInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">mg%</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="htcInput">Hct</label>
+										<div class="input-group">
+											<input type="text" name="htcInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">%</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="plateletCountInput">Plate count</label>
+										<div class="input-group">
+											<input type="text" name="plateletInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">x10<sup>3</sup></span>
+											</div>
+										</div>
 									</div>
 								</div>
-
+								<div class="form-row">
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="wbcInput">WBC</label>
+										<input type="text" name="wbcInput" class="form-control" required>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="nInput">N</label>
+										<div class="input-group">
+											<input type="text" name="nInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">%</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="lInput">L</label>
+										<div class="input-group">
+											<input type="text" name="lInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">%</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="atypLymphInput">Atyp lymph</label>
+										<div class="input-group">
+											<input type="text" name="atypLymphInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="monoInput">Mono</label>
+										<div class="input-group">
+											<input type="text" name="monoInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">%</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="basoInput">Baso</label>
+										<div class="input-group">
+											<input type="text" name="basoInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">%</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="eoInput">Eo</label>
+										<div class="input-group">
+											<input type="text" name="eoInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">%</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
+										<label for="bandInput">Band</label>
+										<div class="input-group">
+											<input type="text" name="bandInput" class="form-control" required>
+											<div class="input-group-append">
+												<span class="input-group-text">%</span>
+											</div>
+										</div>
+									</div>
+								</div>
 
 							</div>
 						</fieldset>
