@@ -67,7 +67,15 @@
 }
 
 .bd-callout-custom-3 {
-  border-left-color: #FF3547;
+  border-left-color: #FF1543;
+}
+
+.bd-callout-custom-4 {
+  border-left-color: #87BB69;
+}
+
+.bd-callout-custom-5 {
+  border-left-color: #F4B43E;
 }
 
 .bd-callout-bg-custom-1 {
@@ -89,7 +97,7 @@
   font-weight: 600;
 }
 
-.custom-label {
+.normal-label {
   font-weight: normal;
 }
 

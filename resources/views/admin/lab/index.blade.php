@@ -78,11 +78,11 @@
 								</div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
 										<label for="ageYearInput">อายุ/ปี</label>
-										<input type="text" name="ageYearInput" class="form-control" id="ageYearInput" value="0" required>
+										<input type="number" name="ageYearInput" class="form-control" id="ageYearInput" value="0" min="0" max="120" required>
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
 										<label for="ageMonthInput">อายุ/เดือน</label>
-										<input type="text" name="ageMonthInput" class="form-control" id="ageMonthInput" value="0" required>
+										<input type="number" name="ageMonthInput" class="form-control" id="ageMonthInput" value="0" min="0" max="12" required>
 									</div>
 								</div>
 								<div class="form-row">
@@ -174,15 +174,15 @@
 										<div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="opdCheckbox">
-												<label for="opdCheckbox" class="custom-control-label custom-label">ผู้ป่วยนอก (OPD)/ILI</label>
+												<label for="opdCheckbox" class="custom-control-label normal-label">ผู้ป่วยนอก (OPD)/ILI</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="ipdCheckbox">
-												<label for="ipdCheckbox" class="custom-control-label custom-label">ผู้ป่วยใน (IPD)/SARI</label>
+												<label for="ipdCheckbox" class="custom-control-label normal-label">ผู้ป่วยใน (IPD)/SARI</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="patientCheckbox" class="custom-control-input" id="icuCheckbox">
-												<label for="icuCheckbox" class="custom-control-label custom-label">ผู้ป่วยหนัก/ICU</label>
+												<label for="icuCheckbox" class="custom-control-label normal-label">ผู้ป่วยหนัก/ICU</label>
 											</div>
 										</div>
 									</div>
@@ -288,11 +288,11 @@
 										<div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="lungXrayInput" class="custom-control-input" id="lungXrayNo">
-												<label for="lungXrayNo" class="custom-control-label custom-label">ไม่ได้ทำ</label>
+												<label for="lungXrayNo" class="custom-control-label normal-label">ไม่ได้ทำ</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="lungXrayInput" class="custom-control-input" id="lungXrayYes">
-												<label for="lungXrayYes" class="custom-control-label custom-label">ทำ</label>
+												<label for="lungXrayYes" class="custom-control-label normal-label">ทำ</label>
 											</div>
 										</div>
 									</div>
@@ -435,11 +435,11 @@
 										<div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="influenzaRapidCheckbox" class="custom-control-input" id="influRapidCheckboxNo">
-												<label for="influRapidCheckboxNo" class="custom-control-label custom-label">ไม่ตรวจ</label>
+												<label for="influRapidCheckboxNo" class="custom-control-label normal-label">ไม่ตรวจ</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="influenzaRapidCheckbox" class="custom-control-input" id="influRapidCheckboxYes">
-												<label for="influRapidCheckboxYes" class="custom-control-label custom-label">ตรวจ</label>
+												<label for="influRapidCheckboxYes" class="custom-control-label normal-label">ตรวจ</label>
 											</div>
 										</div>
 									</div>
@@ -454,15 +454,15 @@
 										<div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="rapidTestResultCheckbox" class="custom-control-input" id="rapidTestNagative">
-												<label for="rapidTestNagative" class="custom-control-label custom-label">Nagative</label>
+												<label for="rapidTestNagative" class="custom-control-label normal-label">Nagative</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="rapidTestResultCheckbox" class="custom-control-input" id="rapidTestPositiveFluA">
-												<label for="rapidTestPositiveFluA" class="custom-control-label custom-label">Positive Flu A</label>
+												<label for="rapidTestPositiveFluA" class="custom-control-label normal-label">Positive Flu A</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="rapidTestResultCheckbox" class="custom-control-input" id="rapidTestPositiveFluB">
-												<label for="rapidTestPositiveFluB" class="custom-control-label custom-label">Positive Flu B</label>
+												<label for="rapidTestPositiveFluB" class="custom-control-label normal-label">Positive Flu B</label>
 											</div>
 										</div>
 									</div>
@@ -473,11 +473,11 @@
 										<div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="influenzaVaccine" class="custom-control-input" id="influenzaVaccNo">
-												<label for="influenzaVaccNo" class="custom-control-label custom-label">ไม่เคย</label>
+												<label for="influenzaVaccNo" class="custom-control-label normal-label">ไม่เคย</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="influenzaVaccine" class="custom-control-input" id="influenzaVaccYes">
-												<label for="influenzaVaccYes" class="custom-control-label custom-label">เคย</label>
+												<label for="influenzaVaccYes" class="custom-control-label normal-label">เคย</label>
 											</div>
 										</div>
 									</div>
@@ -499,11 +499,11 @@
 										<div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="virusMedicine" class="custom-control-input" id="virusMedicineNo">
-												<label for="virusMedicineNo" class="custom-control-label custom-label">ไม่ให้</label>
+												<label for="virusMedicineNo" class="custom-control-label normal-label">ไม่ให้</label>
 											</div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="virusMedicine" class="custom-control-input" id="virusMedicineYes">
-												<label for="virusMedicineYes" class="custom-control-label custom-label">ให้</label>
+												<label for="virusMedicineYes" class="custom-control-label normal-label">ให้</label>
 											</div>
 										</div>
 									</div>
@@ -532,7 +532,14 @@
 									</div>
 								</div>
 							</div>
-
+							<div class="bd-callout bd-callout-custom-5">
+								<h1>3. ประวัติเสี่ยง</h1>
+								<div class="form-row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+										@include('admin.lab.risk-history-tbl')
+									</div>
+								</div>
+							</div>
 						<button class="btn btn-primary mt-3" type="submit">Submit form</button>
 					</form>
 				</div>
