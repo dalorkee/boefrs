@@ -13,7 +13,7 @@ class CreateSymptomsTable extends Migration
 	*/
 	public function up()
 	{
-		Schema::create('symptoms', function (Blueprint $table) {
+		Schema::create('ref_symptoms', function (Blueprint $table) {
 			$table->bigIncrements('id');
 			$table->string('symptom_name_en',100)->charset('utf8mb4');
 			$table->string('symptom_name_th',100)->charset('utf8mb4');

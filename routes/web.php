@@ -17,3 +17,9 @@ Route::get('/', function () {
 
 /* Lab */
 Route::get('/lab', 'LabController@index')->name('lab');
+
+/* Sample Submission Form */
+Route::get('/sample-submissions-form', array(
+			'as'   => 'sample-submission.form',
+			'uses' => 'SampleSubmissionsController@Form_Sample_Submissions'
+));
