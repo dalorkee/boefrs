@@ -121,3 +121,25 @@
   background-color: #f4f4f4;
 }
 
+.input-append {
+  border: 1px solid #eee;
+}
+
+.input-append:focus {
+  border: 1px solid #bbb;
+}
+
+.border-bottom-custom-1 {
+  border-top: none;
+  border-left: none;
+  border-bottom: 2px solid #FFB848;
+  border-right: none;
+}
+
+.border-bottom-custom-2 {
+  border-top: none;
+  border-left: none;
+  border-bottom: 1px solid #bbb;
+  border-right: none;
+}
+

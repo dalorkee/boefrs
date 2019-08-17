@@ -1,5 +1,5 @@
 <table class="table" id="health_table">
-	<thead class="thead-dark">
+	<thead class="bg-info text-light">
 		<tr>
 			<th scope="col">โรคประจำตัว</th>
 			<th scope="col">มี</th>
