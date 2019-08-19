@@ -9,6 +9,6 @@ use Illuminate\Support\Str;
 class BoeFrsController extends Controller
 {
 	public function getSymptoms() {
-		return DB::connection('mysql')->table('symptoms')->get();
+		return DB::connection('mysql')->table('ref_symptoms')->get();
 	}
 }
