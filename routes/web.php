@@ -12,11 +12,13 @@
 */
 
 Route::get('/', function () {
-	return view('index');
+	return view('admin.dashboard.index');
 });
 
-/* Lab */
-Route::get('/lab', 'LabController@index')->name('lab');
+/* Hospital Lab */
+Route::get('/print', 'HospitalController@index')->name('print');
+/* Hospital print data form */
+Route::get('/hospital', 'HospitalController@hospitalLab')->name('hospital');
 
 /* Sample Submission Form */
 Route::get('/sample-submissions-form', array(

@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
-class LabController extends BoeFrsController
+class HospitalController extends BoeFrsController
 {
 	/**
 	* Display a listing of the resource.
 	*
 	* @return \Illuminate\Http\Response
 	*/
+
 	public function index() {
+		return view('admin.hospital.index');
+	}
+
+	public function hospitalLab() {
 		$symptoms = $this->symptomsList();
 		return view(
-			'admin.lab.index',
+			'admin.hospital.hospitalLab',
 			[
 				'symptoms'=>$symptoms
 			]
@@ -86,7 +91,7 @@ class LabController extends BoeFrsController
     }
 
 	public function symptomsList() {
-		return LabController::getSymptoms();
+		return HospitalController::getSymptoms();
 	}
 
 }

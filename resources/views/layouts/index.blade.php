@@ -8,7 +8,7 @@
 	<meta name="author" content="">
 	<!-- Favicon icon -->
 	<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
-	<title>BOE - Flu Right Site</title>
+	<title>BOE - Flu Right Size</title>
 	@include('layouts.mainStyle')
 	@include('layouts.mainScript')
 	@yield('style')

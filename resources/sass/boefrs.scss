@@ -8,8 +8,7 @@
 }
 .bd-callout {
 	padding: 1.25rem;
-	margin-top: 1rem;
-	margin-bottom: 1.25rem;
+	margin: 1rem 0 1.25rem 0;
 	border: 1px solid #eee;
 	border-left-width: .25rem;
 	border-radius: .25rem;
@@ -18,7 +17,6 @@
 	font-size: 1.275em;
 	margin-bottom: 14px;
 	padding-bottom: 4px;
-
 }
 .bd-callout-info {
 	border-left-color: #54A4E0;
@@ -84,4 +82,10 @@
 	border-left: none;
 	border-bottom: 1px solid #bbb;
 	border-right: none;
+}
+a.link-color-white {
+	color: white;
+}
+a.link-color-white:hover {
+	color: white;
 }
