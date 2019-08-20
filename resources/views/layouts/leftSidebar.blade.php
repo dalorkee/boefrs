@@ -11,7 +11,7 @@
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Form </span></a>
 					<ul aria-expanded="false" class="collapse  first-level">
 						<li class="sidebar-item"><a href="{{ route('print') }}" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> Hospital </span></a></li>
-						<li class="sidebar-item"><a href="{{ route('sample-submissions-form') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Lab </span></a></li>
+						<li class="sidebar-item"><a href="{{ URL::route('sample-submission.form') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Lab </span></a></li>
 					</ul>
 				</li>
 				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Users</span></a></li>

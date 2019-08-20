@@ -24,5 +24,7 @@
 {{ Html::script('public/assets/libs/flot/jquery.flot.crosshair.js') }}
 {{ Html::script('public/assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js') }}
 {{ Html::script('public/dist/js/pages/chart/chart-page-init.js') }}
+{{ Html::script('public/assets/extra-libs/chart.js/Chart.min.js') }}
+{{ Html::script('public/assets/extra-libs/chart.js/utils.js') }}
 <!-- datepicker -->
 {{ Html::script('public/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}

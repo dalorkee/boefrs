@@ -16,6 +16,6 @@
 	</div>
 </div>
 <div class="container-fluid">
-	<div>content</div>
+	@include('admin.dashboard.fluStackChart')
 </div>
 @endsection
