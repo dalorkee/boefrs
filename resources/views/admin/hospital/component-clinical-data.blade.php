@@ -21,7 +21,7 @@
 <div class="form-row">
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 		<label for="sickDateInput">วันที่เริ่มป่วย</label>
-		<div class="input-group date" data-provide="datepicke" id="sickDate">
+		<div class="input-group date" data-provide="datepicke" id="sickDateInput">
 			<div class="input-group">
 				<input type="text" name="sickDateInput" class="form-control" required>
 				<div class="input-group-append">
@@ -32,7 +32,7 @@
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 		<label for="treatDateInput">วันที่รักษาครั้งแรก</label>
-		<div class="input-group date" data-provide="datepicke" id="treatDate">
+		<div class="input-group date" data-provide="datepicke" id="treatDateInput">
 			<div class="input-group">
 				<input type="text" name="treatDateInput" class="form-control" required>
 				<div class="input-group-append">
@@ -43,7 +43,7 @@
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 		<label for="admitDateInput">วันที่นอนโรงพยาบาล</label>
-		<div class="input-group date" data-provide="datepicke" id="admitDate">
+		<div class="input-group date" data-provide="datepicke" id="admitDateInput">
 			<div class="input-group">
 				<input type="admitDateInput" class="form-control" required>
 				<div class="input-group-append">
@@ -59,7 +59,7 @@
 		<div class="input-group">
 			<input type="text" name="sickDateInput" class="form-control" required>
 			<div class="input-group-append">
-				<span class="input-group-text">&#176;</span>
+				<span class="input-group-text">C&#176;</span>
 			</div>
 		</div>
 	</div>
@@ -145,7 +145,7 @@
 </div>
 <div class="form-row">
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-		<label for="cbcInput">CBC (ครั้งแรก): วันที่</label>
+		<label for="cbcDateInput">CBC (ครั้งแรก): วันที่</label>
 		<div class="input-group date" data-provide="datepicke" id="cbcDateInput">
 			<div class="input-group">
 				<input type="text" name="cbcDateInput" class="form-control">

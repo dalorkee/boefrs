@@ -127,6 +127,36 @@ $(document).ready(function() {
 			$('#otherNationality_input').prop('disabled', true);
 		}
 	});
+	/* sick date input */
+	$('#sickDateInput').datepicker({
+		format: 'dd/mm/yyyy',
+		todayHighlight: true,
+		todayBtn: true
+	});
+	/* treat date input */
+	$('#treatDateInput').datepicker({
+		format: 'dd/mm/yyyy',
+		todayHighlight: true,
+		todayBtn: true
+	});
+	/* admit date input */
+	$('#admitDateInput').datepicker({
+		format: 'dd/mm/yyyy',
+		todayHighlight: true,
+		todayBtn: true
+	});
+	/* xray date input */
+	$('#xRayDateInput').datepicker({
+		format: 'dd/mm/yyyy',
+		todayHighlight: true,
+		todayBtn: true
+	});
+	/* cbc date input */
+	$('#cbcDateInput').datepicker({
+		format: 'dd/mm/yyyy',
+		todayHighlight: true,
+		todayBtn: true
+	});
 
 });
 

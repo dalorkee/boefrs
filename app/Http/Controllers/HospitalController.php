@@ -11,6 +11,10 @@ class HospitalController extends BoeFrsController
 	*/
 
 	public function index() {
+		return view('admin.dashboard.index');
+	}
+
+	public function print() {
 		return view('admin.hospital.index');
 	}
 

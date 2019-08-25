@@ -11,12 +11,15 @@
 |
 */
 
+/* Dashboard */
 Route::get('/', function () {
 	return view('admin.dashboard.index');
 });
+Route::get('/dashboard', 'HospitalController@index')->name('dashboard');
 
 /* Hospital Lab */
-Route::get('/print', 'HospitalController@index')->name('print');
+Route::get('/print', 'HospitalController@print')->name('print');
+
 /* Hospital print data form */
 Route::get('/hospital', 'HospitalController@hospitalLab')->name('hospital');
 
