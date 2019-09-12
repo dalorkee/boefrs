@@ -1,10 +1,13 @@
-<!-- Custom CSS -->
+<!-- chart CSS -->
 {{ Html::style('public/assets/libs/flot/css/float-chart.css') }}
 <!-- Custom CSS -->
 {{ Html::style('public/dist/css/style.min.css') }}
+<!-- boefrs -->
 {{ Html::style('public/css/boefrs.css') }}
 <!-- datepicker -->
 {{ Html::style('public/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}
+<link href="public/assets/libs/toastr/build/toastr.min.css" rel="stylesheet">
+
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>

@@ -14,12 +14,12 @@ class HospitalController extends BoeFrsController
 		return view('admin.dashboard.index');
 	}
 
-	public function print() {
+	public function hospitalHome() {
 		return view('admin.hospital.index');
 	}
 
 	public function hospitalLab() {
-		$symptoms = $this->symptomsList();
+		$symptoms = parent::getSymptoms();
 		return view(
 			'admin.hospital.hospitalLab',
 			[
@@ -29,73 +29,69 @@ class HospitalController extends BoeFrsController
 	}
 
 	/**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+	* Show the form for creating a new resource.
+	*
+	* @return \Illuminate\Http\Response
+	*/
+	public function create()
+	{
+		//
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+	/**
+	* Store a newly created resource in storage.
+	*
+	* @param  \Illuminate\Http\Request  $request
+	* @return \Illuminate\Http\Response
+	*/
+	public function store(Request $request)
+	{
+		//
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+	/**
+	* Display the specified resource.
+	*
+	* @param  int  $id
+	* @return \Illuminate\Http\Response
+	*/
+	public function show($id)
+	{
+		//
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+	/**
+	* Show the form for editing the specified resource.
+	*
+	* @param  int  $id
+	* @return \Illuminate\Http\Response
+	*/
+	public function edit($id)
+	{
+		//
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+	/**
+	* Update the specified resource in storage.
+	*
+	* @param  \Illuminate\Http\Request  $request
+	* @param  int  $id
+	* @return \Illuminate\Http\Response
+	*/
+	public function update(Request $request, $id)
+	{
+		//
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-	public function symptomsList() {
-		return HospitalController::getSymptoms();
+	/**
+	* Remove the specified resource from storage.
+	*
+	* @param  int  $id
+	* @return \Illuminate\Http\Response
+	*/
+	public function destroy($id)
+	{
+		//
 	}
 
 }

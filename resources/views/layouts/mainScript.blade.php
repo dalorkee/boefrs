@@ -28,3 +28,4 @@
 {{ Html::script('public/assets/extra-libs/chart.js/utils.js') }}
 <!-- datepicker -->
 {{ Html::script('public/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}
+<script src="public/assets/libs/toastr/build/toastr.min.js"></script>

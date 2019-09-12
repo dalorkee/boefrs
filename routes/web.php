@@ -18,7 +18,20 @@ Route::get('/', function () {
 Route::get('/dashboard', 'HospitalController@index')->name('dashboard');
 
 /* Hospital Lab */
-Route::get('/print', 'HospitalController@print')->name('print');
+Route::get('/home', 'HospitalController@hospitalHome')->name('home');
+
+/* Generate code form */
+Route::get('/code', 'CodeGenController@index')->name('code');
+
+/* Generate code method */
+/* Route::resource('/gen', 'CodeGenController'); */
+
+/* Ajax request for update patient table */
+Route::get('/ajaxRequestTable', 'CodeGenController@ajaxRequestTable')->name('ajaxRequestTable');
+
+/* Ajax request for generate lab code */
+/* Route::get('ajaxRequest', 'CodeGenController@ajaxRequest')->name('ajaxRequest'); */
+Route::post('ajaxRequest', 'CodeGenController@ajaxRequestPost')->name('ajaxRequest');
 
 /* Hospital print data form */
 Route::get('/hospital', 'HospitalController@hospitalLab')->name('hospital');

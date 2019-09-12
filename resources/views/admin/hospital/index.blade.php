@@ -36,7 +36,7 @@
 										<div class="card card-hover">
 											<div class="box bg-danger text-center">
 												<h1 class="font-light text-white"><i class="mdi mdi-printer"></i></h1>
-												<h4 class="text-white"><a href="#" class="link-color-white">พิมพ์แบบเก็บข้อมูล</a></h4>
+												<h4 class="text-white"><a href="{{ route('code') }}" class="link-color-white">สร้างรหัสแบบฟอร์ม</a></h4>
 											</div>
 										</div>
 									</div>
