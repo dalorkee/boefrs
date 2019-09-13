@@ -46,7 +46,8 @@
 	td:nth-of-type(2):before { content: "ชื่อ-สกุล";margin-top:10px;font-weight:600;}
 	td:nth-of-type(3):before { content: "HN";margin-top:10px;font-weight:600;}
 	td:nth-of-type(4):before { content: "รหัส";margin-top:10px;font-weight:600;}
-	td:nth-of-type(5):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
+	td:nth-of-type(5):before { content: "สถานะ";margin-top:10px;font-weight:600;}
+	td:nth-of-type(6):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
 }
 
 .error{
@@ -155,12 +156,6 @@ input.valid, textarea.valid{
 						@endif
 					</div>
 					<div id="patient_data">
-						@php
-							if ($ajaxRequest == true)
-
-							endif
-						@endphp
-						<!--
 						<table class="display mT-2 mb-4" id="code_table" role="table">
 							<thead>
 								<tr>
@@ -173,24 +168,24 @@ input.valid, textarea.valid{
 								</tr>
 							</thead>
 							<tbody>
-								php
-								$patient->each(function ($item, $key) {
+								@php
+								$titleNameKeyed = $titleName->keyBy('id');
+								$patient->each(function ($item, $key) use ($titleNameKeyed) {
 									echo "<tr>";
 										echo "<td>".$item->id."</td>";
-										echo "<td>".$item->title_name.$item->first_name." ".$item->last_name."</td>";
+										echo "<td>".$titleNameKeyed[$item->title_name]->title_name.$item->first_name." ".$item->last_name."</td>";
 										echo "<td>".$item->hn."</td>";
-										echo "<td span class=\"text-danger\">".$item->lab_code."</td>";
-										echo "<td>".$item->lab_status."</td>";
+										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
+										echo "<td><span class=\"badge badge-pill badge-success\">".$item->lab_status."</span></td>";
 										echo "<td>";
 											echo "<button type=\"button\" class=\"btn btn-cyan btn-sm\">Edit</button>&nbsp;";
 											echo "<button type=\"button\" class=\"btn btn-danger btn-sm\">Delete</button>";
 										echo "</td>";
 									echo "</tr>";
 								});
-								endphp
+								@endphp
 							</tbody>
 						</table>
-						-->
 					</div>
 				</div><!-- card body -->
 			</div><!-- card -->
@@ -237,19 +232,10 @@ $(document).ready(function() {
 
 	$("#btn_submit").click(function(e){
 		var x = ConvertFormToJSON("#patient_form");
-/*
-		var titleName = $("select[name=titleNameInput]").val();
-		var name = $("input[name=firstNameInput]").val();
-		var lastname = $("input[name=lastNameInput]").val();
-		var hn = $("input[name=hnInput]").val();
-		var an = $("input[name=anInput]").val();
-
-*/
 		$.ajax({
 			type: 'POST',
 			url: "{{ route('ajaxRequest') }}",
 			data: x,
-			//data: {titleName:titleName, name:name, lastname:lastname, hn:hn, an:an},
 			success: function(data){
 				alert(data.status);
 				$.ajax({

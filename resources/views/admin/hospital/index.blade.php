@@ -44,7 +44,7 @@
 										<div class="card card-hover">
 											<div class="box bg-success text-center">
 												<h1 class="font-light text-white"><i class="mdi mdi-content-save"></i></h1>
-												<h4 class="text-white"><a href="{{ route('hospital') }}" class="link-color-white">บันทึกข้อมูลเข้าสู่ระบบ</a></h4>
+												<h4 class="text-white"><a href="{{ route('list') }}" class="link-color-white">บันทึกข้อมูลเข้าสู่ระบบ</a></h4>
 											</div>
 										</div>
 									</div>

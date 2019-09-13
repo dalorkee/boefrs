@@ -17,7 +17,7 @@ class CodeGenController extends BoeFrsController
 	public function index()
 	{
 		$titleName = parent::getTitleName();
-		 $patient = parent::getPatient();
+		$patient = parent::getPatient();
 		return view(
 			'admin.codeGen.index',
 			[
@@ -140,7 +140,7 @@ class CodeGenController extends BoeFrsController
 			$code->title_name = $request->titleNameInput;
 			$code->first_name = $request->firstNameInput;
 			$code->last_name = $request->lastNameInput;
-			$code->lab_code = parent::ranPin('L', '-');
+			$code->lab_code = parent::randPin('L', '-');
 			$code->lab_status = 'New';
 			$code->user = 'user';
 			$code->active = '1';
@@ -169,13 +169,15 @@ class CodeGenController extends BoeFrsController
 			</thead>
 			<tbody";
 		$patient = parent::getPatient();
+		$titleName = parent::getTitleName();
+		$titleNameKeyed = $titleName->keyBy('id');
 		foreach($patient as $key=>$value) {
 			$htm .= "<tr>";
 				$htm .= "<td>".$value->id."</td>";
-				$htm .= "<td>".$value->title_name.$value->first_name." ".$value->last_name."</td>";
+				$htm .= "<td>".$titleNameKeyed[$value->title_name]->title_name.$value->first_name." ".$value->last_name."</td>";
 				$htm .= "<td>".$value->hn."</td>";
-				$htm .= "<td span class=\"text-danger\">".$value->lab_code."</td>";
-				$htm .= "<td>".$value->lab_status."</td>";
+				$htm .= "<td><strong class=\"text-danger\">".$value->lab_code."</strong></td>";
+				$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
 				$htm .= "<td>";
 					$htm .= "<button type=\"button\" class=\"btn btn-cyan btn-sm\">Edit</button>&nbsp;";
 					$htm .= "<button type=\"button\" class=\"btn btn-danger btn-sm\">Delete</button>";

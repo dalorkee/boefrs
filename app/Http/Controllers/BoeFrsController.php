@@ -34,8 +34,7 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
-	public function ranPin($prefix=null, $separator=null) {
-
+	public function randPin($prefix=null, $separator=null) {
 		// Available alpha caracters
 		$characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		// generate a pin based on 2 * x digits + a random character

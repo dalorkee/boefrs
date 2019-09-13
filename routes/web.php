@@ -23,6 +23,9 @@ Route::get('/home', 'HospitalController@hospitalHome')->name('home');
 /* Generate code form */
 Route::get('/code', 'CodeGenController@index')->name('code');
 
+/* List the lab data */
+Route::get('/list', 'ListDataController@index')->name('list');
+
 /* Generate code method */
 /* Route::resource('/gen', 'CodeGenController'); */
 
