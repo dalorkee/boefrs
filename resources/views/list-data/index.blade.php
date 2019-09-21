@@ -1,7 +1,11 @@
 @extends('layouts.index')
-@section('style')
-<link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css'>
-<link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css'>
+@section('custom-style')
+	<link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css'>
+	<link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css'>
+	<link rel='stylesheet' href='public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css'>
+	<link rel="stylesheet" type="text/css" href="public/assets/libs/select2/dist/css/select2.min.css">
+@endsection
+@section('internal-style')
 <style>
 @media
 	only screen
@@ -84,17 +88,40 @@ input.valid, textarea.valid{
 	</div>
 </div>
 <div class="container-fluid">
+	<div class="card">
+		<form>
+			<div class="card-body">
+				<div class="d-md-flex align-items-center">
+					<div>
+						<h4 class="card-title">รายการข้อมูล โครงการเฝ้าระวังเชื้อไวรัสก่อโรคระบบทางเดินหายใจ</h4>
+						<h5 class="card-subtitle">Flu-BOE</h5>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-3 m-t-15">Multiple Select</label>
+					<div class="col-md-3">
+						<select class="select2 form-control m-t-15" multiple="multiple" style="height: 36px;width: 100%;">
+							<optgroup label="Alaskan/Hawaiian Time Zone">
+								<option value="AK">Alaska</option>
+								<option value="HI">Hawaii</option>
+							</optgroup>
+						</select>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
-					<div class="d-md-flex align-items-center">
-						<div>
-							<h4 class="card-title">รายการข้อมูล โครงการเฝ้าระวังเชื้อไวรัสก่อโรคระบบทางเดินหายใจ</h4>
-							<h5 class="card-subtitle">Flu-BOE</h5>
-						</div>
-					</div>
+
 					<div id="patient_data">
+
+
+
+
 						<table class="display mT-2 mb-4" id="code_table" role="table">
 							<thead>
 								<tr>
@@ -108,14 +135,28 @@ input.valid, textarea.valid{
 							</thead>
 							<tbody>
 								@php
-								$titleNameKeyed = $titleName->keyBy('id');
-								$patient->each(function ($item, $key) use ($titleNameKeyed) {
+								$patient->each(function ($item, $key) {
+									switch ($item->lab_status) {
+										case 'New':
+											$status_class = 'danger';
+											break;
+										case 'Processing':
+											$status_class = 'warning';
+											break;
+										case 'Complete':
+											$status_class = 'success';
+											break;
+										default :
+											$status_class = 'primary';
+											break;
+									}
+
 									echo "<tr>";
 										echo "<td>".$item->id."</td>";
-										echo "<td>".$titleNameKeyed[$item->title_name]->title_name.$item->first_name." ".$item->last_name."</td>";
+										echo "<td>".$item->title_name.$item->first_name." ".$item->last_name."</td>";
 										echo "<td>".$item->hn."</td>";
 										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
-										echo "<td><span class=\"badge badge-pill badge-success\">".$item->lab_status."</span></td>";
+										echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
 										echo "<td>";
 											echo "<a href=\"#\" class=\"btn btn-info\">แก้ไข</a>&nbsp;";
 											echo "<a href=\"#\" class=\"btn btn-danger\">ลบ</button>";
@@ -132,10 +173,12 @@ input.valid, textarea.valid{
 	</div><!-- row -->
 </div>
 @endsection
-@section('script')
-<script src='public/assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js'></script>
-<script src='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js'></script>
-<script>
+@section('bottom-script')
+	<script src='public/assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js'></script>
+	<script src='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js'></script>
+	<script src="public/assets/libs/select2/dist/js/select2.full.min.js"></script>
+	<script src="public/assets/libs/select2/dist/js/select2.min.js"></script>
+	<script>
 $(document).ready(function() {
 	/* data table */
 	$('#code_table').DataTable({
@@ -149,6 +192,9 @@ $(document).ready(function() {
 			className: 'dt-head-right dt-body-right'
 		}]
 	});
+
+	/* select2 */
+	$(".select2").select2();
 
 });
 </script>

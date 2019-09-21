@@ -11,33 +11,30 @@
 |
 */
 
-/* Dashboard */
-Route::get('/', function () {
-	return view('admin.dashboard.index');
+Auth::routes();
+Route::get('/', 'DashboardController@index');
+Route::get('/home', 'DashboardController@index')->name('home');
+
+Route::group(['middleware' => ['auth']], function() {
+	Route::resource('roles','RoleController');
+	Route::resource('users','UserController');
+	Route::resource('products','ProductController');
+	Route::resource('dashboard', 'DashboardController');
+	Route::resource('code', 'CodeController');
+	Route::resource('list-data', 'ListDataController');
 });
-Route::get('/dashboard', 'HospitalController@index')->name('dashboard');
 
 /* Hospital Lab */
-Route::get('/home', 'HospitalController@hospitalHome')->name('home');
-
-/* Generate code form */
-Route::get('/code', 'CodeGenController@index')->name('code');
-
-/* List the lab data */
-Route::get('/list', 'ListDataController@index')->name('list');
-
-/* Generate code method */
-/* Route::resource('/gen', 'CodeGenController'); */
-
-/* Ajax request for update patient table */
-Route::get('/ajaxRequestTable', 'CodeGenController@ajaxRequestTable')->name('ajaxRequestTable');
+//Route::get('/home1', 'HospitalController@hospitalHome')->name('home1');
 
 /* Ajax request for generate lab code */
-/* Route::get('ajaxRequest', 'CodeGenController@ajaxRequest')->name('ajaxRequest'); */
-Route::post('ajaxRequest', 'CodeGenController@ajaxRequestPost')->name('ajaxRequest');
+Route::post('ajaxRequest', 'CodeController@ajaxRequestPost')->name('ajaxRequest');
+
+/* Ajax request for update patient table */
+Route::get('/ajaxRequestTable', 'CodeController@ajaxRequestTable')->name('ajaxRequestTable');
 
 /* Hospital print data form */
-Route::get('/hospital', 'HospitalController@hospitalLab')->name('hospital');
+//Route::get('/hospital', 'HospitalController@hospitalLab')->name('hospital');
 
 /* Sample Submission Form */
 Route::get('/sample-submissions-form', array(

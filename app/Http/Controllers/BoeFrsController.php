@@ -9,10 +9,12 @@ use Illuminate\Support\Str;
 class BoeFrsController extends Controller implements BoeFrs
 {
 	protected $result;
+	public $title_name;
 
 	public function __construct() {
+		$titleName = $this->getTitleName();
+		$this->title_name = $titleName->keyBy('id');
 		$this->result = null;
-		return true;
 	}
 
 	public function getSymptoms() {
@@ -27,10 +29,10 @@ class BoeFrsController extends Controller implements BoeFrs
 		return DB::connection('mysql')->table('patient')->get();
 	}
 
-	public function getPatientByField($data=['field'=>'value']) {
+	public function getPatientByField($field=null, $value=null) {
 		return DB::connection('mysql')
 			->table('patient')
-			->where($data['field'], $data['value'])
+			->where($field, '=', $value)
 			->get();
 	}
 

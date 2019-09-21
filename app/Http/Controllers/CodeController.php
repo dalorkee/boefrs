@@ -1,29 +1,31 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\CodeGen;
+use App\Code;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Session;
 
-class CodeGenController extends BoeFrsController
+class CodeController extends BoeFrsController
 {
+
+	public function __construct() {
+		parent::__construct();
+	}
 	/**
 	* Display a listing of the resource.
 	*
 	* @return \Illuminate\Http\Response
 	*/
-	public function index()
-	{
-		$titleName = parent::getTitleName();
-		$patient = parent::getPatient();
+
+	public function index() {
+		$patient = parent::getPatientByField('lab_status', 'New');
 		return view(
-			'admin.codeGen.index',
+			'code.index',
 			[
-				'titleName' => $titleName,
-				'patient' => $patient,
-				'ajaxRequest' => true
+				'titleName' => $this->title_name,
+				'patient' => $patient
 			]
 		);
 	}
@@ -33,8 +35,7 @@ class CodeGenController extends BoeFrsController
 	*
 	* @return \Illuminate\Http\Response
 	*/
-	public function create()
-	{
+	public function create() {
 		//
 	}
 
@@ -44,29 +45,8 @@ class CodeGenController extends BoeFrsController
 	* @param  \Illuminate\Http\Request  $request
 	* @return \Illuminate\Http\Response
 	*/
-	public function store(Request $request)
-	{
-		$this->validate($request, [
-			'titleNameInput' => 'required|min:1'
-		]);
-
-		/*
-		$code = new CodeGen;
-		$code->hoscpde = '1111';
-		$code->title_name = $request->titleNameInput;
-		$code->first_name = $request->firstNameInput;
-		$code->last_name = $request->lastNameInput;
-		$code->hn = $request->hnInput;
-		$code->lab_status = 'New';
-		$code->user = 'user';
-		$code->active = '1';
-		$saved = $code->save();
-		if (!$saved) {
-			App::abort(500, 'Internal Server Error.');
-		} else {
-			return redirect('code');
-		}
-		*/
+	public function store(Request $request) {
+		//
 	}
 
 	/**
@@ -86,8 +66,7 @@ class CodeGenController extends BoeFrsController
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function edit($id)
-	{
+	public function edit($id) {
 		//
 	}
 
@@ -98,8 +77,7 @@ class CodeGenController extends BoeFrsController
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function update(Request $request, $id)
-	{
+	public function update(Request $request, $id) {
 		//
 	}
 
@@ -109,40 +87,28 @@ class CodeGenController extends BoeFrsController
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function destroy($id)
-	{
+	public function destroy($id) {
 		//
 	}
 
-/*
-	public function ajaxRequest()
-	{
-		$titleName = parent::getTitleName();
-		$patient = parent::getPatient();
-		return view(
-			'admin.codeGen.index',
-			[
-				'titleName'=>$titleName,
-				'patient'=>$patient
-			]
-		);
-	}
-*/
-
-	public function ajaxRequestPost(Request $request)
-	{
+	public function ajaxRequestPost(Request $request) {
 		if (empty($request->firstNameInput)) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
 		} else {
-			$code = new CodeGen;
+			$code = new Code;
 			$code->hoscpde = '1111';
 			$code->hn = $request->hnInput;
-			$code->title_name = $request->titleNameInput;
+			$code->an = $request->anInput;
+			if ($request->titleNameInput == '6') {
+				$code->title_name = $request->otherTitleNameInput;
+			} else {
+				$code->title_name = $this->title_name[$request->titleNameInput]->title_name;
+			}
 			$code->first_name = $request->firstNameInput;
 			$code->last_name = $request->lastNameInput;
 			$code->lab_code = parent::randPin('L', '-');
 			$code->lab_status = 'New';
-			$code->user = 'user';
+			$code->user = auth()->user()->name;
 			$code->active = '1';
 			$saved = $code->save();
 			if (!$saved) {
@@ -153,12 +119,11 @@ class CodeGenController extends BoeFrsController
 		}
 	}
 
-	public function ajaxRequestTable()
-	{
+	public function ajaxRequestTable() {
 		$htm = "
-			<table class=\"display mT-2 mb-4\" id=\"code_table1\" role=\"table\">
-				<thead>
-					<tr>
+		<table class=\"display mT-2 mb-4\" id=\"code_table1\" role=\"table\">
+			<thead>
+				<tr>
 					<th>ลำดับ</th>
 					<th>ชื่อ-สกุล</th>
 					<th>HN</th>
@@ -168,13 +133,11 @@ class CodeGenController extends BoeFrsController
 				</tr>
 			</thead>
 			<tbody";
-		$patient = parent::getPatient();
-		$titleName = parent::getTitleName();
-		$titleNameKeyed = $titleName->keyBy('id');
+		$patient = parent::getPatientByField('lab_status', 'New');
 		foreach($patient as $key=>$value) {
 			$htm .= "<tr>";
 				$htm .= "<td>".$value->id."</td>";
-				$htm .= "<td>".$titleNameKeyed[$value->title_name]->title_name.$value->first_name." ".$value->last_name."</td>";
+				$htm .= "<td>".$value->title_name.$value->first_name." ".$value->last_name."</td>";
 				$htm .= "<td>".$value->hn."</td>";
 				$htm .= "<td><strong class=\"text-danger\">".$value->lab_code."</strong></td>";
 				$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
@@ -203,7 +166,5 @@ class CodeGenController extends BoeFrsController
 		";
 		return $htm;
 	}
-
-
 
 }

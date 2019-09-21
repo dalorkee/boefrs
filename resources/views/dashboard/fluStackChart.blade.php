@@ -1,4 +1,4 @@
-@section('style')
+@section('internal-style')
 <style>
 canvas {
 	-moz-user-select: none;
@@ -10,7 +10,7 @@ canvas {
 <div style="width: 90%">
 	<canvas id="canvas"></canvas>
 </div>
-@section('script')
+@section('bottom-script')
 	<script>
 		var barChartData = {
 			labels: [

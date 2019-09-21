@@ -1,8 +1,11 @@
 @extends('layouts.index')
-@section('style')
+@section('custom-style')
 <link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css'>
 <link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css'>
 <link rel='stylesheet' href='public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css'>
+<link rel="stylesheet" href="public/assets/libs/toastr/build/toastr.min.css">
+@endsection
+@section('internal-style')
 <style>
 @media
 	only screen
@@ -66,10 +69,9 @@ input.invalid, textarea.invalid{
 input.valid, textarea.valid{
 	border: 2px solid green;
 }
-
 </style>
 @endsection
-@section('meta')
+@section('meta-token')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('contents')
@@ -80,8 +82,8 @@ input.valid, textarea.valid{
 			<div class="ml-auto text-right">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Print</li>
+						<li class="breadcrumb-item"><a href="#">Laboratory</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Create</li>
 					</ol>
 				</nav>
 			</div>
@@ -112,7 +114,6 @@ input.valid, textarea.valid{
 												echo "<option value=\"".$item->id."\">".$item->title_name."</option>";
 											});
 										@endphp
-										<option value="other">อื่นๆ ระบุ</option>
 									</select>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
@@ -141,7 +142,7 @@ input.valid, textarea.valid{
 									<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN">
 								</div>
 							</div>
-							<button type="button" class="btn btn-primary btn-sm" id="btn_submit">OK</button>
+							<button type="button" class="btn btn-primary" id="btn_submit">Create</button>
 						</form>
 					</div>
 					<div>
@@ -169,11 +170,11 @@ input.valid, textarea.valid{
 							</thead>
 							<tbody>
 								@php
-								$titleNameKeyed = $titleName->keyBy('id');
-								$patient->each(function ($item, $key) use ($titleNameKeyed) {
+								// $titleNameKeyed = $titleName->keyBy('id');
+								$patient->each(function ($item, $key) {
 									echo "<tr>";
 										echo "<td>".$item->id."</td>";
-										echo "<td>".$titleNameKeyed[$item->title_name]->title_name.$item->first_name." ".$item->last_name."</td>";
+										echo "<td>".$item->title_name.$item->first_name." ".$item->last_name."</td>";
 										echo "<td>".$item->hn."</td>";
 										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 										echo "<td><span class=\"badge badge-pill badge-success\">".$item->lab_status."</span></td>";
@@ -193,22 +194,13 @@ input.valid, textarea.valid{
 	</div><!-- row -->
 </div>
 @endsection
-@section('script')
+@section('bottom-script')
 <script src='public/assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js'></script>
 <script src='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js'></script>
 <script src='public/assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js'></script>
 <script src='public/assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js'></script>
 <script>
 $(document).ready(function() {
-	/* title name */
-	$('#title_name_input').change(function() {
-		if ($('select#title_name_input').val() === 'other') {
-			$('#other_title_name_input').prop('disabled', false);
-		} else {
-			$('#other_title_name_input').val('');
-			$('#other_title_name_input').prop('disabled', true);
-		}
-	});
 	/* data table */
 	$('#code_table').DataTable({
 		"searching": false,
@@ -221,8 +213,9 @@ $(document).ready(function() {
 			className: 'dt-head-right dt-body-right'
 		}]
 	});
-
+	/* select picker */
 	$('.custo-select').selectpicker();
+
 	/* ajax request */
 	$.ajaxSetup({
 		headers: {
@@ -230,6 +223,7 @@ $(document).ready(function() {
 		}
 	});
 
+	/* submit ajax */
 	$("#btn_submit").click(function(e){
 		var x = ConvertFormToJSON("#patient_form");
 		$.ajax({
@@ -237,22 +231,36 @@ $(document).ready(function() {
 			url: "{{ route('ajaxRequest') }}",
 			data: x,
 			success: function(data){
-				alert(data.status);
+				// alert(data.status);
 				$.ajax({
 					url: "{{ route('ajaxRequestTable') }}",
 					dataType: "HTML",
 					success: function(html){
 						if (data.status == 204) {
-							toastr.error(data.msg, 'Flu Right Size');
+							toastr.error(data.msg, "Flu Right Size",
+								{
+									"closeButton": true,
+									"positionClass": "toast-top-center",
+									"progressBar": true,
+									"showDuration": "500"
+								}
+							);
 						} else {
 							$('#patient_data').html(html);
 							$("#title_name_input").val('0').selectpicker("refresh");
 							$('#patient_form').find('input:text').val('');
-							toastr.success(data.msg, 'Flu Right Size');
+							toastr.success(data.msg, "Flu Right Size",
+								{
+									"closeButton": true,
+									"positionClass": "toast-top-center",
+									"progressBar": true,
+									"showDuration": "500"
+								}
+							);
 						}
 					},
 					error: function(request){
-						alert('Error! Status: ' + request.status);
+						alert('Errorx! Status: ' + request.status);
 					}
 				});
 			},
@@ -261,6 +269,17 @@ $(document).ready(function() {
 			}
 		});
 	});
+});
+</script>
+<script>
+/* title name */
+$('#title_name_input').change(function() {
+	if ($('select#title_name_input').val() === '6') {
+		$('#other_title_name_input').prop('disabled', false);
+	} else {
+		$('#other_title_name_input').val('');
+		$('#other_title_name_input').prop('disabled', true);
+	}
 });
 </script>
 <script>

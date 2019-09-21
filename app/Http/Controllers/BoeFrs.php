@@ -15,6 +15,9 @@ interface BoeFrs
 	public function getPatient();
 
 	/* get patient by status */
-	public function getPatientByField($data=array('field'=>'value'));
+	public function getPatientByField($field=null, $value=null);
+
+	/* random pin */
+	public function randPin($prefix=null, $separator=null);
 }
 ?>

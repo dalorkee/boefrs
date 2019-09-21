@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 class ListDataController extends BoeFrsController
 {
+	public function __construct() {
+		parent::__construct();
+	}
 	/**
 	* Display a listing of the resource.
 	*
@@ -13,12 +16,11 @@ class ListDataController extends BoeFrsController
 	*/
 	public function index()
 	{
-		$titleName = parent::getTitleName();
 		$patient = parent::getPatient();
 		return view(
-			'admin.listData.index',
+			'list-data.index',
 			[
-				'titleName' => $titleName,
+				'titleName' => $this->title_name,
 				'patient' => $patient
 			]
 		);
