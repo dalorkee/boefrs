@@ -19,5 +19,10 @@ interface BoeFrs
 
 	/* random pin */
 	public function randPin($prefix=null, $separator=null);
+
+	/* hospital */
+	public function getHospital();
+
+	public function getProvince();
 }
 ?>

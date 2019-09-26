@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ListDataController extends BoeFrsController
@@ -14,14 +15,19 @@ class ListDataController extends BoeFrsController
 	*
 	* @return \Illuminate\Http\Response
 	*/
-	public function index()
-	{
-		$patient = parent::getPatient();
+	public function index() {
+		//$user = Auth::user();
+
+		$provinces = parent::getProvince();
+		$hospitals = parent::getHospital();
+		$patients = parent::getPatient();
 		return view(
 			'list-data.index',
 			[
+				'provinces' => $provinces,
+				'hospitals' => $hospitals,
 				'titleName' => $this->title_name,
-				'patient' => $patient
+				'patients' => $patients
 			]
 		);
 	}
@@ -31,8 +37,7 @@ class ListDataController extends BoeFrsController
 	*
 	* @return \Illuminate\Http\Response
 	*/
-	public function create()
-	{
+	public function create() {
 		//
 	}
 
@@ -42,8 +47,7 @@ class ListDataController extends BoeFrsController
 	* @param  \Illuminate\Http\Request  $request
 	* @return \Illuminate\Http\Response
 	*/
-	public function store(Request $request)
-	{
+	public function store(Request $request) {
 		//
 	}
 
@@ -53,8 +57,7 @@ class ListDataController extends BoeFrsController
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function show($id)
-	{
+	public function show($id) {
 		//
 	}
 
@@ -64,8 +67,7 @@ class ListDataController extends BoeFrsController
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function edit($id)
-	{
+	public function edit($id) {
 		//
 	}
 
@@ -76,8 +78,7 @@ class ListDataController extends BoeFrsController
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function update(Request $request, $id)
-	{
+	public function update(Request $request, $id) {
 		//
 	}
 
@@ -87,8 +88,7 @@ class ListDataController extends BoeFrsController
 	* @param  int  $id
 	* @return \Illuminate\Http\Response
 	*/
-	public function destroy($id)
-	{
+	public function destroy($id) {
 		//
 	}
 }

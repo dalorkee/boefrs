@@ -231,7 +231,6 @@ $(document).ready(function() {
 			url: "{{ route('ajaxRequest') }}",
 			data: x,
 			success: function(data){
-				// alert(data.status);
 				$.ajax({
 					url: "{{ route('ajaxRequestTable') }}",
 					dataType: "HTML",

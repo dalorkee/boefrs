@@ -91,6 +91,11 @@ class CodeController extends BoeFrsController
 		//
 	}
 
+	public function ajaxRequestSelect(Request $request) {
+		$x = $request->x;
+		return response()->json(['x'=>$x]);
+	}
+
 	public function ajaxRequestPost(Request $request) {
 		if (empty($request->firstNameInput)) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
@@ -106,7 +111,7 @@ class CodeController extends BoeFrsController
 			}
 			$code->first_name = $request->firstNameInput;
 			$code->last_name = $request->lastNameInput;
-			$code->lab_code = parent::randPin('L', '-');
+			$code->lab_code = parent::randPin();
 			$code->lab_status = 'New';
 			$code->user = auth()->user()->name;
 			$code->active = '1';
@@ -166,5 +171,7 @@ class CodeController extends BoeFrsController
 		";
 		return $htm;
 	}
+
+
 
 }

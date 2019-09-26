@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\hospital;
 
-class HospitalController extends BoeFrsController
+class HospitalController extends Controller
 {
 	/**
 	* Display a listing of the resource.
@@ -13,6 +14,8 @@ class HospitalController extends BoeFrsController
 	public function index() {
 		/* return view('admin.dashboard.index'); */
 	}
+
+
 
 	public function hospitalHome() {
 		return view('admin.hospital.index');

@@ -12,8 +12,10 @@
 */
 
 Auth::routes();
-Route::get('/', 'DashboardController@index');
-Route::get('/home', 'DashboardController@index')->name('home');
+//Route::get('/', 'DashboardController@index');
+//Route::get('/home', 'DashboardController@index')->name('home');
+
+Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
 	Route::resource('roles','RoleController');
@@ -32,6 +34,9 @@ Route::post('ajaxRequest', 'CodeController@ajaxRequestPost')->name('ajaxRequest'
 
 /* Ajax request for update patient table */
 Route::get('/ajaxRequestTable', 'CodeController@ajaxRequestTable')->name('ajaxRequestTable');
+
+/* Ajax select */
+Route::post('/ajaxSelect', 'CodeController@ajaxRequestSelect')->name('ajaxSelect');
 
 /* Hospital print data form */
 //Route::get('/hospital', 'HospitalController@hospitalLab')->name('hospital');
