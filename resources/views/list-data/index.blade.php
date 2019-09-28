@@ -333,7 +333,8 @@ $(".select-status").select2({
 	tags: true
 });
 $(".select-province").on("select2:select select2:unselect", function(e) {
-	// var s = $(e.currentTarget).val();
+	var s = $(e.currentTarget).val();
+	alert(s);
 });
 /*
 $(".search-status").on("select2:select select2:unselect", function(e) {

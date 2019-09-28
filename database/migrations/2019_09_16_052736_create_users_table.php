@@ -20,8 +20,13 @@ class CreateUsersTable extends Migration
 			$table->string('idcard');
 			$table->string('email');
 			$table->string('password');
+			$table->string('hospcode');
+			$table->enum('status', ['active', 'reject'])->default('active');
 			$table->rememberToken();
 			$table->timestamps();
+			$table->engine = 'InnoDB';
+			$table->charset = 'utf8mb4';
+			$table->collation = 'utf8mb4_unicode_ci';
 		});
 	}
 
