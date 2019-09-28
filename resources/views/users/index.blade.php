@@ -3,11 +3,11 @@
 <div class="page-breadcrumb bg-light">
 	<div class="row">
 		<div class="col-12 d-flex no-block align-items-center">
-			<h4 class="page-title"><span style="display:none;">Print</span></h4>
+			<h4 class="page-title"><span style="display:none;">Users</span></h4>
 			<div class="ml-auto text-right">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">User</a></li>
+						<li class="breadcrumb-item"><a href="{{ route('users.index') }}">User</a></li>
 						<li class="breadcrumb-item active" aria-current="page">Manage</li>
 					</ol>
 				</nav>
