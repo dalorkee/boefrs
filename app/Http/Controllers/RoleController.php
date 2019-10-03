@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
@@ -22,10 +22,11 @@ class RoleController extends Controller
 	*
 	* @return \Illuminate\Http\Response
 	*/
-	public function index()
+	public function index(Request $request)
 	{
 		$roles = Role::orderBy('id', 'DESC')->paginate(5);
-		return view('roles.index', compact('roles'))->with('i', ($request->input('page', 1) - 1) * 5);
+		return view('roles.index', compact('roles'))
+			->with('i', ($request->input('page', 1) - 1) * 5);
 	}
 
 	/**
@@ -36,7 +37,7 @@ class RoleController extends Controller
 	public function create()
 	{
 		$permission = Permission::get();
-		return view('roles.create',compact('permission'));
+		return view('roles.create', compact('permission'));
 	}
 
 	/**

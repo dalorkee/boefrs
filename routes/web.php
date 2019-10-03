@@ -38,6 +38,9 @@ Route::get('/ajaxRequestTable', 'CodeController@ajaxRequestTable')->name('ajaxRe
 /* Ajax select */
 Route::post('/ajaxSelect', 'CodeController@ajaxRequestSelect')->name('ajaxSelect');
 
+/* Ajax request hosp */
+Route::get('/ajaxGetHospByProv', 'UserController@ajaxGetHospByProv')->name('ajaxGetHospByProv');
+
 /* Hospital print data form */
 //Route::get('/hospital', 'HospitalController@hospitalLab')->name('hospital');
 

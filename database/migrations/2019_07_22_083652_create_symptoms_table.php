@@ -30,6 +30,6 @@ class CreateSymptomsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('symptoms');
+        Schema::dropIfExists('ref_symptoms');
     }
 }

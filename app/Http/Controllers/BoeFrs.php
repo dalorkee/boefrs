@@ -6,23 +6,26 @@ namespace App\Http\Controllers;
 interface BoeFrs
 {
 	/* get all symptoms */
-	public function getSymptoms();
+	public function symptoms();
 
-	/* get all title_name */
-	public function getTitleName();
+	/* all title_name */
+	public function titleName();
 
-	/* get all patient */
-	public function getPatient();
+	/* all patient */
+	public function patients();
 
-	/* get patient by status */
-	public function getPatientByField($field=null, $value=null);
+	/* patient by status */
+	public function patientByField($field=null, $value=null);
 
 	/* random pin */
 	public function randPin($prefix=null, $separator=null);
 
 	/* hospital */
-	public function getHospital();
+	public function hospitals();
 
-	public function getProvince();
+	public function hospitalByProv($prov_id=null);
+
+	public function provinces();
+
 }
 ?>

@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Code;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
+use App\Code;
 use Session;
 
 class CodeController extends BoeFrsController

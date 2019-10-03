@@ -1,16 +1,19 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\User;
 use Spatie\Permission\Models\Role;
+use App\User;
 use DB;
 use Hash;
 
-class UserController extends Controller
+class UserController extends BoeFrsController
 {
+	public function __construct() {
+		parent::__construct();
+	}
+
 	/**
 	* Display a listing of the resource.
 	*
@@ -19,7 +22,8 @@ class UserController extends Controller
 	public function index(Request $request)
 	{
 		$data = User::orderBy('id', 'DESC')->paginate(5);
-		return view('users.index', compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+		return view('users.index', compact('data'))
+				->with('i', ($request->input('page', 1) - 1) * 5);
 	}
 
 	/**
@@ -29,8 +33,11 @@ class UserController extends Controller
 	*/
 	public function create()
 	{
+		$provinces = parent::provinces();
 		$roles = Role::pluck('name', 'name')->all();
-		return view('users.create', compact('roles'));
+		return view('users.create', compact('roles'))
+				->with('titleName', $this->title_name)
+				->with('provinces', $provinces);
 	}
 
 	/**
@@ -127,4 +134,18 @@ class UserController extends Controller
 		User::find($id)->delete();
 		return redirect()->route('users.index')->with('success', 'User deleted successfully');
 	}
+
+	public function ajaxGetHospByProv(Request $request)
+	{
+		$this->result = parent::hospitalByProv($request->prov_id);
+		$htm = "<option value=\"0\">-- โปรดเลือก --</option>\n";
+		foreach($this->result as $key=>$value) {
+				$htm .= "<option value=\"".$value->hospcode."\">".$value->hosp_name."</option>\n";
+		}
+		return $htm;
+	}
+
+
+
+
 }

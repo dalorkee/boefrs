@@ -3,34 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Hospitals;
 
 class BoeFrsController extends Controller implements BoeFrs
 {
-	protected $result;
+	public $result;
 	public $title_name;
 
 	public function __construct() {
-		$titleName = $this->getTitleName();
+		$titleName = $this->titleName();
 		$this->title_name = $titleName->keyBy('id');
 		$this->result = null;
 	}
 
-	public function getSymptoms() {
+	public function symptoms() {
 		return DB::connection('mysql')->table('ref_symptoms')->get();
 	}
 
-	public function getTitleName() {
+	public function titleName() {
 		return DB::connection('mysql')->table('ref_title_name')->get();
 	}
 
-	public function getPatient() {
+	public function patients() {
 		return DB::connection('mysql')->table('patient')->get();
 	}
 
-	public function getPatientByField($field=null, $value=null) {
+	public function patientByField($field=null, $value=null) {
 		return DB::connection('mysql')
 			->table('patient')
 			->where($field, '=', $value)
@@ -61,7 +62,7 @@ class BoeFrsController extends Controller implements BoeFrs
 	}
 	*/
 
-	public function getHospital() {
+	public function hospitals() {
 		return DB::connection('mysql')
 			->table('hospitals')
 			->orderBy('id', 'asc')
@@ -69,11 +70,21 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
-	public function getProvince() {
+	public function provinces() {
 		return DB::connection('mysql')
 			->table('ref_province')
 			->orderBy('province_id', 'asc')
 			->get();
 	}
+
+	public function hospitalByProv($prov_code=0) {
+		return DB::connection('mysql')
+			->table('hospitals')
+			->where('prov_code', '=', $prov_code)
+			->orderBy('id', 'asc')
+			->get();
+	}
+
+
 
 }
