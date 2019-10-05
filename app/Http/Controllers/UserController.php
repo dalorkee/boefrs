@@ -48,6 +48,7 @@ class UserController extends BoeFrsController
 	*/
 	public function store(Request $request)
 	{
+		//dd($request);
 		$this->validate($request, [
 			'name' => 'required',
 			'email' => 'required|email|unique:users,email',

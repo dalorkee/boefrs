@@ -12,11 +12,12 @@
 */
 
 Auth::routes();
-//Route::get('/', 'DashboardController@index');
-//Route::get('/home', 'DashboardController@index')->name('home');
 
+/* Home */
+Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 
+/* Auth */
 Route::group(['middleware' => ['auth']], function() {
 	Route::resource('roles','RoleController');
 	Route::resource('users','UserController');

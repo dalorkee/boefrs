@@ -1,6 +1,5 @@
 @extends('layouts.index')
 @section('custom-style')
-<link rel="stylesheet" href="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('public/assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 @section('contents')
@@ -41,13 +40,13 @@
 								</ul>
 							</div>
 						@endif
-						<!-- !! Form::open(array('route' => 'users.store', 'method'=>'POST')) !! -->
-						<form method="POST" action="{{ route('users.store') }}" class="mt-4 mb-3">
+						{!! Form::open(array('route'=>'users.store', 'method'=>'POST', 'class'=>'mt-4 mb-3')) !!}
+						<!-- form method="POST" action="{ route('users.store') }" class="mt-4 mb-3"> -->
 							<div class="row">
 								<div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
 									<div class="form-group">
 										<label for="province">จังหวัด</label>
-										<select class="form-control select-province" style="width:100%">
+										<select name="provine" class="form-control select-province" style="width:100%">
 											<option value="0">-- เลือกจังหวัด --</option>
 											@php
 												$provinces->keyBy('province_id');
@@ -61,7 +60,7 @@
 								<div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
 									<div class="form-group">
 										<label for="hospital">โรงพยาบาล</label>
-										<select class="form-control select-hospital" disabled style="width:100%">
+										<select name="hospcode" class="form-control select-hospital" disabled style="width:100%">
 											<option value="0">-- เลือกโรงพยาบาล --</option>
 										</select>
 									</div>
@@ -71,7 +70,7 @@
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
 									<div class="form-group">
 										<label for="titleName">คำนำหน้าชื่อ</label>
-										<select name="titleNameInput" class="form-control select-title-name" style="width:100%">
+										<select name="title_name" class="form-control select-title-name" style="width:100%">
 											<option value="0">-- โปรดเลือก --</option>
 											@php
 												$titleName->each(function ($item, $key) {
@@ -84,7 +83,7 @@
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
 									<div class="form-group">
 										<label for="otherTitleNameInput">อื่นๆ ระบุ</label>
-										<input type="text" name="otherTitleNameInput" class="form-control other-title-name" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
+										<input type="text" name="otname" class="form-control other-title-name" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
 									</div>
 								</div>
 							</div>
@@ -154,7 +153,6 @@
 </div>
 @endsection
 @section('bottom-script')
-<script src="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 <script src="{{ URL::asset('public/assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script>
 $(document).ready(function() {

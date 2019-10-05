@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use App\Code;
 use Session;
 
@@ -20,7 +23,10 @@ class CodeController extends BoeFrsController
 	*/
 
 	public function index() {
-		$patient = parent::getPatientByField('lab_status', 'New');
+		$user = Auth::user();
+		$permissions = $user->getAllPermissions();
+		dd($permissions);
+		$patient = parent::patientByField('lab_status', 'New');
 		return view(
 			'code.index',
 			[
