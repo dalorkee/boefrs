@@ -19,16 +19,21 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /* Auth */
 Route::group(['middleware' => ['auth']], function() {
-	Route::resource('roles','RoleController');
-	Route::resource('users','UserController');
-	Route::resource('products','ProductController');
+	Route::resource('roles', 'RoleController');
+	Route::resource('users', 'UserController');
+	Route::resource('products', 'ProductController');
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('code', 'CodeController');
 	Route::resource('list-data', 'ListDataController');
 });
 
-/* Hospital Lab */
-//Route::get('/home1', 'HospitalController@hospitalHome')->name('home1');
+/* Register */
+Route::get('/register', '\App\Http\Controllers\Auth\RegisterController@index')->name('register');
+Route::post('register', '\App\Http\Controllers\Auth\RegisterController@register')->name('register');
+
+/* Logout */
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
 
 /* Ajax request for generate lab code */
 Route::post('ajaxRequest', 'CodeController@ajaxRequestPost')->name('ajaxRequest');
@@ -37,13 +42,13 @@ Route::post('ajaxRequest', 'CodeController@ajaxRequestPost')->name('ajaxRequest'
 Route::get('/ajaxRequestTable', 'CodeController@ajaxRequestTable')->name('ajaxRequestTable');
 
 /* Ajax select */
-Route::post('/ajaxSelect', 'CodeController@ajaxRequestSelect')->name('ajaxSelect');
+Route::post('ajaxSelect', 'CodeController@ajaxRequestSelect')->name('ajaxSelect');
 
 /* Ajax request hosp */
 Route::get('/ajaxGetHospByProv', 'UserController@ajaxGetHospByProv')->name('ajaxGetHospByProv');
 
-/* Hospital print data form */
-//Route::get('/hospital', 'HospitalController@hospitalLab')->name('hospital');
+/* Captcha */
+Route::get('refreshcaptcha', 'CaptchaController@refreshCaptcha');
 
 /* Sample Submission Form */
 Route::get('/sample-submissions-form', array(

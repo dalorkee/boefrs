@@ -13,25 +13,69 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="public/assets/images/favicon.png">
 	<title>{{ config('app.name', 'Flu Right Size') }}</title>
 	<!-- Custom CSS -->
-	<link href="public/dist/css/style.min.css" rel="stylesheet">
+	@yield('custom-style')
+	<style>
+		.topbar, #navbarSupportedContent {
+			background-color:#343a40 !important;
+		}
+		#navbarSupportedContent a {
+			color: white;
+		}
+	</style>
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+	<![endif]-->
 </head>
 <body>
-	<div class="main-wrapper">
-		<div class="preloader">
-			<div class="lds-ripple">
-				<div class="lds-pos"></div>
-				<div class="lds-pos"></div>
+<div class="main-wrapper">
+	<div class="preloader">
+		<div class="lds-ripple">
+			<div class="lds-pos"></div>
+			<div class="lds-pos"></div>
+		</div>
+	</div>
+	<header class="topbar">
+		<nav class="navbar top-navbar navbar-expand-md">
+			<div class="navbar-header">
+				<!-- This is for the sidebar toggle which is visible on mobile only -->
+				<a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<i class="ti-menu ti-close"></i>
+				</a>
+				<a class="navbar-brand" href="#">
+					<b class="logo-icon p-l-10">
+						<img src="public/assets/images/logo-icon.png" alt="BOE" class="light-logo">
+					</b>
+					<span class="logo-text">
+						<img src="public/assets/images/logo2.png" alt="FRS" class="light-logo">
+					</span>
+				</a>
+				<!-- Toggle which is visible on mobile only -->
+				<a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<i class="ti-more"></i>
+				</a>
 			</div>
-		</div>
-		<div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
-			@yield('content')
-		</div>
+			<!-- End Logo -->
+			<div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+				<!-- toggle and nav items -->
+				<ul class="navbar-nav float-left mr-auto">
+					<li class="nav-item d-none d-md-block">
+						<a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar">
+							<i class="mdi mdi-menu font-24" style="display:none;"></i>
+						</a>
+					</li>
+				</ul>
+				<!-- Right side toggle and nav items -->
+				<ul class="navbar-nav float-right">
+					<li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="fas fa-lock m-r-10"></i>{{ __('Login') }}</a></li>
+					<li class="nav-item"><a href="{{ route('register') }}" class="nav-link"><i class="fas fa-user-plus m-r-10"></i>{{ __('Register') }}</a></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
+		@yield('content')
 	</div>
 	<script src="public/assets/libs/jquery/dist/jquery.min.js"></script>
 	<!-- Bootstrap tether Core JavaScript -->
@@ -52,5 +96,6 @@
 			$("#loginform").fadeIn();
 		});
 	</script>
+	@yield('bottom-script')
 </body>
 </html>

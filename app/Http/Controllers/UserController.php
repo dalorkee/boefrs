@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\BoeFrsController;
 use App\User;
 use DB;
 use Hash;
@@ -50,6 +51,7 @@ class UserController extends BoeFrsController
 	{
 		//dd($request);
 		$this->validate($request, [
+			'hospcode' => 'required',
 			'name' => 'required',
 			'email' => 'required|email|unique:users,email',
 			'password' => 'required|same:confirm-password',
@@ -58,10 +60,8 @@ class UserController extends BoeFrsController
 
 		$input = $request->all();
 		$input['password'] = Hash::make($input['password']);
-
 		$user = User::create($input);
 		$user->assignRole($request->input('roles'));
-
 		return redirect()->route('users.index')->with('success', 'User created successfully');
 	}
 

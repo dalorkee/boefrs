@@ -6,12 +6,19 @@
 			<div class="card">
 				<div class="card-header">Dashboard</div>
 				<div class="card-body">
+					@php
+						$user = Auth::user();
+					@endphp
 					@if (session('status'))
 						<div class="alert alert-success" role="alert">
 							{{ session('status') }}
 						</div>
 					@endif
-					You are logged in {{ auth()->user()->name }}!
+					@if (Auth::user()->hasRole('Admin'))
+						You are logged in Admin {{ auth()->user()->name }} !!
+					@else
+						{{ __('You are guest') }}
+					@endif
 				</div>
 			</div>
 		</div>

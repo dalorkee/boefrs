@@ -1,14 +1,17 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\BoeFrsController;
+use App\User;
+use DB;
 
-class RegisterController extends Controller
+class RegisterController extends BoefrsController
 {
     /*
     |--------------------------------------------------------------------------
@@ -28,45 +31,90 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/register';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->middleware('guest');
+	}
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
+	protected function index(Request $request) {
+		$provinces = parent::provinces();
+		$roles = Role::pluck('name', 'id')->all();
+		return view('auth.register', compact('roles'))
+				->with('titleName', $this->title_name)
+				->with('provinces', $provinces);
+	}
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-    }
+	/**
+	* Get a validator for an incoming registration request.
+	*
+	* @param  array  $data
+	* @return \Illuminate\Contracts\Validation\Validator
+	*/
+	public function validator(array $data)
+	{
+		/* use for user model
+		return Validator::make($data, [
+			'province' => ['required'],
+			'hospcode' => ['required'],
+			'title_name' => ['required'],
+			'name' => ['required', 'string', 'max:255'],
+			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+			'password' => ['required', 'min:6', 'confirmed'],
+			'password_confirmation' => ['required', 'min:6'],
+			'captcha' => ['required', 'captcha'],
+		]);
+		*/
+	}
+
+	/**
+	* Create a new user instance after a valid registration.
+	*
+	* @param  array  $data
+	* @return \App\User
+	*/
+	protected function create(array $data)
+	{
+		/* use for user model
+		if (!isset($data['title_name_other']) || empty($data['title_name_other'])) {
+			$data['title_name_other'] = NULL;
+		}
+		return User::create([
+			'province' => $data['province'],
+			'hospcode' => $data['hospcode'],
+			'title_name' => $data['title_name'],
+			'title_name_other' => $data['title_name_other'],
+			'name' => $data['name'],
+			'lastname' => $data['lastname'],
+			'email' => $data['email'],
+			'password' => Hash::make($data['password']),
+		]);
+		*/
+	}
+
+	protected function register(Request $request)
+	{
+		$this->validate($request, [
+			'province' => 'required',
+			'hospcode' => 'required',
+			'title_name' => 'required',
+			'name' => 'required|string|max:255',
+			'email' => 'required|email|max:255|unique:users,email',
+			'password' => 'required|same:confirm-password',
+			'captcha' => 'required|captcha',
+		]);
+
+		$input = $request->all();
+		$input['password'] = Hash::make($input['password']);
+		$user = User::create($input);
+		$user->assignRole($request->input('roles'));
+		return redirect()->route('register')->with('success', 'User created successfully');
+	}
 }

@@ -104,12 +104,6 @@
 							<div class="row">
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
 									<div class="form-group">
-										<label>หมายเลขบัตร ปชช:</label>
-										{!! Form::text('idcard', null, array('placeholder' => 'ID Card','class' => 'form-control')) !!}
-									</div>
-								</div>
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
-									<div class="form-group">
 										<label>อีเมล์:</label>
 										{!! Form::text('email', null, array('placeholder' => 'Email','class' => 'form-control')) !!}
 									</div>
