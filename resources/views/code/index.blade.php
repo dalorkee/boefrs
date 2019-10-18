@@ -205,8 +205,8 @@ input.valid, textarea.valid{
 										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 										echo "<td><span class=\"badge badge-pill badge-success\">".$item->lab_status."</span></td>";
 										echo "<td>";
-											echo "<button type=\"button\" class=\"btn btn-cyan btn-sm\">Edit</button>&nbsp;";
-											echo "<button type=\"button\" class=\"btn btn-danger btn-sm\">Delete</button>";
+											echo "<a href=\"#\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
+											echo "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">Delete</button>";
 										echo "</td>";
 									echo "</tr>";
 								});

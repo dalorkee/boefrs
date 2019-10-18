@@ -139,6 +139,16 @@ class CodeController extends BoeFrsController
 	}
 
 	public function ajaxRequestTable() {
+		$roleArr = auth()->user()->getRoleNames();
+		if ($roleArr[0] == 'admin') {
+			$patients = parent::patientByAdmin('new');
+		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
+			$hospcode = auth()->user()->hospcode;
+			$patients = parent::patientByUser($hospcode, 'new');
+		} else {
+			return redirect()->route('logout');
+		}
+
 		$htm = "
 		<table class=\"display mT-2 mb-4\" id=\"code_table1\" role=\"table\">
 			<thead>
@@ -152,38 +162,36 @@ class CodeController extends BoeFrsController
 				</tr>
 			</thead>
 			<tbody";
-
-		$patient = parent::patientByField('lab_status', 'new');
-		foreach($patient as $key=>$value) {
-			$htm .= "<tr>";
-				$htm .= "<td>".$value->id."</td>";
-				$htm .= "<td>".$value->title_name.$value->first_name." ".$value->last_name."</td>";
-				$htm .= "<td>".$value->hn."</td>";
-				$htm .= "<td><strong class=\"text-danger\">".$value->lab_code."</strong></td>";
-				$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
-				$htm .= "<td>";
-					$htm .= "<button type=\"button\" class=\"btn btn-cyan btn-sm\">Edit</button>&nbsp;";
-					$htm .= "<button type=\"button\" class=\"btn btn-danger btn-sm\">Delete</button>";
-				$htm .= "</td>";
-			$htm .= "</tr>";
-		}
-		$htm .= "</tbody>";
-		$htm .= "</table>";
-		$htm .= "<script>
-			$(document).ready(function() {
-				$('#code_table1').DataTable({
-					'searching': false,
-					'paging': false,
-					'ordering': true,
-					'info': false,
-					'responsive': true,
-					'columnDefs': [{
-						targets: -1,
-						className: 'dt-head-right dt-body-right'
-					}]
+			foreach($patients as $key=>$value) {
+				$htm .= "<tr>";
+					$htm .= "<td>".$value->id."</td>";
+					$htm .= "<td>".$value->title_name.$value->first_name." ".$value->last_name."</td>";
+					$htm .= "<td>".$value->hn."</td>";
+					$htm .= "<td><strong class=\"text-danger\">".$value->lab_code."</strong></td>";
+					$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
+					$htm .= "<td>";
+						$htm .= "<button type=\"button\" class=\"btn btn-cyan btn-sm\">Edit</button>&nbsp;";
+						$htm .= "<button type=\"button\" class=\"btn btn-danger btn-sm\">Delete</button>";
+					$htm .= "</td>";
+				$htm .= "</tr>";
+			}
+			$htm .= "</tbody>";
+			$htm .= "</table>";
+			$htm .= "<script>
+				$(document).ready(function() {
+					$('#code_table1').DataTable({
+						'searching': false,
+						'paging': false,
+						'ordering': true,
+						'info': false,
+						'responsive': true,
+						'columnDefs': [{
+							targets: -1,
+							className: 'dt-head-right dt-body-right'
+						}]
+					});
 				});
-			});
-		";
+			";
 		return $htm;
 	}
 

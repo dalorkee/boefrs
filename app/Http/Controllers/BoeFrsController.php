@@ -47,7 +47,7 @@ class BoeFrsController extends Controller implements BoeFrs
 
 	protected function patientByUser($hospcode=null, $lab_status='new') {
 		return DB::connection('mysql')
-			->table('patient')
+			->table('patients')
 			->where([
 				['hoscpde', '=', $hospcode],
 				['lab_status', '=', $lab_status],
