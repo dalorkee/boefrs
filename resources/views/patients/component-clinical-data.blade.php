@@ -358,7 +358,7 @@
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-12 col-xl-12 mb-3">
 		<label for="sickDateInput">ภาวะสุขภาพ หรือ โรคประจำตัว</label>
 		<div class="table-responsive">
-			@include('admin.hospital.component-health-tbl')
+			@include('patients.component-health-tbl')
 		</div>
 	</div>
 </div>

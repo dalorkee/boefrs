@@ -196,7 +196,21 @@ input.valid, textarea.valid{
 								</tr>
 							</thead>
 							<tbody>
-								@php
+							@foreach ($patients as $key => $value)
+								<tr>
+									<td>{{ $value->id }}</td>
+									<td>{{ $value->title_name.$value->first_name." ".$value->last_name }}</td>
+									<td>{{ $value->hn }}</td>
+									<td><span class="text-danger">{{ $value->lab_code }}</span></td>
+									<td><span class="badge badge-pill badge-success">{{ $value->lab_status }}</span></td>
+									<td>
+										<a href="{{ route('patient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">Edit</a>&nbsp;
+										<a href="#" class="btn btn-outline-danger btn-sm">Delete</a>
+									</td>
+								</tr>
+							@endforeach
+							@php
+								/*
 								$patients->each(function ($item, $key) {
 									echo "<tr>";
 										echo "<td>".$item->id."</td>";
@@ -205,12 +219,13 @@ input.valid, textarea.valid{
 										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 										echo "<td><span class=\"badge badge-pill badge-success\">".$item->lab_status."</span></td>";
 										echo "<td>";
-											echo "<a href=\"#\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
-											echo "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">Delete</button>";
+											echo "<a href=\"".route('patient', ['pid'=>$item->id])."\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
+											echo "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">Delete</a>";
 										echo "</td>";
 									echo "</tr>";
 								});
-								@endphp
+								*/
+							@endphp
 							</tbody>
 						</table>
 					</div>

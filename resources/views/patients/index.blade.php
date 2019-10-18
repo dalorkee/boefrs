@@ -11,7 +11,7 @@
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">Home</a></li>
 						<li class="breadcrumb-item active" aria-current="page">Form</li>
-						<li class="breadcrumb-item active" aria-current="page">Hospital</li>
+						<li class="breadcrumb-item active" aria-current="page">Patient</li>
 					</ol>
 				</nav>
 			</div>
@@ -33,27 +33,27 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-info" style="margin-top:0;">
-									@include('admin.hospital.component-general-data')
+									@include('patients.component-general-data')
 								</div><!-- bd-callout -->
 							</div><!-- card body -->
 						</div><!-- card -->
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-danger">
-									@include('admin.hospital.component-clinical-data')
+									@include('patients.component-clinical-data')
 								</div><!-- bd-callout -->
 							</div><!-- card body -->
 						</div><!-- card -->
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-custom-5">
-									@include('admin.hospital.component-risk-history-tbl')
+									@include('patients.component-risk-history-tbl')
 								</div><!-- bd-callout -->
 							</div><!-- card body -->
 						</div><!-- card -->
 						<div class="card">
 							<div class="card-body border-top">
-								@include('admin.hospital.component-reporter')
+								@include('patients.component-reporter')
 							</div><!-- card body -->
 						</div><!-- card -->
 						<div class="border-top">

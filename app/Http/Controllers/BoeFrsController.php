@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Hospitals;
+use App\Symptoms;
 
 class BoeFrsController extends Controller implements BoeFrs
 {
@@ -20,7 +20,8 @@ class BoeFrsController extends Controller implements BoeFrs
 	}
 
 	public function symptoms() {
-		return DB::connection('mysql')->table('ref_symptoms')->get();
+		return Symptoms::all();
+		//return DB::connection('mysql')->table('ref_symptoms')->get();
 	}
 
 	public function titleName() {
@@ -33,14 +34,14 @@ class BoeFrsController extends Controller implements BoeFrs
 
 	public function patientByField($field=null, $value=null) {
 		return DB::connection('mysql')
-			->table('patient')
+			->table('patients')
 			->where($field, '=', $value)
 			->get();
 	}
 
 	protected function patientByAdmin($lab_status='new') {
 		return DB::connection('mysql')
-			->table('patient')
+			->table('patients')
 			->where('lab_status', '=', $lab_status)
 			->get();
 	}

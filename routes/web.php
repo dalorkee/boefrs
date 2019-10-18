@@ -21,7 +21,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => ['auth']], function() {
 	Route::resource('roles', 'RoleController');
 	Route::resource('users', 'UserController');
-	Route::resource('products', 'ProductController');
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('code', 'CodeController');
 	Route::resource('list-data', 'ListDataController');
@@ -33,7 +32,6 @@ Route::post('register', '\App\Http\Controllers\Auth\RegisterController@register'
 
 /* Logout */
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
-
 
 /* Ajax request for generate lab code */
 Route::post('ajaxRequest', 'CodeController@ajaxRequestPost')->name('ajaxRequest');
@@ -55,3 +53,6 @@ Route::get('/sample-submissions-form', array(
 			'as'   => 'sample-submission.form',
 			'uses' => 'SampleSubmissionsController@Form_Sample_Submissions'
 ));
+
+/* patient */
+Route::get('/patient/{id}', 'PatientsController@index')->name('patient');
