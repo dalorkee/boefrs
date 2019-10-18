@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Patients;
 
 class PatientsController extends BoeFrsController
 {
@@ -11,13 +12,19 @@ class PatientsController extends BoeFrsController
 	*
 	* @return \Illuminate\Http\Response
 	*/
-	public function index()
+	public function index(Request $request)
 	{
 		$symptoms = parent::symptoms();
+		$patient = Patients::where('active', 1)
+		->orderBy('name', 'desc')
+		->take(10)
+		->get();
+
 		return view(
 			'patients.index',
 			[
-				'symptoms'=>$symptoms
+				'symptoms'=>$symptoms,
+				'id'=>$request->id
 			]
 		);
 	}
@@ -27,10 +34,10 @@ class PatientsController extends BoeFrsController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+	public function create()
+	{
+
+	}
 
     /**
      * Store a newly created resource in storage.
