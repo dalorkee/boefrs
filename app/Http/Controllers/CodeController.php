@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Code;
+use DB;
 use Session;
 
 class CodeController extends BoeFrsController
@@ -15,6 +16,8 @@ class CodeController extends BoeFrsController
 
 	public function __construct() {
 		parent::__construct();
+		$this->middleware('auth');
+		$this->middleware(['role:admin|hospital|lab']);
 	}
 	/**
 	* Display a listing of the resource.
@@ -22,16 +25,20 @@ class CodeController extends BoeFrsController
 	* @return \Illuminate\Http\Response
 	*/
 
-	public function index() {
-		$user = Auth::user();
-		$permissions = $user->getAllPermissions();
-		dd($permissions);
-		$patient = parent::patientByField('lab_status', 'New');
-		return view(
-			'code.index',
+	public function index(Request $request) {
+		$roleArr = auth()->user()->getRoleNames();
+		if ($roleArr[0] == 'admin') {
+			$patients = parent::patientByAdmin('new');
+		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
+			$hospcode = auth()->user()->hospcode;
+			$patients = parent::patientByUser($hospcode, 'new');
+		} else {
+			return redirect()->route('logout');
+		}
+		return view('code.index',
 			[
 				'titleName' => $this->title_name,
-				'patient' => $patient
+				'patients' => $patients
 			]
 		);
 	}
@@ -97,35 +104,36 @@ class CodeController extends BoeFrsController
 		//
 	}
 
+/*
 	public function ajaxRequestSelect(Request $request) {
 		$x = $request->x;
 		return response()->json(['x'=>$x]);
 	}
-
+*/
 	public function ajaxRequestPost(Request $request) {
 		if (empty($request->firstNameInput)) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
 		} else {
 			$code = new Code;
-			$code->hoscpde = '1111';
+			$code->hoscpde = auth()->user()->hospcode;
 			$code->hn = $request->hnInput;
 			$code->an = $request->anInput;
-			if ($request->titleNameInput == '6') {
+
+			if ($request->titleNameInput == 6 && isset($request->otherTitleNameInput)) {
 				$code->title_name = $request->otherTitleNameInput;
 			} else {
 				$code->title_name = $this->title_name[$request->titleNameInput]->title_name;
 			}
+
 			$code->first_name = $request->firstNameInput;
 			$code->last_name = $request->lastNameInput;
 			$code->lab_code = parent::randPin();
-			$code->lab_status = 'New';
-			$code->user = auth()->user()->name;
-			$code->active = '1';
+			$code->user = '1';
 			$saved = $code->save();
-			if (!$saved) {
-				return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
-			} else {
+			if ($saved) {
 				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+			} else {
+				return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
 			}
 		}
 	}
@@ -144,7 +152,8 @@ class CodeController extends BoeFrsController
 				</tr>
 			</thead>
 			<tbody";
-		$patient = parent::getPatientByField('lab_status', 'New');
+
+		$patient = parent::patientByField('lab_status', 'new');
 		foreach($patient as $key=>$value) {
 			$htm .= "<tr>";
 				$htm .= "<td>".$value->id."</td>";
@@ -175,6 +184,16 @@ class CodeController extends BoeFrsController
 				});
 			});
 		";
+		return $htm;
+	}
+
+	public function ajaxGetHospByProv(Request $request)
+	{
+		$this->result = parent::hospitalByProv($request->prov_id);
+		$htm = "<option value=\"0\">-- โปรดเลือก --</option>\n";
+		foreach($this->result as $key=>$value) {
+				$htm .= "<option value=\"".$value->hospcode."\">".$value->hosp_name."</option>\n";
+		}
 		return $htm;
 	}
 

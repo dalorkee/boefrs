@@ -112,6 +112,17 @@ class RegisterController extends BoefrsController
 		]);
 
 		$input = $request->all();
+		
+		if ($input['title_name'] != 0 && $input['title_name'] != 6) {
+			$title_name_coll = $this->title_name[$input['title_name']];
+			$title_name = $title_name_coll->title_name;
+			$input['title_name'] = $title_name;
+		} elseif (isset($input['title_name_other']) && $input['title_name'] == 6) {
+			$input['title_name'] = $input['title_name_other'];
+		} else {
+			$input['title_name'] = null;
+		}
+
 		$input['password'] = Hash::make($input['password']);
 		$user = User::create($input);
 		$user->assignRole($request->input('roles'));

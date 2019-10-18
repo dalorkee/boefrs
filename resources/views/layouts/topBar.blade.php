@@ -30,11 +30,58 @@
 			<!-- Right side toggle and nav items -->
 			<!-- ============================================================== -->
 			<ul class="navbar-nav float-right">
+				@php
+					$provinces = Session::get('provinces');
+					$role = auth()->user()->roles->pluck('name');
+				@endphp
+				<li class="nav-item"><a class="nav-link">{{ auth()->user()->name }}&nbsp;[{{ $role[0] }}]</a></li>
+
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Html::image('public/assets/images/users/1.jpg', 'alt=user', ['class'=>'rounded-circle', 'width'=>'31']) }}</a>
-					<div class="dropdown-menu dropdown-menu-right user-dd animated bounceInDown">
-						<a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
-						<a class="dropdown-item" href="{{ route('logout') }}"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
+					<a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						{{ Html::image('public/assets/images/users/1.jpg', 'alt=user', ['class'=>'rounded-circle', 'width'=>'31']) }}
+					</a>
+					<div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown" aria-labelledby="2">
+						<ul class="list-style-none">
+							<li>
+								<div class="">
+									 <!-- Message -->
+									<a href="javascript:void(0)" class="link border-top">
+										<div class="d-flex no-block align-items-center p-10">
+											<span class="btn btn-success btn-circle"><i class="mdi mdi-account"></i></span>
+											<div class="m-l-10">
+												<h6 class="m-b-0">{{ auth()->user()->name }}&nbsp;{{ auth()->user()->lastname }}</h6>
+												<span class="mail-desc">{{ auth()->user()->email }}</span>
+											</div>
+										</div>
+									</a>
+									<!-- Message -->
+									<a href="javascript:void(0)" class="link border-top">
+										<div class="d-flex no-block align-items-center p-10">
+											<span class="btn btn-info btn-circle"><i class="fas fa-map-pin"></i></span>
+											<div class="m-l-10">
+												<h5 class="m-b-0">
+													@if (auth()->user()->hospcode == 0)
+														สำนักระบาดวิทยา
+													@else
+														{{ auth()->user()->hospcode }}
+													@endif
+												</h5>
+												<span class="mail-desc">{{ $provinces[auth()->user()->province]->province_name }}</span>
+											</div>
+										</div>
+									</a>
+									<a href="{{ route('logout')}}" class="link border-top">
+										<div class="d-flex no-block align-items-center p-10">
+											<span class="btn btn-danger btn-circle"><i class="fa fa-power-off"></i></span>
+											<div class="m-l-10">
+												<h5 class="m-b-0">Logout</h5>
+												<span class="mail-desc"></span>
+											</div>
+										</div>
+									</a>
+								</div>
+							</li>
+						</ul>
 					</div>
 				</li>
 			</ul>

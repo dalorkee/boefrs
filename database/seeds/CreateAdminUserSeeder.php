@@ -16,8 +16,8 @@ class CreateAdminUserSeeder extends Seeder
 	{
 		$user = User::create([
 			'hospcode' => '0',
-			'province' => '10',
-			'title_name' => '1',
+			'province' => '11',
+			'title_name' => 'Huya',
 			'name' => 'Talek',
 			'lastname' => 'Studio',
 			'email' => 'talek@gmail.com',
@@ -32,5 +32,6 @@ class CreateAdminUserSeeder extends Seeder
 		$role = Role::create(['name' => 'hospital']);
 		$role = Role::create(['name' => 'lab']);
 		$role = Role::create(['name' => 'guest']);
+		$user->syncPermissions($permissions);
 	}
 }

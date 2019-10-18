@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
-class HomeController extends Controller
+class HomeController extends BoeFrsController
 {
 	/**
 	* Create a new controller instance.
@@ -17,6 +17,8 @@ class HomeController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth');
+		$this->middleware(['role:admin|hospital|lab']);
+//		$this->middleware(['permission:manageuser']);
 	}
 
 	/**
@@ -24,13 +26,21 @@ class HomeController extends Controller
 	*
 	* @return \Illuminate\Contracts\Support\Renderable
 	*/
-	public function index()
+	public function index(Request $request)
 	{
-		//$r = Auth::user()->roles()->pluck('name');
-		if (Auth::user()->hasRole("Admin")) {
+		$prov = parent::provinces();
+		$provinces = $prov->keyBy('province_id');
+		$provinces->all();
+		$request->session()->put('provinces', $provinces);
+		$roleArr = auth()->user()->getRoleNames();
+		//$roleArr = auth()->user()->roles()->pluck('name');
+		//$roleArr = Auth::user()->roles()->pluck('name');
+		if ($roleArr[0] == 'admin') {
 			return redirect()->route('users.index');
+		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
+			return redirect()->route('dashboard.index');
 		} else {
-			return view('home');
+			return redirect()->route('logout');
 		}
 	}
 }

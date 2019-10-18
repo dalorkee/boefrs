@@ -1,9 +1,9 @@
 @extends('layouts.index')
 @section('custom-style')
-<link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css'>
-<link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css'>
-<link rel='stylesheet' href='public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css'>
-<link rel="stylesheet" href="public/assets/libs/toastr/build/toastr.min.css">
+<link rel='stylesheet' href="{{ URL::asset('public/assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css') }}">
+<link rel='stylesheet' href="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('public/assets/libs/toastr/build/toastr.min.css') }}">
 @endsection
 @section('internal-style')
 <style>
@@ -103,18 +103,45 @@ input.valid, textarea.valid{
 					</div>
 					<div class="alert" role="alert" style="border:1px solid #ccc;">
 						<form id="patient_form" class="mt-4 mb-3">
+							@role('admin')
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-									<!-- { csrf_field() }} -->
-									<label for="titleName">คำนำหน้าชื่อ</label>
-									<select name="titleNameInput" class="selectpicker" id="title_name_input">
-										<option value="0">-- โปรดเลือก --</option>
-										@php
-											$titleName->each(function ($item, $key) {
-												echo "<option value=\"".$item->id."\">".$item->title_name."</option>";
-											});
-										@endphp
-									</select>
+									<div class="form-group">
+										<label for="province">จังหวัด</label>
+										<select name="province" class="form-control selectpicker show-tick" id="select_province" data-style="btn-danger" >
+											<option value="0">-- เลือกจังหวัด --</option>
+											@php
+												$provinces = Session::get('provinces');
+												$provinces->each(function ($item, $key) {
+													echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>\n";
+												});
+											@endphp
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+									<div class="form-group">
+										<label for="hospital">โรงพยาบาล</label>
+										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-style="btn-danger">
+											<option value="0">-- เลือกโรงพยาบาล --</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							@endrole
+							<div class="form-row">
+								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+									<div class="form-group">
+										<label for="titleName">คำนำหน้าชื่อ</label>
+										<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
+											<option value="0">-- โปรดเลือก --</option>
+											@php
+												$titleName->each(function ($item, $key) {
+													echo "<option value=\"".$item->id."\">".$item->title_name."</option>";
+												});
+											@endphp
+										</select>
+									</div>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<label for="otherTitleNameInput">อื่นๆ ระบุ</label>
@@ -142,7 +169,7 @@ input.valid, textarea.valid{
 									<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN">
 								</div>
 							</div>
-							<button type="button" class="btn btn-primary" id="btn_submit">Create</button>
+							<button type="button" class="btn btn-primary" id="btn_submit">สร้างรหัส</button>
 						</form>
 					</div>
 					<div>
@@ -170,8 +197,7 @@ input.valid, textarea.valid{
 							</thead>
 							<tbody>
 								@php
-								// $titleNameKeyed = $titleName->keyBy('id');
-								$patient->each(function ($item, $key) {
+								$patients->each(function ($item, $key) {
 									echo "<tr>";
 										echo "<td>".$item->id."</td>";
 										echo "<td>".$item->title_name.$item->first_name." ".$item->last_name."</td>";
@@ -195,12 +221,19 @@ input.valid, textarea.valid{
 </div>
 @endsection
 @section('bottom-script')
-<script src='public/assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js'></script>
-<script src='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js'></script>
-<script src='public/assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js'></script>
-<script src='public/assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js'></script>
+<script src="{{ URL::asset('public/assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
+<script src="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
+<script src="{{ URL::asset('public/assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
 <script>
 $(document).ready(function() {
+	/* ajax request */
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+
 	/* data table */
 	$('#code_table').DataTable({
 		"searching": false,
@@ -213,39 +246,67 @@ $(document).ready(function() {
 			className: 'dt-head-right dt-body-right'
 		}]
 	});
-	/* select picker */
-	$('.custo-select').selectpicker();
 
-	/* ajax request */
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	/* select province */
+	$('#select_province').change(function() {
+		var prov_id = $('#select_province').val();
+		if (prov_id > 0) {
+			$('#select_hospital').prop('disabled', false);
+			$.ajax({
+				type: "GET",
+				url: "{{ route('ajaxGetHospByProv') }}",
+				dataType: 'HTML',
+				data: {prov_id: prov_id},
+				success: function(response) {
+					$('#select_hospital').empty();
+					$('#select_hospital').html(response);
+					$('#select_hospital').selectpicker("refresh");
+				},
+				error: function(response) {
+					alert(data.status);
+				}
+			});
+		} else {
+			$('#select_hospital').empty();
+			$('#select_hospital').selectpicker("refresh");
+			$('#select_hospital').prop('disabled', true);
+		}
+	});
+
+	/* title name */
+	$('#title_name_input').change(function() {
+		if ($('select#title_name_input').val() === '6') {
+			$('#other_title_name_input').prop('disabled', false);
+		} else {
+			$('#other_title_name_input').val('');
+			$('#other_title_name_input').prop('disabled', true);
 		}
 	});
 
 	/* submit ajax */
 	$("#btn_submit").click(function(e){
-		var x = ConvertFormToJSON("#patient_form");
+		var input = ConvertFormToJSON("#patient_form");
 		$.ajax({
 			type: 'POST',
 			url: "{{ route('ajaxRequest') }}",
-			data: x,
+			data: input,
 			success: function(data){
-				$.ajax({
-					url: "{{ route('ajaxRequestTable') }}",
-					dataType: "HTML",
-					success: function(html){
-						if (data.status == 204) {
-							toastr.error(data.msg, "Flu Right Size",
-								{
-									"closeButton": true,
-									"positionClass": "toast-top-center",
-									"progressBar": true,
-									"showDuration": "500"
-								}
-							);
-						} else {
-							$('#patient_data').html(html);
+				if (data.status == 204) {
+					toastr.error(data.msg, "Flu Right Size",
+						{
+							"closeButton": true,
+							"positionClass": "toast-top-center",
+							"progressBar": true,
+							"showDuration": "500"
+						}
+					);
+				} else if (data.status == 200) {
+					$.ajax({
+						type: 'GET',
+						url: "{{ route('ajaxRequestTable') }}",
+						dataType: "HTML",
+						success: function(res){
+							$('#patient_data').html(res);
 							$("#title_name_input").val('0').selectpicker("refresh");
 							$('#patient_form').find('input:text').val('');
 							toastr.success(data.msg, "Flu Right Size",
@@ -256,29 +317,20 @@ $(document).ready(function() {
 									"showDuration": "500"
 								}
 							);
+						},
+						error: function(jqXhr, textStatus, errorMessage){
+							alert('Error code: ' + jqXhr.status);
 						}
-					},
-					error: function(request){
-						alert('Errorx! Status: ' + request.status);
-					}
-				});
+					});
+				} else {
+					alert('nok');
+				}
 			},
-			error: function(request, status, error){
-				alert(request.status + ' Status: ' + data.status);
+			error: function(data, status, error){
+				alert('Error code: ' + data.status);
 			}
 		});
 	});
-});
-</script>
-<script>
-/* title name */
-$('#title_name_input').change(function() {
-	if ($('select#title_name_input').val() === '6') {
-		$('#other_title_name_input').prop('disabled', false);
-	} else {
-		$('#other_title_name_input').val('');
-		$('#other_title_name_input').prop('disabled', true);
-	}
 });
 </script>
 <script>

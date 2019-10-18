@@ -209,8 +209,7 @@ input[type=text], input[type=password] {
 </div>
 @endsection
 @section('bottom-script')
-	<script src="public/assets/libs/select2/dist/js/select2.full.min.js"></script>
-
+<script src="{{ URL::asset('public/assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ URL::asset('public/assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script>
 $(document).ready(function() {

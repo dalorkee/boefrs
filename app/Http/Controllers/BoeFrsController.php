@@ -38,6 +38,22 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
+	protected function patientByAdmin($lab_status='new') {
+		return DB::connection('mysql')
+			->table('patient')
+			->where('lab_status', '=', $lab_status)
+			->get();
+	}
+
+	protected function patientByUser($hospcode=null, $lab_status='new') {
+		return DB::connection('mysql')
+			->table('patient')
+			->where([
+				['hoscpde', '=', $hospcode],
+				['lab_status', '=', $lab_status],
+			])->get();
+	}
+
 	/* random for generate the pin */
 	public function randPin($prefix=null, $separator=null) {
 		// Available alpha caracters
@@ -81,7 +97,7 @@ class BoeFrsController extends Controller implements BoeFrs
 		return DB::connection('mysql')
 			->table('hospitals')
 			->where('prov_code', '=', $prov_code)
-			->whereIn('hosp_type_code', ['05', '06', '07'])
+			->whereIn('hosp_type_code', ['05', '06', '07', '11'])
 			->orderBy('id', 'asc')
 			->get();
 	}

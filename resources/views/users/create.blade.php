@@ -46,10 +46,10 @@
 								<div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
 									<div class="form-group">
 										<label for="province">จังหวัด</label>
-										<select name="provine" class="form-control select-province" style="width:100%">
+										<select name="province" class="form-control select-province" style="width:100%">
 											<option value="0">-- เลือกจังหวัด --</option>
 											@php
-												$provinces->keyBy('province_id');
+												$provinces = Session::get('provinces');
 												$provinces->each(function ($item, $key) {
 													echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>";
 												});

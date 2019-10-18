@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\BoeFrsController;
 use App\User;
@@ -13,6 +14,9 @@ class UserController extends BoeFrsController
 {
 	public function __construct() {
 		parent::__construct();
+		$this->middleware('auth');
+		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware('permission:manageuser|list|create|edit|delete', ['only' => ['index','store']]);
 	}
 
 	/**
@@ -34,11 +38,9 @@ class UserController extends BoeFrsController
 	*/
 	public function create()
 	{
-		$provinces = parent::provinces();
 		$roles = Role::pluck('name', 'name')->all();
 		return view('users.create', compact('roles'))
-				->with('titleName', $this->title_name)
-				->with('provinces', $provinces);
+				->with('titleName', $this->title_name);
 	}
 
 	/**
@@ -49,8 +51,8 @@ class UserController extends BoeFrsController
 	*/
 	public function store(Request $request)
 	{
-		//dd($request);
 		$this->validate($request, [
+			'province' => 'required',
 			'hospcode' => 'required',
 			'name' => 'required',
 			'email' => 'required|email|unique:users,email',
@@ -59,6 +61,17 @@ class UserController extends BoeFrsController
 		]);
 
 		$input = $request->all();
+
+		if ($input['title_name'] != 0 && $input['title_name'] != 6) {
+			$title_name_coll = $this->title_name[$input['title_name']];
+			$title_name = $title_name_coll->title_name;
+			$input['title_name'] = $title_name;
+		} elseif (isset($input['title_name_other']) && $input['title_name'] == 6) {
+			$input['title_name'] = $input['title_name_other'];
+		} else {
+			$input['title_name'] = null;
+		}
+
 		$input['password'] = Hash::make($input['password']);
 		$user = User::create($input);
 		$user->assignRole($request->input('roles'));
@@ -102,6 +115,8 @@ class UserController extends BoeFrsController
 	public function update(Request $request, $id)
 	{
 		$this->validate($request, [
+			//'province' => 'required',
+			//'hospcode' => 'required',
 			'name' => 'required',
 			'email' => 'required|email|unique:users,email,'.$id,
 			'password' => 'same:confirm-password',
