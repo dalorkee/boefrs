@@ -19,6 +19,7 @@ class CodeController extends BoeFrsController
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
 	}
+	
 	/**
 	* Display a listing of the resource.
 	*

@@ -1,30 +1,26 @@
 <h1 class="text-info">1. ข้อมูลทั่วไปของผู้ป่วย</h1>
 <div class="form-row">
-	<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-3">
+	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
 		<label for="formIndexInput">รหัสแบบฟอร์ม</label>
 		<div class="input-group-append">
-			<input type="text" name="formIndexInput" class="form-control" id="form_index_input" placeholder="รหัสแบบฟอร์ม" required>
-			<div class="input-group-append">
-				<button class="input-group-text"><i class="fas fa-search"></i></button>
-			</div>
+			<input type="text" name="formIndexInput" class="form-control" id="form_index_input" value="{{ $patient[0]->lab_code }}" readonly required>
 		</div>
 	</div>
 </div>
 <div class="form-row">
-	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-		{{ csrf_field() }}
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 		<label for="titleName">คำนำหน้าชื่อ</label>
-		<select name="titleNameInput" class="custom-select" id="title_name_input">
-			<option value="null">-- โปรดเลือก --</option>
-			<option value="1">ด.ช.</option>
-			<option value="2">ด.ญ.</option>
-			<option value="3">นาย</option>
-			<option value="4">นาง</option>
-			<option value="5">นางสาว</option>
-			<option value="other">อื่นๆ ระบุ</option>
+		<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
+			<option value="">{{ $patient[0]->title_name }}</option>
+			<option value="0">-- โปรดเลือก --</option>
+			@php
+				$titleName->each(function ($item, $key) {
+					echo "<option value=\"".$item->id."\">".$item->title_name."</option>";
+				});
+			@endphp
 		</select>
 	</div>
-	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 		<label for="otherTitleNameInput">คำนำหน้าชื่ออื่นๆ ระบุ</label>
 		<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
 	</div>

@@ -33,6 +33,7 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-info" style="margin-top:0;">
+									{{ csrf_field() }}
 									@include('patients.component-general-data')
 								</div><!-- bd-callout -->
 							</div><!-- card body -->

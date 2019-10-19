@@ -7,6 +7,13 @@ use App\Patients;
 
 class PatientsController extends BoeFrsController
 {
+
+	public function __construct() {
+		parent::__construct();
+		$this->middleware('auth');
+		$this->middleware(['role:admin|hospital|lab']);
+	}
+
 	/**
 	* Display a listing of the resource.
 	*
@@ -15,16 +22,18 @@ class PatientsController extends BoeFrsController
 	public function index(Request $request)
 	{
 		$symptoms = parent::symptoms();
-		$patient = Patients::where('active', 1)
-		->orderBy('name', 'desc')
-		->take(10)
-		->get();
+		$patient = Patients::where([
+			['id', '=', $request->id],
+			['status', '=', 'active'],
+		])
+		->orderBy('id', 'desc')->get();
 
 		return view(
 			'patients.index',
 			[
+				'titleName'=>$this->title_name,
 				'symptoms'=>$symptoms,
-				'id'=>$request->id
+				'patient'=>$patient
 			]
 		);
 	}
