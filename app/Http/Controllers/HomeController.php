@@ -28,10 +28,13 @@ class HomeController extends BoeFrsController
 	*/
 	public function index(Request $request)
 	{
+		/*
 		$prov = parent::provinces();
 		$provinces = $prov->keyBy('province_id');
 		$provinces->all();
 		$request->session()->put('provinces', $provinces);
+		*/
+
 		$roleArr = auth()->user()->getRoleNames();
 		//$roleArr = auth()->user()->roles()->pluck('name');
 		//$roleArr = Auth::user()->roles()->pluck('name');

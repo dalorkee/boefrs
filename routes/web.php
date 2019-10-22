@@ -54,5 +54,8 @@ Route::get('/sample-submissions-form', array(
 			'uses' => 'SampleSubmissionsController@Form_Sample_Submissions'
 ));
 
+/* code soft deleted */
+Route::get('/codeSoftDelete/{id}','CodeController@softDelete')->name('codeSoftDelete');
+
 /* patient */
 Route::get('/patient/{id}', 'PatientsController@index')->name('patient');

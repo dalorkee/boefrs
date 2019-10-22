@@ -49,8 +49,9 @@
 	td:nth-of-type(2):before { content: "ชื่อ-สกุล";margin-top:10px;font-weight:600;}
 	td:nth-of-type(3):before { content: "HN";margin-top:10px;font-weight:600;}
 	td:nth-of-type(4):before { content: "รหัส";margin-top:10px;font-weight:600;}
-	td:nth-of-type(5):before { content: "สถานะ";margin-top:10px;font-weight:600;}
-	td:nth-of-type(6):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
+	td:nth-of-type(5):before { content: "รพ.";margin-top:10px;font-weight:600;}
+	td:nth-of-type(6):before { content: "สถานะ";margin-top:10px;font-weight:600;}
+	td:nth-of-type(7):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
 }
 
 .error{
@@ -75,6 +76,14 @@ input.valid, textarea.valid{
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('contents')
+@php
+/*
+	$response = Session::get('response');
+	if (isset($response)) {
+		dd($response);
+	}
+*/
+@endphp
 <div class="page-breadcrumb bg-light">
 	<div class="row">
 		<div class="col-12 d-flex no-block align-items-center">
@@ -173,15 +182,15 @@ input.valid, textarea.valid{
 						</form>
 					</div>
 					<div>
-						@if(count($errors) > 0)
-							<div class="alert alert-danger">
-								<ul>
-								@foreach ($errors->all as $error)
-									<li>{{ $error }}</li>
-								@endforeach
-								</ul>
-							</div>
-						@endif
+					@if(count($errors) > 0)
+						<div class="alert alert-danger">
+							<ul>
+							@foreach ($errors->all as $error)
+								<li>{{ $error }}</li>
+							@endforeach
+							</ul>
+						</div>
+					@endif
 					</div>
 					<div id="patient_data">
 						<table class="display mT-2 mb-4" id="code_table" role="table">
@@ -191,6 +200,7 @@ input.valid, textarea.valid{
 									<th>ชื่อ-สกุล</th>
 									<th>HN</th>
 									<th>รหัส</th>
+									<th>รพ.</th>
 									<th>สถานะ</th>
 									<th>จัดการ</th>
 								</tr>
@@ -199,13 +209,19 @@ input.valid, textarea.valid{
 							@foreach ($patients as $key => $value)
 								<tr>
 									<td>{{ $value->id }}</td>
-									<td>{{ $value->title_name.$value->first_name." ".$value->last_name }}</td>
+									@if ($value->title_name != 6)
+										<td>{{ $titleName[$value->title_name]->title_name.$value->first_name." ".$value->last_name }}</td>
+									@else
+										<td>{{ $value->title_name_other.$value->first_name." ".$value->last_name }}</td>
+									@endif
 									<td>{{ $value->hn }}</td>
 									<td><span class="text-danger">{{ $value->lab_code }}</span></td>
+									<td>{{ $value->hospcode }}</td>
 									<td><span class="badge badge-pill badge-success">{{ $value->lab_status }}</span></td>
 									<td>
 										<a href="{{ route('patient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">Edit</a>&nbsp;
-										<a href="#" class="btn btn-outline-danger btn-sm">Delete</a>
+										<!-- <a href="{ route('codeSoftDelete', ['id'=>$value->id]) }" id="delete" class="btn btn-outline-danger btn-sm">Delete</a> -->
+										
 									</td>
 								</tr>
 							@endforeach
@@ -322,6 +338,8 @@ $(document).ready(function() {
 						dataType: "HTML",
 						success: function(res){
 							$('#patient_data').html(res);
+							$("#select_province").val('0').selectpicker("refresh");
+							$("#select_hospital").val('0').selectpicker("refresh");
 							$("#title_name_input").val('0').selectpicker("refresh");
 							$('#patient_form').find('input:text').val('');
 							toastr.success(data.msg, "Flu Right Size",
@@ -346,6 +364,29 @@ $(document).ready(function() {
 			}
 		});
 	});
+});
+</script>
+<script>
+$('#delete').click(function() {
+	var data = this.val();
+	alert(data);
+	/*
+	$.ajax({
+		type: 'POST',
+		url: "{{ route('ajaxRequest') }}",
+		data: input,
+		success: function(data){
+			if (data.status == 204) {
+				toastr.error(data.msg, "Flu Right Size",
+					{
+						"closeButton": true,
+						"positionClass": "toast-top-center",
+						"progressBar": true,
+						"showDuration": "500"
+					}
+				);
+			}
+			*/
 });
 </script>
 <script>

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Code;
-use DB;
 use Session;
 
 class CodeController extends BoeFrsController
@@ -19,7 +18,7 @@ class CodeController extends BoeFrsController
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
 	}
-	
+
 	/**
 	* Display a listing of the resource.
 	*
@@ -42,6 +41,18 @@ class CodeController extends BoeFrsController
 				'patients' => $patients
 			]
 		);
+	}
+
+	public function softDelete($id) {
+		$code = Code::destroy($id);
+		if ($code) {
+			$response = $this->successfulMessage(200, 'Successfully deleted', true, 0, $code);
+		} else {
+			$response = $this->notFoundMessage();
+		}
+		session(['response' => $response]);
+		//return response($response);
+		return redirect()->route('code.index');
 	}
 
 	/**
@@ -105,6 +116,27 @@ class CodeController extends BoeFrsController
 		//
 	}
 
+	private function notFoundMessage() {
+		return [
+			'code' => 404,
+			'message' => 'Note not found',
+			'success' => false,
+		];
+	}
+
+	private function successfulMessage($code, $message, $status, $count, $payload) {
+		return [
+			'code' => $code,
+			'message' => $message,
+			'success' => $status,
+			'count' => $count,
+			'data' => $payload,
+		];
+	}
+
+
+
+
 /*
 	public function ajaxRequestSelect(Request $request) {
 		$x = $request->x;
@@ -115,24 +147,39 @@ class CodeController extends BoeFrsController
 		if (empty($request->firstNameInput)) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
 		} else {
+			$roleArr = auth()->user()->getRoleNames();
+			if ($roleArr[0] == 'admin') {
+				$province = $request->province;
+				$hospcode = $request->hospcode;
+			} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
+				$province = auth()->user()->province;
+				$hospcode = auth()->user()->hospcode;
+			} else {
+				return redirect()->route('logout');
+			}
+
 			$code = new Code;
-			$code->hoscpde = auth()->user()->hospcode;
+			$code->province = $province;
+			$code->hospcode = $hospcode;
 			$code->hn = $request->hnInput;
 			$code->an = $request->anInput;
+			$code->title_name = $request->titleNameInput;
 
 			if ($request->titleNameInput == 6 && isset($request->otherTitleNameInput)) {
-				$code->title_name = $request->otherTitleNameInput;
+				$code->title_name_other = $request->otherTitleNameInput;
 			} else {
-				$code->title_name = $this->title_name[$request->titleNameInput]->title_name;
+				$code->title_name_other = null;
 			}
 
 			$code->first_name = $request->firstNameInput;
 			$code->last_name = $request->lastNameInput;
+
 			$code->lab_code = parent::randPin();
-			$code->user = '1';
+			$code->user = auth()->user()->id;
+
 			$saved = $code->save();
 			if ($saved) {
-				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว'.$roleArr[0]]);
 			} else {
 				return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
 			}
@@ -158,6 +205,7 @@ class CodeController extends BoeFrsController
 					<th>ชื่อ-สกุล</th>
 					<th>HN</th>
 					<th>รหัส</th>
+					<th>รพ.</th>
 					<th>สถานะ</th>
 					<th>จัดการ</th>
 				</tr>
@@ -166,13 +214,18 @@ class CodeController extends BoeFrsController
 			foreach($patients as $key=>$value) {
 				$htm .= "<tr>";
 					$htm .= "<td>".$value->id."</td>";
-					$htm .= "<td>".$value->title_name.$value->first_name." ".$value->last_name."</td>";
+					if ($value->title_name != 6) {
+						$htm .= "<td>".$this->title_name[$value->title_name]->title_name.$value->first_name." ".$value->last_name."</td>";
+					} else {
+						$htm .= "<td>".$value->title_name_other.$value->first_name." ".$value->last_name."</td>";
+					}
 					$htm .= "<td>".$value->hn."</td>";
 					$htm .= "<td><strong class=\"text-danger\">".$value->lab_code."</strong></td>";
+					$htm .= "<td>".$value->hospcode."</td>";
 					$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
 					$htm .= "<td>";
-						$htm .= "<button type=\"button\" class=\"btn btn-cyan btn-sm\">Edit</button>&nbsp;";
-						$htm .= "<button type=\"button\" class=\"btn btn-danger btn-sm\">Delete</button>";
+						$htm .= "<a href=\"".route('patient', ['id'=>$value->id])."\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
+						$htm .= "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">Delete</a>";
 					$htm .= "</td>";
 				$htm .= "</tr>";
 			}
@@ -205,6 +258,8 @@ class CodeController extends BoeFrsController
 		}
 		return $htm;
 	}
+
+
 
 
 

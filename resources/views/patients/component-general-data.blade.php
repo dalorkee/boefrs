@@ -22,30 +22,34 @@
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 		<label for="otherTitleNameInput">คำนำหน้าชื่ออื่นๆ ระบุ</label>
-		<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
+		@if ($patient[0]->title_name == 'อื่นๆ')
+			<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" value="aaa">
+		@else
+			<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
+		@endif
 	</div>
 </div>
 <div class="form-row">
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 		<label for="firstNameInput">ชื่อจริง</label>
-		<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="ชื่อ" required>
+		<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="ชื่อ" value="{{ $patient[0]->first_name }}" required>
 		<div class="valid-feedback">Looks good!</div>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 		<label for="lastNameInput">นามสกุล</label>
-		<input type="text" name="lastNameInput" class="form-control" id="last_name_input" placeholder="นามสกุล" required>
+		<input type="text" name="lastNameInput" class="form-control" id="last_name_input" placeholder="นามสกุล" value="{{ $patient[0]->last_name }}" required>
 		<div class="valid-feedback">Looks good!</div>
 	</div>
 </div>
 <div class="form-row">
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 		<label for="hnInput">HN</label>
-		<input type="text" name="hnInput" class="form-control" id="hn_input" placeholder="HN" required>
+		<input type="text" name="hnInput" class="form-control" id="hn_input" placeholder="HN" value="{{ $patient[0]->hn }}" required>
 		<div class="valid-feedback">Looks good!</div>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 		<label for="anInput">AN</label>
-		<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN">
+		<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN" value="{{ $patient[0]->an }}">
 		<div class="valid-feedback">Looks good!</div>
 	</div>
 </div>

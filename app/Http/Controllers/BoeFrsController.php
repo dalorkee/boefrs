@@ -42,17 +42,19 @@ class BoeFrsController extends Controller implements BoeFrs
 	protected function patientByAdmin($lab_status='new') {
 		return DB::connection('mysql')
 			->table('patients')
-			->where('lab_status', '=', $lab_status)
-			->get();
+			->where([
+				['lab_status', '=', $lab_status],
+				['deleted_at', '==', NULL],
+			])->get();
 	}
 
 	protected function patientByUser($hospcode=null, $lab_status='new') {
 		return DB::connection('mysql')
 			->table('patients')
-			->where([
-				['hoscpde', '=', $hospcode],
-				['lab_status', '=', $lab_status],
-			])->get();
+			->where('hospcode', '=', $hospcode)
+			->where('lab_status', '=', $lab_status)
+			->whereNull('deleted_at')
+			->get();
 	}
 
 	/* random for generate the pin */
@@ -92,6 +94,16 @@ class BoeFrsController extends Controller implements BoeFrs
 			->table('ref_province')
 			->orderBy('province_id', 'asc')
 			->get();
+	}
+
+	public static function provinceList() {
+		$prov = DB::connection('mysql')
+				->table('ref_province')
+				->orderBy('province_id', 'asc')
+				->get();
+		$provinces = $prov->keyBy('province_id');
+		$provinces->all();
+		return $provinces;
 	}
 
 	public function hospitalByProv($prov_code=0) {
