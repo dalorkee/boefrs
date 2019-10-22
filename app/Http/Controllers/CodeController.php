@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Code;
 use Session;
+use Storage;
 
 class CodeController extends BoeFrsController
 {
@@ -177,8 +178,10 @@ class CodeController extends BoeFrsController
 			$code->lab_code = parent::randPin();
 			$code->user = auth()->user()->id;
 
+			$this->simpleQrcode($code->lab_code);
 			$saved = $code->save();
 			if ($saved) {
+
 				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว'.$roleArr[0]]);
 			} else {
 				return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
@@ -259,8 +262,8 @@ class CodeController extends BoeFrsController
 		return $htm;
 	}
 
-
-
-
-
+	public function simpleQrcode($str='str') {
+		$image = \QrCode::format('png')->size(100)->generate($str);
+		Storage::disk('qrcode')->put('/'.$str.'.png', $image);
+	}
 }

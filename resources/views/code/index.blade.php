@@ -111,6 +111,7 @@ input.valid, textarea.valid{
 						</div>
 					</div>
 					<div class="alert" role="alert" style="border:1px solid #ccc;">
+
 						<form id="patient_form" class="mt-4 mb-3">
 							@role('admin')
 							<div class="form-row">

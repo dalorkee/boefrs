@@ -3,7 +3,8 @@
 	<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
 		<label for="formIndexInput">รหัสแบบฟอร์ม</label>
 		<div class="input-group-append">
-			<input type="text" name="formIndexInput" class="form-control" id="form_index_input" value="{{ $patient[0]->lab_code }}" readonly required>
+			<span class="btn btn-outline-danger btn-lg">{{ $patient[0]->lab_code }}</span>
+			<input type="hidden" name="formIndexInput" class="form-control" id="form_index_input" value="{{ $patient[0]->lab_code }}" readonly required>
 		</div>
 	</div>
 </div>

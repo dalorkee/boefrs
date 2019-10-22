@@ -181,6 +181,9 @@ return [
 		/* Mews Captcha */
 		Mews\Captcha\CaptchaServiceProvider::class,
 
+		/* simple-qrcode */
+		SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+
     ],
 
     /*
@@ -232,6 +235,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 		'Captcha' => Mews\Captcha\Facades\Captcha::class,
+		'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
 
     ],
 

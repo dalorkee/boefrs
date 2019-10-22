@@ -55,6 +55,11 @@ return [
             'visibility' => 'public',
         ],
 
+		'qrcode' => [
+			'driver' => 'local',
+			'root' => public_path(). '/qrcode',
+		],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

@@ -57,5 +57,8 @@ Route::get('/sample-submissions-form', array(
 /* code soft deleted */
 Route::get('/codeSoftDelete/{id}','CodeController@softDelete')->name('codeSoftDelete');
 
+/* code qrcode generate */
+
+
 /* patient */
 Route::get('/patient/{id}', 'PatientsController@index')->name('patient');
