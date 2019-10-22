@@ -220,28 +220,11 @@ input.valid, textarea.valid{
 									<td><span class="badge badge-pill badge-success">{{ $value->lab_status }}</span></td>
 									<td>
 										<a href="{{ route('patient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">Edit</a>&nbsp;
-										<!-- <a href="{ route('codeSoftDelete', ['id'=>$value->id]) }" id="delete" class="btn btn-outline-danger btn-sm">Delete</a> -->
-										
+										<a href="{{ route('codeSoftDelete', ['id'=>$value->id]) }}" id="delete" class="btn btn-outline-danger btn-sm">Delete</a>
+										<!--<button name="delete" type="submit" id="delete" class="btn btn-outline-danger btn-sm" value="{ $value->id }">Delete</button> -->
 									</td>
 								</tr>
 							@endforeach
-							@php
-								/*
-								$patients->each(function ($item, $key) {
-									echo "<tr>";
-										echo "<td>".$item->id."</td>";
-										echo "<td>".$item->title_name.$item->first_name." ".$item->last_name."</td>";
-										echo "<td>".$item->hn."</td>";
-										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
-										echo "<td><span class=\"badge badge-pill badge-success\">".$item->lab_status."</span></td>";
-										echo "<td>";
-											echo "<a href=\"".route('patient', ['pid'=>$item->id])."\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
-											echo "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">Delete</a>";
-										echo "</td>";
-									echo "</tr>";
-								});
-								*/
-							@endphp
 							</tbody>
 						</table>
 					</div>
@@ -364,29 +347,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-});
-</script>
-<script>
-$('#delete').click(function() {
-	var data = this.val();
-	alert(data);
-	/*
-	$.ajax({
-		type: 'POST',
-		url: "{{ route('ajaxRequest') }}",
-		data: input,
-		success: function(data){
-			if (data.status == 204) {
-				toastr.error(data.msg, "Flu Right Size",
-					{
-						"closeButton": true,
-						"positionClass": "toast-top-center",
-						"progressBar": true,
-						"showDuration": "500"
-					}
-				);
-			}
-			*/
 });
 </script>
 <script>
