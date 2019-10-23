@@ -3,6 +3,11 @@
 <link rel="stylesheet" href="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('public/assets/libs/toastr/build/toastr.min.css') }}">
 @endsection
+@section('internal-style')
+<style>
+
+</style>
+@endsection
 @section('contents')
 <div class="page-breadcrumb bg-light">
 	<div class="row">
@@ -109,14 +114,19 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
 	/* title name */
+	if ($('select#title_name_input').val() === '6') {
+		$('#other_title_name_input').prop('disabled', false);
+	}
 	$('#title_name_input').change(function() {
-		if ($('select#title_name_input').val() === 'other') {
+		if ($('select#title_name_input').val() === '6') {
 			$('#other_title_name_input').prop('disabled', false);
 		} else {
 			$('#other_title_name_input').val('');
 			$('#other_title_name_input').prop('disabled', true);
 		}
 	});
+
+
 	/* date of birth */
 	$('#birthDateInput').datepicker({
 		format: 'dd/mm/yyyy',
