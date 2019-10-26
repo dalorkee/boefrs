@@ -205,11 +205,11 @@ class CodeController extends BoeFrsController
 			<thead>
 				<tr>
 					<th>ลำดับ</th>
+					<th>รหัส</th>
 					<th>ชื่อ-สกุล</th>
 					<th>HN</th>
-					<th>รหัส</th>
-					<th>รพ.</th>
 					<th>สถานะ</th>
+					<th>วัน/เวลา</th>
 					<th>จัดการ</th>
 				</tr>
 			</thead>
@@ -217,15 +217,15 @@ class CodeController extends BoeFrsController
 			foreach($patients as $key=>$value) {
 				$htm .= "<tr>";
 					$htm .= "<td>".$value->id."</td>";
+					$htm .= "<td><span class=\"text-danger\">".$value->lab_code."</span></td>";
 					if ($value->title_name != 6) {
 						$htm .= "<td>".$this->title_name[$value->title_name]->title_name.$value->first_name." ".$value->last_name."</td>";
 					} else {
 						$htm .= "<td>".$value->title_name_other.$value->first_name." ".$value->last_name."</td>";
 					}
 					$htm .= "<td>".$value->hn."</td>";
-					$htm .= "<td><strong class=\"text-danger\">".$value->lab_code."</strong></td>";
-					$htm .= "<td>".$value->hospcode."</td>";
 					$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
+					$htm .= "<td>".$value->created_at."</td>";
 					$htm .= "<td>";
 						$htm .= "<a href=\"".route('patient', ['id'=>$value->id])."\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
 						$htm .= "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">Delete</a>";

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Patients;
 
 class PatientsController extends BoeFrsController
 {
@@ -21,21 +20,43 @@ class PatientsController extends BoeFrsController
 	*/
 	public function index(Request $request)
 	{
+		$nationality = parent::nationality();
+		$occupation = parent::occupation();
 		$symptoms = parent::symptoms();
-		$patient = Patients::where([
-			['id', '=', $request->id],
-			['status', '=', 'active'],
-		])
-		->orderBy('id', 'desc')->get();
+		$patient = parent::patientsById($request->id);
+		$hospital = parent::hospitalByCode($request->hospcode);
 
 		return view(
 			'patients.index',
 			[
 				'titleName'=>$this->title_name,
+				'nationality'=>$nationality,
+				'occupation'=>$occupation,
 				'symptoms'=>$symptoms,
-				'patient'=>$patient
+				'patient'=>$patient,
+				'hospital'=>$hospital
 			]
 		);
+	}
+
+	public function districtFetch(Request $request) {
+		$coll = parent::districtByProv($request->id);
+		$districts = $coll->keyBy('district_id');
+		$htm = "<option value=\"0\">-- โปรดเลือก --</option>";
+		foreach ($districts as $key => $val) {
+			$htm .= "<option value=\"".$val->district_id."\">".$val->district_name."</option>";
+		}
+		return $htm;
+	}
+
+	public function subDistrictFetch(Request $request) {
+		$coll = parent::subDistrictByDistrict($request->id);
+		$sub_districts = $coll->keyBy('sub_district_id');
+		$htm = "<option value=\"0\">-- โปรดเลือก --</option>";
+		foreach ($sub_districts as $key => $val) {
+			$htm .= "<option value=\"".$val->sub_district_id."\">".$val->sub_district_name."</option>";
+		}
+		return $htm;
 	}
 
     /**

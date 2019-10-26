@@ -49,8 +49,8 @@
 	td:nth-of-type(2):before { content: "ชื่อ-สกุล";margin-top:10px;font-weight:600;}
 	td:nth-of-type(3):before { content: "HN";margin-top:10px;font-weight:600;}
 	td:nth-of-type(4):before { content: "รหัส";margin-top:10px;font-weight:600;}
-	td:nth-of-type(5):before { content: "รพ.";margin-top:10px;font-weight:600;}
 	td:nth-of-type(6):before { content: "สถานะ";margin-top:10px;font-weight:600;}
+		td:nth-of-type(5):before { content: "วันที่";margin-top:10px;font-weight:600;}
 	td:nth-of-type(7):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
 }
 
@@ -198,11 +198,11 @@ input.valid, textarea.valid{
 							<thead>
 								<tr>
 									<th>ลำดับ</th>
+									<th>รหัส</th>
 									<th>ชื่อ-สกุล</th>
 									<th>HN</th>
-									<th>รหัส</th>
-									<th>รพ.</th>
 									<th>สถานะ</th>
+									<th>วัน/เวลา</th>
 									<th>จัดการ</th>
 								</tr>
 							</thead>
@@ -210,15 +210,15 @@ input.valid, textarea.valid{
 							@foreach ($patients as $key => $value)
 								<tr>
 									<td>{{ $value->id }}</td>
+									<td><span class="text-danger">{{ $value->lab_code }}</span></td>
 									@if ($value->title_name != 6)
 										<td>{{ $titleName[$value->title_name]->title_name.$value->first_name." ".$value->last_name }}</td>
 									@else
 										<td>{{ $value->title_name_other.$value->first_name." ".$value->last_name }}</td>
 									@endif
 									<td>{{ $value->hn }}</td>
-									<td><span class="text-danger">{{ $value->lab_code }}</span></td>
-									<td>{{ $value->hospcode }}</td>
 									<td><span class="badge badge-pill badge-success">{{ $value->lab_status }}</span></td>
+									<td>{{ $value->created_at }}</td>
 									<td>
 										<a href="{{ route('patient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">Edit</a>&nbsp;
 										<a href="{{ route('codeSoftDelete', ['id'=>$value->id]) }}" id="delete" class="btn btn-outline-danger btn-sm">Delete</a>

@@ -32,10 +32,22 @@ class BoeFrsController extends Controller implements BoeFrs
 		return DB::connection('mysql')->table('patient')->get();
 	}
 
+	public function patientsById($id=0) {
+		return DB::connection('mysql')
+			->table('patients')
+			->where([
+				['id', '=', $id],
+				['status', '=', 'active'],
+			])
+			->whereNull('deleted_at')
+			->orderBy('id', 'desc')->get();
+	}
+
 	public function patientByField($field=null, $value=null) {
 		return DB::connection('mysql')
 			->table('patients')
 			->where($field, '=', $value)
+			->whereNull('deleted_at')
 			->get();
 	}
 
@@ -55,6 +67,86 @@ class BoeFrsController extends Controller implements BoeFrs
 			->whereNull('deleted_at')
 			->get();
 	}
+
+	public function provinces() {
+		return DB::connection('mysql')
+			->table('ref_province')
+			->orderBy('province_id', 'asc')
+			->get();
+	}
+
+	public static function provinceList() {
+		$prov = DB::connection('mysql')
+				->table('ref_province')
+				->orderBy('province_id', 'asc')
+				->get();
+		$provinces = $prov->keyBy('province_id');
+		$provinces->all();
+		return $provinces;
+	}
+
+	public function district() {
+		return DB::connection('mysql')
+			->table('ref_district')
+			->orderBy('district_id', 'asc')
+			->get();
+	}
+
+	public function districtByProv($prov_code=0) {
+		return DB::connection('mysql')
+			->table('ref_district')
+			->where('province_id', '=', $prov_code)
+			->orderBy('district_id', 'asc')
+			->get();
+	}
+
+	public function subDistrictByDistrict($dist_code=0) {
+		return DB::connection('mysql')
+			->table('ref_sub_district')
+			->where('district_id', '=', $dist_code)
+			->orderBy('sub_district_id', 'asc')
+			->get();
+	}
+
+	public function hospitals() {
+		return DB::connection('mysql')
+			->table('hospitals')
+			->orderBy('id', 'asc')
+			->limit(100)
+			->get();
+	}
+
+	public function hospitalByProv($prov_code=0) {
+		return DB::connection('mysql')
+			->table('hospitals')
+			->where('prov_code', '=', $prov_code)
+			->whereIn('hosp_type_code', ['05', '06', '07', '11'])
+			->orderBy('id', 'asc')
+			->get();
+	}
+
+	public function hospitalByCode($hosp_code=0) {
+		return DB::connection('mysql')
+			->table('hospitals')
+			->where('hospcode', '=', $hosp_code)
+			->limit(1)
+			->get();
+	}
+
+	public function nationality() {
+		return DB::connection('mysql')
+			->table('ref_nationality')
+			->orderBy('id', 'asc')
+			->get();
+	}
+
+	public function occupation() {
+		return DB::connection('mysql')
+			->table('ref_occupation')
+			->orderBy('id', 'asc')
+			->get();
+	}
+
 
 	/* random for generate the pin */
 	public function randPin($prefix=null, $separator=null) {
@@ -80,39 +172,8 @@ class BoeFrsController extends Controller implements BoeFrs
 	}
 	*/
 
-	public function hospitals() {
-		return DB::connection('mysql')
-			->table('hospitals')
-			->orderBy('id', 'asc')
-			->limit(100)
-			->get();
-	}
 
-	public function provinces() {
-		return DB::connection('mysql')
-			->table('ref_province')
-			->orderBy('province_id', 'asc')
-			->get();
-	}
 
-	public static function provinceList() {
-		$prov = DB::connection('mysql')
-				->table('ref_province')
-				->orderBy('province_id', 'asc')
-				->get();
-		$provinces = $prov->keyBy('province_id');
-		$provinces->all();
-		return $provinces;
-	}
-
-	public function hospitalByProv($prov_code=0) {
-		return DB::connection('mysql')
-			->table('hospitals')
-			->where('prov_code', '=', $prov_code)
-			->whereIn('hosp_type_code', ['05', '06', '07', '11'])
-			->orderBy('id', 'asc')
-			->get();
-	}
 
 
 

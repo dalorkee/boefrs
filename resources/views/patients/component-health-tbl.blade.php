@@ -13,7 +13,7 @@
 		</tr>
 	</tfoot>
 	<tbody>
-		<tr>
+		<tr id="health_table_tr1">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">หญิงตั้งครรภ์ ระบุ อายุครรภ์</label>
@@ -408,3 +408,23 @@
 		</tr>
 	</tbody>
 </table>
+<script>
+$('.health-1').click(function() {
+	$('.health-1').not(this).prop('checked', false);
+	let number = $('.health-1').filter(':checked').length;
+	if (number === 1) {
+		let hasClass = $('#health_table_tr1').hasClass('highlight');
+		if (!hasClass) {
+			$('#health_table_tr1').addClass('highlight');
+		}
+		if (1 == 19) {
+			$('#health_other').prop('disabled', false);
+		}
+	} else {
+		$('#health_table_tr1').removeClass('highlight');
+		if (1 == 19) {
+			$('#shealth_other').prop('disabled', true);
+		}
+	}
+});
+</script>

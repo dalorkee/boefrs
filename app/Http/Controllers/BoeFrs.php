@@ -27,5 +27,7 @@ interface BoeFrs
 
 	public function provinces();
 
+	public function nationality();
+
 }
 ?>
