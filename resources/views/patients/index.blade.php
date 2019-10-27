@@ -586,11 +586,6 @@
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-12 col-xl-12 mb-3">
 											<label for="sickDateInput">ภาวะสุขภาพ หรือ โรคประจำตัว</label>
 											<div class="table-responsive">
-
-
-
-
-
 												<table class="table" id="health_table">
 													<thead class="bg-info text-light">
 														<tr>
@@ -610,9 +605,9 @@
 															<td>
 																<div class="form-group row">
 																	<label for="pregnant" class="mt-2 font-normal">หญิงตั้งครรภ์ ระบุ อายุครรภ์</label>
-																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
 																		<div class="input-group">
-																			<input type="text" name="pregnant_age" value="0" class="form-control">
+																			<input type="number" name="pregnant_age" class="form-control" value="0" min="0" max="52" id="pregnant_age_week" disabled>
 																			<div class="input-group-append">
 																				<span class="input-group-text">สัปดาห์</span>
 																			</div>
@@ -622,34 +617,385 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="pregnant_age_input" value="Y" class="custom-control-input health-1" id="pregnant_age_y">
+																	<input type="checkbox" name="pregnant_age_input" value="y" class="custom-control-input health-1" id="pregnant_age_y">
 																	<label for="pregnant_age_y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="pregnant_age_input" value="N" class="custom-control-input health-1" id="pregnant_age_n">
+																	<input type="checkbox" name="pregnant_age_input" value="n" class="custom-control-input health-1" id="pregnant_age_n">
 																	<label for="pregnant_age_n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="pregnant_age_input" value="Y" class="custom-control-input health-1" id="pregnant_age_u">
+																	<input type="checkbox" name="pregnant_age_input" value="u" class="custom-control-input health-1" id="pregnant_age_u">
 																	<label for="pregnant_age_u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 														</tr>
-
+														<tr id="health_table_tr2">
+															<td>
+																<div class="form-group row">
+																	<label for="give_birth" class="mt-2 font-normal">หญิงหลังคลอด ในช่วง 2 สัปดาห์แรก</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="after_give_birth" value="y" class="custom-control-input health-2" id="after_give_birth_y">
+																	<label for="after_give_birth_y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="after_give_birth" value="n" class="custom-control-input health-2" id="after_give_birth_n">
+																	<label for="after_give_birth_n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="after_give_birth" value="u" class="custom-control-input health-2" id="after_give_birth_u">
+																	<label for="after_give_birth_u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr3">
+															<td>
+																<div class="form-group row">
+																	<label for="fat" class="mt-2 font-normal">อ้วน ระบุส่วนสูง</label>
+																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+																		<div class="input-group">
+																			<input type="number" name="fat_height_input" class="form-control" min="0" max="250" value="0" id="fat-height-input" disabled>
+																			<div class="input-group-append">
+																				<span class="input-group-text">cm</span>
+																			</div>
+																		</div>
+																	</div>
+																	<label for="fat_weight" class="mt-2 font-normal">น้ำหนัก</label>
+																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+																		<div class="input-group">
+																			<input type="number" name="fat_weight_input" class="form-control" min="0" max="200" value="0" id="fat-weight-input" disabled>
+																			<div class="input-group-append">
+																				<span class="input-group-text">kg</span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="fat_input_yes" value="y" class="custom-control-input health-3" id="fat-input-y">
+																	<label for="fat-input-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="fat_input_no" value="n" class="custom-control-input health-3" id="fat-input-n">
+																	<label for="fat-input-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="fat_input_un" value="u" class="custom-control-input health-3" id="fat-input-u">
+																	<label for="fat-input-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr4">
+															<td>
+																<div class="form-group row">
+																	<label for="diabetes" class="mt-2 font-normal">เบาหวาน</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="diabetes_yes" value="y" class="custom-control-input health-4" id="diabetes-y">
+																	<label for="diabetes-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="diabetes_no" value="n" class="custom-control-input health-4" id="diabetes-n">
+																	<label for="diabetes-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="diabetes_un" value="Y" class="custom-control-input health-4" id="diabetes-u">
+																	<label for="diabetes-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr5">
+															<td>
+																<div class="form-group row">
+																	<label for="aids" class="mt-2 font-normal">ภูมิคุ้มกันบกพร่อง ระบุ</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="aids_yes" value="y" class="custom-control-input health-5" id="aids-y">
+																	<label for="aids-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="aids_no" value="n" class="custom-control-input health-5" id="aids-n">
+																	<label for="aids-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="aids_un" value="Y" class="custom-control-input health-5" id="aids-u">
+																	<label for="aids-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr6">
+															<td>
+																<div class="form-group row">
+																	<label for="preterm_infant" class="mt-2 font-normal">คลอดก่อนกำหนด อายุครรภ์</label>
+																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+																		<div class="input-group">
+																			<input type="number" name="preterm_infant_week" value="0" min="0" max="52" class="form-control" id="preterm-infant-week">
+																			<div class="input-group-append">
+																				<span class="input-group-text">สัปดาห์</span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="preterm_infant_yes" value="y" class="custom-control-input health-6" id="preterm-infant-y">
+																	<label for="preterm-infant-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="preterm_infant_no" value="n" class="custom-control-input health-6" id="preterm-infant-n">
+																	<label for="preterm-infant-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="preterm_infant_un" value="u" class="custom-control-input health-6" id="preterm-infant-u">
+																	<label for="preterm-infant-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr7">
+															<td>
+																<div class="form-group row">
+																	<label for="malnutrition" class="mt-2 font-normal">ภาวะทุพโภชนาการ/ขาดสารอาหาร</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="malnutrition_yes" value="y" class="custom-control-input health-7" id="malnutrition-y">
+																	<label for="malnutrition-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="malnutrition_no" value="n" class="custom-control-input health-7" id="malnutrition-n">
+																	<label for="malnutrition-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="malnutrition_un" value="u" class="custom-control-input health-7" id="malnutrition-u">
+																	<label for="malnutrition-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr8">
+															<td>
+																<div class="form-group row">
+																	<label for="copd" class="mt-2 font-normal">โรคปอดเรื้อัง (COPD)</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="copd_yes" value="y" class="custom-control-input health-8" id="copd-y">
+																	<label for="copd-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="copd_no" value="n" class="custom-control-input health-8" id="copd-n">
+																	<label for="copd-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="copd_un" value="u" class="custom-control-input health-8" id="copd-u">
+																	<label for="copd-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr9">
+															<td>
+																<div class="form-group row">
+																	<label for="asthma" class="mt-2 font-normal">หอบหืด</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="asthma_yes" value="y" class="custom-control-input health-9" id="asthma-y">
+																	<label for="asthma-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="asthma_no" value="n" class="custom-control-input health-9" id="asthma-n">
+																	<label for="asthma-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="asthma_un" value="u" class="custom-control-input health-9" id="asthma-u">
+																	<label for="asthma-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr10">
+															<td>
+																<div class="form-group row">
+																	<label for="heart_disease" class="mt-2 font-normal">โรคหัวใจ</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="heart_disease_yes" value="y" class="custom-control-input health-10" id="heart-disease-y">
+																	<label for="heart-disease-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="heart_disease_no" value="n" class="custom-control-input health-10" id="heart-disease-n">
+																	<label for="heart-disease-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="heart_disease_un" value="u" class="custom-control-input health-10" id="heart-disease-u">
+																	<label for="heart-disease-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr11">
+															<td>
+																<div class="form-group row">
+																	<label for="stroke" class="mt-2 font-normal">โรคหลอดเลือกสมอง</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="stroke_yes" value="y" class="custom-control-input health-11" id="stroke-y">
+																	<label for="stroke-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="stroke_no" value="n" class="custom-control-input health-11" id="stroke-n">
+																	<label for="stroke-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="stroke-y" value="u" class="custom-control-input health-11" id="stroke-u">
+																	<label for="stroke-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr12">
+															<td>
+																<div class="form-group row">
+																	<label for="kidney_disease" class="mt-2 font-normal">โรคไตวาย</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="kidney_disease_yes" value="y" class="custom-control-input health-12" id="kidney-disease-y">
+																	<label for="kidney-disease-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="kidney_disease_no" value="n" class="custom-control-input health-12" id="kidney-disease-n">
+																	<label for="kidney-disease-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="kidney_disease_un" value="u" class="custom-control-input health-12" id="kidney-disease-u">
+																	<label for="kidney-disease-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr13">
+															<td>
+																<div class="form-group row">
+																	<label for="cancer" class="mt-2 font-normal">มะเร็ง ระบุ</label>
+																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+																		<div class="input-group">
+																			<input type="text" name="cancer_input" class="form-control" id="cancer-input" disabled>
+																		</div>
+																	</div>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="cancer_yes" value="y" class="custom-control-input health-13" id="cancer-y">
+																	<label for="cancer-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="cancer_no" value="n" class="custom-control-input health-13" id="cancer-n">
+																	<label for="cancer-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="cancer-un" value="u" class="custom-control-input health-13" id="cancer-u">
+																	<label for="cancer-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="health_table_tr14">
+															<td>
+																<div class="form-group row">
+																	<label for="other_disease" class="mt-2 font-normal">อื่นๆ ระบุ</label>
+																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+																		<div class="input-group">
+																			<input type="text" name="other_disease_input" class="form-control" id="other-disease-input" disabled>
+																		</div>
+																	</div>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="other_disease_y" value="y" class="custom-control-input health-14" id="other-disease-y">
+																	<label for="other-disease-y" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="other_disease_no" value="n" class="custom-control-input health-14" id="other-disease-n">
+																	<label for="other-disease-n" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+															<td>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="other_disease_un" value="u" class="custom-control-input health-14" id="other-disease-u">
+																	<label for="other-disease-u" class="custom-control-label">&nbsp;</label>
+																</div>
+															</td>
+														</tr>
 													</tbody>
 												</table>
-
-
-
-
-
-
-
-
 											</div>
 										</div>
 									</div>
@@ -659,7 +1005,116 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-custom-5">
-									@include('patients.component-risk-history-tbl')
+									<h1>3. ประวัติเสี่ยง</h1>
+									<div class="form-row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+											<table class="table">
+												<thead class="bg-warning text-light">
+													<tr>
+														<th scope="col">รายการ</th>
+														<th scope="col">#</th>
+														<th scope="col">#</th>
+													</tr>
+												</thead>
+												<tfoot>
+													<tr><td colspan="3">&nbsp;</td></tr>
+												</tfoot>
+												<tbody>
+													<tr id="risk_table_tr1">
+														<td>ช่วง 7 วันก่อนป่วยได้สัมผัสสัตว์ปีกป่วย/ตายโดยตรง</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="pet_touch" value="n" class="custom-control-input risk-1" id="pet_touch_n">
+																<label for="pet_touch_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="pet_touch" value="y" class="custom-control-input risk-1" id="pet_touch_y">
+																<label for="pet_touch_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
+													<tr id="risk_table_tr2">
+														<td>
+															<div class="form-group row mt-0 mb-0">
+																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+																	<div class="input-group">
+																		<label for="pet_touch_range" class="font-normal">ช่วง 14 วันก่อนป่วยได้สัมผัสสัตว์ป่วยโดยตรงหรือไม่ ระบุชนิดสัตว์</label>
+																		<input type="text" name="pet_touch_name" class="form-control form-control-sm ml-2" id="pet_touch_name" disabled>
+																	</div>
+																</div>
+															</div>
+														</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="pet_touch_direct" value="n" class="custom-control-input risk-2" id="pet_touch_direct_n">
+																<label for="pet_touch_direct_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="pet_touch_direct" value="y" class="custom-control-input risk-2" id="pet_touch_direct_y">
+																<label for="pet_touch_direct_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
+													<tr id="risk_table_tr3">
+														<td>ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่ในพื้นที่ที่มีสัตว์ปีกป่วย/ตายผิดปกติ</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="stay_pet_death" value="n" class="custom-control-input risk-3" id="stay_pet_death_n">
+																<label for="stay_pet_death_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="stay_pet_death" value="y" class="custom-control-input risk-3" id="stay_pet_death_y">
+																<label for="stay_pet_death_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
+													<tr id="risk_table_tr4">
+														<td>
+															<div class="form-group row mt-0 mb-0">
+																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+																	<div class="input-group">
+																		<label for="stay_outbreak" class="font-normal">ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่หรือเดินทางมาจากพื้นที่ที่ไข้หวัดใหญ่/ปอดอักเสบระบาด <span class="text-info">ระบุพื้นที่</span></label>
+																		<input type="text" name="stay_outbreak_input" class="form-control form-control-sm ml-2" id="stay_outbreak_input" disabled>
+																	</div>
+																</div>
+															</div>
+														</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="stay_outbreak" value="n" class="custom-control-input risk-4" id="stay_outbreak_n">
+																<label for="stay_outbreak_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="stay_outbreak" value="y" class="custom-control-input risk-4" id="stay_outbreak_y">
+																<label for="stay_outbreak_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
+
+
+
+
+
+
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+
+
+
+
+
 								</div><!-- bd-callout -->
 							</div><!-- card body -->
 						</div><!-- card -->
@@ -919,25 +1374,285 @@ $(document).ready(function() {
 	/* health tbl */
 
 	$('.health-1').click(function() {
-
-
 		$('.health-1').not(this).prop('checked', false);
 		let number = $('.health-1').filter(':checked').length;
-		if (number === 1) {
+		if (number == 1) {
 			let hasClass = $('#health_table_tr1').hasClass('highlight');
 			if (!hasClass) {
 				$('#health_table_tr1').addClass('highlight');
 			}
-			if (1 == 19) {
-				$('#health_other').prop('disabled', false);
-			}
 		} else {
 			$('#health_table_tr1').removeClass('highlight');
-			if (1 == 19) {
-				$('#shealth_other').prop('disabled', true);
-			}
-		} 
+		}
+		if ($('#pregnant_age_y').prop('checked') == true) {
+			$('#pregnant_age_week').prop('disabled', false);
+		} else {
+			$('#pregnant_age_week').val('0');
+			$('#pregnant_age_week').prop('disabled', true);
+		}
 	});
+
+	$('.health-2').click(function() {
+		$('.health-2').not(this).prop('checked', false);
+		let number = $('.health-2').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr2').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr2').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr2').removeClass('highlight');
+		}
+	});
+
+	$('.health-3').click(function() {
+		$('.health-3').not(this).prop('checked', false);
+		let number = $('.health-3').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr3').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr3').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr3').removeClass('highlight');
+		}
+		if ($('#fat-input-y').prop('checked') == true) {
+			$('#fat-height-input').prop('disabled', false);
+			$('#fat-weight-input').prop('disabled', false);
+		} else {
+			$('#fat-height-input').val('0');
+			$('#fat-weight-input').val('0');
+			$('#fat-height-input').prop('disabled', true);
+			$('#fat-weight-input').prop('disabled', true);
+		}
+	});
+
+	$('.health-4').click(function() {
+		$('.health-4').not(this).prop('checked', false);
+		let number = $('.health-4').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr4').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr4').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr4').removeClass('highlight');
+		}
+	});
+
+	$('.health-5').click(function() {
+		$('.health-5').not(this).prop('checked', false);
+		let number = $('.health-5').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr5').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr5').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr5').removeClass('highlight');
+		}
+	});
+
+	$('.health-6').click(function() {
+		$('.health-6').not(this).prop('checked', false);
+		let number = $('.health-6').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr6').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr6').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr6').removeClass('highlight');
+		}
+		if ($('#preterm-infant-y').prop('checked') == true) {
+			$('#preterm-infant-week').prop('disabled', false);
+		} else {
+			$('#preterm-infant-week').val('0');
+			$('#preterm-infant-week').prop('disabled', true);
+		}
+	});
+
+	$('.health-7').click(function() {
+		$('.health-7').not(this).prop('checked', false);
+		let number = $('.health-7').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr7').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr7').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr7').removeClass('highlight');
+		}
+	});
+
+	$('.health-8').click(function() {
+		$('.health-8').not(this).prop('checked', false);
+		let number = $('.health-8').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr8').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr8').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr8').removeClass('highlight');
+		}
+	});
+
+	$('.health-9').click(function() {
+		$('.health-9').not(this).prop('checked', false);
+		let number = $('.health-9').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr9').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr9').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr9').removeClass('highlight');
+		}
+	});
+
+	$('.health-10').click(function() {
+		$('.health-10').not(this).prop('checked', false);
+		let number = $('.health-10').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr10').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr10').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr10').removeClass('highlight');
+		}
+	});
+
+	$('.health-11').click(function() {
+		$('.health-11').not(this).prop('checked', false);
+		let number = $('.health-11').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr11').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr11').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr11').removeClass('highlight');
+		}
+	});
+
+	$('.health-12').click(function() {
+		$('.health-12').not(this).prop('checked', false);
+		let number = $('.health-12').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr12').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr12').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr12').removeClass('highlight');
+		}
+	});
+
+	$('.health-13').click(function() {
+		$('.health-13').not(this).prop('checked', false);
+		let number = $('.health-13').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr13').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr13').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr13').removeClass('highlight');
+		}
+		if ($('#cancer-y').prop('checked') == true) {
+			$('#cancer-input').prop('disabled', false);
+		} else {
+			$('#cancer-input').val('');
+			$('#cancer-input').prop('disabled', true);
+		}
+	});
+
+	$('.health-14').click(function() {
+		$('.health-14').not(this).prop('checked', false);
+		let number = $('.health-14').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#health_table_tr14').hasClass('highlight');
+			if (!hasClass) {
+				$('#health_table_tr14').addClass('highlight');
+			}
+		} else {
+			$('#health_table_tr14').removeClass('highlight');
+		}
+		if ($('#other-disease-y').prop('checked') == true) {
+			$('#other-disease-input').prop('disabled', false);
+		} else {
+			$('#other-disease-input').val('');
+			$('#other-disease-input').prop('disabled', true);
+		}
+	});
+
+	/* risk-hostory */
+	$('.risk-1').click(function() {
+		$('.risk-1').not(this).prop('checked', false);
+		let number = $('.risk-1').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr1').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr1').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr1').removeClass('highlight');
+		}
+	});
+
+	$('.risk-2').click(function() {
+		$('.risk-2').not(this).prop('checked', false);
+		let number = $('.risk-2').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr2').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr2').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr2').removeClass('highlight');
+		}
+		if ($('#pet_touch_direct_y').prop('checked') == true) {
+			$('#pet_touch_name').prop('disabled', false);
+		} else {
+			$('#pet_touch_name').val('');
+			$('#pet_touch_name').prop('disabled', true);
+		}
+	});
+
+	$('.risk-3').click(function() {
+		$('.risk-3').not(this).prop('checked', false);
+		let number = $('.risk-3').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr3').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr3').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr3').removeClass('highlight');
+		}
+	});
+
+	$('.risk-4').click(function() {
+		$('.risk-4').not(this).prop('checked', false);
+		let number = $('.risk-4').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr4').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr4').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr4').removeClass('highlight');
+		}
+		if ($('#stay_outbreak_y').prop('checked') == true) {
+			$('#stay_outbreak_input').prop('disabled', false);
+		} else {
+			$('#stay_outbreak_input').val('');
+			$('#stay_outbreak_input').prop('disabled', true);
+		}
+	});
+
 
 
 
@@ -946,8 +1661,5 @@ $(document).ready(function() {
 });
 
 </script>
-<script>
 
-
-</script>
 @endsection

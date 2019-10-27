@@ -46,7 +46,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr2">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">หญิงหลังคลอด ในช่วง 2 สัปดาห์แรก</label>
@@ -71,7 +71,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr3">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">อ้วน ระบุส่วนสูง</label>
@@ -113,7 +113,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr4">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">เบาหวาน</label>
@@ -138,7 +138,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr5">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">ภูมิคุ้มกันบกพร่อง ระบุ</label>
@@ -163,7 +163,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr6">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">คลอดก่อนกำหนด อายุครรภ์</label>
@@ -196,7 +196,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr7">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">ภาวะทุพโภชนาการ/ขาดสารอาหาร</label>
@@ -221,7 +221,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr8">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">โรคปอดเรื้อัง (COPD)</label>
@@ -246,7 +246,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr9">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">หอบหืด</label>
@@ -271,7 +271,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr10">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">โรคหัวใจ</label>
@@ -296,7 +296,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr11">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">โรคหลอดเลือกสมอง</label>
@@ -321,7 +321,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr12">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">โรคไตวาย</label>
@@ -346,7 +346,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr13">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">มะเร็ง ระบุ</label>
@@ -376,7 +376,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr>
+		<tr id="health_table_tr14">
 			<td>
 				<div class="form-group row">
 					<label for="pregnant" class="mt-2 font-normal">อื่นๆ ระบุ</label>
@@ -408,23 +408,3 @@
 		</tr>
 	</tbody>
 </table>
-<script>
-$('.health-1').click(function() {
-	$('.health-1').not(this).prop('checked', false);
-	let number = $('.health-1').filter(':checked').length;
-	if (number === 1) {
-		let hasClass = $('#health_table_tr1').hasClass('highlight');
-		if (!hasClass) {
-			$('#health_table_tr1').addClass('highlight');
-		}
-		if (1 == 19) {
-			$('#health_other').prop('disabled', false);
-		}
-	} else {
-		$('#health_table_tr1').removeClass('highlight');
-		if (1 == 19) {
-			$('#shealth_other').prop('disabled', true);
-		}
-	}
-});
-</script>
