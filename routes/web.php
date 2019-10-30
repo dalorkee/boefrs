@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('code', 'CodeController');
 	Route::resource('list-data', 'ListDataController');
+	//Route::resource('patients', 'PatientsController');
 });
 
 /* Register */
@@ -46,7 +47,7 @@ Route::post('ajaxSelect', 'CodeController@ajaxRequestSelect')->name('ajaxSelect'
 Route::get('/ajaxGetHospByProv', 'UserController@ajaxGetHospByProv')->name('ajaxGetHospByProv');
 
 /* Captcha */
-Route::get('refreshcaptcha', 'CaptchaController@refreshCaptcha');
+Route::get('/refreshcaptcha', 'CaptchaController@refreshCaptcha');
 
 /* Sample Submission Form */
 Route::get('/sample-submissions-form', array(
@@ -54,14 +55,13 @@ Route::get('/sample-submissions-form', array(
 			'uses' => 'SampleSubmissionsController@Form_Sample_Submissions'
 ));
 
-/* code soft deleted */
+/* code soft delete */
 Route::get('/codeSoftDelete/{id}','CodeController@softDelete')->name('codeSoftDelete');
 
+/* fetch district, fetch sub-district */
+Route::post('province/district', 'PatientsController@districtFetch')->name('districtFetch');
+Route::post('province/district/sub-district', 'PatientsController@subDistrictFetch')->name('subDistrictFetch');
+
 /* patient */
-Route::get('/patient/{id}', 'PatientsController@index')->name('patient');
-
-/* fetch district */
-Route::post('/province/district', 'PatientsController@districtFetch')->name('districtFetch');
-
-/* fetch sub-district */
-Route::post('/province/district/sub-district', 'PatientsController@subDistrictFetch')->name('subDistrictFetch');
+Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
+Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');

@@ -113,7 +113,6 @@ input.valid, textarea.valid{
 					<div class="alert" role="alert" style="border:1px solid #ccc;">
 
 						<form id="patient_form" class="mt-4 mb-3">
-							@role('admin')
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
@@ -138,7 +137,6 @@ input.valid, textarea.valid{
 									</div>
 								</div>
 							</div>
-							@endrole
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
@@ -220,7 +218,7 @@ input.valid, textarea.valid{
 									<td><span class="badge badge-pill badge-success">{{ $value->lab_status }}</span></td>
 									<td>{{ $value->created_at }}</td>
 									<td>
-										<a href="{{ route('patient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">Edit</a>&nbsp;
+										<a href="{{ route('createPatient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">Edit</a>&nbsp;
 										<a href="{{ route('codeSoftDelete', ['id'=>$value->id]) }}" id="delete" class="btn btn-outline-danger btn-sm">Delete</a>
 										<!--<button name="delete" type="submit" id="delete" class="btn btn-outline-danger btn-sm" value="{ $value->id }">Delete</button> -->
 									</td>
@@ -307,7 +305,7 @@ $(document).ready(function() {
 			data: input,
 			success: function(data){
 				if (data.status == 204) {
-					toastr.error(data.msg, "Flu Right Size",
+					toastr.warning(data.msg, "Flu Right Size",
 						{
 							"closeButton": true,
 							"positionClass": "toast-top-center",
@@ -336,15 +334,39 @@ $(document).ready(function() {
 							);
 						},
 						error: function(jqXhr, textStatus, errorMessage){
-							alert('Error code: ' + jqXhr.status);
+							$("#select_province").val('0').selectpicker("refresh");
+							$("#select_hospital").val('0').selectpicker("refresh");
+							$("#title_name_input").val('0').selectpicker("refresh");
+							$('#patient_form').find('input:text').val('');
+							toastr.error(jqXhr.status + " " + textStatus + " " + errorMessage, " Flu Right Size",
+								{
+									"closeButton": true,
+									"positionClass": "toast-top-center",
+									"progressBar": true,
+									"timeOut": 0,
+									"extendedTimeOut": 0
+								}
+							);
 						}
 					});
 				} else {
-					alert('nok');
+					alert('Error!');
 				}
 			},
 			error: function(data, status, error){
-				alert('Error code: ' + data.status);
+				$("#select_province").val('0').selectpicker("refresh");
+				$("#select_hospital").val('0').selectpicker("refresh");
+				$("#title_name_input").val('0').selectpicker("refresh");
+				$('#patient_form').find('input:text').val('');
+				toastr.error(data.status + " " + status + " " + error, " Flu Right Size",
+					{
+						"closeButton": true,
+						"positionClass": "toast-top-center",
+						"progressBar": true,
+						"timeOut": 0,
+						"extendedTimeOut": 0
+					}
+				);
 			}
 		});
 	});

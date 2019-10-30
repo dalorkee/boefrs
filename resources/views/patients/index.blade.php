@@ -38,12 +38,12 @@
 							<h5 class="card-subtitle">ID Flu-BOE</h5>
 						</div>
 					</div>
-					<Form action="#" method="POST" class="needs-validation custom-form-legend" novalidate>
+					<Form action="{{ route('addPatient') }}" method="POST" class="needs-validation custom-form-legend" novalidate>
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
 									<div style="position:absolute; top:2px; right:2px;">
-										<img src="{{ URL::asset('public/qrcode/6910U124720191022.png') }}" />
+										<img src="{{ URL::asset('public/qrcode/qr'.$patient[0]->lab_code.'.png') }}" />
 									</div>
 									<h1 class="text-info">1. ข้อมูลทั่วไปของผู้ป่วย</h1>
 									<div class="form-row">
@@ -52,7 +52,8 @@
 											<div class="input-group-append">
 												<span class="btn btn-primary btn-sm">{{ $patient[0]->lab_code }}</span>
 												{{ csrf_field() }}
-												<input type="hidden" name="formIndexInput" class="form-control" id="form_index_input" value="{{ $patient[0]->lab_code }}" readonly required>
+												<input type="hidden" name="pid" value="{{ $patient[0]->id }}">
+												<input type="hidden" name="formIndexInput" value="{{ $patient[0]->lab_code }}">
 											</div>
 										</div>
 									</div>
@@ -63,7 +64,9 @@
 											<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
 											@php
 												if ($patient[0]->title_name == 6) {
-													$cache_title_name = array( '-6', $patient[0]->title_name_other);
+													$cache_title_name = array( -6, $patient[0]->title_name_other);
+												} else {
+													$cache_title_name = array($patient[0]->title_name, $titleName[$patient[0]->title_name]->title_name);
 												}
 											@endphp
 												<option value="{{ $cache_title_name[0] }}">{{ $cache_title_name[1] }}</option>
@@ -83,7 +86,7 @@
 													$disbled = null;
 												} else {
 													$title_name_oth_txt = null;
-													$disbled = 'disbled';
+													$disbled = "disabled";
 												}
 											@endphp
 												<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" value="{{ $title_name_oth_txt }}" {{ $disbled }}>
@@ -117,16 +120,16 @@
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="sex">เพศ</label>
 											<select name="sexInput" class="custom-select">
-												<option value="null">-- โปรดเลือก --</option>
+												<option value="0">-- โปรดเลือก --</option>
 												<option value="male">ชาย</option>
 												<option value="female">หญิง</option>
 											</select>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="birthDate">ว/ด/ป เกิด</label>
-											<div class="input-group date" data-provide="datepicker" id="birthDateInput">
+											<div class="input-group date" data-provide="datepicker" id="birthDayInput">
 												<div class="input-group">
-													<input type="text" name="birthDateInput" class="form-control" required>
+													<input  type="text" name="birthDayInput" class="form-control">
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -135,11 +138,11 @@
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
 											<label for="ageYear">อายุ/ปี</label>
-											<input type="number" name="ageYearInput" class="form-control" id="age_year_input" value="0" min="0" max="120" required>
+											<input type="text" name="ageYearInput" class="form-control" id="age_year_input" value="0" required readonly>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
 											<label for="ageMonth">อายุ/เดือน</label>
-											<input type="number" name="ageMonthInput" class="form-control" id="age_month_input" value="0" min="0" max="12" required>
+											<input type="text" name="ageMonthInput" class="form-control" id="age_month_input" value="0" required readonly>
 										</div>
 									</div>
 									<div class="form-row">
@@ -158,9 +161,14 @@
 										</div>
 									</div>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="hospital">โรงพยาบาล</label>
-											<input type="text" name="hospitalInput" class="form-control" value="{{ $patient[0]->hospcode }}" placeholder="โรงพยาบาล" required readonly>
+											<select name="hospitalInput" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true">
+												<option value="0">-- เลือกโรงพยาบาล --</option>
+												@foreach ($hospital as $key => $val)
+													<option value="{{ $val->hospcode }}">{{ $val->hosp_name }}</option>
+												@endforeach
+											</select>
 										</div>
 									</div>
 									<div class="form-row">
@@ -184,7 +192,7 @@
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="province">จังหวัด</label>
-											<select name="province" class="form-control selectpicker show-tick" id="select_province">
+											<select name="provinceInput" class="form-control selectpicker show-tick" id="select_province">
 												<option value="0">-- เลือกจังหวัด --</option>
 												@php
 													$provinces = Session::get('provinces');
@@ -217,9 +225,9 @@
 												@endforeach
 											</select>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3" id="other_occupation_input">
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
 											<label for="occupationOtherInput">อาชีพ อื่นๆ ระบุ</label>
-											<input type="text" name="occupationOtherInput" class="form-control" placeholder="อาชีพ อื่นๆ" disabled>
+											<input type="text" name="occupationOtherInput" class="form-control" id="occupation_other_input" placeholder="อาชีพ อื่นๆ" disabled>
 										</div>
 									</div>
 								</div><!-- bd-callout -->
@@ -228,21 +236,36 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-danger">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 									<h1 class="text-danger">2. ข้อมูลทางคลินิก</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="patient">ผู้ป่วย</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="patientCheckbox" class="custom-control-input ptCheck" id="opdCheckbox">
+													<input type="checkbox" name="patientType" value="opd" class="custom-control-input pt-type" id="opdCheckbox">
 													<label for="opdCheckbox" class="custom-control-label normal-label">ผู้ป่วยนอก (OPD)/ILI</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="patientCheckbox" class="custom-control-input ptCheck" id="ipdCheckbox">
+													<input type="checkbox" name="patientType" value="ipd" class="custom-control-input pt-type" id="ipdCheckbox">
 													<label for="ipdCheckbox" class="custom-control-label normal-label">ผู้ป่วยใน (IPD)/SARI</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="patientCheckbox" class="custom-control-input ptCheck" id="icuCheckbox">
+													<input type="checkbox" name="patientType" value="icu" class="custom-control-input pt-type" id="icuCheckbox">
 													<label for="icuCheckbox" class="custom-control-label normal-label">ผู้ป่วยหนัก/ICU</label>
 												</div>
 											</div>
@@ -307,34 +330,34 @@
 													</thead>
 													<tbody>
 													@php
-														$symptoms->each(function ($item, $key) {
-															if ($item->id == 19) {
-																$other_symptom = "<input type=\"text\" name=\"other_symptom\" class=\"form-control\" id=\"symptom_other\" disabled>";
-															} else {
-																$other_symptom = null;
-															}
-															echo "<tr id=\"symptoms_table_tr".$item->id."\">";
-																echo "<td>".$item->symptom_name_th."&nbsp;&#40;".$item->symptom_name_en."&#41;".$other_symptom."</td>";
-																echo "<td>";
-																	echo "<div class=\"custom-control custom-checkbox\">";
-																		echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"N\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_yes\">";
-																		echo "<label for=\"symptom_".$item->id."_yes\" class=\"custom-control-label\">&nbsp;</label>";
-																	echo "</div>";
-																echo "</td>";
-																echo "<td>";
-																	echo "<div class=\"custom-control custom-checkbox\">";
-																		echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"N\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_no\">";
-																		echo "<label for=\"symptom_".$item->id."_no\" class=\"custom-control-label\"></label>";
-																	echo "</div>";
-																echo "</td>";
-																echo "<td>";
-																	echo "<div class=\"custom-control custom-checkbox\">";
-																		echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"N\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_unknown\">";
-																		echo "<label for=\"symptom_".$item->id."_unknown\" class=\"custom-control-label\"></label>";
-																	echo "</div>";
-																echo "</td>";
-															echo "</tr>\n";
-														})
+													$symptoms->each(function ($item, $key) {
+														if ($item->symptom_name_en == 'Other') {
+															$other_symptom = "<input type=\"text\" name=\"other_symptom\" class=\"form-control\" id=\"symptom_other\" disabled>";
+														} else {
+															$other_symptom = null;
+														}
+														echo "<tr id=\"symptoms_table_tr".$item->id."\">";
+															echo "<td>".$item->symptom_name_th." (".$item->symptom_name_en.") ".$other_symptom."</td>";
+															echo "<td>";
+																echo "<div class=\"custom-control custom-checkbox\">";
+																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"1\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_yes\">";
+																	echo "<label for=\"symptom_".$item->id."_yes\" class=\"custom-control-label\">&nbsp;</label>";
+																echo "</div>";
+															echo "</td>";
+															echo "<td>";
+																echo "<div class=\"custom-control custom-checkbox\">";
+																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"2\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_no\">";
+																	echo "<label for=\"symptom_".$item->id."_no\" class=\"custom-control-label\"></label>";
+																echo "</div>";
+															echo "</td>";
+															echo "<td>";
+																echo "<div class=\"custom-control custom-checkbox\">";
+																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"3\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_un\">";
+																	echo "<label for=\"symptom_".$item->id."_un\" class=\"custom-control-label\"></label>";
+																echo "</div>";
+															echo "</td>";
+														echo "</tr>\n";
+													})
 													@endphp
 													</tbody>
 												</table>
@@ -346,11 +369,11 @@
 											<label for="firstXrayInput">เอกซเรย์ปอด (ครั้งแรก)</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="lungXrayInput" class="custom-control-input lungXray" id="lungXrayNo">
+													<input type="checkbox" name="lungXrayInput" value="0" class="custom-control-input lungXray" id="lungXrayNo">
 													<label for="lungXrayNo" class="custom-control-label normal-label">ไม่ได้ทำ</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="lungXrayInput" class="custom-control-input lungXray" id="lungXrayYes">
+													<input type="checkbox" name="lungXrayInput" value="1" class="custom-control-input lungXray" id="lungXrayYes">
 													<label for="lungXrayYes" class="custom-control-label normal-label">ทำ</label>
 												</div>
 											</div>
@@ -1098,29 +1121,169 @@
 															</div>
 														</td>
 													</tr>
-
-
-
-
-
-
-
+													<tr id="risk_table_tr5">
+														<td>ช่วง 14 วันก่อนป่วยได้ดูแลหรือสัมผัสใกล้ชิดกับผู้ป่วยอาการคล้ายไข้หวัดใหญ่/ปอดอักเสบ</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="close_up_flu" value="n" class="custom-control-input risk-5" id="close_up_n">
+																<label for="close_up_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="close_up_flu" value="y" class="custom-control-input risk-5" id="close_up_y">
+																<label for="close_up_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
+													<tr id="risk_table_tr6">
+														<td>ช่วง 14 วันก่อนป่วยไปเยี่ยมผู้ป่วยไข้หวัดใหญ่/ปอดอักเสบ</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="patient_visit" value="n" class="custom-control-input risk-6" id="patient_visit_n">
+																<label for="patient_visit_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="patient_visit" value="y" class="custom-control-input risk-6" id="patient_visit_y">
+																<label for="patient_visit_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
+													<tr id="risk_table_tr7">
+														<td>เป็นบุคลากรทางการแพทย์และสาธารณสุขหรือเจ้าหน้าที่ห้องปฏิบัติการ</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="healthcare" value="n" class="custom-control-input risk-7" id="healthcare_n">
+																<label for="healthcare_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="healthcare" value="y" class="custom-control-input risk-7" id="healthcare_y">
+																<label for="healthcare_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
+													<tr id="risk_table_tr8">
+														<td>เป็นผู้ป่วยสงสัยไข้หวัดใหญ่/ปอดอักเสบ ที่เข้ารับการรักษาเป็นกลุ่มก้อน</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="suspect_patient" value="n" class="custom-control-input risk-8" id="suspect_patient_n">
+																<label for="suspect_patient_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="suspect_patient" value="y" class="custom-control-input risk-8" id="suspect_patient_y">
+																<label for="suspect_patient_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
+													<tr id="risk_table_tr9">
+														<td>
+															<div class="form-group row mt-0 mb-0">
+																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+																	<div class="input-group">
+																		<label for="other_risk" class="font-normal">อื่นๆ ระบุ</label>
+																		<input type="text" name="other_risk_input" class="form-control form-control-sm ml-2" id="other_risk_input" disabled style="width:400px;">
+																	</div>
+																</div>
+															</div>
+														</td>
+														<td class="text-danger">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="other_risk" value="n" class="custom-control-input risk-9" id="other_risk_n">
+																<label for="other_risk_n" class="custom-control-label normal-label">ไม่ใช่</label>
+															</div>
+														</td>
+														<td class="text-success">
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" name="other_risk" value="y" class="custom-control-input risk-9" id="other_risk_y">
+																<label for="other_risk_y" class="custom-control-label normal-label">ใช่</label>
+															</div>
+														</td>
+													</tr>
 												</tbody>
 											</table>
 										</div>
 									</div>
-
-
-
-
-
-
+									<div class="row">
+										<div class="form-row">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+												<label for="treatment">ผลการรักษา</label>
+												<div>
+													<div class="custom-control custom-checkbox custom-control-inline">
+														<input type="checkbox" name="treatment" value="cured" class="custom-control-input treatment-1" id="treatment_cured">
+														<label for="treatment_cured" class="custom-control-label normal-label">หาย</label>
+													</div>
+													<div class="custom-control custom-checkbox custom-control-inline">
+														<input type="checkbox" name="treatment" value="treat" class="custom-control-input treatment-1" id="treatment_treat">
+														<label for="treatment_treat" class="custom-control-label normal-label">อยู่ระหว่างการรักษา</label>
+													</div>
+													<div class="custom-control custom-checkbox custom-control-inline" style="width:340px">
+														<input type="checkbox" name="treatment" value="refer" class="custom-control-input treatment-1" id="treatment_refer">
+														<label for="treatment_refer" class="custom-control-label normal-label">ส่งต่อไปรักษาที่</label>
+														<input type="text" name="treatment_refer_at" class="form-control form-control-sm ml-2" disabled id="treatment_refer_at" style="width:200px">
+													</div>
+													<div class="custom-control custom-checkbox custom-control-inline">
+														<input type="checkbox" name="treatment" value="dead" class="custom-control-input treatment-1" id="treatment_dead">
+														<label for="treatment_dead" class="custom-control-label normal-label">เสียชีวิต</label>
+													</div>
+													<div class="custom-control custom-checkbox custom-control-inline">
+														<input type="checkbox" name="treatment_unknown" value="unknown" class="custom-control-input treatment-1" id="treatment_unknown">
+														<label for="treatment_unknown" class="custom-control-label normal-label">ไม่ทราบ</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div><!-- bd-callout -->
 							</div><!-- card body -->
 						</div><!-- card -->
 						<div class="card">
 							<div class="card-body border-top">
-								@include('patients.component-reporter')
+								<div class="alert alert-success" role="alert">
+									<div class="form-row">
+
+
+
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+											<label for="report_date">วันที่รายงาน</label>
+											<div class="input-group date" data-provide="datepicke" id="report_date">
+												<div class="input-group">
+													<input type="text" name="birthDateInput" class="form-control" required>
+													<div class="input-group-append">
+														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
+											<label for="user_hospital">หน่วยงาน/โรงพยาบาล</label>
+											<input type="text" name="user_hospital" value="{{ $patient[0]->user_hospcode }}" class="form-control" placeholder="โรงพยาบาล">
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
+											<label for="firstNameInput">ผู้รายงาน</label>
+											<input type="text" name="user_firstname" value="{{ auth()->user()->name . ' ' . auth()->user()->lastname }}" class="form-control" id="first_name_input" placeholder="First name" required>
+											<div class="valid-feedback">Looks good!</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
+											<label for="user_phone">โทรศัพท์</label>
+											<input type="text" name="user_phone" class="form-control" placeholder="Phone">
+											<div class="valid-feedback">Looks good!</div>
+										</div>
+									</div>
+								</div>
+
+
+
+
+
+
 							</div><!-- card body -->
 						</div><!-- card -->
 						<div class="border-top">
@@ -1149,32 +1312,6 @@ $(document).ready(function() {
 		}
 	});
 
-	/* symptoms */
-	@php
-	$symptoms->each(function ($item, $key) {
-		echo "
-			$('.symptom-".$item->id."').click(function() {
-				$('.symptom-".$item->id."').not(this).prop('checked', false);
-				let number = $('.symptom-".$item->id."').filter(':checked').length;
-				if (number === 1) {
-					let hasClass = $('#symptoms_table_tr".$item->id."').hasClass('highlight');
-					if (!hasClass) {
-						$('#symptoms_table_tr".$item->id."').addClass('highlight');
-					}
-					if (".$item->id." == 19) {
-						$('#symptom_other').prop('disabled', false);
-					}
-				} else {
-					$('#symptoms_table_tr".$item->id."').removeClass('highlight');
-					if (".$item->id." == 19) {
-						$('#symptom_other').prop('disabled', true);
-					}
-				}
-			});
-		\n";
-	});
-	@endphp
-
 	/* title name */
 	$('#title_name_input').change(function() {
 		var id = $('#title_name_input').val();
@@ -1192,10 +1329,30 @@ $(document).ready(function() {
 	});
 
 	/* date of birth */
-	$('#birthDateInput').datepicker({
+	$('#birthDayInput').datepicker({
 		format: 'dd/mm/yyyy',
+		endDate: '+1d',
+		datesDisabled: '+1d',
 		todayHighlight: true,
-		todayBtn: true
+		todayBtn: true,
+		autoclose: true
+	});
+
+	/* calc age year */
+	$('#birthDayInput').datepicker().on('changeDate', function(e){
+		var
+			getDay = new Date(e.date).getDate(),
+			getMonth = new Date(e.date).getMonth() + 1,
+			getYear = String(e.date).split(" ")[3];
+			date = getYear + '-' + getMonth + '-' + getDay,
+			birthday = new Date(date),
+			today = new Date(),
+			ageInMilliseconds = new Date(today - birthday),
+			years = ageInMilliseconds / (24 * 60 * 60 * 1000 * 365.25 ),
+			months = 12 * (years % 1),
+			days = Math.floor(30 * (months % 1));
+			$('#age_year_input').val(Math.floor(years));
+			$('#age_month_input').val(Math.floor(months));
 	});
 
 	/* nationallity */
@@ -1250,20 +1407,20 @@ $(document).ready(function() {
 	});
 
 	/* select occupation */
-	/*
 	$('#select_occupation').change(function() {
 		var id = $('#select_occupation').val();
 		if (id === '14') {
-			$('#other_occupation_input').prop('disabled', false);
+			$('#occupation_other_input').prop('disabled', false);
 		} else {
-			$('#other_occupation_input').val('');
-			$('#other_occupation_input').prop('disabled', true);
+			$('#occupation_other_input').val('');
+			$('#occupation_other_input').prop('disabled', true);
 		}
 	});
-	*/
-	/* patient opd ipd check */
-	$('input.ptCheck').on('change', function() {
-		$('input.ptCheck').not(this).prop('checked', false);
+
+	/* *************** Clinical ***************** */
+	/* patient type */
+	$('.pt-type').click(function() {
+		$('.pt-type').not(this).prop('checked', false);
 	});
 
 	/* sick date input */
@@ -1287,6 +1444,33 @@ $(document).ready(function() {
 		todayHighlight: true,
 		todayBtn: true
 	});
+
+	/* symptoms */
+	@php
+	$symptoms->each(function ($item, $key) {
+		echo "
+			$('.symptom-".$item->id."').click(function() {
+				$('.symptom-".$item->id."').not(this).prop('checked', false);
+				let number = $('.symptom-".$item->id."').filter(':checked').length;
+				if (number === 1) {
+					let hasClass = $('#symptoms_table_tr".$item->id."').hasClass('highlight');
+					if (!hasClass) {
+						$('#symptoms_table_tr".$item->id."').addClass('highlight');
+					}
+					if ('".$item->symptom_name_en."' === 'Other') {
+						$('#symptom_other').prop('disabled', false);
+					}
+				} else {
+					$('#symptoms_table_tr".$item->id."').removeClass('highlight');
+					if ('".$item->symptom_name_en."' === 'Other') {
+						$('#symptom_other').prop('disabled', true);
+					}
+				}
+			});
+		\n";
+	});
+	@endphp
+
 
 	/* xrayh check */
 	$('input.lungXray').on('change', function() {
@@ -1653,6 +1837,95 @@ $(document).ready(function() {
 		}
 	});
 
+	$('.risk-5').click(function() {
+		$('.risk-5').not(this).prop('checked', false);
+		let number = $('.risk-5').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr5').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr5').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr5').removeClass('highlight');
+		}
+	});
+
+	$('.risk-6').click(function() {
+		$('.risk-6').not(this).prop('checked', false);
+		let number = $('.risk-6').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr6').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr6').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr6').removeClass('highlight');
+		}
+	});
+
+	$('.risk-7').click(function() {
+		$('.risk-7').not(this).prop('checked', false);
+		let number = $('.risk-7').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr7').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr7').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr7').removeClass('highlight');
+		}
+	});
+
+	$('.risk-8').click(function() {
+		$('.risk-8').not(this).prop('checked', false);
+		let number = $('.risk-8').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr8').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr8').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr8').removeClass('highlight');
+		}
+	});
+
+	$('.risk-9').click(function() {
+		$('.risk-9').not(this).prop('checked', false);
+		let number = $('.risk-9').filter(':checked').length;
+		if (number == 1) {
+			let hasClass = $('#risk_table_tr9').hasClass('highlight');
+			if (!hasClass) {
+				$('#risk_table_tr9').addClass('highlight');
+			}
+		} else {
+			$('#risk_table_tr9').removeClass('highlight');
+		}
+		if ($('#other_risk_y').prop('checked') == true) {
+			$('#other_risk_input').prop('disabled', false);
+		} else {
+			$('#other_risk_input').val('');
+			$('#other_risk_input').prop('disabled', true);
+		}
+	});
+
+	/* treatment */
+	$('.treatment-1').click(function() {
+		$('.treatment-1').not(this).prop('checked', false);
+		if ($('#treatment_refer').prop('checked') == true) {
+			$('#treatment_refer_at').prop('disabled', false);
+		} else {
+			$('#treatment_refer_at').val('');
+			$('#treatment_refer_at').prop('disabled', true);
+		}
+	});
+
+	/* report date input */
+	$('#report_date').datepicker({
+		'setDate': new Date(),
+		format: 'dd/mm/yyyy',
+		todayHighlight: true,
+		todayBtn: true,
+	});
 
 
 

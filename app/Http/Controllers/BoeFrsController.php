@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Symptoms;
 
+
 class BoeFrsController extends Controller implements BoeFrs
 {
 	public $result;
@@ -59,10 +60,19 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
-	protected function patientByUser($hospcode=null, $lab_status='new') {
+	protected function patientByUser($user=null, $lab_status='new') {
 		return DB::connection('mysql')
 			->table('patients')
-			->where('hospcode', '=', $hospcode)
+			->where('user', '=', $user)
+			->where('lab_status', '=', $lab_status)
+			->whereNull('deleted_at')
+			->get();
+	}
+
+	protected function patientByUserHospcode($user_hospcode=null, $lab_status='new') {
+		return DB::connection('mysql')
+			->table('patients')
+			->where('user_hospcode', '=', $user_hospcode)
 			->where('lab_status', '=', $lab_status)
 			->whereNull('deleted_at')
 			->get();
@@ -111,6 +121,15 @@ class BoeFrsController extends Controller implements BoeFrs
 	public function hospitals() {
 		return DB::connection('mysql')
 			->table('hospitals')
+			->orderBy('id', 'asc')
+			->limit(100)
+			->get();
+	}
+
+	public function hospitalByActive() {
+		return DB::connection('mysql')
+			->table('hospitals')
+			->where('accive', '=', 1)
 			->orderBy('id', 'asc')
 			->limit(100)
 			->get();
@@ -171,6 +190,11 @@ class BoeFrsController extends Controller implements BoeFrs
 		return $hospitals;
 	}
 	*/
+	protected function convertDateToMySQL($date='00/00/0000') {
+		$ep = explode("/", $date);
+		$string = $ep[2]."-".$ep[1]."-".$ep[0];
+		return $string;
+	}
 
 
 

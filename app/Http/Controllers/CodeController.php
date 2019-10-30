@@ -31,8 +31,8 @@ class CodeController extends BoeFrsController
 		if ($roleArr[0] == 'admin') {
 			$patients = parent::patientByAdmin('new');
 		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-			$hospcode = auth()->user()->hospcode;
-			$patients = parent::patientByUser($hospcode, 'new');
+			$user_hospcode = auth()->user()->hospcode;
+			$patients = parent::patientByUserHospcode($user_hospcode, 'new');
 		} else {
 			return redirect()->route('logout');
 		}
@@ -135,9 +135,6 @@ class CodeController extends BoeFrsController
 		];
 	}
 
-
-
-
 /*
 	public function ajaxRequestSelect(Request $request) {
 		$x = $request->x;
@@ -145,31 +142,21 @@ class CodeController extends BoeFrsController
 	}
 */
 	public function ajaxRequestPost(Request $request) {
-		if (empty($request->firstNameInput)) {
+		if (empty($request->province) || empty($request->hospcode)) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
 		} else {
-			$roleArr = auth()->user()->getRoleNames();
-			if ($roleArr[0] == 'admin') {
-				$province = $request->province;
-				$hospcode = $request->hospcode;
-			} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-				$province = auth()->user()->province;
-				$hospcode = auth()->user()->hospcode;
-			} else {
-				return redirect()->route('logout');
-			}
-
 			$code = new Code;
-			$code->province = $province;
-			$code->hospcode = $hospcode;
+			$code->province = $request->province;
+			$code->hospcode = $request->hospcode;
+
 			$code->hn = $request->hnInput;
 			$code->an = $request->anInput;
 			$code->title_name = $request->titleNameInput;
 
-			if ($request->titleNameInput == 6 && isset($request->otherTitleNameInput)) {
+			if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
 				$code->title_name_other = $request->otherTitleNameInput;
 			} else {
-				$code->title_name_other = null;
+				$code->title_name_other = NULL;
 			}
 
 			$code->first_name = $request->firstNameInput;
@@ -177,12 +164,16 @@ class CodeController extends BoeFrsController
 
 			$code->lab_code = parent::randPin();
 			$code->user = auth()->user()->id;
+			$code->user_hospcode = auth()->user()->hospcode;
+
+			$roleArr = auth()->user()->getRoleNames();
+			$code->user_role = $roleArr[0];
 
 			$this->simpleQrcode($code->lab_code);
+
 			$saved = $code->save();
 			if ($saved) {
-
-				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว'.$roleArr[0]]);
+				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
 			} else {
 				return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
 			}
@@ -194,8 +185,8 @@ class CodeController extends BoeFrsController
 		if ($roleArr[0] == 'admin') {
 			$patients = parent::patientByAdmin('new');
 		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-			$hospcode = auth()->user()->hospcode;
-			$patients = parent::patientByUser($hospcode, 'new');
+			$user_hospcode = auth()->user()->hospcode;
+			$patients = parent::patientByUserHospcode($user_hospcode, 'new');
 		} else {
 			return redirect()->route('logout');
 		}
@@ -227,7 +218,7 @@ class CodeController extends BoeFrsController
 					$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
 					$htm .= "<td>".$value->created_at."</td>";
 					$htm .= "<td>";
-						$htm .= "<a href=\"".route('patient', ['id'=>$value->id])."\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
+						$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id]) ."\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
 						$htm .= "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">Delete</a>";
 					$htm .= "</td>";
 				$htm .= "</tr>";
@@ -264,6 +255,6 @@ class CodeController extends BoeFrsController
 
 	public function simpleQrcode($str='str') {
 		$image = \QrCode::format('png')->size(100)->generate($str);
-		Storage::disk('qrcode')->put('/'.$str.'.png', $image);
+		Storage::disk('qrcode')->put('/qr'.$str.'.png', $image);
 	}
 }

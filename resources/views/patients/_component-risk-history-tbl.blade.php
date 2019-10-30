@@ -13,7 +13,7 @@
 				<tr><td colspan="3">&nbsp;</td></tr>
 			</tfoot>
 			<tbody>
-				<tr>
+				<tr id="risk_table_tr1">
 					<td>ช่วง 7 วันก่อนป่วยได้สัมผัสสัตว์ปีกป่วย/ตายโดยตรง</td>
 					<td class="text-danger">
 						<div class="custom-control custom-checkbox">
@@ -28,7 +28,7 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<tr id="risk_table_tr2">
 					<td>
 						<div class="form-group row mt-0 mb-0">
 							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
@@ -52,7 +52,7 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<tr id="risk_table_tr3">
 					<td>ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่ในพื้นที่ที่มีสัตว์ปีกป่วย/ตายผิดปกติ</td>
 					<td class="text-danger">
 						<div class="custom-control custom-checkbox">
@@ -67,12 +67,12 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<tr id="risk_table_tr4">
 					<td>
 						<div class="form-group row mt-0 mb-0">
 							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
 								<div class="input-group">
-									<label for="" class="font-normal">ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่หรือเดินทางมาจากพื้นที่ที่ไข้หวัดใหญ่/ปอดอักเสบระบาด <span class="text-info">ระบุพื้นที่</span></label>
+									<label for="" class="font-normal">ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่หรือเดินทางมาจากพื้นที่ที่ไข้หวัดใหญ่/ปอดอักเสบ ระบาด <span class="text-info">ระบุพื้นที่</span></label>
 									<input type="text" name="" class="form-control form-control-sm ml-2">
 								</div>
 							</div>
@@ -91,8 +91,8 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
-					<td>ช่วง 14 วันก่อนป่วยได้ดูแลหรือสัมผัสใกล้ชิดกับผู้ป่วยอาการคล้ายไข้หวัดใหญ่หรือปอดอักเสบ</td>
+				<tr id="risk_table_tr5">
+					<td>ช่วง 14 วันก่อนป่วยได้ดูแลหรือสัมผัสใกล้ชิดกับผู้ป่วยอาการคล้ายไข้หวัดใหญ่/ปอดอักเสบ</td>
 					<td class="text-danger">
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" value="N" class="custom-control-input">
@@ -106,8 +106,8 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
-					<td>ช่วง 14 วันก่อนป่วยไปเยี่ยมผู้ป่วยไข้หวัดใหญ่หรือปอดอักเสบ</td>
+				<tr id="risk_table_tr6">
+					<td>ช่วง 14 วันก่อนป่วยไปเยี่ยมผู้ป่วยไข้หวัดใหญ่/ปอดอักเสบ</td>
 					<td class="text-danger">
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" value="N" class="custom-control-input">
@@ -121,7 +121,7 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<tr id="risk_table_tr7">
 					<td>เป็นบุคลากรทางการแพทย์และสาธารณสุขหรือเจ้าหน้าที่ห้องปฏิบัติการ</td>
 					<td class="text-danger">
 						<div class="custom-control custom-checkbox">
@@ -136,7 +136,7 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<tr id="risk_table_tr8">
 					<td>เป็นผู้ป่วยสงสัยไข้หวัดใหญ่/ปอดอักเสบที่เข้ารับการรักษาเป็นกลุ่มก้อน</td>
 					<td class="text-danger">
 						<div class="custom-control custom-checkbox">
@@ -151,7 +151,7 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
+				<tr id="risk_table_tr9">
 					<td>
 						<div class="form-group row mt-0 mb-0">
 							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
@@ -179,8 +179,6 @@
 		</table>
 	</div>
 </div>
-
-
 
 <div class="row">
 	<div class="form-row">

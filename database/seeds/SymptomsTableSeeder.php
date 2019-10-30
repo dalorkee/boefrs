@@ -87,6 +87,14 @@ class SymptomsTableSeeder extends Seeder
 				'symptom_name_th'=>'ใส่ท่อช่วยหายใจ'
 			],
 			[
+				'symptom_name_en'=>'Pneumonia',
+				'symptom_name_th'=>'ปอดอักเสบ/ปอดบวม'
+			],
+			[
+				'symptom_name_en'=>'Kidney',
+				'symptom_name_th'=>'ไตวาย'
+			],
+			[
 				'symptom_name_en'=>'Other',
 				'symptom_name_th'=>'อื่นๆ โปรดระบุ'
 			],
