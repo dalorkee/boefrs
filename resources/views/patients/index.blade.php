@@ -32,6 +32,15 @@
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
+					@if (count($errors) > 0)
+						<div class="alert alert-danger">
+							<ul>
+							@foreach ($errors->all() as $error)
+								<li>{{ $error }}</li>
+							@endforeach
+							</ul>
+						</div>
+					@endif
 					<div class="d-md-flex align-items-center">
 						<div>
 							<h4 class="card-title">แบบเก็บข้อมูลโครงการเฝ้าระวังเชื้อไวรัสก่อโรคระบบทางเดินหายใจ</h4>
@@ -236,21 +245,6 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-danger">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 									<h1 class="text-danger">2. ข้อมูลทางคลินิก</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
@@ -340,19 +334,19 @@
 															echo "<td>".$item->symptom_name_th." (".$item->symptom_name_en.") ".$other_symptom."</td>";
 															echo "<td>";
 																echo "<div class=\"custom-control custom-checkbox\">";
-																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"1\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_yes\">";
+																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"y\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_yes\">";
 																	echo "<label for=\"symptom_".$item->id."_yes\" class=\"custom-control-label\">&nbsp;</label>";
 																echo "</div>";
 															echo "</td>";
 															echo "<td>";
 																echo "<div class=\"custom-control custom-checkbox\">";
-																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"2\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_no\">";
+																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"n\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_no\">";
 																	echo "<label for=\"symptom_".$item->id."_no\" class=\"custom-control-label\"></label>";
 																echo "</div>";
 															echo "</td>";
 															echo "<td>";
 																echo "<div class=\"custom-control custom-checkbox\">";
-																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"3\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_un\">";
+																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"u\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_un\">";
 																	echo "<label for=\"symptom_".$item->id."_un\" class=\"custom-control-label\"></label>";
 																echo "</div>";
 															echo "</td>";
@@ -369,11 +363,11 @@
 											<label for="firstXrayInput">เอกซเรย์ปอด (ครั้งแรก)</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="lungXrayInput" value="0" class="custom-control-input lungXray" id="lungXrayNo">
+													<input type="checkbox" name="lungXrayInput" value="n" class="custom-control-input lungXray" id="lungXrayNo">
 													<label for="lungXrayNo" class="custom-control-label normal-label">ไม่ได้ทำ</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="lungXrayInput" value="1" class="custom-control-input lungXray" id="lungXrayYes">
+													<input type="checkbox" name="lungXrayInput" value="y" class="custom-control-input lungXray" id="lungXrayYes">
 													<label for="lungXrayYes" class="custom-control-label normal-label">ทำ</label>
 												</div>
 											</div>
@@ -516,11 +510,11 @@
 											<label for="influenzaRapid">มีการตรวจ Influenza rapid test</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="influRapidInput" class="custom-control-input influRapid" id="influRapidUnChecked">
+													<input type="checkbox" name="influRapidInput" value="n" class="custom-control-input influRapid" id="influRapidUnChecked">
 													<label for="influRapidUnChecked" class="custom-control-label normal-label">ไม่ตรวจ</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="influRapidInput" class="custom-control-input influRapid" id="influRaidCheckd">
+													<input type="checkbox" name="influRapidInput" value="y" class="custom-control-input influRapid" id="influRaidCheckd">
 													<label for="influRaidCheckd" class="custom-control-label normal-label">ตรวจ</label>
 												</div>
 											</div>
@@ -535,15 +529,15 @@
 											<label for="rapidTestResult">ผล Rapid test</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultCheckbox" class="custom-control-input influRapidRs" id="rapidTestNagative">
+													<input type="checkbox" name="rapidTestResultInput" value="nagative" class="custom-control-input influRapidRs" id="rapidTestNagative">
 													<label for="rapidTestNagative" class="custom-control-label normal-label">Nagative</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultCheckbox" class="custom-control-input influRapidRs" id="rapidTestPositiveFluA">
+													<input type="checkbox" name="rapidTestResultInput" value="positive-flu-a" class="custom-control-input influRapidRs" id="rapidTestPositiveFluA">
 													<label for="rapidTestPositiveFluA" class="custom-control-label normal-label">Positive Flu A</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultCheckbox" class="custom-control-input influRapidRs" id="rapidTestPositiveFluB">
+													<input type="checkbox" name="rapidTestResultInput" value="positive-flu-b" class="custom-control-input influRapidRs" id="rapidTestPositiveFluB">
 													<label for="rapidTestPositiveFluB" class="custom-control-label normal-label">Positive Flu B</label>
 												</div>
 											</div>
@@ -554,11 +548,11 @@
 											<label for="influVaccineReceive">ผู้ป่วยเคยได้รับวัคซีนไข้หวัดใหญ่หรือไม่</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="influVaccine" class="custom-control-input influVaccineRc" id="influVaccineNo">
+													<input type="checkbox" name="influVaccineInput" value="n" class="custom-control-input influVaccineRc" id="influVaccineNo">
 													<label for="influVaccineNo" class="custom-control-label normal-label">ไม่เคย</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="influVaccine" class="custom-control-input influVaccineRc" id="influVaccineYes">
+													<input type="checkbox" name="influVaccineInput" value="y" class="custom-control-input influVaccineRc" id="influVaccineYes">
 													<label for="influVaccineYes" class="custom-control-label normal-label">เคย</label>
 												</div>
 											</div>
@@ -580,11 +574,11 @@
 											<label for="virusMedicine">การให้ยาต้านไวรัส</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="virusMedicine" class="custom-control-input virusMedic" id="virusMedicineNo">
+													<input type="checkbox" name="virusMedicineInput" value="n" class="custom-control-input virusMedic" id="virusMedicineNo">
 													<label for="virusMedicineNo" class="custom-control-label normal-label">ไม่ให้</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="virusMedicine" class="custom-control-input virusMedic" id="virusMedicineYes">
+													<input type="checkbox" name="virusMedicineInput" value="y" class="custom-control-input virusMedic" id="virusMedicineYes">
 													<label for="virusMedicineYes" class="custom-control-label normal-label">ให้</label>
 												</div>
 											</div>
@@ -630,7 +624,7 @@
 																	<label for="pregnant" class="mt-2 font-normal">หญิงตั้งครรภ์ ระบุ อายุครรภ์</label>
 																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
 																		<div class="input-group">
-																			<input type="number" name="pregnant_age" class="form-control" value="0" min="0" max="52" id="pregnant_age_week" disabled>
+																			<input type="number" name="pregnantWeekInput" class="form-control" value="0" min="0" max="52" id="pregnant_age_week" disabled>
 																			<div class="input-group-append">
 																				<span class="input-group-text">สัปดาห์</span>
 																			</div>
@@ -640,19 +634,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="pregnant_age_input" value="y" class="custom-control-input health-1" id="pregnant_age_y">
+																	<input type="checkbox" name="pregnantInput" value="y" class="custom-control-input health-1" id="pregnant_age_y">
 																	<label for="pregnant_age_y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="pregnant_age_input" value="n" class="custom-control-input health-1" id="pregnant_age_n">
+																	<input type="checkbox" name="pregnantInput" value="n" class="custom-control-input health-1" id="pregnant_age_n">
 																	<label for="pregnant_age_n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="pregnant_age_input" value="u" class="custom-control-input health-1" id="pregnant_age_u">
+																	<input type="checkbox" name="pregnantInput" value="u" class="custom-control-input health-1" id="pregnant_age_u">
 																	<label for="pregnant_age_u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -665,19 +659,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="after_give_birth" value="y" class="custom-control-input health-2" id="after_give_birth_y">
+																	<input type="checkbox" name="postPregnantInput" value="y" class="custom-control-input health-2" id="after_give_birth_y">
 																	<label for="after_give_birth_y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="after_give_birth" value="n" class="custom-control-input health-2" id="after_give_birth_n">
+																	<input type="checkbox" name="postPregnantInput" value="n" class="custom-control-input health-2" id="after_give_birth_n">
 																	<label for="after_give_birth_n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="after_give_birth" value="u" class="custom-control-input health-2" id="after_give_birth_u">
+																	<input type="checkbox" name="postPregnantInput" value="u" class="custom-control-input health-2" id="after_give_birth_u">
 																	<label for="after_give_birth_u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -688,7 +682,7 @@
 																	<label for="fat" class="mt-2 font-normal">อ้วน ระบุส่วนสูง</label>
 																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
 																		<div class="input-group">
-																			<input type="number" name="fat_height_input" class="form-control" min="0" max="250" value="0" id="fat-height-input" disabled>
+																			<input type="number" name="fatHeightInput" class="form-control" min="0" max="250" value="0" id="fat-height-input" disabled>
 																			<div class="input-group-append">
 																				<span class="input-group-text">cm</span>
 																			</div>
@@ -697,7 +691,7 @@
 																	<label for="fat_weight" class="mt-2 font-normal">น้ำหนัก</label>
 																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
 																		<div class="input-group">
-																			<input type="number" name="fat_weight_input" class="form-control" min="0" max="200" value="0" id="fat-weight-input" disabled>
+																			<input type="number" name="fatWeightInput" class="form-control" min="0" max="200" value="0" id="fat-weight-input" disabled>
 																			<div class="input-group-append">
 																				<span class="input-group-text">kg</span>
 																			</div>
@@ -707,19 +701,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="fat_input_yes" value="y" class="custom-control-input health-3" id="fat-input-y">
+																	<input type="checkbox" name="fatInput" value="y" class="custom-control-input health-3" id="fat-input-y">
 																	<label for="fat-input-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="fat_input_no" value="n" class="custom-control-input health-3" id="fat-input-n">
+																	<input type="checkbox" name="fatInput" value="n" class="custom-control-input health-3" id="fat-input-n">
 																	<label for="fat-input-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="fat_input_un" value="u" class="custom-control-input health-3" id="fat-input-u">
+																	<input type="checkbox" name="fatInput" value="u" class="custom-control-input health-3" id="fat-input-u">
 																	<label for="fat-input-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -732,19 +726,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="diabetes_yes" value="y" class="custom-control-input health-4" id="diabetes-y">
+																	<input type="checkbox" name="diabetesInput" value="y" class="custom-control-input health-4" id="diabetes-y">
 																	<label for="diabetes-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="diabetes_no" value="n" class="custom-control-input health-4" id="diabetes-n">
+																	<input type="checkbox" name="diabetesInput" value="n" class="custom-control-input health-4" id="diabetes-n">
 																	<label for="diabetes-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="diabetes_un" value="Y" class="custom-control-input health-4" id="diabetes-u">
+																	<input type="checkbox" name="diabetesInput" value="u" class="custom-control-input health-4" id="diabetes-u">
 																	<label for="diabetes-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -753,23 +747,30 @@
 															<td>
 																<div class="form-group row">
 																	<label for="aids" class="mt-2 font-normal">ภูมิคุ้มกันบกพร่อง ระบุ</label>
+
+																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+																		<div class="input-group">
+																			<input type="text" name="immuneSpecifyInput" class="form-control" id="immune_specify" disabled>
+																		</div>
+																	</div>
+
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="aids_yes" value="y" class="custom-control-input health-5" id="aids-y">
+																	<input type="checkbox" name="immuneInput" value="y" class="custom-control-input health-5" id="aids-y">
 																	<label for="aids-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="aids_no" value="n" class="custom-control-input health-5" id="aids-n">
+																	<input type="checkbox" name="immuneInput" value="n" class="custom-control-input health-5" id="aids-n">
 																	<label for="aids-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="aids_un" value="Y" class="custom-control-input health-5" id="aids-u">
+																	<input type="checkbox" name="immuneInput" value="u" class="custom-control-input health-5" id="aids-u">
 																	<label for="aids-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -780,7 +781,7 @@
 																	<label for="preterm_infant" class="mt-2 font-normal">คลอดก่อนกำหนด อายุครรภ์</label>
 																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
 																		<div class="input-group">
-																			<input type="number" name="preterm_infant_week" value="0" min="0" max="52" class="form-control" id="preterm-infant-week">
+																			<input type="number" name="earlyBirthWeekInput" value="0" min="0" max="52" class="form-control" id="preterm-infant-week">
 																			<div class="input-group-append">
 																				<span class="input-group-text">สัปดาห์</span>
 																			</div>
@@ -790,19 +791,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="preterm_infant_yes" value="y" class="custom-control-input health-6" id="preterm-infant-y">
+																	<input type="checkbox" name="earlyBirthInput" value="y" class="custom-control-input health-6" id="preterm-infant-y">
 																	<label for="preterm-infant-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="preterm_infant_no" value="n" class="custom-control-input health-6" id="preterm-infant-n">
+																	<input type="checkbox" name="earlyBirthInput" value="n" class="custom-control-input health-6" id="preterm-infant-n">
 																	<label for="preterm-infant-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="preterm_infant_un" value="u" class="custom-control-input health-6" id="preterm-infant-u">
+																	<input type="checkbox" name="earlyBirthInput" value="u" class="custom-control-input health-6" id="preterm-infant-u">
 																	<label for="preterm-infant-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -815,19 +816,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="malnutrition_yes" value="y" class="custom-control-input health-7" id="malnutrition-y">
+																	<input type="checkbox" name="malnutritionInput" value="y" class="custom-control-input health-7" id="malnutrition-y">
 																	<label for="malnutrition-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="malnutrition_no" value="n" class="custom-control-input health-7" id="malnutrition-n">
+																	<input type="checkbox" name="malnutritionInput" value="n" class="custom-control-input health-7" id="malnutrition-n">
 																	<label for="malnutrition-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="malnutrition_un" value="u" class="custom-control-input health-7" id="malnutrition-u">
+																	<input type="checkbox" name="malnutritionInput" value="u" class="custom-control-input health-7" id="malnutrition-u">
 																	<label for="malnutrition-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -840,19 +841,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="copd_yes" value="y" class="custom-control-input health-8" id="copd-y">
+																	<input type="checkbox" name="copdInput" value="y" class="custom-control-input health-8" id="copd-y">
 																	<label for="copd-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="copd_no" value="n" class="custom-control-input health-8" id="copd-n">
+																	<input type="checkbox" name="copdInput" value="n" class="custom-control-input health-8" id="copd-n">
 																	<label for="copd-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="copd_un" value="u" class="custom-control-input health-8" id="copd-u">
+																	<input type="checkbox" name="copdInput" value="u" class="custom-control-input health-8" id="copd-u">
 																	<label for="copd-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -865,19 +866,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="asthma_yes" value="y" class="custom-control-input health-9" id="asthma-y">
+																	<input type="checkbox" name="asthmaInput" value="y" class="custom-control-input health-9" id="asthma-y">
 																	<label for="asthma-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="asthma_no" value="n" class="custom-control-input health-9" id="asthma-n">
+																	<input type="checkbox" name="asthmaInput" value="n" class="custom-control-input health-9" id="asthma-n">
 																	<label for="asthma-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="asthma_un" value="u" class="custom-control-input health-9" id="asthma-u">
+																	<input type="checkbox" name="asthmaInput" value="u" class="custom-control-input health-9" id="asthma-u">
 																	<label for="asthma-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -890,19 +891,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="heart_disease_yes" value="y" class="custom-control-input health-10" id="heart-disease-y">
+																	<input type="checkbox" name="heartDiseaseInput" value="y" class="custom-control-input health-10" id="heart-disease-y">
 																	<label for="heart-disease-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="heart_disease_no" value="n" class="custom-control-input health-10" id="heart-disease-n">
+																	<input type="checkbox" name="heartDiseaseInput" value="n" class="custom-control-input health-10" id="heart-disease-n">
 																	<label for="heart-disease-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="heart_disease_un" value="u" class="custom-control-input health-10" id="heart-disease-u">
+																	<input type="checkbox" name="heartDiseaseInput" value="u" class="custom-control-input health-10" id="heart-disease-u">
 																	<label for="heart-disease-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -915,19 +916,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="stroke_yes" value="y" class="custom-control-input health-11" id="stroke-y">
+																	<input type="checkbox" name="cerebralInput" value="y" class="custom-control-input health-11" id="stroke-y">
 																	<label for="stroke-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="stroke_no" value="n" class="custom-control-input health-11" id="stroke-n">
+																	<input type="checkbox" name="cerebralInput" value="n" class="custom-control-input health-11" id="stroke-n">
 																	<label for="stroke-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="stroke-y" value="u" class="custom-control-input health-11" id="stroke-u">
+																	<input type="checkbox" name="cerebralInput" value="u" class="custom-control-input health-11" id="stroke-u">
 																	<label for="stroke-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -940,19 +941,19 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="kidney_disease_yes" value="y" class="custom-control-input health-12" id="kidney-disease-y">
+																	<input type="checkbox" name="kidneyFailInput" value="y" class="custom-control-input health-12" id="kidney-disease-y">
 																	<label for="kidney-disease-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="kidney_disease_no" value="n" class="custom-control-input health-12" id="kidney-disease-n">
+																	<input type="checkbox" name="kidneyFailInput" value="n" class="custom-control-input health-12" id="kidney-disease-n">
 																	<label for="kidney-disease-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="kidney_disease_un" value="u" class="custom-control-input health-12" id="kidney-disease-u">
+																	<input type="checkbox" name="kidneyFailInput" value="u" class="custom-control-input health-12" id="kidney-disease-u">
 																	<label for="kidney-disease-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -963,26 +964,26 @@
 																	<label for="cancer" class="mt-2 font-normal">มะเร็ง ระบุ</label>
 																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
 																		<div class="input-group">
-																			<input type="text" name="cancer_input" class="form-control" id="cancer-input" disabled>
+																			<input type="text" name="cancerSpecifyInput" class="form-control" id="cancer-input" disabled>
 																		</div>
 																	</div>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="cancer_yes" value="y" class="custom-control-input health-13" id="cancer-y">
+																	<input type="checkbox" name="cancerInput" value="y" class="custom-control-input health-13" id="cancer-y">
 																	<label for="cancer-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="cancer_no" value="n" class="custom-control-input health-13" id="cancer-n">
+																	<input type="checkbox" name="cancerInput" value="n" class="custom-control-input health-13" id="cancer-n">
 																	<label for="cancer-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="cancer-un" value="u" class="custom-control-input health-13" id="cancer-u">
+																	<input type="checkbox" name="cancerInput" value="u" class="custom-control-input health-13" id="cancer-u">
 																	<label for="cancer-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -993,26 +994,26 @@
 																	<label for="other_disease" class="mt-2 font-normal">อื่นๆ ระบุ</label>
 																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
 																		<div class="input-group">
-																			<input type="text" name="other_disease_input" class="form-control" id="other-disease-input" disabled>
+																			<input type="text" name="otherCongenitalSpecifyInput" class="form-control" id="other-disease-input" disabled>
 																		</div>
 																	</div>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="other_disease_y" value="y" class="custom-control-input health-14" id="other-disease-y">
+																	<input type="checkbox" name="otherCongenitalInput" value="y" class="custom-control-input health-14" id="other-disease-y">
 																	<label for="other-disease-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="other_disease_no" value="n" class="custom-control-input health-14" id="other-disease-n">
+																	<input type="checkbox" name="otherCongenitalInput" value="n" class="custom-control-input health-14" id="other-disease-n">
 																	<label for="other-disease-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="other_disease_un" value="u" class="custom-control-input health-14" id="other-disease-u">
+																	<input type="checkbox" name="otherCongenitalInput" value="u" class="custom-control-input health-14" id="other-disease-u">
 																	<label for="other-disease-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
@@ -1047,13 +1048,13 @@
 														<td>ช่วง 7 วันก่อนป่วยได้สัมผัสสัตว์ปีกป่วย/ตายโดยตรง</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="pet_touch" value="n" class="custom-control-input risk-1" id="pet_touch_n">
+																<input type="checkbox" name="contactPoultry7Input" value="n" class="custom-control-input risk-1" id="pet_touch_n">
 																<label for="pet_touch_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="pet_touch" value="y" class="custom-control-input risk-1" id="pet_touch_y">
+																<input type="checkbox" name="contactPoultry7Input" value="y" class="custom-control-input risk-1" id="pet_touch_y">
 																<label for="pet_touch_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1064,20 +1065,20 @@
 																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
 																	<div class="input-group">
 																		<label for="pet_touch_range" class="font-normal">ช่วง 14 วันก่อนป่วยได้สัมผัสสัตว์ป่วยโดยตรงหรือไม่ ระบุชนิดสัตว์</label>
-																		<input type="text" name="pet_touch_name" class="form-control form-control-sm ml-2" id="pet_touch_name" disabled>
+																		<input type="text" name="contactPoultry14SpecifyInput" class="form-control form-control-sm ml-2" id="pet_touch_name" disabled>
 																	</div>
 																</div>
 															</div>
 														</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="pet_touch_direct" value="n" class="custom-control-input risk-2" id="pet_touch_direct_n">
+																<input type="checkbox" name="contactPoultry14Input" value="n" class="custom-control-input risk-2" id="pet_touch_direct_n">
 																<label for="pet_touch_direct_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="pet_touch_direct" value="y" class="custom-control-input risk-2" id="pet_touch_direct_y">
+																<input type="checkbox" name="contactPoultry14Input" value="y" class="custom-control-input risk-2" id="pet_touch_direct_y">
 																<label for="pet_touch_direct_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1086,13 +1087,13 @@
 														<td>ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่ในพื้นที่ที่มีสัตว์ปีกป่วย/ตายผิดปกติ</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="stay_pet_death" value="n" class="custom-control-input risk-3" id="stay_pet_death_n">
+																<input type="checkbox" name="stayPoultry14Input" value="n" class="custom-control-input risk-3" id="stay_pet_death_n">
 																<label for="stay_pet_death_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="stay_pet_death" value="y" class="custom-control-input risk-3" id="stay_pet_death_y">
+																<input type="checkbox" name="stayPoultry14Input" value="y" class="custom-control-input risk-3" id="stay_pet_death_y">
 																<label for="stay_pet_death_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1103,20 +1104,20 @@
 																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
 																	<div class="input-group">
 																		<label for="stay_outbreak" class="font-normal">ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่หรือเดินทางมาจากพื้นที่ที่ไข้หวัดใหญ่/ปอดอักเสบระบาด <span class="text-info">ระบุพื้นที่</span></label>
-																		<input type="text" name="stay_outbreak_input" class="form-control form-control-sm ml-2" id="stay_outbreak_input" disabled>
+																		<input type="text" name="stayFlu14PlaceSpecifyInput" class="form-control form-control-sm ml-2" id="stay_outbreak_input" disabled>
 																	</div>
 																</div>
 															</div>
 														</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="stay_outbreak" value="n" class="custom-control-input risk-4" id="stay_outbreak_n">
+																<input type="checkbox" name="stayFlu14Input" value="n" class="custom-control-input risk-4" id="stay_outbreak_n">
 																<label for="stay_outbreak_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="stay_outbreak" value="y" class="custom-control-input risk-4" id="stay_outbreak_y">
+																<input type="checkbox" name="stayFlu14Input" value="y" class="custom-control-input risk-4" id="stay_outbreak_y">
 																<label for="stay_outbreak_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1125,13 +1126,13 @@
 														<td>ช่วง 14 วันก่อนป่วยได้ดูแลหรือสัมผัสใกล้ชิดกับผู้ป่วยอาการคล้ายไข้หวัดใหญ่/ปอดอักเสบ</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="close_up_flu" value="n" class="custom-control-input risk-5" id="close_up_n">
+																<input type="checkbox" name="contactFlu14Input" value="n" class="custom-control-input risk-5" id="close_up_n">
 																<label for="close_up_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="close_up_flu" value="y" class="custom-control-input risk-5" id="close_up_y">
+																<input type="checkbox" name="contactFlu14Input" value="y" class="custom-control-input risk-5" id="close_up_y">
 																<label for="close_up_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1140,13 +1141,13 @@
 														<td>ช่วง 14 วันก่อนป่วยไปเยี่ยมผู้ป่วยไข้หวัดใหญ่/ปอดอักเสบ</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="patient_visit" value="n" class="custom-control-input risk-6" id="patient_visit_n">
+																<input type="checkbox" name="visitFlu14Input" value="n" class="custom-control-input risk-6" id="patient_visit_n">
 																<label for="patient_visit_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="patient_visit" value="y" class="custom-control-input risk-6" id="patient_visit_y">
+																<input type="checkbox" name="visitFlu14Input" value="y" class="custom-control-input risk-6" id="patient_visit_y">
 																<label for="patient_visit_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1155,13 +1156,13 @@
 														<td>เป็นบุคลากรทางการแพทย์และสาธารณสุขหรือเจ้าหน้าที่ห้องปฏิบัติการ</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="healthcare" value="n" class="custom-control-input risk-7" id="healthcare_n">
+																<input type="checkbox" name="healthcareWorkerInput" value="n" class="custom-control-input risk-7" id="healthcare_n">
 																<label for="healthcare_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="healthcare" value="y" class="custom-control-input risk-7" id="healthcare_y">
+																<input type="checkbox" name="healthcareWorkerInput" value="y" class="custom-control-input risk-7" id="healthcare_y">
 																<label for="healthcare_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1170,13 +1171,13 @@
 														<td>เป็นผู้ป่วยสงสัยไข้หวัดใหญ่/ปอดอักเสบ ที่เข้ารับการรักษาเป็นกลุ่มก้อน</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="suspect_patient" value="n" class="custom-control-input risk-8" id="suspect_patient_n">
+																<input type="checkbox" name="suspectFluInput" value="n" class="custom-control-input risk-8" id="suspect_patient_n">
 																<label for="suspect_patient_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="suspect_patient" value="y" class="custom-control-input risk-8" id="suspect_patient_y">
+																<input type="checkbox" name="suspectFluInput" value="y" class="custom-control-input risk-8" id="suspect_patient_y">
 																<label for="suspect_patient_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1187,20 +1188,20 @@
 																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
 																	<div class="input-group">
 																		<label for="other_risk" class="font-normal">อื่นๆ ระบุ</label>
-																		<input type="text" name="other_risk_input" class="form-control form-control-sm ml-2" id="other_risk_input" disabled style="width:400px;">
+																		<input type="text" name="otherRiskInputSpecify" class="form-control form-control-sm ml-2" id="other_risk_input" disabled style="width:400px;">
 																	</div>
 																</div>
 															</div>
 														</td>
 														<td class="text-danger">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="other_risk" value="n" class="custom-control-input risk-9" id="other_risk_n">
+																<input type="checkbox" name="otherRiskInput" value="n" class="custom-control-input risk-9" id="other_risk_n">
 																<label for="other_risk_n" class="custom-control-label normal-label">ไม่ใช่</label>
 															</div>
 														</td>
 														<td class="text-success">
 															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="other_risk" value="y" class="custom-control-input risk-9" id="other_risk_y">
+																<input type="checkbox" name="otherRiskInput" value="y" class="custom-control-input risk-9" id="other_risk_y">
 																<label for="other_risk_y" class="custom-control-label normal-label">ใช่</label>
 															</div>
 														</td>
@@ -1215,24 +1216,24 @@
 												<label for="treatment">ผลการรักษา</label>
 												<div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="treatment" value="cured" class="custom-control-input treatment-1" id="treatment_cured">
+														<input type="checkbox" name="resultCliInput" value="cured" class="custom-control-input treatment-1" id="treatment_cured">
 														<label for="treatment_cured" class="custom-control-label normal-label">หาย</label>
 													</div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="treatment" value="treat" class="custom-control-input treatment-1" id="treatment_treat">
+														<input type="checkbox" name="resultCliInput" value="treat" class="custom-control-input treatment-1" id="treatment_treat">
 														<label for="treatment_treat" class="custom-control-label normal-label">อยู่ระหว่างการรักษา</label>
 													</div>
 													<div class="custom-control custom-checkbox custom-control-inline" style="width:340px">
-														<input type="checkbox" name="treatment" value="refer" class="custom-control-input treatment-1" id="treatment_refer">
+														<input type="checkbox" name="resultCliInput" value="refer" class="custom-control-input treatment-1" id="treatment_refer">
 														<label for="treatment_refer" class="custom-control-label normal-label">ส่งต่อไปรักษาที่</label>
-														<input type="text" name="treatment_refer_at" class="form-control form-control-sm ml-2" disabled id="treatment_refer_at" style="width:200px">
+														<input type="text" name="resultCliReferInput" class="form-control form-control-sm ml-2" disabled id="treatment_refer_at" style="width:200px">
 													</div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="treatment" value="dead" class="custom-control-input treatment-1" id="treatment_dead">
+														<input type="checkbox" name="resultCliInput" value="dead" class="custom-control-input treatment-1" id="treatment_dead">
 														<label for="treatment_dead" class="custom-control-label normal-label">เสียชีวิต</label>
 													</div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="treatment_unknown" value="unknown" class="custom-control-input treatment-1" id="treatment_unknown">
+														<input type="checkbox" name="resultCliInput" value="unknown" class="custom-control-input treatment-1" id="treatment_unknown">
 														<label for="treatment_unknown" class="custom-control-label normal-label">ไม่ทราบ</label>
 													</div>
 												</div>
@@ -1246,14 +1247,11 @@
 							<div class="card-body border-top">
 								<div class="alert alert-success" role="alert">
 									<div class="form-row">
-
-
-
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="report_date">วันที่รายงาน</label>
 											<div class="input-group date" data-provide="datepicke" id="report_date">
 												<div class="input-group">
-													<input type="text" name="birthDateInput" class="form-control" required>
+													<input type="text" name="reportDateInput" class="form-control" required>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -1262,13 +1260,13 @@
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="user_hospital">หน่วยงาน/โรงพยาบาล</label>
-											<input type="text" name="user_hospital" value="{{ $patient[0]->user_hospcode }}" class="form-control" placeholder="โรงพยาบาล">
+											<input type="text" name="userHospitalInput" value="{{ $patient[0]->user_hospcode }}" class="form-control" placeholder="โรงพยาบาล">
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="firstNameInput">ผู้รายงาน</label>
-											<input type="text" name="user_firstname" value="{{ auth()->user()->name . ' ' . auth()->user()->lastname }}" class="form-control" id="first_name_input" placeholder="First name" required>
+											<input type="text" name="userInput" value="{{ auth()->user()->name . ' ' . auth()->user()->lastname }}" class="form-control" id="first_name_input" placeholder="First name" required>
 											<div class="valid-feedback">Looks good!</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">

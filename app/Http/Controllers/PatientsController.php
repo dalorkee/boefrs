@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App;
 use App\Patients;
+use App\Clinical;
+use Session;
 
 
 class PatientsController extends BoeFrsController
@@ -53,6 +55,22 @@ class PatientsController extends BoeFrsController
 	}
 
 	public function addPatient(Request $request) {
+		/* validation */
+		$this->validate($request, [
+			'titleNameInput' => 'required',
+			'firstNameInput' => 'required',
+			'lastNameInput' => 'required',
+			'hnInput' => 'required',
+			'sexInput' => 'required',
+			'birthDayInput' => 'required',
+			'hospitalInput' => 'required',
+			'provinceInput' => 'required',
+			'districtInput' => 'required',
+			'subDistrictInput' => 'required',
+			'patientType' => 'required'
+
+		]);
+
 		$patient = Patients::find($request->pid);
 		/* General section */
 		if ($request->titleNameInput == -6) {
@@ -90,16 +108,17 @@ class PatientsController extends BoeFrsController
 		}
 		$patient->lab_status = 'hosp_added';
 
-		$general = $this->storePatient($patient);
-		//$patient->save();
+		//$general = $this->storePatient($patient);
 
 		/* Clinical section */
+
+		$clinical = new Clinical;
 		$clinical->ref_pt_id = $request->pid;
 		$clinical->pt_type = $request->patientType;
-		$clinical->date_sick = $request->sickDateInput;
-		$clinical->date_define = $request->treatDateInput;
-		$clinical->date_admit = $request->admitDateInput;
-		$clinical->pt_pt_temperature = $request->temperatureInput;
+		$clinical->date_sick = parent::convertDateToMySQL($request->sickDateInput);
+		$clinical->date_define = parent::convertDateToMySQL($request->treatDateInput);
+		$clinical->date_admit = parent::convertDateToMySQL($request->admitDateInput);
+		$clinical->pt_temperature = $request->temperatureInput;
 
 		$clinical->fever_sym = $request->symptom_1_Input;
 		$clinical->cough_sym = $request->symptom_2_Input;
@@ -124,7 +143,7 @@ class PatientsController extends BoeFrsController
 		$clinical->other_symptom = $request->other_symptom;
 
 		$clinical->lung = $request->lungXrayInput;
-		$clinical->lung_date = $request->xRayDateInput;
+		$clinical->lung_date = parent::convertDateToMySQL($request->xRayDateInput);
 		$clinical->lung_result = $request->xRayResultInput;
 		$clinical->cbc_date = $request->cbcDateInput;
 		$clinical->hb = $request->hbInput;
@@ -134,10 +153,73 @@ class PatientsController extends BoeFrsController
 		$clinical->n = $request->nInput;
 		$clinical->l = $request->lInput;
 		$clinical->atyp_lymph = $request->atypLymphInput;
+		$clinical->mono = $request->monoInput;
+		$clinical->baso = $request->basoInput;
+		$clinical->eo = $request->eoInput;
+		$clinical->band = $request->bandInput;
+		$clinical->first_diag = $request->firstDiagnosisInput;
+		$clinical->rapid_test = $request->influRapidInput;
+		$clinical->rapid_test_name = $request->influRapidtestName;
+		$clinical->rapid_test_result = $request->rapidTestResultInput;
+		$clinical->flu_vaccine = $request->influVaccineInput;
+		$clinical->flu_vaccine_date = parent::convertDateToMySQL($request->influVaccineDateInput);
+		$clinical->antiviral = $request->virusMedicineInput;
+		$clinical->antiviral_name = $request->medicineNameInput;
+		$clinical->antiviral_date = parent::convertDateToMySQL($request->medicineGiveDateInput);
+		$clinical->pregnant_wk = $request->pregnantWeekInput;
+		$clinical->pregnant = $request->pregnantInput;
+		$clinical->post_pregnant = $request->postPregnantInput;
+		$clinical->fat_high = $request->fatHeightInput;
+		$clinical->fat_weight = $request->fatWeightInput;
+		$clinical->fat = $request->fatInput;
+		$clinical->diabetes = $request->diabetesInput;
+		$clinical->immune = $request->immuneInput;
+		$clinical->immune_specify = $request->immuneSpecifyInput;
+		$clinical->early_birth = $request->earlyBirthInput;
+		$clinical->early_birth_wk = $request->earlyBirthWeekInput;
+		$clinical->malnutrition = $request->malnutritionInput;
+		$clinical->copd = $request->copdInput;
+		$clinical->asthma = $request->asthmaInput;
+		$clinical->heart_disease = $request->heartDiseaseInput;
+		$clinical->cerebral = $request->cerebralInput;
+		$clinical->kidney_fail = $request->kidneyFailInput;
+		$clinical->cancer_specify = $request->cancerSpecifyInput;
+		$clinical->cancer = $request->cancerInput;
+		$clinical->other_congenital = $request->otherCongenitalInput;
+		$clinical->other_congenital_specify = $request->otherCongenitalSpecifyInput;
+		$clinical->contact_poultry7 = $request->contactPoultry7Input;
+		$clinical->contact_poultry14 = $request->contactPoultry14SpecifyInput;
+		$clinical->contact_poultry14_specify = $request->contactPoultry14Input;
+		$clinical->stay_poultry14 = $request->stayPoultry14Input;
+		$clinical->stay_flu14 = $request->stayFlu14Input;
+		$clinical->stay_flu14_place_specify = $request->stayFlu14PlaceSpecifyInput;
+		$clinical->contact_flu14 = $request->contactFlu14Input;
+		$clinical->visit_flu14 = $request->visitFlu14Input;
+		$clinical->health_care_worker = $request->healthcareWorkerInput;
+		$clinical->suspect_flu = $request->suspectFluInput;
+		$clinical->other_risk = $request->otherRiskInput;
+		$clinical->other_risk_specify = $request->otherRiskInputSpecify;
+		$clinical->result_cli = $request->resultCliInput;
+		$clinical->result_cli_refer = $request->resultCliReferInput;
+		$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
+		$clinical->user_hospital = $request->userHospitalInput;
+		$clinical->user_id = $request->userInput;
 
+		$saved = $clinical->save();
+		if ($saved) {
+			$message = collect(['status'=>'200', 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+			return redirect()->route('code.index')->with('message', $message);
+		} else {
+			return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
+		}
 
-
-		//dd($patient);
+		/*
+		if ($saved) {
+			return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+		} else {
+			return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
+		}
+		*/
 
 
 

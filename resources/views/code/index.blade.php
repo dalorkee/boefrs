@@ -104,6 +104,11 @@ input.valid, textarea.valid{
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
+					@if (Session::has('message'))
+						<div class="alert alert-info">
+							{{ Session::get('message') }}
+						</div>
+					@endif
 					<div class="d-md-flex align-items-center">
 						<div>
 							<h4 class="card-title">สร้างรหัสแบบฟอร์มเก็บข้อมูล</h4>
@@ -238,6 +243,20 @@ input.valid, textarea.valid{
 <script src="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 <script src="{{ URL::asset('public/assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
+@php
+	if (Session::has('message')) {
+		$msg = Session::get('message');
+
+
+		echo "<script>";
+			echo "
+				$(document).ready(function() {
+					alert('ok');
+				});";
+
+		echo "</script>";
+	}
+@endphp
 <script>
 $(document).ready(function() {
 	/* ajax request */
@@ -370,6 +389,8 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+
 });
 </script>
 <script>
