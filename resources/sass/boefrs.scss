@@ -42,6 +42,12 @@
 .bd-callout-custom-5 {
 	border-left-color: #F4B43E;
 }
+.bd-callout-custom-6 {
+	border-left-color: #900C3F;
+}
+.bd-callout-custom-7 {
+	border-left-color: #6C3483;
+}
 .bd-callout-bg-custom-1 {
 	background-color: #FAE7E8;
 }
@@ -51,6 +57,10 @@
 .bd-callout p:last-child {
 	margin-bottom: 0;
 }
+.border-danger {
+	border: 1px solid #B94A48 !important;
+}
+
 .custom-form-legend legend {
 	font-size: 1.275em;
 	margin: 0;
@@ -88,4 +98,10 @@ a.link-color-white {
 }
 a.link-color-white:hover {
 	color: white;
+}
+.bg-custom-1 {
+	background-color: #6C3483;
+}
+.text-color-custom-1 {
+	color: #6C3483 !important;
 }

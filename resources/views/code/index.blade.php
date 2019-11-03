@@ -104,11 +104,6 @@ input.valid, textarea.valid{
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
-					@if (Session::has('message'))
-						<div class="alert alert-info">
-							{{ Session::get('message') }}
-						</div>
-					@endif
 					<div class="d-md-flex align-items-center">
 						<div>
 							<h4 class="card-title">สร้างรหัสแบบฟอร์มเก็บข้อมูล</h4>
@@ -116,8 +111,8 @@ input.valid, textarea.valid{
 						</div>
 					</div>
 					<div class="alert" role="alert" style="border:1px solid #ccc;">
-
 						<form id="patient_form" class="mt-4 mb-3">
+							@role('admin')
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
@@ -136,12 +131,13 @@ input.valid, textarea.valid{
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
 										<label for="hospital">โรงพยาบาล</label>
-										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-style="btn-danger">
+										<select name="hospital" class="form-control selectpicker show-tick" id="select_hospital" data-style="btn-danger">
 											<option value="0">-- เลือกโรงพยาบาล --</option>
 										</select>
 									</div>
 								</div>
 							</div>
+							@endrole
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
@@ -165,7 +161,6 @@ input.valid, textarea.valid{
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<label for="firstNameInput">ชื่อจริง</label>
 									<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="ชื่อ">
-									<span class="error">This field is required</span>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 mb-3">
 									<label for="lastNameInput">นามสกุล</label>
@@ -246,14 +241,31 @@ input.valid, textarea.valid{
 @php
 	if (Session::has('message')) {
 		$msg = Session::get('message');
-
-
+		$msg->all();
 		echo "<script>";
 			echo "
 				$(document).ready(function() {
-					alert('ok');
+					var msg = ".$msg['status'].";
+					if (msg == 200) {
+						toastr.success('".$msg['msg']."', 'Flu Right Size',
+							{
+								'closeButton': true,
+								'positionClass': 'toast-top-center',
+								'progressBar': true,
+								'showDuration': '600'
+							}
+						);
+					} else {
+						toastr.error('".$msg['msg']."', 'Flu Right Size',
+							{
+								'closeButton': true,
+								'positionClass': 'toast-top-center',
+								'progressBar': true,
+								'showDuration': '800'
+							}
+						);
+					}
 				});";
-
 		echo "</script>";
 	}
 @endphp

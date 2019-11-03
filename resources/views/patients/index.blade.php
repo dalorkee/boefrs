@@ -4,9 +4,6 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/assets/libs/toastr/build/toastr.min.css') }}">
 @endsection
-@section('internal-style')
-<style></style>
-@endsection
 @section('meta-token')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
@@ -68,160 +65,208 @@
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-											<label for="titleName">คำนำหน้าชื่อ</label>
-											<input type="hidden" name="title_name_cache" value="{{ $patient[0]->title_name }}">
-											<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
-											@php
-												if ($patient[0]->title_name == 6) {
-													$cache_title_name = array( -6, $patient[0]->title_name_other);
-												} else {
-													$cache_title_name = array($patient[0]->title_name, $titleName[$patient[0]->title_name]->title_name);
-												}
-											@endphp
-												<option value="{{ $cache_title_name[0] }}">{{ $cache_title_name[1] }}</option>
-												<option value="0">-- โปรดเลือก --</option>
+											<div class="form-group {{ $errors->has('titleNameInput') ? 'has-error' : '' }}">
+												<label for="titleName">คำนำหน้าชื่อ</label>
+												<input type="hidden" name="title_name_cache" value="{{ $patient[0]->title_name }}">
+												<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
 												@php
-													$titleName->each(function ($item, $key) {
-														echo "<option value=\"".$item->id."\">".$item->title_name."</option>";
-													});
+													if ($patient[0]->title_name == 6) {
+														$cache_title_name = array( -6, $patient[0]->title_name_other);
+													} else {
+														$cache_title_name = array($patient[0]->title_name, $titleName[$patient[0]->title_name]->title_name);
+													}
 												@endphp
-											</select>
+													<option value="{{ $cache_title_name[0] }}">{{ $cache_title_name[1] }}</option>
+													<option value="0">-- โปรดเลือก --</option>
+													@php
+														$titleName->each(function ($item, $key) {
+															echo "<option value=\"".$item->id."\">".$item->title_name."</option>";
+														});
+													@endphp
+												</select>
+												<span class="text-danger">{{ $errors->first('titleNameInput') }}</span>
+											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-											<label for="otherTitleName">คำนำหน้าชื่ออื่นๆ ระบุ</label>
-											@php
-												if ($patient[0]->title_name == 6) {
-													$title_name_oth_txt = $patient[0]->title_name_other;
-													$disbled = null;
-												} else {
-													$title_name_oth_txt = null;
-													$disbled = "disabled";
-												}
-											@endphp
+											<div class="form-group">
+												<label for="otherTitleName">คำนำหน้าชื่ออื่นๆ ระบุ</label>
+												@php
+													if ($patient[0]->title_name == 6) {
+														$title_name_oth_txt = $patient[0]->title_name_other;
+														$disbled = null;
+													} else {
+														$title_name_oth_txt = null;
+														$disbled = "disabled";
+													}
+												@endphp
 												<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" value="{{ $title_name_oth_txt }}" {{ $disbled }}>
+											</div>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-											<label for="firstName">ชื่อจริง</label>
-											<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="ชื่อ" value="{{ $patient[0]->first_name }}" required>
-											<div class="valid-feedback">Looks good!</div>
+											<div class="form-group {{ $errors->has('firstNameInput') ? 'has-error' : '' }}">
+												<label for="firstName">ชื่อจริง</label>
+												<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="ชื่อ" value="{{ $patient[0]->first_name }}" required>
+											</div>
+											<span class="text-danger">{{ $errors->first('firstNameInput') }}</span>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-											<label for="lastName">นามสกุล</label>
-											<input type="text" name="lastNameInput" class="form-control" id="last_name_input" placeholder="นามสกุล" value="{{ $patient[0]->last_name }}" required>
-											<div class="valid-feedback">Looks good!</div>
+											<div class="form-group {{ $errors->has('lastNameInput') ? 'has-error' : '' }}">
+												<label for="lastName">นามสกุล</label>
+												<input type="text" name="lastNameInput" class="form-control" id="last_name_input" placeholder="นามสกุล" value="{{ $patient[0]->last_name }}" required>
+											</div>
+											<span class="text-danger">{{ $errors->first('lastNameInput') }}</span>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="HN">HN</label>
-											<input type="text" name="hnInput" class="form-control" id="hn_input" placeholder="HN" value="{{ $patient[0]->hn }}" required>
-											<div class="valid-feedback">Looks good!</div>
+											<div class="form-group {{ $errors->has('hnInput') ? 'has-error' : '' }}">
+												<label for="HN">HN</label>
+												<input type="text" name="hnInput" class="form-control" id="hn_input" placeholder="HN" value="{{ $patient[0]->hn }}" required>
+											</div>
+											<span class="text-danger">{{ $errors->first('hnInput') }}</span>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="AN">AN</label>
-											<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN" value="{{ $patient[0]->an }}">
-											<div class="valid-feedback">Looks good!</div>
+											<div class="form-group">
+												<label for="AN">AN</label>
+												<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN" value="{{ $patient[0]->an }}">
+											</div>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="sex">เพศ</label>
-											<select name="sexInput" class="custom-select">
-												<option value="0">-- โปรดเลือก --</option>
-												<option value="male">ชาย</option>
-												<option value="female">หญิง</option>
-											</select>
+											<div class="form-group {{ $errors->has('sexInput') ? 'has-error' : '' }}">
+												<label for="sex">เพศ</label>
+												<select name="sexInput" class="form-control selectpicker show-tick">
+													<option value="">-- โปรดเลือก --</option>
+													<option value="male">ชาย</option>
+													<option value="female">หญิง</option>
+												</select>
+											</div>
+											<span class="text-danger">{{ $errors->first('sexInput') }}</span>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="birthDate">ว/ด/ป เกิด</label>
-											<div class="input-group date" data-provide="datepicker" id="birthDayInput">
-												<div class="input-group">
-													<input  type="text" name="birthDayInput" class="form-control">
+											<div class="form-group">
+												<label for="birthDate">ว/ด/ป เกิด</label>
+												<div class="input-group date" data-provide="datepicker" id="birthDayInput">
+													<input  type="text" name="birthDayInput" class="form-control {{ $errors->has('birthDayInput') ? 'border-danger' : '' }}">
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
 												</div>
 											</div>
+											<div class="text-danger">{{ $errors->first('birthDayInput') }}</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
-											<label for="ageYear">อายุ/ปี</label>
-											<input type="text" name="ageYearInput" class="form-control" id="age_year_input" value="0" required readonly>
+											<div class="form-group">
+												<label for="ageYear">อายุ/ปี</label>
+												<input type="text" name="ageYearInput" class="form-control" id="age_year_input" value="0" required readonly>
+											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
-											<label for="ageMonth">อายุ/เดือน</label>
-											<input type="text" name="ageMonthInput" class="form-control" id="age_month_input" value="0" required readonly>
+											<div class="form-group">
+												<label for="ageMonth">อายุ/เดือน</label>
+												<input type="text" name="ageMonthInput" class="form-control" id="age_month_input" value="0" required readonly>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
+											<div class="form-group">
+												<label for="ageMonth">อายุ/วัน</label>
+												<input type="text" name="ageDayInput" class="form-control" id="age_day_input" value="0" required readonly>
+											</div>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="nationality">สัญชาติ</label>
-											<select name="nationalityInput" class="custom-select" id="select_nationality">
-												<option value="0">-- โปรดเลือก --</option>
-												@foreach ($nationality as $key => $value)
-													<option value="{{ $value->id }}">{{ $value->name_th }}</option>
-												@endforeach
-											</select>
+											<div class="form-group">
+												<label for="nationality">สัญชาติ</label>
+												<select name="nationalityInput" class="form-control selectpicker show-tick" id="select_nationality">
+													<option value="0">-- โปรดเลือก --</option>
+													@foreach ($nationality as $key => $value)
+														<option value="{{ $value->id }}">{{ $value->name_th }}</option>
+													@endforeach
+												</select>
+											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-											<label for="otherNationality">สัญชาติ อื่นๆ ระบุ</label>
-											<input type="text" name="otherNationalityInput" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" disabled>
+											<div class="form-group">
+												<label for="otherNationality">สัญชาติ อื่นๆ ระบุ</label>
+												<input type="text" name="otherNationalityInput" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" disabled>
+											</div>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="hospital">โรงพยาบาล</label>
-											<select name="hospitalInput" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true">
-												<option value="0">-- เลือกโรงพยาบาล --</option>
-												@foreach ($hospital as $key => $val)
-													<option value="{{ $val->hospcode }}">{{ $val->hosp_name }}</option>
-												@endforeach
-											</select>
+											<div class="form-group {{ $errors->has('hospitalInput') ? 'has-error' : '' }}">
+												<label for="hospital">โรงพยาบาล</label>
+												<select name="hospitalInput" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true">
+													<option value="">-- เลือกโรงพยาบาล --</option>
+													@foreach ($hospital as $key => $val)
+														<option value="{{ $val->hospcode }}">{{ $val->hosp_name }}</option>
+													@endforeach
+												</select>
+											</div>
+											<span class="text-danger">{{ $errors->first('hospitalInput') }}</span>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="houseNo">ที่อยู่ปัจจุบัน/ขณะป่วย เลขที่</label>
-											<input type="text" name="houseNoInput" class="form-control" placeholder="บ้านเลขที่">
+											<div class="form-group">
+												<label for="houseNo">ที่อยู่ปัจจุบัน/ขณะป่วย เลขที่</label>
+												<input type="text" name="houseNoInput" class="form-control" placeholder="บ้านเลขที่">
+											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-3">
-											<label for="villageNo">หมู่ที่</label>
-											<input type="text" name="villageNoInput" class="form-control" placeholder="หมู่ที่">
+											<div class="form-group">
+												<label for="villageNo">หมู่ที่</label>
+												<input type="text" name="villageNoInput" class="form-control" placeholder="หมู่ที่">
+											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="village">หมู่บ้าน</label>
 											<input type="text" name="villageInput" class="form-control" placeholder="หมู่บ้าน">
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="lane">ซอย</label>
-											<input type="text" name="laneInput" class="form-control" placeholder="ซอย">
+											<div class="form-group">
+												<label for="lane">ซอย</label>
+												<input type="text" name="laneInput" class="form-control" placeholder="ซอย">
+											</div>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="province">จังหวัด</label>
-											<select name="provinceInput" class="form-control selectpicker show-tick" id="select_province">
-												<option value="0">-- เลือกจังหวัด --</option>
-												@php
-													$provinces = Session::get('provinces');
-													$provinces->each(function ($item, $key) {
-														echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>\n";
-													});
-												@endphp
-											</select>
+											<div class="form-group {{ $errors->has('provinceInput') ? 'has-error' : '' }}">
+												<label for="province">จังหวัด</label>
+												<select name="provinceInput" class="form-control selectpicker show-tick" id="select_province">
+													<option value="">-- เลือกจังหวัด --</option>
+													@php
+														$provinces = Session::get('provinces');
+														$provinces->each(function ($item, $key) {
+															echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>\n";
+														});
+													@endphp
+												</select>
+											</div>
+											<span class="text-danger">{{ $errors->first('provinceInput') }}</span>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="district">อำเภอ</label>
-											<select name="districtInput" class="form-control selectpicker show-tick" id="select_district">
-												<option value="0">-- โปรดเลือก --</option>
-											</select>
+											<div class="form-group {{ $errors->has('districtInput') ? 'has-error' : '' }}">
+												<label for="district">อำเภอ</label>
+												<select name="districtInput" class="form-control selectpicker show-tick" id="select_district">
+													<option value="">-- โปรดเลือก --</option>
+												</select>
+											</div>
+											<span class="text-danger">{{ $errors->first('districtInput') }}</span>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="subDistrict">ตำบล</label>
-											<select name="subDistrictInput" class="form-control selectpicker show-tick" id="select_sub_district">
-												<option value="0">-- โปรดเลือก --</option>
-											</select>
+											<div class="form-group {{ $errors->has('subDistrictInput') ? 'has-error' : '' }}">
+												<label for="subDistrict">ตำบล</label>
+												<select name="subDistrictInput" class="form-control selectpicker show-tick" id="select_sub_district">
+													<option value="">-- โปรดเลือก --</option>
+												</select>
+											</div>
+											<span class="text-danger">{{ $errors->first('subDistrictInput') }}</span>
 										</div>
 									</div>
 									<div class="form-row">
@@ -244,67 +289,80 @@
 						</div><!-- card -->
 						<div class="card">
 							<div class="card-body">
-								<div class="bd-callout bd-callout-danger">
-									<h1 class="text-danger">2. ข้อมูลทางคลินิก</h1>
+								<div class="bd-callout bd-callout-custom-7">
+									<h1 class="text-color-custom-1">2. ข้อมูลทางคลินิก</h1>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-											<label for="patient">ผู้ป่วย</label>
-											<div>
-												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="patientType" value="opd" class="custom-control-input pt-type" id="opdCheckbox">
-													<label for="opdCheckbox" class="custom-control-label normal-label">ผู้ป่วยนอก (OPD)/ILI</label>
-												</div>
-												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="patientType" value="ipd" class="custom-control-input pt-type" id="ipdCheckbox">
-													<label for="ipdCheckbox" class="custom-control-label normal-label">ผู้ป่วยใน (IPD)/SARI</label>
-												</div>
-												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="patientType" value="icu" class="custom-control-input pt-type" id="icuCheckbox">
-													<label for="icuCheckbox" class="custom-control-label normal-label">ผู้ป่วยหนัก/ICU</label>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3 {{ $errors->has('patientType') ? 'border-danger' : '' }}">
+											<div class="form-group">
+												<label for="patient">ผู้ป่วย</label>
+												<div>
+													<div class="custom-control custom-checkbox custom-control-inline">
+														<input type="checkbox" name="patientType" value="opd" class="custom-control-input pt-type" id="opdCheckbox">
+														<label for="opdCheckbox" class="custom-control-label normal-label">ผู้ป่วยนอก (OPD)/ILI</label>
+													</div>
+													<div class="custom-control custom-checkbox custom-control-inline">
+														<input type="checkbox" name="patientType" value="ipd" class="custom-control-input pt-type" id="ipdCheckbox">
+														<label for="ipdCheckbox" class="custom-control-label normal-label">ผู้ป่วยใน (IPD)/SARI</label>
+													</div>
+													<div class="custom-control custom-checkbox custom-control-inline">
+														<input type="checkbox" name="patientType" value="icu" class="custom-control-input pt-type" id="icuCheckbox">
+														<label for="icuCheckbox" class="custom-control-label normal-label">ผู้ป่วยหนัก/ICU</label>
+													</div>
 												</div>
 											</div>
+											<span class="text-danger">{{ $errors->first('patientType') }}</span>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="sickDateInput">วันที่เริ่มป่วย</label>
-											<div class="input-group date" data-provide="datepicke" id="sickDateInput">
-												<div class="input-group">
-													<input type="text" name="sickDateInput" class="form-control" required>
-													<div class="input-group-append">
-														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+											<div class="form-group">
+												<label for="sickDateInput">วันที่เริ่มป่วย</label>
+												<div class="input-group date" data-provide="datepicke" id="sickDateInput">
+													<div class="input-group">
+														<input type="text" name="sickDateInput" class="form-control {{ $errors->has('sickDateInput') ? 'border-danger' : '' }}" required>
+														<div class="input-group-append">
+															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<span class="text-danger">{{ $errors->first('sickDateInput') }}</span>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+											<div class="form-group">
+												<label for="treatDateInput">วันที่รักษาครั้งแรก</label>
+												<div class="input-group date" data-provide="datepicke" id="treatDateInput">
+													<div class="input-group">
+														<input type="text" name="treatDateInput" class="form-control {{ $errors->has('treatDateInput') ? 'border-danger' : '' }}" required>
+														<div class="input-group-append">
+															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<span class="text-danger">{{ $errors->first('treatDateInput') }}</span>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+											<div class="form-group">
+												<label for="admitDateInput">วันที่นอนโรงพยาบาล</label>
+												<div class="input-group date" data-provide="datepicke" id="admitDateInput">
+													<div class="input-group">
+														<input type="text" name="admitDateInput" class="form-control" required>
+														<div class="input-group-append">
+															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="treatDateInput">วันที่รักษาครั้งแรก</label>
-											<div class="input-group date" data-provide="datepicke" id="treatDateInput">
+											<div class="form-group">
+												<label for="sickDateInput">อุณหภูมิร่างกายแรกรับ</label>
 												<div class="input-group">
-													<input type="text" name="treatDateInput" class="form-control" required>
+													<input type="number" name="temperatureInput" value="0" class="form-control" max="50" min="0" required>
 													<div class="input-group-append">
-														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+														<span class="input-group-text">C&#176;</span>
 													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="admitDateInput">วันที่นอนโรงพยาบาล</label>
-											<div class="input-group date" data-provide="datepicke" id="admitDateInput">
-												<div class="input-group">
-													<input type="text" name="admitDateInput" class="form-control" required>
-													<div class="input-group-append">
-														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<label for="sickDateInput">อุณหภูมิร่างกายแรกรับ</label>
-											<div class="input-group">
-												<input type="number" name="temperatureInput" class="form-control" max="50" min="0" required>
-												<div class="input-group-append">
-													<span class="input-group-text">C&#176;</span>
 												</div>
 											</div>
 										</div>
@@ -314,7 +372,7 @@
 											<label for="sickDateInput">อาการและอาการแสดง</label>
 											<div class="table-responsive">
 												<table class="table" id="symptoms_table">
-													<thead class="bg-danger text-light">
+													<thead class="bg-custom-1 text-light">
 														<tr>
 															<th scope="col">อาการ</th>
 															<th scope="col">มี</th>
@@ -1245,7 +1303,7 @@
 						</div><!-- card -->
 						<div class="card">
 							<div class="card-body border-top">
-								<div class="alert alert-success" role="alert">
+								<div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="report_date">วันที่รายงาน</label>
@@ -1260,34 +1318,26 @@
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="user_hospital">หน่วยงาน/โรงพยาบาล</label>
-											<input type="text" name="userHospitalInput" value="{{ $patient[0]->user_hospcode }}" class="form-control" placeholder="โรงพยาบาล">
+											<input type="text" name="userHospitalInput" value="{{ $patient[0]->hospital }}" class="form-control">
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="firstNameInput">ผู้รายงาน</label>
-											<input type="text" name="userInput" value="{{ auth()->user()->name . ' ' . auth()->user()->lastname }}" class="form-control" id="first_name_input" placeholder="First name" required>
-											<div class="valid-feedback">Looks good!</div>
+											<input type="hidden" name="userIdInput" value="{{ auth()->user()->id }}">
+											<input type="text" name="userInput" value="{{ auth()->user()->name . ' ' . auth()->user()->lastname }}" class="form-control" id="first_name_input">
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="user_phone">โทรศัพท์</label>
-											<input type="text" name="user_phone" class="form-control" placeholder="Phone">
-											<div class="valid-feedback">Looks good!</div>
+											<input type="text" name="userPhoneInput" class="form-control" placeholder="Phone">
 										</div>
 									</div>
 								</div>
-
-
-
-
-
-
 							</div><!-- card body -->
 						</div><!-- card -->
 						<div class="border-top">
 							<div class="card-body">
-								<button type="submit" class="btn btn-success">Save</button>
-								<button type="submit" class="btn btn-primary">Reset</button>
+								<button type="submit" class="btn btn-primary">Save</button>
 							</div>
 						</div>
 					</form>
@@ -1425,14 +1475,16 @@ $(document).ready(function() {
 	$('#sickDateInput').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
-		todayBtn: true
+		todayBtn: true,
+		autoclose: true
 	});
 
 	/* treat date input */
 	$('#treatDateInput').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
-		todayBtn: true
+		todayBtn: true,
+		autoclose: true
 	});
 
 
@@ -1440,7 +1492,8 @@ $(document).ready(function() {
 	$('#admitDateInput').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
-		todayBtn: true
+		todayBtn: true,
+		autoclose: true
 	});
 
 	/* symptoms */
@@ -1919,14 +1972,12 @@ $(document).ready(function() {
 
 	/* report date input */
 	$('#report_date').datepicker({
-		'setDate': new Date(),
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
 		todayBtn: true,
+		autoclose: true
 	});
-
-
-
+	$('#report_date').datepicker('update', new Date());
 
 
 });

@@ -67,8 +67,24 @@ class PatientsController extends BoeFrsController
 			'provinceInput' => 'required',
 			'districtInput' => 'required',
 			'subDistrictInput' => 'required',
-			'patientType' => 'required'
+			'patientType' => 'required',
+			'sickDateInput' => 'required',
+			'treatDateInput' => 'required'
 
+		],[
+			'titleNameInput.required' => 'Title name field is required.',
+			'firstNameInput.required' => 'Firstname field is required',
+			'lastNameInput.required' => 'Lastname field is required',
+			'hnInput.required' => 'HN field is required',
+			'sexInput.required' => 'Gender field is required.',
+			'birthDayInput.required' => 'Birth date field is required.',
+			'hospitalInput.required' => 'Hospital field is required',
+			'provinceInput.required' => 'Province field is required',
+			'districtInput.required' => 'District field is required',
+			'subDistrictInput.required' => 'Sub-district field is required',
+			'patientType.required' => 'Patient type field is required',
+			'sickDateInput.required' => 'Sick date field is required',
+			'treatDateInput.required' => 'Date define field is required'
 		]);
 
 		$patient = Patients::find($request->pid);
@@ -107,8 +123,10 @@ class PatientsController extends BoeFrsController
 			$patient->occupation_other = $request->occupationOtherInput;
 		}
 		$patient->lab_status = 'hosp_added';
+		$patient->user_phone = $request->userPhoneInput;
 
-		//$general = $this->storePatient($patient);
+
+		$general = $this->storePatient($patient);
 
 		/* Clinical section */
 
@@ -145,7 +163,7 @@ class PatientsController extends BoeFrsController
 		$clinical->lung = $request->lungXrayInput;
 		$clinical->lung_date = parent::convertDateToMySQL($request->xRayDateInput);
 		$clinical->lung_result = $request->xRayResultInput;
-		$clinical->cbc_date = $request->cbcDateInput;
+		$clinical->cbc_date = parent::convertDateToMySQL($request->cbcDateInput);
 		$clinical->hb = $request->hbInput;
 		$clinical->hct = $request->htcInput;
 		$clinical->platelet_count = $request->plateletInput;
@@ -188,8 +206,8 @@ class PatientsController extends BoeFrsController
 		$clinical->other_congenital = $request->otherCongenitalInput;
 		$clinical->other_congenital_specify = $request->otherCongenitalSpecifyInput;
 		$clinical->contact_poultry7 = $request->contactPoultry7Input;
-		$clinical->contact_poultry14 = $request->contactPoultry14SpecifyInput;
-		$clinical->contact_poultry14_specify = $request->contactPoultry14Input;
+		$clinical->contact_poultry14 = $request->contactPoultry14Input;
+		$clinical->contact_poultry14_specify = $request->contactPoultry14SpecifyInput;
 		$clinical->stay_poultry14 = $request->stayPoultry14Input;
 		$clinical->stay_flu14 = $request->stayFlu14Input;
 		$clinical->stay_flu14_place_specify = $request->stayFlu14PlaceSpecifyInput;
@@ -203,26 +221,15 @@ class PatientsController extends BoeFrsController
 		$clinical->result_cli_refer = $request->resultCliReferInput;
 		$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
 		$clinical->user_hospital = $request->userHospitalInput;
-		$clinical->user_id = $request->userInput;
+		$clinical->user_id = $request->userIdInput;
 
 		$saved = $clinical->save();
 		if ($saved) {
-			$message = collect(['status'=>'200', 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
-			return redirect()->route('code.index')->with('message', $message);
+			$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
 		} else {
-			return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
+			$message = collect(['status'=>500, 'msg'=>'Internal Server Error!']);
 		}
-
-		/*
-		if ($saved) {
-			return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
-		} else {
-			return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
-		}
-		*/
-
-
-
+		return redirect()->route('code.index')->with('message', $message);
 	}
 
 	/**

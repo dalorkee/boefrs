@@ -11,9 +11,7 @@ use App\Code;
 use Session;
 use Storage;
 
-class CodeController extends BoeFrsController
-{
-
+class CodeController extends BoeFrsController {
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
@@ -31,8 +29,8 @@ class CodeController extends BoeFrsController
 		if ($roleArr[0] == 'admin') {
 			$patients = parent::patientByAdmin('new');
 		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-			$user_hospcode = auth()->user()->hospcode;
-			$patients = parent::patientByUserHospcode($user_hospcode, 'new');
+			$hospital = auth()->user()->hospcode;
+			$patients = parent::patientByUserHospcode($hospital, 'new');
 		} else {
 			return redirect()->route('logout');
 		}
@@ -142,37 +140,34 @@ class CodeController extends BoeFrsController
 	}
 */
 	public function ajaxRequestPost(Request $request) {
-		if (empty($request->province) || empty($request->hospcode)) {
+		if (!isset($request) || empty($request->titleNameInput) || empty($request->firstNameInput) || empty($request->hnInput)) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
 		} else {
 			$code = new Code;
-			$code->province = $request->province;
-			$code->hospcode = $request->hospcode;
-
-			$code->hn = $request->hnInput;
-			$code->an = $request->anInput;
+			$roleArr = auth()->user()->getRoleNames();
+			if ($roleArr[0] == 'admin') {
+				$code->province = $request->province;
+				$code->hospital = $request->hospital;
+			} else {
+				$code->province = auth()->user()->province;
+				$code->hospital = auth()->user()->hospcode;
+			}
 			$code->title_name = $request->titleNameInput;
-
 			if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
 				$code->title_name_other = $request->otherTitleNameInput;
 			} else {
 				$code->title_name_other = NULL;
 			}
-
 			$code->first_name = $request->firstNameInput;
 			$code->last_name = $request->lastNameInput;
-
+			$code->hn = $request->hnInput;
+			$code->an = $request->anInput;
 			$code->lab_code = parent::randPin();
-			$code->user = auth()->user()->id;
-			$code->user_hospcode = auth()->user()->hospcode;
-
-			$roleArr = auth()->user()->getRoleNames();
-			$code->user_role = $roleArr[0];
-
-			$this->simpleQrcode($code->lab_code);
+			$code->ref_user_id = auth()->user()->id;
 
 			$saved = $code->save();
 			if ($saved) {
+				$this->simpleQrcode($code->lab_code);
 				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
 			} else {
 				return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);

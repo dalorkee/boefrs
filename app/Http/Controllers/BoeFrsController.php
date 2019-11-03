@@ -69,10 +69,10 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
-	protected function patientByUserHospcode($user_hospcode=null, $lab_status='new') {
+	protected function patientByUserHospcode($hospcode=null, $lab_status='new') {
 		return DB::connection('mysql')
 			->table('patients')
-			->where('user_hospcode', '=', $user_hospcode)
+			->where('hospital', '=', $hospcode)
 			->where('lab_status', '=', $lab_status)
 			->whereNull('deleted_at')
 			->get();
