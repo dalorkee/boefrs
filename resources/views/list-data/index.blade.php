@@ -252,15 +252,15 @@ input.valid, textarea.valid{
 							</thead>
 							<tbody>
 								@php
-								$patients->each(function ($item, $key) {
+								$patients->each(function ($item, $key) use ($titleName) {
 									switch ($item->lab_status) {
-										case 'New':
+										case 'new':
 											$status_class = 'danger';
 											break;
-										case 'Processing':
+										case 'processing':
 											$status_class = 'warning';
 											break;
-										case 'Complete':
+										case 'complete':
 											$status_class = 'success';
 											break;
 										default :
@@ -270,12 +270,16 @@ input.valid, textarea.valid{
 
 									echo "<tr>";
 										echo "<td>".$item->id."</td>";
-										echo "<td>".$item->title_name.$item->first_name." ".$item->last_name."</td>";
+										if ($item->id != 6) {
+											echo "<td>".$titleName[$item->id]->title_name.$item->first_name." ".$item->last_name."</td>";
+										} else {
+											echo "<td>".$item->title_name_other.$item->first_name." ".$item->last_name."</td>";
+										}
 										echo "<td>".$item->hn."</td>";
 										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 										echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
 										echo "<td>";
-											echo "<a href=\"#\" class=\"btn btn-info\">แก้ไข</a>&nbsp;";
+											echo "<a href=\"#\" class=\"btn btn-success\">เพิ่มข้อมูล</a>&nbsp;";
 											echo "<a href=\"#\" class=\"btn btn-danger\">ลบ</button>";
 										echo "</td>";
 									echo "</tr>";

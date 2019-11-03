@@ -16,11 +16,9 @@ class ListDataController extends BoeFrsController
 	* @return \Illuminate\Http\Response
 	*/
 	public function index() {
-		//$user = Auth::user();
-
-		$provinces = parent::getProvince();
-		$hospitals = parent::getHospital();
-		$patients = parent::getPatient();
+		$provinces = parent::provinces();
+		$hospitals = parent::hospitalByActive();
+		$patients = parent::patients();
 		return view(
 			'list-data.index',
 			[
@@ -91,4 +89,5 @@ class ListDataController extends BoeFrsController
 	public function destroy($id) {
 		//
 	}
+
 }

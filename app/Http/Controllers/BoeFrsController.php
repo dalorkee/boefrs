@@ -30,7 +30,7 @@ class BoeFrsController extends Controller implements BoeFrs
 	}
 
 	public function patients() {
-		return DB::connection('mysql')->table('patient')->get();
+		return DB::connection('mysql')->table('patients')->get();
 	}
 
 	public function patientsById($id=0) {
