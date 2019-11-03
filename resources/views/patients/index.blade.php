@@ -383,8 +383,8 @@
 													<tbody>
 													@php
 													$symptoms->each(function ($item, $key) {
-														if ($item->symptom_name_en == 'Other') {
-															$other_symptom = "<input type=\"text\" name=\"other_symptom\" class=\"form-control\" id=\"symptom_other\" disabled>";
+														if ($item->id == 21) {
+															$other_symptom = "<input type=\"text\" name=\"other_symptom_input\" class=\"form-control\" id=\"symptom_other\" disabled>";
 														} else {
 															$other_symptom = null;
 														}
@@ -804,8 +804,7 @@
 														<tr id="health_table_tr5">
 															<td>
 																<div class="form-group row">
-																	<label for="aids" class="mt-2 font-normal">ภูมิคุ้มกันบกพร่อง ระบุ</label>
-
+																	<label for="immune" class="mt-2 font-normal">ภูมิคุ้มกันบกพร่อง ระบุ</label>
 																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
 																		<div class="input-group">
 																			<input type="text" name="immuneSpecifyInput" class="form-control" id="immune_specify" disabled>
@@ -816,20 +815,20 @@
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="immuneInput" value="y" class="custom-control-input health-5" id="aids-y">
-																	<label for="aids-y" class="custom-control-label">&nbsp;</label>
+																	<input type="checkbox" name="immuneInput" value="y" class="custom-control-input health-5" id="immune-y">
+																	<label for="immune-y" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="immuneInput" value="n" class="custom-control-input health-5" id="aids-n">
-																	<label for="aids-n" class="custom-control-label">&nbsp;</label>
+																	<input type="checkbox" name="immuneInput" value="n" class="custom-control-input health-5" id="immune-n">
+																	<label for="immune-n" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 															<td>
 																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" name="immuneInput" value="u" class="custom-control-input health-5" id="aids-u">
-																	<label for="aids-u" class="custom-control-label">&nbsp;</label>
+																	<input type="checkbox" name="immuneInput" value="u" class="custom-control-input health-5" id="immune-u">
+																	<label for="immune-u" class="custom-control-label">&nbsp;</label>
 																</div>
 															</td>
 														</tr>
@@ -1318,18 +1317,18 @@
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="user_hospital">หน่วยงาน/โรงพยาบาล</label>
-											<input type="text" name="userHospitalInput" value="{{ $patient[0]->hospital }}" class="form-control">
+											<input type="text" name="userHospitalInput" value="{{ $patient[0]->ref_user_hospcode }}" class="form-control" readonly>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="firstNameInput">ผู้รายงาน</label>
 											<input type="hidden" name="userIdInput" value="{{ auth()->user()->id }}">
-											<input type="text" name="userInput" value="{{ auth()->user()->name . ' ' . auth()->user()->lastname }}" class="form-control" id="first_name_input">
+											<input type="text" name="userInput" value="{{ auth()->user()->name . ' ' . auth()->user()->lastname }}" class="form-control" id="first_name_input" readonly>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="user_phone">โทรศัพท์</label>
-											<input type="text" name="userPhoneInput" class="form-control" placeholder="Phone">
+											<input type="text" name="userPhoneInput" class="form-control" placeholder="Phone" readonly>
 										</div>
 									</div>
 								</div>
@@ -1401,6 +1400,7 @@ $(document).ready(function() {
 			days = Math.floor(30 * (months % 1));
 			$('#age_year_input').val(Math.floor(years));
 			$('#age_month_input').val(Math.floor(months));
+			$('#age_day_input').val(Math.floor(days));
 	});
 
 	/* nationallity */
@@ -1502,20 +1502,20 @@ $(document).ready(function() {
 		echo "
 			$('.symptom-".$item->id."').click(function() {
 				$('.symptom-".$item->id."').not(this).prop('checked', false);
-				let number = $('.symptom-".$item->id."').filter(':checked').length;
+				var number = $('.symptom-".$item->id."').filter(':checked').length;
+				var symp = $('.symptom-".$item->id."').filter(':checked').val();
 				if (number === 1) {
-					let hasClass = $('#symptoms_table_tr".$item->id."').hasClass('highlight');
+					var hasClass = $('#symptoms_table_tr".$item->id."').hasClass('highlight');
 					if (!hasClass) {
 						$('#symptoms_table_tr".$item->id."').addClass('highlight');
 					}
-					if ('".$item->symptom_name_en."' === 'Other') {
-						$('#symptom_other').prop('disabled', false);
-					}
 				} else {
 					$('#symptoms_table_tr".$item->id."').removeClass('highlight');
-					if ('".$item->symptom_name_en."' === 'Other') {
-						$('#symptom_other').prop('disabled', true);
-					}
+				}
+				if (symp === 'y') {
+					$('#symptom_other').prop('disabled', false);
+				} else {
+					$('#symptom_other').prop('disabled', true);
 				}
 			});
 		\n";
@@ -1541,14 +1541,16 @@ $(document).ready(function() {
 	$('#xRayDateInput').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
-		todayBtn: true
+		todayBtn: true,
+		autoclose: true
 	});
 
 	/* cbc date input */
 	$('#cbcDateInput').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
-		todayBtn: true
+		todayBtn: true,
+		autoclose: true
 	});
 
 	/* influ Rapid test */
@@ -1582,7 +1584,8 @@ $(document).ready(function() {
 	$('#influVaccineDateInput').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
-		todayBtn: true
+		todayBtn: true,
+		autoclose: true
 	});
 
 	/* influ Rapid Result */
@@ -1603,7 +1606,8 @@ $(document).ready(function() {
 	$('#medicineGiveDateInput').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
-		todayBtn: true
+		todayBtn: true,
+		autoclose: true
 	});
 
 	/* health tbl */
@@ -1685,6 +1689,12 @@ $(document).ready(function() {
 			}
 		} else {
 			$('#health_table_tr5').removeClass('highlight');
+		}
+		if ($('#immune-y').prop('checked') == true) {
+			$('#immune_specify').prop('disabled', false);
+		} else {
+			$('#immune_specify').val('');
+			$('#immune_specify').prop('disabled', true);
 		}
 	});
 

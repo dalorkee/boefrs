@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use App;
 use App\Patients;
 use App\Clinical;
@@ -88,6 +91,7 @@ class PatientsController extends BoeFrsController
 		]);
 
 		$patient = Patients::find($request->pid);
+
 		/* General section */
 		if ($request->titleNameInput == -6) {
 			$patient->title_name = 6;
@@ -105,6 +109,7 @@ class PatientsController extends BoeFrsController
 		$patient->date_of_birth = parent::convertDateToMySQL($request->birthDayInput);
 		$patient->age_year = $request->ageYearInput;
 		$patient->age_month = $request->ageMonthInput;
+		$patient->age_day = $request->ageDayInput;
 		$patient->nationality = $request->nationalityInput;
 
 		if (isset($request->otherNationalityInput) && !empty($request->otherNationalityInput)) {
@@ -123,13 +128,8 @@ class PatientsController extends BoeFrsController
 			$patient->occupation_other = $request->occupationOtherInput;
 		}
 		$patient->lab_status = 'hosp_added';
-		$patient->user_phone = $request->userPhoneInput;
-
-
-		$general = $this->storePatient($patient);
 
 		/* Clinical section */
-
 		$clinical = new Clinical;
 		$clinical->ref_pt_id = $request->pid;
 		$clinical->pt_type = $request->patientType;
@@ -137,7 +137,6 @@ class PatientsController extends BoeFrsController
 		$clinical->date_define = parent::convertDateToMySQL($request->treatDateInput);
 		$clinical->date_admit = parent::convertDateToMySQL($request->admitDateInput);
 		$clinical->pt_temperature = $request->temperatureInput;
-
 		$clinical->fever_sym = $request->symptom_1_Input;
 		$clinical->cough_sym = $request->symptom_2_Input;
 		$clinical->sore_throat_sym = $request->symptom_3_Input;
@@ -158,8 +157,8 @@ class PatientsController extends BoeFrsController
 		$clinical->intubation_sym = $request->symptom_18_Input;
 		$clinical->pneumonia_sym = $request->symptom_19_Input;
 		$clinical->kidney_sym = $request->symptom_20_Input;
-		$clinical->other_symptom = $request->other_symptom;
-
+		$clinical->other_symptom = $request->symptom_21_Input;
+		$clinical->other_symptom_specify = $request->other_symptom_input;
 		$clinical->lung = $request->lungXrayInput;
 		$clinical->lung_date = parent::convertDateToMySQL($request->xRayDateInput);
 		$clinical->lung_result = $request->xRayResultInput;
@@ -220,14 +219,19 @@ class PatientsController extends BoeFrsController
 		$clinical->result_cli = $request->resultCliInput;
 		$clinical->result_cli_refer = $request->resultCliReferInput;
 		$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
-		$clinical->user_hospital = $request->userHospitalInput;
-		$clinical->user_id = $request->userIdInput;
-
-		$saved = $clinical->save();
-		if ($saved) {
-			$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+		$clinical->ref_user_id = $request->userIdInput;
+		
+		/* save method */
+		$patient_saved = $this->storePatient($patient);
+		if ($patient_saved) {
+			$saved = $clinical->save();
+			if ($saved) {
+				$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+			} else {
+				$message = collect(['status'=>500, 'msg'=>'Internal Server Error! :: Clinical Data Error.']);
+			}
 		} else {
-			$message = collect(['status'=>500, 'msg'=>'Internal Server Error!']);
+			$message = collect(['status'=>500, 'msg'=>'Internal Server Error! :: Patient Data Error.']);
 		}
 		return redirect()->route('code.index')->with('message', $message);
 	}
@@ -247,16 +251,6 @@ class PatientsController extends BoeFrsController
 			$pt = new Patients;
 			$pt = $data;
 			return $pt->save();
-		} catch(\Exception $e) {
-			return $e->getMessage();
-		}
-	}
-
-	public function storeClinical($data) {
-		try {
-			$cli = new Clinical;
-			$cli = $data;
-			return $cli->save();
 		} catch(\Exception $e) {
 			return $e->getMessage();
 		}

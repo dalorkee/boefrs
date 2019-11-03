@@ -131,7 +131,7 @@ input.valid, textarea.valid{
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
 										<label for="hospital">โรงพยาบาล</label>
-										<select name="hospital" class="form-control selectpicker show-tick" id="select_hospital" data-style="btn-danger">
+										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-style="btn-danger">
 											<option value="0">-- เลือกโรงพยาบาล --</option>
 										</select>
 									</div>
@@ -238,37 +238,6 @@ input.valid, textarea.valid{
 <script src="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 <script src="{{ URL::asset('public/assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
-@php
-	if (Session::has('message')) {
-		$msg = Session::get('message');
-		$msg->all();
-		echo "<script>";
-			echo "
-				$(document).ready(function() {
-					var msg = ".$msg['status'].";
-					if (msg == 200) {
-						toastr.success('".$msg['msg']."', 'Flu Right Size',
-							{
-								'closeButton': true,
-								'positionClass': 'toast-top-center',
-								'progressBar': true,
-								'showDuration': '600'
-							}
-						);
-					} else {
-						toastr.error('".$msg['msg']."', 'Flu Right Size',
-							{
-								'closeButton': true,
-								'positionClass': 'toast-top-center',
-								'progressBar': true,
-								'showDuration': '800'
-							}
-						);
-					}
-				});";
-		echo "</script>";
-	}
-@endphp
 <script>
 $(document).ready(function() {
 	/* ajax request */
@@ -277,6 +246,20 @@ $(document).ready(function() {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+
+	@php
+	if (Session::has('message')) {
+		$msg = Session::get('message');
+		$msg->all();
+		echo "
+			var status = '".$msg['status']."';
+			var msg = '".$msg['msg']."';
+			var title = 'Flu Right Size';
+			alertMessage(status, msg, title);
+		";
+		Session::forget('message');
+	}
+	@endphp
 
 	/* data table */
 	$('#code_table').DataTable({
@@ -418,6 +401,27 @@ function ConvertFormToJSON(form){
 		json[this.name] = this.value || '';
 	});
 	return json;
+}
+function alertMessage(status, message, title) {
+	if (status == 200) {
+		toastr.success(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '600'
+			}
+		);
+	} else {
+		toastr.error(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '800'
+			}
+		);
+	}
 }
 </script>
 @endsection

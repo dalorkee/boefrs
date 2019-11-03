@@ -39,7 +39,7 @@ class HomeController extends BoeFrsController
 		//$roleArr = auth()->user()->roles()->pluck('name');
 		//$roleArr = Auth::user()->roles()->pluck('name');
 		if ($roleArr[0] == 'admin') {
-			return redirect()->route('users.index');
+			return redirect()->route('dashboard.index');
 		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
 			return redirect()->route('dashboard.index');
 		} else {

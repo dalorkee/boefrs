@@ -143,15 +143,16 @@ class CodeController extends BoeFrsController {
 		if (!isset($request) || empty($request->titleNameInput) || empty($request->firstNameInput) || empty($request->hnInput)) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
 		} else {
-			$code = new Code;
 			$roleArr = auth()->user()->getRoleNames();
 			if ($roleArr[0] == 'admin') {
-				$code->province = $request->province;
-				$code->hospital = $request->hospital;
+				$province = $request->province;
+				$hospcode = $request->hospcode;
 			} else {
-				$code->province = auth()->user()->province;
-				$code->hospital = auth()->user()->hospcode;
+				$province = auth()->user()->province;
+				$hospcode = auth()->user()->hospcode;
 			}
+
+			$code = new Code;
 			$code->title_name = $request->titleNameInput;
 			if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
 				$code->title_name_other = $request->otherTitleNameInput;
@@ -164,6 +165,7 @@ class CodeController extends BoeFrsController {
 			$code->an = $request->anInput;
 			$code->lab_code = parent::randPin();
 			$code->ref_user_id = auth()->user()->id;
+			$code->ref_user_hospcode = $hospcode;
 
 			$saved = $code->save();
 			if ($saved) {
