@@ -24,7 +24,6 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('code', 'CodeController');
 	Route::resource('list-data', 'ListDataController');
-	//Route::resource('patients', 'PatientsController');
 });
 
 /* Register */

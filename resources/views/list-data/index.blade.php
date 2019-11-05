@@ -257,8 +257,11 @@ input.valid, textarea.valid{
 										case 'new':
 											$status_class = 'danger';
 											break;
-										case 'processing':
+										case 'hospital':
 											$status_class = 'warning';
+											break;
+										case 'lab':
+											$status_class = 'primary';
 											break;
 										case 'complete':
 											$status_class = 'success';
@@ -279,8 +282,8 @@ input.valid, textarea.valid{
 										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 										echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
 										echo "<td>";
-											echo "<a href=\"#\" class=\"btn btn-success\">เพิ่มข้อมูล</a>&nbsp;";
-											echo "<a href=\"#\" class=\"btn btn-danger\">ลบ</button>";
+											echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-success\">เพิ่มข้อมูล</a>&nbsp;";
+											echo "<a href=\"".route('codeSoftDelete', ['id'=>$item->id])."\" class=\"btn btn-danger\">ลบ</button>";
 										echo "</td>";
 									echo "</tr>";
 								});

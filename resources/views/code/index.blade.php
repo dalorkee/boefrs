@@ -218,8 +218,8 @@ input.valid, textarea.valid{
 									<td><span class="badge badge-pill badge-success">{{ $value->lab_status }}</span></td>
 									<td>{{ $value->created_at }}</td>
 									<td>
-										<a href="{{ route('createPatient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">Edit</a>&nbsp;
-										<a href="{{ route('codeSoftDelete', ['id'=>$value->id]) }}" id="delete" class="btn btn-outline-danger btn-sm">Delete</a>
+										<a href="{{ route('createPatient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">เพิ่มข้อมูล</a>&nbsp;
+										<a href="{{ route('codeSoftDelete', ['id'=>$value->id]) }}" id="delete" class="btn btn-outline-danger btn-sm">ลบ</a>
 										<!--<button name="delete" type="submit" id="delete" class="btn btn-outline-danger btn-sm" value="{ $value->id }">Delete</button> -->
 									</td>
 								</tr>

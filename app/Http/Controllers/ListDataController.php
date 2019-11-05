@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class ListDataController extends BoeFrsController
 {
 	public function __construct() {
 		parent::__construct();
+		$this->middleware('auth');
+		$this->middleware(['role:admin|hospital|lab']);
 	}
 	/**
 	* Display a listing of the resource.
@@ -16,9 +20,22 @@ class ListDataController extends BoeFrsController
 	* @return \Illuminate\Http\Response
 	*/
 	public function index() {
+		$roleArr = auth()->user()->getRoleNames();
+		if ($roleArr[0] == 'admin') {
+			$patients = parent::patientByAdmin('new');
+		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
+			$hospital = auth()->user()->hospcode;
+			$patients = parent::patientByUserHospcode($hospital, 'new');
+		} else {
+			return redirect()->route('logout');
+		}
+
 		$provinces = parent::provinces();
 		$hospitals = parent::hospitalByActive();
-		$patients = parent::patients();
+
+
+
+		//$patients = parent::patients();
 		return view(
 			'list-data.index',
 			[
