@@ -222,7 +222,8 @@ class CodeController extends BoeFrsController {
 			}
 			$htm .= "</tbody>";
 			$htm .= "</table>";
-			$htm .= "<script>
+			$htm .= "
+			<script>
 				$(document).ready(function() {
 					$('#code_table1').DataTable({
 						'searching': false,
@@ -236,7 +237,7 @@ class CodeController extends BoeFrsController {
 						}]
 					});
 				});
-			";
+			</script>";
 		return $htm;
 	}
 

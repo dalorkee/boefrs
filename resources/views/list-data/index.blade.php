@@ -1,9 +1,9 @@
 @extends('layouts.index')
 @section('custom-style')
-	<link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css'>
-	<link rel='stylesheet' href='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css'>
-	<link rel='stylesheet' href='public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css'>
-	<link rel="stylesheet" type="text/css" href="public/assets/libs/select2/dist/css/select2.min.css">
+<link rel='stylesheet' href="{{ URL::asset('public/assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css') }}">
+<link rel='stylesheet' href="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css') }}">
+<link rel='stylesheet' href="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('public/assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 @section('internal-style')
 <style>
@@ -52,7 +52,6 @@
 	td:nth-of-type(5):before { content: "สถานะ";margin-top:10px;font-weight:600;}
 	td:nth-of-type(6):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
 }
-
 .error{
 	display: none;
 	margin-left: 10px;
@@ -199,11 +198,11 @@ input.valid, textarea.valid{
 					<h5 class="card-subtitle">Flu-BOE</h5>
 				</div>
 			</div>
-			<form class="mx-4">
+			<form name="search_frm" class="mx-4" id="search_frm">
 				<div class="form-group row pt-4">
 					<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-1">
-						<select class="form-control my-1 select-province" style="width:100%;">
-							<option value="0">-- เลือกจังหวัด --</option>
+						<select class="form-control my-1 select-province" id="select_province" style="width:100%;">
+							<option value="0">-- จังหวัด --</option>
 							@php
 								$provinces->keyBy('province_id');
 								$provinces->each(function ($item, $key) {
@@ -214,23 +213,20 @@ input.valid, textarea.valid{
 						</select>
 					</div>
 					<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-1">
-						<select class="form-control my-1 select-hospital" style="width:100%;">
-							<option value="0">-- เลือกโรงพยาบาล --</option>
-
-							@foreach ($hospitals as $hospital)
-								<option value="{{ $hospital->hospcode }}">{{ $hospital->hosp_name }}</option>
-							@endforeach
+						<select class="form-control my-1 select-hospital" id="select_hospital" disabled style="width:100%;">
+							<option value="0">-- โรงพยาบาล --</option>
 						</select>
 					</div>
 					<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-1">
-						<select class="form-control my-1 select-status" multiple="multiple" style="width:100%;">
+						<select class="form-control my-1 select-status" id="select_status" multiple="multiple" disabled style="width:100%;">
 							<option value="new">New</option>
-							<option value="process">Processing</option>
-							<option value="complete">Complete</option>
+							<option value="hospital">Hospital</option>
+							<option value="lab">Lab</option>
+							<option value="completed">Completed</option>
 						</select>
 					</div>
 					<div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 mt-1">
-						<button type="button" class="btn btn-primary" style="height:40px;"><i class="fas fa-search"></i> ค้นหา</button>
+						<a href="#" class="btn btn-primary" id="btn_search" style="height:38px;"><i class="fas fa-search"></i> ค้นหา</a>
 					</div>
 				</div>
 			</form>
@@ -255,16 +251,16 @@ input.valid, textarea.valid{
 								$patients->each(function ($item, $key) use ($titleName) {
 									switch ($item->lab_status) {
 										case 'new':
-											$status_class = 'danger';
+											$status_class = 'success';
 											break;
 										case 'hospital':
 											$status_class = 'warning';
 											break;
 										case 'lab':
-											$status_class = 'primary';
+											$status_class = 'danger';
 											break;
-										case 'complete':
-											$status_class = 'success';
+										case 'completed':
+											$status_class = 'primary';
 											break;
 										default :
 											$status_class = 'primary';
@@ -298,12 +294,22 @@ input.valid, textarea.valid{
 </div>
 @endsection
 @section('bottom-script')
-<script src='public/assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js'></script>
-<script src='public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js'></script>
-<script src="public/assets/libs/select2/dist/js/select2.full.min.js"></script>
-<script src="public/assets/libs/select2/dist/js/select2.min.js"></script>
+<script src="{{ URL::asset('public/assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
+<script src="{{ URL::asset('public/assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+<script src="{{ URL::asset('public/assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script>
 $(document).ready(function() {
+	/* ajax request */
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+	$(".select-province").select2();
+	$(".select-hospital").select2({
+		closeOnSelect : true
+	});
 	/* data table */
 	$('#code_table').DataTable({
 		"searching": false,
@@ -317,58 +323,67 @@ $(document).ready(function() {
 		}]
 	});
 
-	/* select2 */
-	//$(".select2").select2();
-});
-</script>
-<script>
-/* ajax request */
-$.ajaxSetup({
-	headers: {
-		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	}
-});
-$(".select-province").select2();
-$(".select-hospital").select2({
-	closeOnSelect : false
-});
-$(".select-status").select2({
-	closeOnSelect : false,
-	placeholder : "-- เลือกสถานะ --",
-	allowHtml: true,
-	allowClear: true,
-	tags: true
-});
-$(".select-province").on("select2:select select2:unselect", function(e) {
-	var s = $(e.currentTarget).val();
-	alert(s);
-});
-/*
-$(".search-status").on("select2:select select2:unselect", function(e) {
-	e.preventDefault();
-	// var s = $(e.currentTarget).val();
-	var s = $(this).val();
-	$.ajax({
-		type: "POST",
-		url: "{ route('ajaxSelect') }}",
-		dataType: 'json',
-		data: {'x': s},
-		success: function(data) {
-			alert(data.x);
+	$(".select-status").select2({
+		closeOnSelect : false,
+		placeholder : "-- สถานะ --",
+		allowHtml: true,
+		allowClear: true,
+		tags: true,
+		closeOnSelect : true
+	});
+	$(".select-province").on("select2:select select2:unselect", function(e) {
+		var prov_id = parseInt($(e.currentTarget).val());
+		if (prov_id > 0) {
+			$('#select_hospital').prop('disabled', false);
+			$.ajax({
+				type: "GET",
+				url: "{{ route('ajaxGetHospByProv') }}",
+				dataType: 'HTML',
+				data: {prov_id: prov_id},
+				success: function(response) {
+					$('#select_hospital').empty();
+					$('#select_hospital').html(response);
+				},
+				error: function(response) {
+					alert(data.status);
+				}
+			});
+		} else {
+			$('#select_hospital').empty();
+			$('#select_hospital').append($('<option>', {
+				value: '0',
+				text: '-- โรงพยาบาล --'
+			}));
+			$('#select_hospital').prop('disabled', true);
+			$('#select_status').val(null).trigger('change');
+			$('#select_status').prop('disabled', true);
 		}
 	});
-});
-*/
-$("#x").click(function(e) {
-	e.preventDefault();
-	$.ajax({
-		type: "POST",
-		url: "{{ route('ajaxSelect') }}",
-		dataType: 'json',
-		data: {'x':'123'},
-		success: function(data) {
-			alert(data.x);
+	$(".select-hospital").on("select2:select select2:unselect", function(e) {
+		var hid = parseInt($(e.currentTarget).val());
+		if (hid != 0) {
+			$('#select_status').prop('disabled', false);
+		} else {
+			$('#select_status').val(null).trigger('change');
+			$('#select_status').prop('disabled', true);
 		}
+	});
+	/* search ajax */
+	$("#btn_search").click(function(e) {
+		var hp = $('#select_hospital').val();
+		var st = $('#select_status').val();
+		$.ajax({
+			type: 'POST',
+			url: '{{ route('ajax-list-data') }}',
+			data: {hp:hp,st:st},
+			dataType: 'HTML',
+			success: function(data) {
+				$('#patient_data').html(data);
+			},
+			error: function(jqXhr, textStatus, errorMessage){
+				alert(jqXhr.status);
+			}
+		});
 	});
 });
 </script>

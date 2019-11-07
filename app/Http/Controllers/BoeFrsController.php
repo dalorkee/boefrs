@@ -60,6 +60,14 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
+	protected function listPatientByAdmin($lab_status=array()) {
+		return DB::connection('mysql')
+			->table('patients')
+			->where('lab_status', '=', $lab_status)
+			->whereNull('deleted_at')
+			->get();
+	}
+
 	protected function patientByUser($user=null, $lab_status='new') {
 		return DB::connection('mysql')
 			->table('patients')

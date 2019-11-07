@@ -11,7 +11,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<!-- Favicon icon -->
 	<link rel="icon" type="image/png" sizes="16x16" href="public/assets/images/favicon.png">
-	<title>{{ config('app.name', 'Flu Right Size') }}</title>
+	<title>Flu Rigit Size</title>
 	<!-- Custom CSS -->
 	@yield('custom-style')
 	<style>

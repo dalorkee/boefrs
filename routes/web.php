@@ -64,3 +64,6 @@ Route::post('province/district/sub-district', 'PatientsController@subDistrictFet
 /* patient */
 Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
 Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
+
+/* list data */
+Route::post('data/list', 'ListDataController@ajaxListData')->name('ajax-list-data');
