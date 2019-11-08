@@ -4,6 +4,7 @@
 <link rel='stylesheet' href="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css') }}">
 <link rel='stylesheet' href="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('public/assets/libs/select2/dist/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('public/assets/libs/toastr/build/toastr.min.css') }}">
 @endsection
 @section('internal-style')
 <style>
@@ -198,9 +199,12 @@ input.valid, textarea.valid{
 					<h5 class="card-subtitle">Flu-BOE</h5>
 				</div>
 			</div>
+			<!-- <form name="search_frm" method="POST" action="{ route('list-data') }}" class="mx-4" id="search_frm"> -->
 			<form name="search_frm" class="mx-4" id="search_frm">
 				<div class="form-group row pt-4">
-					<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-1">
+					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
+
+					@role('admin')
 						<select class="form-control my-1 select-province" id="select_province" style="width:100%;">
 							<option value="0">-- จังหวัด --</option>
 							@php
@@ -209,15 +213,27 @@ input.valid, textarea.valid{
 									echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>";
 								});
 							@endphp
-
 						</select>
+					@endrole
+					@role('hospital|lab')
+						<select class="form-control my-1 select-province" id="select_province1" disabled style="width:100%;">
+							<option value="{{ auth()->user()->province }}">{{ $provinces[auth()->user()->province]->province_name }}</option>
+						</select>
+					@endrole
 					</div>
 					<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-1">
+					@role('admin')
 						<select class="form-control my-1 select-hospital" id="select_hospital" disabled style="width:100%;">
 							<option value="0">-- โรงพยาบาล --</option>
 						</select>
+					@endrole
+					@role('hospital|lab')
+						<select class="form-control my-1 select-hospital" id="select_hospital1" disabled style="width:100%;">
+							<option value="{{ auth()->user()->hospcode }}">{{ auth()->user()->hospcode }}</option>
+						</select>
+					@endrole
 					</div>
-					<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-1">
+					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
 						<select class="form-control my-1 select-status" id="select_status" multiple="multiple" disabled style="width:100%;">
 							<option value="new">New</option>
 							<option value="hospital">Hospital</option>
@@ -226,6 +242,7 @@ input.valid, textarea.valid{
 						</select>
 					</div>
 					<div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 mt-1">
+						<!-- <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> ค้นหา</button> -->
 						<a href="#" class="btn btn-primary" id="btn_search" style="height:38px;"><i class="fas fa-search"></i> ค้นหา</a>
 					</div>
 				</div>
@@ -368,23 +385,49 @@ $(document).ready(function() {
 			$('#select_status').prop('disabled', true);
 		}
 	});
+
 	/* search ajax */
 	$("#btn_search").click(function(e) {
+		var pv = $('#select_province').val();
 		var hp = $('#select_hospital').val();
 		var st = $('#select_status').val();
 		$.ajax({
 			type: 'POST',
 			url: '{{ route('ajax-list-data') }}',
-			data: {hp:hp,st:st},
+			data: {pv:pv,hp:hp,st:st},
 			dataType: 'HTML',
 			success: function(data) {
 				$('#patient_data').html(data);
 			},
 			error: function(jqXhr, textStatus, errorMessage){
-				alert(jqXhr.status);
+				alertMessage(jqXhr.status, errorMessage, 'Flu Right Sizex');
 			}
 		});
 	});
 });
+</script>
+<script>
+
+function alertMessage(status, message, title) {
+	if (status == 200) {
+		toastr.success(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '600',
+			}
+		);
+	} else {
+		toastr.error(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '600',
+			}
+		);
+	}
+}
 </script>
 @endsection

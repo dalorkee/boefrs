@@ -45,11 +45,13 @@ class CodeController extends BoeFrsController {
 	public function softDelete($id) {
 		$code = Code::destroy($id);
 		if ($code) {
-			$response = $this->successfulMessage(200, 'Successfully deleted', true, 0, $code);
+			response()->json(['status'=>200, 'msg'=>'ลบข้อมูลสำเร็จแล้ว']);
+			//$response = $this->successfulMessage(200, 'Successfully deleted', true, 0, $code);
 		} else {
-			$response = $this->notFoundMessage();
+			response()->json(['status'=>503, 'msg'=>'Service Unavailable']);
+			//$response = $this->notFoundMessage();
 		}
-		session(['response' => $response]);
+		//session(['response' => $response]);
 		//return response($response);
 		return redirect()->route('code.index');
 	}
@@ -115,7 +117,7 @@ class CodeController extends BoeFrsController {
 		//
 	}
 
-	private function notFoundMessage() {
+	/*private function notFoundMessage() {
 		return [
 			'code' => 404,
 			'message' => 'Note not found',
@@ -132,13 +134,8 @@ class CodeController extends BoeFrsController {
 			'data' => $payload,
 		];
 	}
-
-/*
-	public function ajaxRequestSelect(Request $request) {
-		$x = $request->x;
-		return response()->json(['x'=>$x]);
-	}
 */
+
 	public function ajaxRequestPost(Request $request) {
 		if (!isset($request) || empty($request->titleNameInput) || empty($request->firstNameInput) || empty($request->hnInput)) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);

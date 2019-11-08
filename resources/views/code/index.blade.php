@@ -76,14 +76,6 @@ input.valid, textarea.valid{
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('contents')
-@php
-/*
-	$response = Session::get('response');
-	if (isset($response)) {
-		dd($response);
-	}
-*/
-@endphp
 <div class="page-breadcrumb bg-light">
 	<div class="row">
 		<div class="col-12 d-flex no-block align-items-center">
@@ -248,6 +240,7 @@ $(document).ready(function() {
 	});
 
 	@php
+	/*
 	if (Session::has('message')) {
 		$msg = Session::get('message');
 		$msg->all();
@@ -258,7 +251,7 @@ $(document).ready(function() {
 			alertMessage(status, msg, title);
 		";
 		Session::forget('message');
-	}
+	}*/
 	@endphp
 
 	/* data table */

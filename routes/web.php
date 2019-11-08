@@ -66,4 +66,5 @@ Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPat
 Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
 
 /* list data */
-Route::post('data/list', 'ListDataController@ajaxListData')->name('ajax-list-data');
+Route::post('data/ajax-list', 'ListDataController@ajaxListData')->name('ajax-list-data');
+Route::post('data/list', 'ListDataController@listData')->name('list-data');
