@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('custom-style')
-<link rel="stylesheet" href="{{ URL::asset('dist/css/style.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('public/dist/css/style.min.css') }}">
 @endsection
 @section('content')
 <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
