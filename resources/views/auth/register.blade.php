@@ -89,7 +89,7 @@ input[type=text], input[type=password] {
 									<div class="form-group">
 										<label for="province">จังหวัด</label>
 										<input type="hidden" name="_token" value="{{ csrf_token() }}">
-										<select name="province" class="form-control form-control-lg select-province" style="width:100%">
+										<select name="province" class="form-control form-control-lg select-province" id="select_province" style="width:100%">
 											<option value="0">-- เลือกจังหวัด --</option>
 											@php
 												$provinces->keyBy('province_id');
@@ -103,7 +103,7 @@ input[type=text], input[type=password] {
 								<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
 									<div class="form-group">
 										<label for="hospital">โรงพยาบาล</label>
-										<select name="hospcode" class="form-control form-control-lg select-hospital" disabled style="width:100%">
+										<select name="hospcode" class="form-control form-control-lg select-hospital" id="select_hospital" disabled style="width:100%">
 											<option value="0">-- เลือกโรงพยาบาล --</option>
 										</select>
 									</div>
@@ -214,25 +214,25 @@ input[type=text], input[type=password] {
 <script>
 $(document).ready(function() {
 	$('.select-province,.select-hospital,.select-title-name,.role').select2();
-	$('.select-province').change(function() {
-		var prov_id = $('.select-province').val();
+	$('#select-province').change(function() {
+		var prov_id = $('#select-province').val();
 		if (prov_id > 0) {
-			$('.select-hospital').prop('disabled', false);
+			$('#select-hospital').prop('disabled', false);
 			$.ajax({
 				type: "GET",
 				url: "{{ route('ajaxGetHospByProv') }}",
 				dataType: 'html',
 				data: {prov_id: prov_id},
 				success: function(data) {
-					$('.select-hospital').html(data);
+					$('#select-hospital').html(data);
 				},
 				error: function(data) {
 					alert(data.status);
 				}
 			});
 		} else {
-			$('.select-hospital').val('');
-			$('.select-hospital').prop('disabled', true);
+			$('#select-hospital').val('');
+			$('#select-hospital').prop('disabled', true);
 		}
 	});
 });
