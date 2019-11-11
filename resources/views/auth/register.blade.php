@@ -214,25 +214,25 @@ input[type=text], input[type=password] {
 <script>
 $(document).ready(function() {
 	$('.select-province,.select-hospital,.select-title-name,.role').select2();
-	$('#select-province').change(function() {
-		var prov_id = $('#select-province').val();
+	$('#select_province').change(function() {
+		var prov_id = $('#select_province').val();
 		if (prov_id > 0) {
-			$('#select-hospital').prop('disabled', false);
+			$('#select_hospital').prop('disabled', false);
 			$.ajax({
 				type: "GET",
-				url: "{{ route('ajaxGetHospByProv') }}",
-				dataType: 'html',
+				url: "{{ route('getHospByProv') }}",
+				dataType: 'HTML',
 				data: {prov_id: prov_id},
 				success: function(data) {
-					$('#select-hospital').html(data);
+					$('#select_hospital').html(data);
 				},
 				error: function(data) {
 					alert(data.status);
 				}
 			});
 		} else {
-			$('#select-hospital').val('');
-			$('#select-hospital').prop('disabled', true);
+			$('#select_hospital').val('');
+			$('#select_hospital').prop('disabled', true);
 		}
 	});
 });

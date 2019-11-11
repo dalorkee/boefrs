@@ -239,21 +239,6 @@ $(document).ready(function() {
 		}
 	});
 
-	@php
-	/*
-	if (Session::has('message')) {
-		$msg = Session::get('message');
-		$msg->all();
-		echo "
-			var status = '".$msg['status']."';
-			var msg = '".$msg['msg']."';
-			var title = 'Flu Right Size';
-			alertMessage(status, msg, title);
-		";
-		Session::forget('message');
-	}*/
-	@endphp
-
 	/* data table */
 	$('#code_table').DataTable({
 		"searching": false,

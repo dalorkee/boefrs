@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function() {
 /* Register */
 Route::get('/register', '\App\Http\Controllers\Auth\RegisterController@index')->name('register');
 Route::post('register', '\App\Http\Controllers\Auth\RegisterController@register')->name('register');
+Route::get('/getHospByProv', '\App\Http\Controllers\Auth\RegisterController@getHospByProv')->name('getHospByProv');
 
 /* Logout */
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
