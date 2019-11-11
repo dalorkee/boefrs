@@ -5,7 +5,11 @@
 
    RewriteEngine On
 
+<<<<<<< HEAD
    # RewriteBase /boefrs/
+=======
+	RewriteBase /boefrs/
+>>>>>>> 268d381f371f649196d0f056ca01007d0f1fbc00
 
    # Handle Authorization Header
    RewriteCond %{HTTP:Authorization} .
@@ -16,9 +20,18 @@
    RewriteCond %{REQUEST_URI} (.+)/$
    RewriteRule ^ %1 [L,R=301]
 
+<<<<<<< HEAD
    # Handle Front Controller...
    RewriteCond %{REQUEST_FILENAME} !-d
    RewriteCond %{REQUEST_FILENAME} !-f
    # RewriteRule ^ index.php [L]
    RewriteRule ^(.*)$ index.php/$1 [L]
+=======
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+	#RewriteRule ^ index.php [L]
+	RewriteRule ^(.*)$ index.php/$1 [L]
+	# Header set Access-Control-Allow-Origin: *
+>>>>>>> 268d381f371f649196d0f056ca01007d0f1fbc00
 </IfModule>
