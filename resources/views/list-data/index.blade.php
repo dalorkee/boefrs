@@ -1,10 +1,10 @@
 @extends('layouts.index')
 @section('custom-style')
-<link rel='stylesheet' href="{{ URL::asset('public/assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css') }}">
-<link rel='stylesheet' href="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css') }}">
-<link rel='stylesheet' href="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('public/assets/libs/select2/dist/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('public/assets/libs/toastr/build/toastr.min.css') }}">
+<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.18/datatables-1.10.18/css/jquery.dataTables.min.css') }}">
+<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css') }}">
+<link rel='stylesheet' href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('assets/libs/select2/dist/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
 @endsection
 @section('internal-style')
 <style>
@@ -182,8 +182,8 @@ input.valid, textarea.valid{
 			<div class="ml-auto text-right">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">หน้าหลัก</a></li>
-						<li class="breadcrumb-item active" aria-current="page">รายการข้อมูล</li>
+						<li class="breadcrumb-item"><a href="#">Form</a></li>
+						<li class="breadcrumb-item active" aria-current="page">All</li>
 					</ol>
 				</nav>
 			</div>
@@ -295,8 +295,8 @@ input.valid, textarea.valid{
 										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 										echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
 										echo "<td>";
-											echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-success\">เพิ่มข้อมูล</a>&nbsp;";
-											echo "<a href=\"".route('codeSoftDelete', ['id'=>$item->id])."\" class=\"btn btn-danger\">ลบ</button>";
+											echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-outline-primary btn-sm\">เพิ่มข้อมูล</a>&nbsp;";
+											echo "<a href=\"".route('codeSoftDelete', ['id'=>$item->id])."\" class=\"btn btn-outline-danger btn-sm\">ลบ</button>";
 										echo "</td>";
 									echo "</tr>";
 								});
@@ -311,10 +311,10 @@ input.valid, textarea.valid{
 </div>
 @endsection
 @section('bottom-script')
-<script src="{{ URL::asset('public/assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ URL::asset('public/assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
-<script src="{{ URL::asset('public/assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
-<script src="{{ URL::asset('public/assets/libs/select2/dist/js/select2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/datatables-1.10.18/datatables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script>
 $(document).ready(function() {
 	/* ajax request */

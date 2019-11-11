@@ -8,11 +8,11 @@
 			<a class="navbar-brand" href="#">
 				<!-- Logo icon -->
 				<b class="logo-icon p-l-10">
-					{{ Html::image('public/assets/images/logo-icon.png', 'alt=homepage', ['class'=>'light-logo']) }}
+					{{ Html::image('assets/images/logo-icon.png', 'alt=homepage', ['class'=>'light-logo']) }}
 				</b>
 				<!-- Logo text -->
 				<span class="logo-text">
-					{{ Html::image('public/assets/images/logo2.png', 'alt=homepage', ['class'=>'light-logo']) }}
+					{{ Html::image('assets/images/logo2.png', 'alt=homepage', ['class'=>'light-logo']) }}
 				</span>
 			</a>
 			<a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>
@@ -38,7 +38,7 @@
 
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						{{ Html::image('public/assets/images/users/1.jpg', 'alt=user', ['class'=>'rounded-circle', 'width'=>'31']) }}
+						{{ Html::image('assets/images/users/1.jpg', 'alt=user', ['class'=>'rounded-circle', 'width'=>'31']) }}
 					</a>
 					<div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown" aria-labelledby="2">
 						<ul class="list-style-none">

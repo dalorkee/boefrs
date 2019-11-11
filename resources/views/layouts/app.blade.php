@@ -10,7 +10,7 @@
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<!-- Favicon icon -->
-	<link rel="icon" type="image/png" sizes="16x16" href="public/assets/images/favicon.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('assets/images/favicon.png') }}">
 	<title>Flu Rigit Size</title>
 	<!-- Custom CSS -->
 	@yield('custom-style')
@@ -46,10 +46,10 @@
 				</a>
 				<a class="navbar-brand" href="#">
 					<b class="logo-icon p-l-10">
-						<img src="public/assets/images/logo-icon.png" alt="BOE" class="light-logo">
+						<img src="{{ URL::asset('assets/images/logo-icon.png') }}" alt="BOE" class="light-logo">
 					</b>
 					<span class="logo-text">
-						<img src="public/assets/images/logo2.png" alt="FRS" class="light-logo">
+						<img src="{{ URL::asset('assets/images/logo2.png') }}" alt="FRS" class="light-logo">
 					</span>
 				</a>
 				<!-- Toggle which is visible on mobile only -->
@@ -77,10 +77,10 @@
 	</header>
 		@yield('content')
 	</div>
-	<script src="public/assets/libs/jquery/dist/jquery.min.js"></script>
+	<script src="{{ URL::asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
 	<!-- Bootstrap tether Core JavaScript -->
-	<script src="public/assets/libs/popper.js/dist/umd/popper.min.js"></script>
-	<script src="public/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="{{ URL::asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
+	<script src="{{ URL::asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 	<script>
 		$('[data-toggle="tooltip"]').tooltip();
 		$(".preloader").fadeOut();

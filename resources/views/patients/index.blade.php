@@ -1,8 +1,8 @@
 @extends('layouts.index')
 @section('custom-style')
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('public/assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('public/assets/libs/toastr/build/toastr.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
 @endsection
 @section('meta-token')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -49,7 +49,7 @@
 							<div class="card-body">
 								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
 									<div style="position:absolute; top:2px; right:2px;">
-										<img src="{{ URL::asset('public/qrcode/qr'.$patient[0]->lab_code.'.png') }}" />
+										<img src="{{ URL::asset('qrcode/qr'.$patient[0]->lab_code.'.png') }}" />
 									</div>
 									<h1 class="text-info">1. ข้อมูลทั่วไปของผู้ป่วย</h1>
 									<div class="form-row">
@@ -1347,9 +1347,9 @@
 </div>
 @endsection
 @section('bottom-script')
-<script src="{{ URL::asset('public/assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
-<script src="{{ URL::asset('public/assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
-<script src="{{ URL::asset('public/assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <script>
 $(document).ready(function() {
 	/* ajax request */

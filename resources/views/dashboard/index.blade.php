@@ -1,16 +1,16 @@
 @extends('layouts.index')
 @section('top-script')
 <!-- Charts js Files -->
-	{{ Html::script('public/assets/libs/flot/excanvas.js') }}
-	{{ Html::script('public/assets/libs/flot/jquery.flot.js') }}
-	{{ Html::script('public/assets/libs/flot/jquery.flot.pie.js') }}
-	{{ Html::script('public/assets/libs/flot/jquery.flot.time.js') }}
-	{{ Html::script('public/assets/libs/flot/jquery.flot.stack.js') }}
-	{{ Html::script('public/assets/libs/flot/jquery.flot.crosshair.js') }}
-	{{ Html::script('public/assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js') }}
-	{{ Html::script('public/dist/js/pages/chart/chart-page-init.js') }}
-	{{ Html::script('public/assets/extra-libs/chart.js/Chart.min.js') }}
-	{{ Html::script('public/assets/extra-libs/chart.js/utils.js') }}
+	{{ Html::script('assets/libs/flot/excanvas.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.pie.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.time.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.stack.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.crosshair.js') }}
+	{{ Html::script('assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js') }}
+	{{ Html::script('dist/js/pages/chart/chart-page-init.js') }}
+	{{ Html::script('assets/extra-libs/chart.js/Chart.min.js') }}
+	{{ Html::script('assets/extra-libs/chart.js/utils.js') }}
 @endsection
 @section('contents')
 <div class="page-breadcrumb">

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('custom-style')
-<link rel="stylesheet" href="{{ URL::asset('public/dist/css/style.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('dist/css/style.min.css') }}">
 @endsection
 @section('content')
 <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
 	<div class="auth-box bg-dark border-top border-secondary">
 		<div id="loginform">
 			<div class="text-center p-t-20 p-b-20">
-				<span class="db"><img src="public/assets/images/logo1.png" alt="logo"></span>
+				<span class="db"><img src="{{ URL::asset('assets/images/logo1.png') }}" alt="logo"></span>
 			</div>
 			<!-- Form -->
 			<form method="POST" action="{{ route('login') }}" class="form-horizontal m-t-20" id="loginform">

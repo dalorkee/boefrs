@@ -8,7 +8,7 @@
 	<meta name="description" content="Flu Right Size">
 	<meta name="author" content="Talek team">
 	<!-- Favicon icon -->
-	<link rel="icon" type="image/png" sizes="16x16" href="public/assets/images/favicon.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('assets/images/favicon.png') }}">
 	<title>BOE - Flu Right Size</title>
 	@yield('custom-style')
 	@include('layouts.main-style')
