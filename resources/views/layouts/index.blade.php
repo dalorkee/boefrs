@@ -24,7 +24,7 @@
 		</div>
 	</div>
 	<div id="main-wrapper">
-		@include('layouts.topbar')
+		@include('layouts.topbar');
 		@include('layouts.left-sidebar')
 		<div class="page-wrapper">
 			@yield('contents')
