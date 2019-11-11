@@ -1,10 +1,10 @@
 <IfModule mod_rewrite.c>
-	<IfModule mod_negotiation.c>
-		Options -MultiViews -Indexes
-	</IfModule>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
 
     RewriteEngine On
-	RewriteBase /boefrs
+	# RewriteBase /boefrs
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -17,6 +17,7 @@
     # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
-	Header set Access-Control-Allow-Origin: *
+	# RewriteRule ^ index.php [L]
+	RewriteRule ^(.*)$ index.php/$1 [L]
+	# Header set Access-Control-Allow-Origin: *
 </IfModule>
