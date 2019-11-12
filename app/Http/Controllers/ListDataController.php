@@ -24,10 +24,12 @@ class ListDataController extends BoeFrsController
 	public function index() {
 		$roleArr = auth()->user()->getRoleNames();
 		if ($roleArr[0] == 'admin') {
-			$patients = parent::patientByAdmin('new');
+			// $patients = parent::patientByAdmin('new');
+			$patients = Patients::whereNotNull('deleted_at')->get();
 		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-			$hospital = auth()->user()->hospcode;
-			$patients = parent::patientByUserHospcode($hospital, 'new');
+			$hospcode = auth()->user()->hospcode;
+			// $patients = parent::patientByUserHospcode($hospital, 'new');
+			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
 		} else {
 			return redirect()->route('logout');
 		}
@@ -133,30 +135,38 @@ class ListDataController extends BoeFrsController
 				$patients = Patients::all();
 				$status = 200;
 				$msg = '1ค้นหาข้อมูลสำเร็จ';
-				//$message = collect(['status'=>$status, 'msgx'=>'1ค้นหาข้อมูลสำเร็จ', 'title'=>'Flu Right Size']);
 			} elseif ($pv != '0' && $hp == '0' && $st[0] == '0') {
 				$status = 406;
 				$msg = '2Info! โปรดกรอกข้อมูลให้ครบเงื่อนไข';
-				//$message = collect(['status'=>$status, 'msgx'=>'2Info! โปรดกรอกข้อมูลให้ครบเงื่อนไข', 'title'=>'Flu Right Size']);
 			} elseif ($pv != '0' && $hp != '0' && $st[0] == '0') {
 				$patients = Patients::where('ref_user_hospcode', '=', $hp)->get();
 				$status = 200;
 				$msg = '3ค้นหาข้อมูลสำเร็จ';
-				//$message = collect(['status'=>$status, 'msgx'=>'3ค้นหาข้อมูลสำเร็จ', 'title'=>'Flu Right Size']);
 			} elseif ($pv != '0' && $hp != '0' && $st[0] != '0') {
 				$patients = Patients::where('ref_user_hospcode', '=', $hp)->whereIn('lab_status', $st)->get();
 				$status = 200;
 				$msg = '4ค้นหาข้อมูลสำเร็จ';
-				//$message = collect(['status'=>$status, 'msgx'=>'4ค้นหาข้อมูลสำเร็จ', 'title'=>'Flu Right Size']);
 			} else {
 				$status = 404;
 				$msg = '5ไม่พบข้อมูล';
-				//$message = collect(['status'=>$status, 'msgx'=>'5ไม่พบข้อมูล', 'title'=>'Flu Right Size']);
+			}
+			$message = collect(['status'=>$status, 'msg'=>$msg, 'title'=>'Flu Right Size']);
+		} elseif ($roleArr[0] == 'hospital') {
+			$hospcode = auth()->user()->hospcode;
+			if ($st[0] == '0') {
+				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->get();
+				$status = 200;
+				$msg = 'xค้นหาข้อมูลสำเร็จ';
+			} elseif ($st[0] != '0') {
+				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereIn('lab_status', $st)->get();
+				$status = 200;
+				$msg = 'yค้นหาข้อมูลสำเร็จ';
+			} else {
+				$status = 404;
+				$msg = 'zไม่พบข้อมูล';
 			}
 			$message = collect(['status'=>$status, 'msg'=>$msg, 'title'=>'Flu Right Size']);
 		}
-
-
 		$htm = "
 			<table class=\"display mb-4\" id=\"code_table1\" role=\"table\">
 				<thead>
@@ -205,8 +215,8 @@ class ListDataController extends BoeFrsController
 				$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
 				$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$val->lab_status."</span></td>";
 				$htm .= "<td>";
-				$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-success\">เพิ่มข้อมูล</a>&nbsp;";
-				$htm .= "<a href=\"".route('codeSoftDelete', ['id'=>$val->id])."\" class=\"btn btn-danger\">ลบ</button>";
+				$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-outline-primary btn-sm\">เพิ่มข้อมูล</a>&nbsp;";
+				$htm .= "<a href=\"".route('codeSoftDelete', ['id'=>$val->id])."\" class=\"btn btn-outline-danger btn-sm\">ลบ</button>";
 				$htm .= "</td>";
 				$htm .= "</tr>";
 			}

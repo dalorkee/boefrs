@@ -216,7 +216,7 @@ input.valid, textarea.valid{
 						</select>
 					@endrole
 					@role('hospital|lab')
-						<select class="form-control my-1 select-province" id="select_province1" disabled style="width:100%;">
+						<select class="form-control my-1 select-province" id="select_province" disabled style="width:100%;">
 							<option value="{{ auth()->user()->province }}">{{ $provinces[auth()->user()->province]->province_name }}</option>
 						</select>
 					@endrole
@@ -228,13 +228,18 @@ input.valid, textarea.valid{
 						</select>
 					@endrole
 					@role('hospital|lab')
-						<select class="form-control my-1 select-hospital" id="select_hospital1" disabled style="width:100%;">
+						<select class="form-control my-1 select-hospital" id="select_hospital" disabled style="width:100%;">
 							<option value="{{ auth()->user()->hospcode }}">{{ auth()->user()->hospcode }}</option>
 						</select>
 					@endrole
 					</div>
 					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
+						@role('admin')
 						<select class="form-control my-1 select-status" id="select_status" multiple="multiple" disabled style="width:100%;">
+						@endrole
+						@role('hospital|lab')
+						<select class="form-control my-1 select-status" id="select_status" multiple="multiple" style="width:100%;">
+						@endrole
 							<option value="new">New</option>
 							<option value="hospital">Hospital</option>
 							<option value="lab">Lab</option>
