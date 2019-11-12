@@ -192,7 +192,7 @@ class BoeFrsController extends Controller implements BoeFrs
 		// get date
 		$date = date('Ymd');
 		// shuffle the result
-		$string = $prefix.$separator.str_shuffle($pin).$date;
+		$string = $prefix.$separator.str_shuffle($pin);
 		return $string;
 	}
 
