@@ -40,9 +40,8 @@ class PatientsController extends BoeFrsController
 		$occupation = parent::occupation();
 		$symptoms = parent::symptoms();
 		$patient = parent::patientsById($request->id);
-		$user_hospital = parent::hospitalByCode($request->hospcode);
-		$hospital = parent::hospitalByActive();
-
+		$user_hospital = parent::hospitalByCode($patient[0]->ref_user_hospcode);
+		$hospital = parent::hospitalByBoeFrsActive();
 		return view(
 			'patients.index',
 			[
@@ -220,7 +219,7 @@ class PatientsController extends BoeFrsController
 		$clinical->result_cli_refer = $request->resultCliReferInput;
 		$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
 		$clinical->ref_user_id = $request->userIdInput;
-		
+
 		/* save method */
 		$patient_saved = $this->storePatient($patient);
 		if ($patient_saved) {

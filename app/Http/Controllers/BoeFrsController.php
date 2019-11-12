@@ -160,6 +160,14 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
+	public function hospitalByBoeFrsActive() {
+		return DB::connection('mysql')
+			->table('hospitals')
+			->where('boefrs_active', '=', '1')
+			->orderBy('hosp_name', 'asc')
+			->get();
+	}
+
 	public function nationality() {
 		return DB::connection('mysql')
 			->table('ref_nationality')

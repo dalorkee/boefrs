@@ -201,10 +201,15 @@
 											<div class="form-group {{ $errors->has('hospitalInput') ? 'has-error' : '' }}">
 												<label for="hospital">โรงพยาบาล</label>
 												<select name="hospitalInput" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true">
-													<option value="">-- เลือกโรงพยาบาล --</option>
-													@foreach ($hospital as $key => $val)
-														<option value="{{ $val->hospcode }}">{{ $val->hosp_name }}</option>
-													@endforeach
+													@role('admin')
+														<option value="">-- เลือกโรงพยาบาล --</option>
+														@foreach ($hospital as $key => $val)
+															<option value="{{ $val->hospcode }}">{{ $val->hosp_name }}</option>
+														@endforeach
+													@endrole
+													@role('hospital|lab')
+														<option value="{{ $user_hospital[0]->hospcode }}">{{ $user_hospital[0]->hosp_name }}</option>
+													@endrole
 												</select>
 											</div>
 											<span class="text-danger">{{ $errors->first('hospitalInput') }}</span>
