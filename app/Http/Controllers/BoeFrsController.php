@@ -215,10 +215,4 @@ class BoeFrsController extends Controller implements BoeFrs
 		}
 		return $string;
 	}
-
-
-
-
-
-
 }

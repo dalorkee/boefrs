@@ -11,6 +11,7 @@ use App;
 use App\Patients;
 use App\Clinical;
 use Session;
+use DB;
 
 
 class PatientsController extends BoeFrsController
@@ -126,7 +127,7 @@ class PatientsController extends BoeFrsController
 		if (isset($request->occupationOtherInput) && !empty($request->occupationOtherInput)) {
 			$patient->occupation_other = $request->occupationOtherInput;
 		}
-		$patient->lab_status = 'hosp_added';
+		$patient->lab_status = 'hospital';
 
 		/* Clinical section */
 		$clinical = new Clinical;
@@ -221,18 +222,22 @@ class PatientsController extends BoeFrsController
 		$clinical->ref_user_id = $request->userIdInput;
 
 		/* save method */
-		$patient_saved = $this->storePatient($patient);
-		if ($patient_saved) {
-			$saved = $clinical->save();
-			if ($saved) {
-				$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+		DB::beginTransaction();
+		try {
+			$patient_saved = $this->storePatient($patient);
+			$clinical_saved = $clinical->save();
+			DB::commit();
+			if ($patient_saved == true && $clinical_saved == true) {
+				$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site']);
 			} else {
-				$message = collect(['status'=>500, 'msg'=>'Internal Server Error! :: Clinical Data Error.']);
+				DB::rollback();
+				$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
 			}
-		} else {
-			$message = collect(['status'=>500, 'msg'=>'Internal Server Error! :: Patient Data Error.']);
+		} catch (Exception $e) {
+			DB::rollback();
+			$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
 		}
-		return redirect()->route('code.index')->with('message', $message);
+		return redirect()->route('list-data.index')->with('message', $message);
 	}
 
 	/**

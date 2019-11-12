@@ -144,9 +144,11 @@ class CodeController extends BoeFrsController {
 			if ($roleArr[0] == 'admin') {
 				$province = $request->province;
 				$hospcode = $request->hospcode;
+				$created_by = 'admin';
 			} else {
 				$province = auth()->user()->province;
 				$hospcode = auth()->user()->hospcode;
+				$created_by = 'user';
 			}
 
 			$code = new Code;
@@ -163,6 +165,7 @@ class CodeController extends BoeFrsController {
 			$code->lab_code = parent::randPin();
 			$code->ref_user_id = auth()->user()->id;
 			$code->ref_user_hospcode = $hospcode;
+			$code->created_by = $created_by;
 
 			$saved = $code->save();
 			if ($saved) {
@@ -212,8 +215,8 @@ class CodeController extends BoeFrsController {
 					$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
 					$htm .= "<td>".$value->created_at."</td>";
 					$htm .= "<td>";
-						$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id]) ."\" class=\"btn btn-outline-primary btn-sm\">Edit</a>&nbsp;";
-						$htm .= "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">Delete</a>";
+						$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id]) ."\" class=\"btn btn-outline-primary btn-sm\">เพิ่มข้อมูล</a>&nbsp;";
+						$htm .= "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">ลบ</a>";
 					$htm .= "</td>";
 				$htm .= "</tr>";
 			}

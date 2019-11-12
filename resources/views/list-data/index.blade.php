@@ -404,10 +404,19 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	/* message */
+	@php
+		if (Session::has('message')) {
+			$message = Session::get('message');
+			$message = $message->all();
+			Session::forget('message');
+			echo "alertMessage('".$message['status']."', '".$message['msg']."', '".$message['title']."')";
+		}
+	@endphp
 });
 </script>
 <script>
-
 function alertMessage(status, message, title) {
 	if (status == 200) {
 		toastr.success(message, title,

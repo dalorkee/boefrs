@@ -1322,7 +1322,12 @@
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="user_hospital">หน่วยงาน/โรงพยาบาล</label>
-											<input type="text" name="userHospitalInput" value="{{ $patient[0]->ref_user_hospcode }}" class="form-control" readonly>
+											@role('admin')
+												<input type="text" name="userHospitalInput" value="{{ $patient[0]->ref_user_hospcode }}" class="form-control" readonly>
+											@endrole
+											@role('hospital|lab')
+												<input type="text" name="userHospitalInput" value="{{ $patient[0]->ref_user_hospcode }}" class="form-control" readonly>
+											@endrole
 										</div>
 									</div>
 									<div class="form-row">
@@ -1352,6 +1357,7 @@
 </div>
 @endsection
 @section('bottom-script')
+<script src="{{ URL::asset('assets/libs/jquery-blockUI/jquery.blockUI.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
@@ -1993,10 +1999,6 @@ $(document).ready(function() {
 		autoclose: true
 	});
 	$('#report_date').datepicker('update', new Date());
-
-
 });
-
 </script>
-
 @endsection
