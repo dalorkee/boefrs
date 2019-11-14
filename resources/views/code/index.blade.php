@@ -294,7 +294,7 @@ $(document).ready(function() {
 		$htm .= "
 		$('#btn_delete".$value->id."').click(function(e) {
 			toastr.warning(
-				'Are you sure to delete? <br><br><button type=\"button\" value='yes' class=\"btn btn-danger\" id=\"dl".$value->id."\">Confirm</button> <button type=\"button\" class=\"btn btn-cyan\">Cancel</button>',
+				'Are you sure to delete? <br><br><button type=\"button\" class=\"btn btn-danger\" id=\"dl".$value->id."\">Confirm</button> <button type=\"button\" class=\"btn btn-cyan\">Cancel</button>',
 				'Flu Right Size',
 				{
 					'closeButton': false,
@@ -310,19 +310,10 @@ $(document).ready(function() {
 					'hideEasing': 'linear',
 					'showMethod': 'fadeIn',
 					'hideMethod': 'fadeOut',
-					'tapToDismiss': false,
-					'allowHtml': true,
-					onclick: function(toast) {
-						value = toast.target.value
-						if (value == 'yes') {
-							alert(toast.target.value, 'carai');
-						}
-					}
+					'tapToDismiss': false
 				}
 			);
-		});
-
-		";
+		});";
 	}
 	echo $htm;
 	@endphp
