@@ -24,7 +24,7 @@
 		</div>
 	</div>
 	<div id="main-wrapper">
-		@include('layouts.top-sidebar');
+		@include('layouts.top-sidebar')
 		@include('layouts.left-sidebar')
 		<div class="page-wrapper">
 			@yield('contents')
@@ -32,6 +32,6 @@
 		</div>
 	</div>
 	@include('layouts.main-script')
-	@yield('bottom-script');
+	@yield('bottom-script')
 </body>
 </html>

@@ -55,7 +55,8 @@ Route::get('/sample-submissions-form', array(
 			'uses' => 'SampleSubmissionsController@Form_Sample_Submissions'
 ));
 
-/* code soft delete */
+/* delete */
+Route::get('/confirmDelete/{id}', 'CodeController@confirmDelete')->name('confirmDelete');
 Route::get('/codeSoftDelete/{id}','CodeController@softDelete')->name('codeSoftDelete');
 
 /* fetch district, fetch sub-district */
@@ -65,6 +66,7 @@ Route::post('province/district/sub-district', 'PatientsController@subDistrictFet
 /* patient */
 Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
 Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
+Route::post('patient/edit', 'PatientsController@editPatient')->name('editPatient');
 
 /* list data */
 Route::post('data/ajax-list', 'ListDataController@ajaxListData')->name('ajax-list-data');

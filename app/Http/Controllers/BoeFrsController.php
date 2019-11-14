@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Symptoms;
+use App\Patients;
+use App\Hospitals;
 
 
 class BoeFrsController extends Controller implements BoeFrs
@@ -60,6 +62,11 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
+	protected function patientAllByAdmin() {
+		$patients = Patients::whereNull('deleted_at')->get();
+		return $patients;
+	}
+
 	protected function listPatientByAdmin($lab_status=array()) {
 		return DB::connection('mysql')
 			->table('patients')
@@ -84,6 +91,13 @@ class BoeFrsController extends Controller implements BoeFrs
 			->where('lab_status', '=', $lab_status)
 			->whereNull('deleted_at')
 			->get();
+	}
+
+	protected function patientAllByUserHospcode($hospcode=null) {
+		$patients = Patients::where('ref_user_hospcode', '=', $hospcode)
+			->whereNull('deleted_at')
+			->get();
+		return $patients;
 	}
 
 	public function provinces() {

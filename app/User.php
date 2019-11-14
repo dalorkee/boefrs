@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Http\Controllers\BoeFrsController;
 
 class User extends Authenticatable
 {
@@ -24,6 +25,7 @@ class User extends Authenticatable
 		'lastname',
 		'email',
 		'password',
+		'user_hospital_name'
 	];
 
 	/**
@@ -40,7 +42,9 @@ class User extends Authenticatable
 	*
 	* @var array
 	*/
+
 	protected $casts = [
 		'email_verified_at' => 'datetime',
 	];
+
 }

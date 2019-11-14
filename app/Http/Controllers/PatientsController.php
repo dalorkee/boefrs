@@ -65,7 +65,7 @@ class PatientsController extends BoeFrsController
 			'lastNameInput' => 'required',
 			'hnInput' => 'required',
 			'sexInput' => 'required',
-			'birthDayInput' => 'required',
+			//'birthDayInput' => 'required',
 			'hospitalInput' => 'required',
 			'provinceInput' => 'required',
 			'districtInput' => 'required',
@@ -80,7 +80,7 @@ class PatientsController extends BoeFrsController
 			'lastNameInput.required' => 'Lastname field is required',
 			'hnInput.required' => 'HN field is required',
 			'sexInput.required' => 'Gender field is required.',
-			'birthDayInput.required' => 'Birth date field is required.',
+			//'birthDayInput.required' => 'Birth date field is required.',
 			'hospitalInput.required' => 'Hospital field is required',
 			'provinceInput.required' => 'Province field is required',
 			'districtInput.required' => 'District field is required',
@@ -238,6 +238,10 @@ class PatientsController extends BoeFrsController
 			$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
 		}
 		return redirect()->route('list-data.index')->with('message', $message);
+	}
+
+	public function editPatient(Request $request) {
+		return 'Comming soon !!';
 	}
 
 	/**

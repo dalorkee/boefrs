@@ -199,11 +199,9 @@ input.valid, textarea.valid{
 					<h5 class="card-subtitle">Flu-BOE</h5>
 				</div>
 			</div>
-			<!-- <form name="search_frm" method="POST" action="{ route('list-data') }}" class="mx-4" id="search_frm"> -->
 			<form name="search_frm" class="mx-4" id="search_frm">
 				<div class="form-group row pt-4">
 					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
-
 					@role('admin')
 						<select class="form-control my-1 select-province" id="select_province" style="width:100%;">
 							<option value="0">-- จังหวัด --</option>
@@ -252,68 +250,73 @@ input.valid, textarea.valid{
 					</div>
 				</div>
 			</form>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-body">
-					<div id="patient_data">
-						<table class="display mb-4" id="code_table" role="table">
-							<thead>
-								<tr>
-									<th>ลำดับ</th>
-									<th>ชื่อ-สกุล</th>
-									<th>HN</th>
-									<th>รหัส</th>
-									<th>สถานะ</th>
-									<th>จัดการ</th>
-								</tr>
-							</thead>
-							<tbody>
-								@php
-								$patients->each(function ($item, $key) use ($titleName) {
-									switch ($item->lab_status) {
-										case 'new':
-											$status_class = 'success';
-											break;
-										case 'hospital':
-											$status_class = 'warning';
-											break;
-										case 'lab':
-											$status_class = 'danger';
-											break;
-										case 'completed':
-											$status_class = 'primary';
-											break;
-										default :
-											$status_class = 'primary';
-											break;
-									}
-
-									echo "<tr>";
-										echo "<td>".$item->id."</td>";
-										if ($item->id != 6) {
-											echo "<td>".$titleName[$item->id]->title_name.$item->first_name." ".$item->last_name."</td>";
-										} else {
-											echo "<td>".$item->title_name_other.$item->first_name." ".$item->last_name."</td>";
-										}
-										echo "<td>".$item->hn."</td>";
-										echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
-										echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
-										echo "<td>";
-											echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-outline-primary btn-sm\">เพิ่มข้อมูล</a>&nbsp;";
-											echo "<a href=\"".route('codeSoftDelete', ['id'=>$item->id])."\" class=\"btn btn-outline-danger btn-sm\">ลบ</button>";
-										echo "</td>";
-									echo "</tr>";
-								});
-								@endphp
-							</tbody>
-						</table>
-					</div>
-				</div><!-- card body -->
-			</div><!-- card -->
-		</div><!-- column -->
-	</div><!-- row -->
-</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-body">
+							<div id="patient_data">
+								<table class="display mb-4" id="code_table" role="table">
+									<thead>
+										<tr>
+											<th>ลำดับ</th>
+											<th>ชื่อ-สกุล</th>
+											<th>HN</th>
+											<th>รหัส</th>
+											<th>สถานะ</th>
+											<th>จัดการ</th>
+										</tr>
+									</thead>
+									<tbody>
+									@php
+										$patients->each(function ($item, $key) use ($titleName) {
+											switch ($item->lab_status) {
+												case 'new':
+													$status_class = 'success';
+													break;
+												case 'hospital':
+													$status_class = 'warning';
+													break;
+												case 'lab':
+													$status_class = 'danger';
+													break;
+												case 'completed':
+													$status_class = 'primary';
+													break;
+												default :
+													$status_class = 'primary';
+													break;
+											}
+											echo "<tr>";
+												echo "<td>".$item->id."</td>";
+												if ($item->id != 6) {
+													echo "<td>".$titleName[$item->id]->title_name.$item->first_name." ".$item->last_name."</td>";
+												} else {
+													echo "<td>".$item->title_name_other.$item->first_name." ".$item->last_name."</td>";
+												}
+												echo "<td>".$item->hn."</td>";
+												echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
+												echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
+												echo "<td>";
+													if ($item->lab_status == 'new') {
+														echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" title=\"เพิ่มข้อมูล\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+													} else {
+														echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+													}
+													echo "<a href=\"".route('codeSoftDelete', ['id'=>$item->id])."\" title=\"ลบข้อมูล\" class=\"btn btn-danger btn-sm\"><i class=\"fas fa-trash\"></i></button>";
+												echo "</td>";
+											echo "</tr>";
+										});
+									@endphp
+									</tbody>
+								</table>
+							</div>
+						</div><!-- card body -->
+					</div><!-- card -->
+				</div><!-- column -->
+			</div><!-- row -->
+		</div><!-- card body -->
+	</div><!-- card -->
+</div><!-- contrainer -->
 @endsection
 @section('bottom-script')
 <script src="{{ URL::asset('assets/libs/datatables-1.10.18/DataTables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
@@ -328,10 +331,7 @@ $(document).ready(function() {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
-	$(".select-province").select2();
-	$(".select-hospital").select2({
-		closeOnSelect : true
-	});
+
 	/* data table */
 	$('#code_table').DataTable({
 		"searching": false,
@@ -345,6 +345,11 @@ $(document).ready(function() {
 		}]
 	});
 
+	/* select2 setting */
+	$(".select-province").select2();
+	$(".select-hospital").select2({
+		closeOnSelect : true
+	});
 	$(".select-status").select2({
 		closeOnSelect : false,
 		placeholder : "-- สถานะ --",
@@ -353,6 +358,8 @@ $(document).ready(function() {
 		tags: true,
 		closeOnSelect : true
 	});
+
+	/* select province */
 	$(".select-province").on("select2:select select2:unselect", function(e) {
 		var prov_id = parseInt($(e.currentTarget).val());
 		if (prov_id > 0) {
@@ -381,6 +388,8 @@ $(document).ready(function() {
 			$('#select_status').prop('disabled', true);
 		}
 	});
+
+	/* select hospital */
 	$(".select-hospital").on("select2:select select2:unselect", function(e) {
 		var hid = parseInt($(e.currentTarget).val());
 		if (hid != 0) {
@@ -410,7 +419,7 @@ $(document).ready(function() {
 		});
 	});
 
-	/* message */
+	/* alert message */
 	@php
 		if (Session::has('message')) {
 			$message = Session::get('message');

@@ -52,5 +52,4 @@ class LoginController extends Controller
 		$provinces = BoeFrsController::provinceList();
 		session(['provinces' => $provinces]);
 	}
-
 }

@@ -210,9 +210,9 @@ input.valid, textarea.valid{
 									<td><span class="badge badge-pill badge-success">{{ $value->lab_status }}</span></td>
 									<td>{{ $value->created_at }}</td>
 									<td>
-										<a href="{{ route('createPatient', ['id'=>$value->id]) }}" class="btn btn-outline-primary btn-sm">เพิ่มข้อมูล</a>&nbsp;
-										<a href="{{ route('codeSoftDelete', ['id'=>$value->id]) }}" id="delete" class="btn btn-outline-danger btn-sm">ลบ</a>
-										<!--<button name="delete" type="submit" id="delete" class="btn btn-outline-danger btn-sm" value="{ $value->id }">Delete</button> -->
+										<a href="{{ route('createPatient', ['id'=>$value->id]) }}" class="btn btn-cyan btn-sm"><i class="fas fa-plus-circle"></i></a>&nbsp;
+										<!-- <a href="{ route('confirmDelete', ['id'=>$value->id]) }}" id="delete" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a> -->
+										<button name="delete" type="button" id="btn_delete{{ $value->id }}" class="btn btn-danger btn-sm" value="{{ $value->id }}"><i class="fas fa-trash"></i></button>
 									</td>
 								</tr>
 							@endforeach
@@ -288,8 +288,47 @@ $(document).ready(function() {
 		}
 	});
 
+	@php
+	$htm = "";
+	foreach ($patients as $key => $value) {
+		$htm .= "
+		$('#btn_delete".$value->id."').click(function(e) {
+			toastr.warning(
+				'Are you sure to delete? <br><br><button type=\"button\" value='yes' class=\"btn btn-danger\" id=\"dl".$value->id."\">Confirm</button> <button type=\"button\" class=\"btn btn-cyan\">Cancel</button>',
+				'Flu Right Size',
+				{
+					'closeButton': false,
+					'debug': false,
+					'newestOnTop': false,
+					'progressBar': false,
+					'positionClass': 'toast-top-center',
+					'preventDuplicates': true,
+					'onclick': null,
+					'timeOut': 0,
+					'extendedTimeOut': 0,
+					'showEasing': 'swing',
+					'hideEasing': 'linear',
+					'showMethod': 'fadeIn',
+					'hideMethod': 'fadeOut',
+					'tapToDismiss': false,
+					'allowHtml': true,
+					onclick: function(toast) {
+						value = toast.target.value
+						if (value == 'yes') {
+							alert(toast.target.value, 'carai');
+						}
+					}
+				}
+			);
+		});
+
+		";
+	}
+	echo $htm;
+	@endphp
+
 	/* submit ajax */
-	$("#btn_submit").click(function(e){
+	$("#btn_submit").click(function(e) {
 		var input = ConvertFormToJSON("#patient_form");
 		$.ajax({
 			type: 'POST',
@@ -362,8 +401,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-
-
 });
 </script>
 <script>

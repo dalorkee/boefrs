@@ -1,3 +1,6 @@
+@php
+	$provinces = Session::get('provinces');
+@endphp
 <!-- ============================================================== -->
 <!-- Topbar header - style you can find in pages.scss -->
 <!-- ============================================================== -->
@@ -30,12 +33,7 @@
 			<!-- Right side toggle and nav items -->
 			<!-- ============================================================== -->
 			<ul class="navbar-nav float-right">
-				@php
-					$provinces = Session::get('provinces');
-					$role = auth()->user()->roles->pluck('name');
-				@endphp
-				<li class="nav-item"><a class="nav-link">{{ auth()->user()->name }}&nbsp;[{{ $role[0] }}]</a></li>
-
+				<li class="nav-item"><a class="nav-link">{{ auth()->user()->name }}&nbsp;[{{ Session::get('user_role_name') }}]</a></li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						{{ Html::image('assets/images/users/1.jpg', 'alt=user', ['class'=>'rounded-circle', 'width'=>'31']) }}
@@ -60,13 +58,13 @@
 											<span class="btn btn-info btn-circle"><i class="fas fa-map-pin"></i></span>
 											<div class="m-l-10">
 												<h5 class="m-b-0">
-													@if (auth()->user()->hospcode == 0)
+													@if (auth()->user()->hospcode <= 0)
 														สำนักระบาดวิทยา
 													@else
-														{{ auth()->user()->hospcode }}
+														{{ Session::get('user_hospital_name') }}
 													@endif
 												</h5>
-												<span class="mail-desc">{{ $provinces[auth()->user()->province]->province_name }}</span>
+												<span class="mail-desc">{{ Session::get('provinces')[auth()->user()->province]->province_name }}</span>
 											</div>
 										</div>
 									</a>

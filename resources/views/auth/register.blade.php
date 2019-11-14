@@ -140,7 +140,7 @@ input[type=text], input[type=password] {
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
 									<div class="form-group">
 										<label for="fname">นามสกุล:</label>
-										<input type="text" name="lastname" class="form-control form-control-lg" value="{{ old('name') }}" placeholder="นามสกุล">
+										<input type="text" name="lastname" class="form-control form-control-lg" value="{{ old('lastname') }}" placeholder="นามสกุล">
 									</div>
 								</div>
 							</div>
@@ -148,9 +148,18 @@ input[type=text], input[type=password] {
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
 									<div class="form-group">
 										<label for="email">อีเมล์:</label>
-										<input type="text" name="email" class="form-control form-control-lg" value="{{ old('name') }}" placeholder="อีเมล์">
+										<input type="text" name="email" class="form-control form-control-lg" value="{{ old('email') }}" placeholder="อีเมล์">
 									</div>
 								</div>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+									<div class="form-group">
+										<label for="phone">โทรศัพท์ :</label>
+										<input type="text" name="phone" class="form-control form-control-lg" value="{{ old('phone') }}" placeholder="อีเมล์">
+									</div>
+								</div>
+							</div>
+							<!--
+							<div class="row">
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
 									<div class="form-group">
 										<label for="role">บทบาท:</label>
@@ -161,6 +170,7 @@ input[type=text], input[type=password] {
 									</div>
 								</div>
 							</div>
+							-->
 							<div class="row">
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
 									<div class="form-group">
@@ -189,7 +199,7 @@ input[type=text], input[type=password] {
 							<div class="row">
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
 									<div class="form-group">
-										<input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
+										<input id="captcha" type="text" class="form-control" placeholder="ผลรวมของรหัส" name="captcha">
 									</div>
 								</div>
 							</div>

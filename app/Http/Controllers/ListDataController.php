@@ -24,12 +24,12 @@ class ListDataController extends BoeFrsController
 	public function index() {
 		$roleArr = auth()->user()->getRoleNames();
 		if ($roleArr[0] == 'admin') {
-			// $patients = parent::patientByAdmin('new');
-			$patients = Patients::whereNotNull('deleted_at')->get();
+			$patients = parent::patientAllByAdmin();
+			//$patients = Patients::whereNull('deleted_at')->get();
 		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
 			$hospcode = auth()->user()->hospcode;
-			// $patients = parent::patientByUserHospcode($hospital, 'new');
-			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
+			$patients = parent::patientAllByUserHospcode($hospcode);
+			//$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
 		} else {
 			return redirect()->route('logout');
 		}
@@ -215,8 +215,12 @@ class ListDataController extends BoeFrsController
 				$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
 				$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$val->lab_status."</span></td>";
 				$htm .= "<td>";
-				$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-outline-primary btn-sm\">เพิ่มข้อมูล</a>&nbsp;";
-				$htm .= "<a href=\"".route('codeSoftDelete', ['id'=>$val->id])."\" class=\"btn btn-outline-danger btn-sm\">ลบ</button>";
+				if ($val->lab_status == 'new') {
+					$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+				} else {
+					$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+				}
+				$htm .= "<a href=\"".route('codeSoftDelete', ['id'=>$val->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fas fa-trash\"></i></button>";
 				$htm .= "</td>";
 				$htm .= "</tr>";
 			}
@@ -243,9 +247,7 @@ class ListDataController extends BoeFrsController
 					$m = $message->all();
 					$htm .= "alertMessage('".$m['status']."', '".$m['msg']."', '".$m['title']."');
 				});
-			</script>
-
-		";
+			</script>";
 		return $htm;
 	}
 }

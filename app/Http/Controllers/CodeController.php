@@ -56,6 +56,10 @@ class CodeController extends BoeFrsController {
 		return redirect()->route('code.index');
 	}
 
+	public function confirmDelete($id) {
+		
+	}
+
 	/**
 	* Show the form for creating a new resource.
 	*
@@ -215,8 +219,8 @@ class CodeController extends BoeFrsController {
 					$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
 					$htm .= "<td>".$value->created_at."</td>";
 					$htm .= "<td>";
-						$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id]) ."\" class=\"btn btn-outline-primary btn-sm\">เพิ่มข้อมูล</a>&nbsp;";
-						$htm .= "<a href=\"#\" class=\"btn btn-outline-danger btn-sm\">ลบ</a>";
+						$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+						$htm .= "<a href=\"".route('codeSoftDelete', ['id'=>$value->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fas fa-trash\"></i></a>";
 					$htm .= "</td>";
 				$htm .= "</tr>";
 			}

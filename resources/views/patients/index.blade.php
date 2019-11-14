@@ -3,6 +3,14 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
+<style>
+input:-moz-read-only { /* For Firefox */
+	background-color: #fafafa !important;
+}
+input:read-only {
+	background-color: #fafafa !important;
+}
+</style>
 @endsection
 @section('meta-token')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -150,7 +158,7 @@
 											<div class="form-group">
 												<label for="birthDate">ว/ด/ป เกิด</label>
 												<div class="input-group date" data-provide="datepicker" id="birthDayInput">
-													<input  type="text" name="birthDayInput" class="form-control {{ $errors->has('birthDayInput') ? 'border-danger' : '' }}">
+													<input  type="text" name="birthDayInput" class="form-control {{ $errors->has('birthDayInput') ? 'border-danger' : '' }}" readonly>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -324,7 +332,7 @@
 												<label for="sickDateInput">วันที่เริ่มป่วย</label>
 												<div class="input-group date" data-provide="datepicke" id="sickDateInput">
 													<div class="input-group">
-														<input type="text" name="sickDateInput" class="form-control {{ $errors->has('sickDateInput') ? 'border-danger' : '' }}" required>
+														<input type="text" name="sickDateInput" class="form-control {{ $errors->has('sickDateInput') ? 'border-danger' : '' }}" required readonly>
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -338,7 +346,7 @@
 												<label for="treatDateInput">วันที่รักษาครั้งแรก</label>
 												<div class="input-group date" data-provide="datepicke" id="treatDateInput">
 													<div class="input-group">
-														<input type="text" name="treatDateInput" class="form-control {{ $errors->has('treatDateInput') ? 'border-danger' : '' }}" required>
+														<input type="text" name="treatDateInput" class="form-control {{ $errors->has('treatDateInput') ? 'border-danger' : '' }}" readonly>
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -352,7 +360,7 @@
 												<label for="admitDateInput">วันที่นอนโรงพยาบาล</label>
 												<div class="input-group date" data-provide="datepicke" id="admitDateInput">
 													<div class="input-group">
-														<input type="text" name="admitDateInput" class="form-control" required>
+														<input type="text" name="admitDateInput" class="form-control" readonly>
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -364,7 +372,7 @@
 											<div class="form-group">
 												<label for="sickDateInput">อุณหภูมิร่างกายแรกรับ</label>
 												<div class="input-group">
-													<input type="number" name="temperatureInput" value="0" class="form-control" max="50" min="0" required>
+													<input type="number" name="temperatureInput" value="0" class="form-control" max="50" min="0">
 													<div class="input-group-append">
 														<span class="input-group-text">C&#176;</span>
 													</div>
@@ -439,7 +447,7 @@
 											<label for="xRayDateInput">ระบุวันที่</label>
 											<div class="input-group date" data-provide="datepicke" id="xRayDateInput">
 												<div class="input-group">
-													<input type="text" name="xRayDateInput" class="form-control" id="xRayDate" disabled>
+													<input type="text" name="xRayDateInput" class="form-control" id="xRayDate" disabled readonly>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -456,7 +464,7 @@
 											<label for="cbcDateInput">CBC (ครั้งแรก): วันที่</label>
 											<div class="input-group date" data-provide="datepicke" id="cbcDateInput">
 												<div class="input-group">
-													<input type="text" name="cbcDateInput" class="form-control">
+													<input type="text" name="cbcDateInput" class="form-control" readonly>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -624,7 +632,7 @@
 											<label for="influVaccineDate">เคยได้รับเมื่อ</label>
 											<div class="input-group date" data-provide="datepicke" id="influVaccineDateInput">
 												<div class="input-group">
-													<input type="text" name="influVaccineDateInput" class="form-control" id="influVaccineDate" disabled>
+													<input type="text" name="influVaccineDateInput" class="form-control" id="influVaccineDate" disabled readonly>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -654,7 +662,7 @@
 											<label for="medicineGiveDateInput">วันที่เริ่มให้ยา</label>
 											<div class="input-group date" data-provide="datepicke" id="medicineGiveDateInput">
 												<div class="input-group">
-													<input type="text" name="medicineGiveDateInput" class="form-control" id="medicineDate" disabled>
+													<input type="text" name="medicineGiveDateInput" class="form-control" id="medicineDate" disabled readonly>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -843,7 +851,7 @@
 																	<label for="preterm_infant" class="mt-2 font-normal">คลอดก่อนกำหนด อายุครรภ์</label>
 																	<div class="col-xs-6 col-sm-6 col-md-4 col-lg-3 col-xl-3">
 																		<div class="input-group">
-																			<input type="number" name="earlyBirthWeekInput" value="0" min="0" max="52" class="form-control" id="preterm-infant-week">
+																			<input type="number" name="earlyBirthWeekInput" value="0" min="0" max="52" class="form-control" id="preterm-infant-week" disabled>
 																			<div class="input-group-append">
 																				<span class="input-group-text">สัปดาห์</span>
 																			</div>
@@ -1313,7 +1321,7 @@
 											<label for="report_date">วันที่รายงาน</label>
 											<div class="input-group date" data-provide="datepicke" id="report_date">
 												<div class="input-group">
-													<input type="text" name="reportDateInput" class="form-control" required>
+													<input type="text" name="reportDateInput" class="form-control" readonly required>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -1325,8 +1333,9 @@
 											@role('admin')
 												<input type="text" name="userHospitalInput" value="{{ $patient[0]->ref_user_hospcode }}" class="form-control" readonly>
 											@endrole
-											@role('hospital|lab')
-												<input type="text" name="userHospitalInput" value="{{ $patient[0]->ref_user_hospcode }}" class="form-control" readonly>
+											@role('hospital')
+												<div class="box" style="background:#E9ECEF;height:36px;">{{ Session::get('user_hospital_name') }}</div>
+												<input type="hidden" name="userHospitalInput" value="{{ $patient[0]->ref_user_hospcode }}" class="form-control" readonly>
 											@endrole
 										</div>
 									</div>

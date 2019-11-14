@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
+use Session;
 
 class HomeController extends BoeFrsController
 {
@@ -28,17 +29,15 @@ class HomeController extends BoeFrsController
 	*/
 	public function index(Request $request)
 	{
-		/*
-		$prov = parent::provinces();
-		$provinces = $prov->keyBy('province_id');
-		$provinces->all();
-		$request->session()->put('provinces', $provinces);
-		*/
+		$user_hosp = parent::hospitalByCode(auth()->user()->hospcode);
+		$user_hosp = $user_hosp->pluck('hosp_name')->all();
+		Session::put('user_hospital_name', $user_hosp[0]);
 
-		$roleArr = auth()->user()->getRoleNames();
-		//$roleArr = auth()->user()->roles()->pluck('name');
-		//$roleArr = Auth::user()->roles()->pluck('name');
+		//$roleArr = auth()->user()->getRoleNames()->all();
+		$roleArr = auth()->user()->roles->pluck('name');
 		$userRole = $roleArr[0];
+		Session::put('user_role_name', $userRole);
+
 		if ($userRole == 'admin') {
 			return redirect()->route('dashboard.index');
 		} elseif ($userRole == 'hospital' || $userRole == 'lab') {
