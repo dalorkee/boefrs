@@ -42,24 +42,6 @@ class CodeController extends BoeFrsController {
 		);
 	}
 
-	public function softDelete($id) {
-		$code = Code::destroy($id);
-		if ($code) {
-			response()->json(['status'=>200, 'msg'=>'ลบข้อมูลสำเร็จแล้ว']);
-			//$response = $this->successfulMessage(200, 'Successfully deleted', true, 0, $code);
-		} else {
-			response()->json(['status'=>503, 'msg'=>'Service Unavailable']);
-			//$response = $this->notFoundMessage();
-		}
-		//session(['response' => $response]);
-		//return response($response);
-		return redirect()->route('code.index');
-	}
-
-	public function confirmDelete($id) {
-		
-	}
-
 	/**
 	* Show the form for creating a new resource.
 	*
@@ -118,10 +100,26 @@ class CodeController extends BoeFrsController {
 	* @return \Illuminate\Http\Response
 	*/
 	public function destroy($id) {
-		//
+		$code = Code::destroy($id);
+		if ($code) {
+			response()->json(['status'=>200, 'msg'=>'ลบข้อมูลสำเร็จแล้ว']);
+		} else {
+			response()->json(['status'=>503, 'msg'=>'Service Unavailable']);
+		}
+		return redirect()->route('code.index');
 	}
 
-	/*private function notFoundMessage() {
+	public function confirmDestroy(Request $request) {
+		$id = trim($request->val);
+		$code = Code::destroy($id);
+		if ($code) {
+			return response()->json(['status'=>'200', 'msg'=>'ลบข้อมูลสำเร็จแล้ว', 'title'=>'Deleted']);
+		} else {
+			return response()->json(['status'=>'500', 'msg'=>'Service Unavailable', 'title'=>'Alert']);
+		}
+	}
+
+	private function notFoundMessage() {
 		return [
 			'code' => 404,
 			'message' => 'Note not found',
@@ -138,7 +136,6 @@ class CodeController extends BoeFrsController {
 			'data' => $payload,
 		];
 	}
-*/
 
 	public function ajaxRequestPost(Request $request) {
 		if (!isset($request) || empty($request->titleNameInput) || empty($request->firstNameInput) || empty($request->hnInput)) {
@@ -191,7 +188,6 @@ class CodeController extends BoeFrsController {
 		} else {
 			return redirect()->route('logout');
 		}
-
 		$htm = "
 		<table class=\"display mT-2 mb-4\" id=\"code_table1\" role=\"table\">
 			<thead>
@@ -220,7 +216,7 @@ class CodeController extends BoeFrsController {
 					$htm .= "<td>".$value->created_at."</td>";
 					$htm .= "<td>";
 						$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
-						$htm .= "<a href=\"".route('codeSoftDelete', ['id'=>$value->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fas fa-trash\"></i></a>";
+						$htm .= "<button name=\"delete\" type=\"button\" id=\"btn_delete_ajax".$value->id."\" class=\"btn btn-danger btn-sm\" value=\"".$value->id."\"><i class=\"fas fa-trash\"></i></button>";
 					$htm .= "</td>";
 				$htm .= "</tr>";
 			}
@@ -240,6 +236,20 @@ class CodeController extends BoeFrsController {
 							className: 'dt-head-right dt-body-right'
 						}]
 					});
+
+					$('#btn_delete_ajax".$value->id."').click(function(e) {
+						toastr.warning(
+							'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
+							'Flu Right Size',
+							{
+								'closeButton': true,
+								'positionClass': 'toast-top-center',
+								'progressBar': true,
+								'showDuration': '500'
+							}
+						);
+					});
+
 				});
 			</script>";
 		return $htm;

@@ -70,6 +70,13 @@ input.invalid, textarea.invalid{
 input.valid, textarea.valid{
 	border: 2px solid green;
 }
+.toast {
+  opacity: 1 !important;
+}
+
+#toast-container > div {
+  opacity: 1 !important;
+}
 </style>
 @endsection
 @section('meta-token')
@@ -211,7 +218,6 @@ input.valid, textarea.valid{
 									<td>{{ $value->created_at }}</td>
 									<td>
 										<a href="{{ route('createPatient', ['id'=>$value->id]) }}" class="btn btn-cyan btn-sm"><i class="fas fa-plus-circle"></i></a>&nbsp;
-										<!-- <a href="{ route('confirmDelete', ['id'=>$value->id]) }}" id="delete" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a> -->
 										<button name="delete" type="button" id="btn_delete{{ $value->id }}" class="btn btn-danger btn-sm" value="{{ $value->id }}"><i class="fas fa-trash"></i></button>
 									</td>
 								</tr>
@@ -290,33 +296,24 @@ $(document).ready(function() {
 
 	@php
 	$htm = "";
-	foreach ($patients as $key => $value) {
-		$htm .= "
-		$('#btn_delete".$value->id."').click(function(e) {
-			toastr.warning(
-				'Are you sure to delete? <br><br><button type=\"button\" class=\"btn btn-danger\" id=\"dl".$value->id."\">Confirm</button> <button type=\"button\" class=\"btn btn-cyan\">Cancel</button>',
-				'Flu Right Size',
-				{
-					'closeButton': false,
-					'debug': false,
-					'newestOnTop': false,
-					'progressBar': false,
-					'positionClass': 'toast-top-center',
-					'preventDuplicates': true,
-					'onclick': null,
-					'timeOut': 0,
-					'extendedTimeOut': 0,
-					'showEasing': 'swing',
-					'hideEasing': 'linear',
-					'showMethod': 'fadeIn',
-					'hideMethod': 'fadeOut',
-					'tapToDismiss': false
-				}
-			);
-		});";
-	}
+		foreach ($patients as $key => $value) {
+			$htm .= "
+			$('#btn_delete".$value->id."').click(function(e) {
+				toastr.warning(
+					'Are you sure to delete? <br/><br/><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">DL</button>',
+					'Flu Right Size',
+					{
+						'closeButton': true,
+						'positionClass': 'toast-top-center',
+						'progressBar': true,
+						'showDuration': '500'
+					}
+				);
+			});";
+		}
 	echo $htm;
 	@endphp
+
 
 	/* submit ajax */
 	$("#btn_submit").click(function(e) {
@@ -325,7 +322,7 @@ $(document).ready(function() {
 			type: 'POST',
 			url: "{{ route('ajaxRequest') }}",
 			data: input,
-			success: function(data){
+			success: function(data) {
 				if (data.status == 204) {
 					toastr.warning(data.msg, "Flu Right Size",
 						{
@@ -340,7 +337,7 @@ $(document).ready(function() {
 						type: 'GET',
 						url: "{{ route('ajaxRequestTable') }}",
 						dataType: "HTML",
-						success: function(res){
+						success: function(res) {
 							$('#patient_data').html(res);
 							$("#select_province").val('0').selectpicker("refresh");
 							$("#select_hospital").val('0').selectpicker("refresh");
@@ -355,7 +352,7 @@ $(document).ready(function() {
 								}
 							);
 						},
-						error: function(jqXhr, textStatus, errorMessage){
+						error: function(jqXhr, textStatus, errorMessage) {
 							$("#select_province").val('0').selectpicker("refresh");
 							$("#select_hospital").val('0').selectpicker("refresh");
 							$("#title_name_input").val('0').selectpicker("refresh");
@@ -375,7 +372,7 @@ $(document).ready(function() {
 					alert('Error!');
 				}
 			},
-			error: function(data, status, error){
+			error: function(data, status, error) {
 				$("#select_province").val('0').selectpicker("refresh");
 				$("#select_hospital").val('0').selectpicker("refresh");
 				$("#title_name_input").val('0').selectpicker("refresh");
@@ -395,6 +392,41 @@ $(document).ready(function() {
 });
 </script>
 <script>
+
+	$('body').on('click', '.btc', function (toast) {
+		toastr.clear();
+	});
+
+	$('body').on('click', '.btk', function (toast) {
+		var val = toast.target.value;
+		$.ajax({
+			method: 'POST',
+			url: '{{ route('codeSoftConfirmDelete') }}',
+			data: {val:val},
+			dataType: 'JSON',
+			success: function(data) {
+				if (data.status === '200') {
+					$.ajax({
+						method: 'GET',
+						url: '{{ route('ajaxRequestTable') }}',
+						data: {pj:data.status},
+						dataType: 'HTML',
+						success: function(data) {
+							$('#patient_data').html(data);
+						},
+						error: function(data, status, error) {
+							alertMessage(500);
+						}
+					});
+				}
+			},
+			error: function(data, status, error) {
+				alertMessage(500);
+			}
+		});
+	});
+</script>
+<script>
 function resetForm($form) {
 	$form.find('input:text, input:password, input:file, select, textarea').val('');
 	$form.find('input:radio, input:checkbox')
@@ -409,6 +441,7 @@ function ConvertFormToJSON(form){
 	return json;
 }
 function alertMessage(status, message, title) {
+	$status = parseInt(status);
 	if (status == 200) {
 		toastr.success(message, title,
 			{
@@ -416,6 +449,15 @@ function alertMessage(status, message, title) {
 				'positionClass': 'toast-top-center',
 				'progressBar': true,
 				'showDuration': '600'
+			}
+		);
+	} else if (status == 204) {
+		toastr.warning(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '800'
 			}
 		);
 	} else {
@@ -428,6 +470,9 @@ function alertMessage(status, message, title) {
 			}
 		);
 	}
+}
+function cleartoasts() {
+	toastr.clear();
 }
 </script>
 @endsection

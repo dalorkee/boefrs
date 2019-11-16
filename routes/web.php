@@ -56,8 +56,8 @@ Route::get('/sample-submissions-form', array(
 ));
 
 /* delete */
-Route::get('/confirmDelete/{id}', 'CodeController@confirmDelete')->name('confirmDelete');
-Route::get('/codeSoftDelete/{id}','CodeController@softDelete')->name('codeSoftDelete');
+Route::post('/code/delete', 'CodeController@confirmDestroy')->name('codeSoftConfirmDelete');
+Route::get('/code/delete/{id}','CodeController@destroy')->name('codeSoftDelete');
 
 /* fetch district, fetch sub-district */
 Route::post('province/district', 'PatientsController@districtFetch')->name('districtFetch');

@@ -57,13 +57,7 @@
 										<div class="d-flex no-block align-items-center p-10">
 											<span class="btn btn-info btn-circle"><i class="fas fa-map-pin"></i></span>
 											<div class="m-l-10">
-												<h5 class="m-b-0">
-													@if (auth()->user()->hospcode <= 0)
-														สำนักระบาดวิทยา
-													@else
-														{{ Session::get('user_hospital_name') }}
-													@endif
-												</h5>
+												<h5 class="m-b-0">{{ Session::get('user_hospital_name') }}</h5>
 												<span class="mail-desc">{{ Session::get('provinces')[auth()->user()->province]->province_name }}</span>
 											</div>
 										</div>
