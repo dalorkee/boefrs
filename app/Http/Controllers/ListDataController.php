@@ -24,21 +24,16 @@ class ListDataController extends BoeFrsController
 	public function index() {
 		$roleArr = auth()->user()->getRoleNames();
 		if ($roleArr[0] == 'admin') {
-			$patients = parent::patientAllByAdmin();
-			//$patients = Patients::whereNull('deleted_at')->get();
+			$patients = Patients::whereNull('deleted_at')->get();
 		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
 			$hospcode = auth()->user()->hospcode;
-			$patients = parent::patientAllByUserHospcode($hospcode);
-			//$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
+			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
 		} else {
 			return redirect()->route('logout');
 		}
-		$provinces = parent::provinces();
-		$provinces = $provinces->keyBy('province_id');
 		return view(
 			'list-data.index',
 			[
-				'provinces' => $provinces,
 				'titleName' => $this->title_name,
 				'patients' => $patients
 			]
@@ -111,28 +106,33 @@ class ListDataController extends BoeFrsController
 
 	public function ajaxListData(Request $request) {
 		/* get request from form */
-		if (isset($request->pv) || $request->pv != '0' || $request->pv != null) {
+		if (isset($request->pv) || !empty($request->pv)) {
 			$pv = $request->pv;
 		} else {
 			$pv = '0';
 		}
-		if (isset($request->hp) || $request->hp != '0' || $request->hp != null) {
+		if (isset($request->hp) || !empty($request->hp)) {
 			$hp = $request->hp;
 		} else {
 			$hp = '0';
 		}
-		if (!isset($request->st)) {
-			$st[] = '0';
-		} else {
+		if (isset($request->st) && $request->st != '0') {
 			foreach ($request->st as $key => $val) {
 				$st[] = $val;
 			}
+		} else {
+			$st[] = '0';
 		}
 
+		/* set alert message */
 		$roleArr = auth()->user()->getRoleNames();
-		if ($roleArr[0] == 'admin') {
+		$role = $roleArr[0];
+
+		/* admin */
+		if ($role == 'admin') {
 			if ($pv == '0' && $hp == '0' && $st[0] == '0') {
-				$patients = Patients::all();
+				$patients = Patients::whereNull('deleted_at')->get();
+				dd($patients);
 				$status = 200;
 				$msg = '1ค้นหาข้อมูลสำเร็จ';
 			} elseif ($pv != '0' && $hp == '0' && $st[0] == '0') {
@@ -151,7 +151,9 @@ class ListDataController extends BoeFrsController
 				$msg = '5ไม่พบข้อมูล';
 			}
 			$message = collect(['status'=>$status, 'msg'=>$msg, 'title'=>'Flu Right Size']);
-		} elseif ($roleArr[0] == 'hospital') {
+
+			/* user */
+		} elseif ($role == 'hospital') {
 			$hospcode = auth()->user()->hospcode;
 			if ($st[0] == '0') {
 				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->get();
@@ -167,7 +169,10 @@ class ListDataController extends BoeFrsController
 			}
 			$message = collect(['status'=>$status, 'msg'=>$msg, 'title'=>'Flu Right Size']);
 		}
-		$htm = "
+
+		/* data list */
+		$htm = "";
+		$htm .= "
 			<table class=\"display mb-4\" id=\"code_table1\" role=\"table\">
 				<thead>
 					<tr>
@@ -181,7 +186,6 @@ class ListDataController extends BoeFrsController
 			</thead>
 			<tfoot></tfoot>
 		";
-
 		if ($status == 200) {
 			$provinces = parent::provinces();
 			$titleName = $this->title_name;
@@ -220,7 +224,7 @@ class ListDataController extends BoeFrsController
 				} else {
 					$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
 				}
-				$htm .= "<a href=\"".route('codeSoftDelete', ['id'=>$val->id])."\" class=\"btn btn-danger btn-sm\"><i class=\"fas fa-trash\"></i></button>";
+				$htm .= "<button name=\"delete\" type=\"button\" id=\"btn_delete_ajax".$val->id."\" class=\"btn btn-danger btn-sm\" value=\"".$val->id."\"><i class=\"fas fa-trash\"></i></button>";
 				$htm .= "</td>";
 				$htm .= "</tr>";
 			}
@@ -244,6 +248,22 @@ class ListDataController extends BoeFrsController
 							className: 'dt-head-right dt-body-right'
 						}]
 					});";
+
+					foreach($patients as $key=>$val) {
+						$htm .= "
+						$('#btn_delete_ajax".$val->id."').click(function(e) {
+							toastr.warning(
+								'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$val->id."\">Delete</button>',
+								'Flu Right Size',
+								{
+									'closeButton': true,
+									'positionClass': 'toast-top-center',
+									'progressBar': true,
+									'showDuration': '500'
+								}
+							);
+						});";
+					}
 					$m = $message->all();
 					$htm .= "alertMessage('".$m['status']."', '".$m['msg']."', '".$m['title']."');
 				});

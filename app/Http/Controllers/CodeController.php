@@ -235,21 +235,23 @@ class CodeController extends BoeFrsController {
 							targets: -1,
 							className: 'dt-head-right dt-body-right'
 						}]
-					});
-
-					$('#btn_delete_ajax".$value->id."').click(function(e) {
-						toastr.warning(
-							'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
-							'Flu Right Size',
-							{
-								'closeButton': true,
-								'positionClass': 'toast-top-center',
-								'progressBar': true,
-								'showDuration': '500'
-							}
-						);
-					});
-
+					});";
+					foreach($patients as $key=>$value) {
+						$htm .= "
+						$('#btn_delete_ajax".$value->id."').click(function(e) {
+							toastr.warning(
+								'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
+								'Flu Right Size',
+								{
+									'closeButton': true,
+									'positionClass': 'toast-top-center',
+									'progressBar': true,
+									'showDuration': '500'
+								}
+							);
+						});";
+					}
+			$htm .= "
 				});
 			</script>";
 		return $htm;

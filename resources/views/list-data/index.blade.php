@@ -2,9 +2,9 @@
 @section('custom-style')
 	<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.18/DataTables-1.10.18/css/jquery.dataTables.min.css') }}">
 	<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css') }}">
-<link rel='stylesheet' href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assets/libs/select2/dist/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
+	<link rel="stylesheet" href="{{ URL::asset('assets/libs/select2/dist/css/select2.min.css') }}">
+	<link rel='stylesheet' href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
+	<link rel="stylesheet" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
 @endsection
 @section('internal-style')
 <style>
@@ -100,6 +100,7 @@ input.valid, textarea.valid{
 // end select 2 dropdown icon
 */
 /* select 2 dropdown checkbox */
+/*
 .select2-results__option {
 	padding-right: 20px;
 	vertical-align: middle;
@@ -153,7 +154,9 @@ input.valid, textarea.valid{
 .select2-selection .select2-selection--multiple:after {
 	content: 'hhghgh';
 }
+*/
 /* select with icons badges single*/
+/*
 .select-icon .select2-selection__placeholder .badge {
 	display: none;
 }
@@ -162,12 +165,13 @@ input.valid, textarea.valid{
 }
 .select-icon .select2-results__option:before,
 .select-icon .select2-results__option[aria-selected=true]:before {
-	display: none !important;
+	display: none !important; */
 	/* content: "" !important; */
+	/*
 }
 .select-icon  .select2-search--dropdown {
 	display: none;
-}
+}*/
 /* end select 2 dropdown checkbox */
 </style>
 @endsection
@@ -203,10 +207,10 @@ input.valid, textarea.valid{
 				<div class="form-group row pt-4">
 					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
 					@role('admin')
-						<select class="form-control my-1 select-province" id="select_province" style="width:100%;">
+						<select name="province" class="form-control selectpicker show-tick" id="select_province" data-size="10">
 							<option value="0">-- จังหวัด --</option>
 							@php
-								$provinces->keyBy('province_id');
+								$provinces = Session::get('provinces');
 								$provinces->each(function ($item, $key) {
 									echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>";
 								});
@@ -214,29 +218,29 @@ input.valid, textarea.valid{
 						</select>
 					@endrole
 					@role('hospital|lab')
-						<select class="form-control my-1 select-province" id="select_province" disabled style="width:100%;">
+						<select name="province" class="form-control selectpicker show-tick" id="select_province" readonly>
 							<option value="{{ auth()->user()->province }}">{{ $provinces[auth()->user()->province]->province_name }}</option>
 						</select>
 					@endrole
 					</div>
 					<div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 my-1">
 					@role('admin')
-						<select class="form-control my-1 select-hospital" id="select_hospital" disabled style="width:100%;">
+						<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" disabled>
 							<option value="0">-- โรงพยาบาล --</option>
 						</select>
 					@endrole
 					@role('hospital|lab')
-						<select class="form-control my-1 select-hospital" id="select_hospital" disabled style="width:100%;">
+						<select name="hospcode" class="form-control selectpicker" id="select_hospital" disabled>
 							<option value="{{ auth()->user()->hospcode }}">{{ auth()->user()->hospcode }}</option>
 						</select>
 					@endrole
 					</div>
 					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
 						@role('admin')
-						<select class="form-control my-1 select-status" id="select_status" multiple="multiple" disabled style="width:100%;">
+						<select name="lab_status" class="form-control my-1 select-status" id="select_status" multiple="multiple" disabled style="width:100%;">
 						@endrole
 						@role('hospital|lab')
-						<select class="form-control my-1 select-status" id="select_status" multiple="multiple" style="width:100%;">
+						<select name="lab_status" class="form-control my-1 select-status" id="select_status" multiple="multiple" disabled style="width:100%;">
 						@endrole
 							<option value="new">New</option>
 							<option value="hospital">Hospital</option>
@@ -298,11 +302,11 @@ input.valid, textarea.valid{
 												echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
 												echo "<td>";
 													if ($item->lab_status == 'new') {
-														echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" title=\"เพิ่มข้อมูล\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+														echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 													} else {
-														echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" title=\"แก้ไข\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+														echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
 													}
-													echo "<a href=\"".route('codeSoftDelete', ['id'=>$item->id])."\" title=\"ลบข้อมูล\" class=\"btn btn-danger btn-sm\"><i class=\"fas fa-trash\"></i></button>";
+													echo "<button name=\"delete\" type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\"><i class=\"fas fa-trash\"></i></button>";
 												echo "</td>";
 											echo "</tr>";
 										});
@@ -323,6 +327,7 @@ input.valid, textarea.valid{
 <script src="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 <script>
 $(document).ready(function() {
 	/* ajax request */
@@ -345,23 +350,36 @@ $(document).ready(function() {
 		}]
 	});
 
+	@php
+	$htm = "";
+		foreach ($patients as $key => $value) {
+			$htm .= "
+			$('#btn_delete".$value->id."').click(function(e) {
+				toastr.warning(
+					'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
+					'Flu Right Size',
+					{
+						'closeButton': true,
+						'positionClass': 'toast-top-center',
+						'progressBar': true,
+						'showDuration': '500'
+					}
+				);
+			});";
+		}
+	echo $htm;
+	@endphp
+
 	/* select2 setting */
-	$(".select-province").select2();
-	$(".select-hospital").select2({
+	//$(".select-province").select2();
+	/*$(".select-hospital").select2({
 		closeOnSelect : true
 	});
-	$(".select-status").select2({
-		closeOnSelect : false,
-		placeholder : "-- สถานะ --",
-		allowHtml: true,
-		allowClear: true,
-		tags: true,
-		closeOnSelect : true
-	});
+	*/
 
 	/* select province */
-	$(".select-province").on("select2:select select2:unselect", function(e) {
-		var prov_id = parseInt($(e.currentTarget).val());
+	$('#select_province').change(function() {
+		var prov_id = $('#select_province').val();
 		if (prov_id > 0) {
 			$('#select_hospital').prop('disabled', false);
 			$.ajax({
@@ -369,12 +387,52 @@ $(document).ready(function() {
 				url: "{{ route('ajaxGetHospByProv') }}",
 				dataType: 'HTML',
 				data: {prov_id: prov_id},
-				success: function(response) {
+				success: function(data) {
 					$('#select_hospital').empty();
-					$('#select_hospital').html(response);
+					$('#select_hospital').html(data);
+					$('#select_hospital').selectpicker("refresh");
 				},
-				error: function(response) {
-					alert(data.status);
+				error: function(xhr, status, error) {
+					alertMessage(xhr.status, error, 'Flu Right Size');
+				}
+			});
+		} else {
+			$('#select_hospital').empty();
+			$('#select_hospital').append('<option val="0">-- เลือกโรงพยาบาล --</option>');
+			$('#select_hospital').prop('disabled', true);
+			$('#select_hospital').selectpicker("refresh");
+			$('#select_status').val(null).trigger('change');
+			$('#select_status').prop('disabled', true);
+		}
+	});
+
+	$('#select_hospital').change(function() {
+		var hosp_id = $('#select_hospital').val();
+		if (hosp_id != 0) {
+			$('#select_status').prop('disabled', false);
+		} else {
+			$('#select_status').val(null).trigger('change');
+			$('#select_status').prop('disabled', true);
+		}
+	});
+
+
+	/*
+	$(".select-province").on("select2:select select2:unselect", function(e) {
+		var prov_id = parseInt($(e.currentTarget).val());
+		if (prov_id > 0) {
+			$('#select_hospital').prop('disabled', false);
+			$.ajax({
+				type: "GET",
+				url: "{ route('ajaxGetHospByProv') }",
+				dataType: 'HTML',
+				data: {prov_id: prov_id},
+				success: function(data) {
+					$('#select_hospital').empty();
+					$('#select_hospital').html(data);
+				},
+				error: function(xhr, status, error) {
+					alertMessage(xhr.status, error, 'Flu Right Size');
 				}
 			});
 		} else {
@@ -388,8 +446,10 @@ $(document).ready(function() {
 			$('#select_status').prop('disabled', true);
 		}
 	});
+	*/
 
 	/* select hospital */
+	/*
 	$(".select-hospital").on("select2:select select2:unselect", function(e) {
 		var hid = parseInt($(e.currentTarget).val());
 		if (hid != 0) {
@@ -399,22 +459,44 @@ $(document).ready(function() {
 			$('#select_status').prop('disabled', true);
 		}
 	});
+	*/
+
+	$(".select-status").select2({
+		closeOnSelect : false,
+		placeholder : "-- สถานะ --",
+		allowHtml: true,
+		allowClear: true,
+		tags: true,
+		closeOnSelect : true
+	});
 
 	/* search ajax */
 	$("#btn_search").click(function(e) {
-		var pv = $('#select_province').val();
-		var hp = $('#select_hospital').val();
-		var st = $('#select_status').val();
+		if ($('#select_province').val() != "") {
+			var pv = $('#select_province').val();
+		} else {
+			var pv = '0';
+		}
+		if ($('#select_hospital').val() != "") {
+			var hp = $('#select_hospital').val();
+		} else {
+			var hp = '0';
+		}
+		if ($('#select_status').val() != "") {
+			var st = $('#select_status').val();
+		} else {
+			var st = '0';
+		}
 		$.ajax({
-			type: 'POST',
+			method: 'POST',
 			url: '{{ route('ajax-list-data') }}',
 			data: {pv:pv,hp:hp,st:st},
 			dataType: 'HTML',
 			success: function(data) {
 				$('#patient_data').html(data);
 			},
-			error: function(jqXhr, textStatus, errorMessage){
-				alertMessage(jqXhr.status, errorMessage, 'Flu Right Sizex');
+			error: function(xhr, status, error){
+				alertMessage(xhr.status, error, 'Flu Right Sizex');
 			}
 		});
 	});
@@ -429,6 +511,39 @@ $(document).ready(function() {
 		}
 	@endphp
 });
+</script>
+<script>
+	$('body').on('click', '.btc', function (toast) {
+		toastr.clear();
+	});
+	$('body').on('click', '.btk', function (toast) {
+		var val = toast.target.value;
+		$.ajax({
+			method: 'POST',
+			url: '{{ route('codeSoftConfirmDelete') }}',
+			data: {val:val},
+			dataType: 'JSON',
+			success: function(data) {
+				if (data.status === '200') {
+					$.ajax({
+						method: 'GET',
+						url: '{{ route('ajaxRequestTable') }}',
+						data: {pj:data.status},
+						dataType: 'HTML',
+						success: function(data) {
+							$('#patient_data').html(data);
+						},
+						error: function(data, status, error) {
+							alertMessage(500, error, 'Flu Right Size');
+						}
+					});
+				}
+			},
+			error: function(data, status, error) {
+				alertMessage(500, error, 'Flu Right Size');
+			}
+		});
+	});
 </script>
 <script>
 function alertMessage(status, message, title) {

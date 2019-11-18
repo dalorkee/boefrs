@@ -130,7 +130,7 @@ input.valid, textarea.valid{
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
 										<label for="hospital">โรงพยาบาล</label>
-										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-style="btn-danger">
+										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-style="btn-danger" disabled>
 											<option value="0">-- เลือกโรงพยาบาล --</option>
 										</select>
 									</div>
@@ -268,19 +268,20 @@ $(document).ready(function() {
 				url: "{{ route('ajaxGetHospByProv') }}",
 				dataType: 'HTML',
 				data: {prov_id: prov_id},
-				success: function(response) {
+				success: function(data) {
 					$('#select_hospital').empty();
-					$('#select_hospital').html(response);
+					$('#select_hospital').html(data);
 					$('#select_hospital').selectpicker("refresh");
 				},
-				error: function(response) {
-					alert(data.status);
+				error: function(xhr, status, error) {
+					alertMessage(xhr.status, error, 'Flu Right Size');
 				}
 			});
 		} else {
 			$('#select_hospital').empty();
-			$('#select_hospital').selectpicker("refresh");
+			$('#select_hospital').append('<option val="0">-- เลือกโรงพยาบาล --</option>');
 			$('#select_hospital').prop('disabled', true);
+			$('#select_hospital').selectpicker("refresh");
 		}
 	});
 
@@ -300,7 +301,7 @@ $(document).ready(function() {
 			$htm .= "
 			$('#btn_delete".$value->id."').click(function(e) {
 				toastr.warning(
-					'Are you sure to delete? <br/><br/><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">DL</button>',
+					'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
 					'Flu Right Size',
 					{
 						'closeButton': true,
@@ -392,7 +393,6 @@ $(document).ready(function() {
 });
 </script>
 <script>
-
 	$('body').on('click', '.btc', function (toast) {
 		toastr.clear();
 	});
