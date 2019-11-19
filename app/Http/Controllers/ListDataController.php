@@ -106,23 +106,24 @@ class ListDataController extends BoeFrsController
 
 	public function ajaxListData(Request $request) {
 		/* get request from form */
-		if (isset($request->pv) || !empty($request->pv)) {
-			$pv = $request->pv;
+		if ($request->pv == 0 || empty($request->pv)) {
+			$pv = 0;
 		} else {
-			$pv = '0';
+			$pv = (int)$request->pv;
 		}
-		if (isset($request->hp) || !empty($request->hp)) {
-			$hp = $request->hp;
+		if ($request->hp == 0 || empty($request->hp)) {
+			$hp = 0;
 		} else {
-			$hp = '0';
+			$hp = (int)$request->hp;
 		}
-		if (isset($request->st) && $request->st != '0') {
+		if ($request->st == 0 || empty($request->st)) {
+			$st = array();
+		} else {
 			foreach ($request->st as $key => $val) {
 				$st[] = $val;
 			}
-		} else {
-			$st[] = '0';
 		}
+		$cntSt = count($st);
 
 		/* set alert message */
 		$roleArr = auth()->user()->getRoleNames();
@@ -130,42 +131,40 @@ class ListDataController extends BoeFrsController
 
 		/* admin */
 		if ($role == 'admin') {
-			if ($pv == '0' && $hp == '0' && $st[0] == '0') {
+			if ($pv == 0 && $hp == 0 && $cntSt == 0) {
 				$patients = Patients::whereNull('deleted_at')->get();
-				dd($patients);
 				$status = 200;
-				$msg = '1ค้นหาข้อมูลสำเร็จ';
-			} elseif ($pv != '0' && $hp == '0' && $st[0] == '0') {
-				$status = 406;
-				$msg = '2Info! โปรดกรอกข้อมูลให้ครบเงื่อนไข';
-			} elseif ($pv != '0' && $hp != '0' && $st[0] == '0') {
+				$msg = 'ค้นหาข้อมูลสำเร็จ';
+			} elseif ($pv > 0 && $hp == 0 && $cntSt == 0) {
+				$status = 400;
+				$msg = 'โปรดเลือกโรงพยาบาล!';
+			} elseif ($pv > 0 && $hp > 0 && $cntSt == 0) {
 				$patients = Patients::where('ref_user_hospcode', '=', $hp)->get();
 				$status = 200;
-				$msg = '3ค้นหาข้อมูลสำเร็จ';
-			} elseif ($pv != '0' && $hp != '0' && $st[0] != '0') {
+				$msg = 'ค้นหาข้อมูลสำเร็จ';
+			} elseif ($pv > 0 && $hp > 0 && $cntSt > 0) {
 				$patients = Patients::where('ref_user_hospcode', '=', $hp)->whereIn('lab_status', $st)->get();
 				$status = 200;
-				$msg = '4ค้นหาข้อมูลสำเร็จ';
+				$msg = 'ค้นหาข้อมูลสำเร็จ'.$st[0];
 			} else {
-				$status = 404;
-				$msg = '5ไม่พบข้อมูล';
+				$status = 500;
+				$msg = 'การค้นหาผิดพลาด!!';
 			}
 			$message = collect(['status'=>$status, 'msg'=>$msg, 'title'=>'Flu Right Size']);
-
 			/* user */
 		} elseif ($role == 'hospital') {
 			$hospcode = auth()->user()->hospcode;
-			if ($st[0] == '0') {
+			if ($cntSt == 0) {
 				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->get();
 				$status = 200;
-				$msg = 'xค้นหาข้อมูลสำเร็จ';
-			} elseif ($st[0] != '0') {
+				$msg = 'ค้นหาข้อมูลสำเร็จ';
+			} elseif ($cntSt != 0) {
 				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereIn('lab_status', $st)->get();
 				$status = 200;
-				$msg = 'yค้นหาข้อมูลสำเร็จ';
+				$msg = 'ค้นหาข้อมูลสำเร็จ';
 			} else {
-				$status = 404;
-				$msg = 'zไม่พบข้อมูล';
+				$status = 400;
+				$msg = 'ไม่พบข้อมูล';
 			}
 			$message = collect(['status'=>$status, 'msg'=>$msg, 'title'=>'Flu Right Size']);
 		}
@@ -248,22 +247,24 @@ class ListDataController extends BoeFrsController
 							className: 'dt-head-right dt-body-right'
 						}]
 					});";
-
-					foreach($patients as $key=>$val) {
-						$htm .= "
-						$('#btn_delete_ajax".$val->id."').click(function(e) {
-							toastr.warning(
-								'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$val->id."\">Delete</button>',
-								'Flu Right Size',
-								{
-									'closeButton': true,
-									'positionClass': 'toast-top-center',
-									'progressBar': true,
-									'showDuration': '500'
-								}
-							);
-						});";
-					}
+					if ($status == 200) {
+						foreach($patients as $key => $val) {
+							$htm .= "
+								$('#btn_delete_ajax".$val->id."').click(function(e) {
+									toastr.warning(
+										'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$val->id."\">Delete</button>',
+										'Flu Right Size',
+										{
+											'closeButton': true,
+											'positionClass': 'toast-top-center',
+											'progressBar': true,
+											'showDuration': '500'
+										}
+									);
+								});
+								";
+							}
+						}
 					$m = $message->all();
 					$htm .= "alertMessage('".$m['status']."', '".$m['msg']."', '".$m['title']."');
 				});

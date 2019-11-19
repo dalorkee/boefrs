@@ -398,7 +398,7 @@ $(document).ready(function() {
 			});
 		} else {
 			$('#select_hospital').empty();
-			$('#select_hospital').append('<option val="0">-- เลือกโรงพยาบาล --</option>');
+			$('#select_hospital').append('<option value="0">-- เลือกโรงพยาบาล --</option>');
 			$('#select_hospital').prop('disabled', true);
 			$('#select_hospital').selectpicker("refresh");
 			$('#select_status').val(null).trigger('change');
@@ -472,25 +472,24 @@ $(document).ready(function() {
 
 	/* search ajax */
 	$("#btn_search").click(function(e) {
-		if ($('#select_province').val() != "") {
-			var pv = $('#select_province').val();
-		} else {
-			var pv = '0';
+		var pv = $('#select_province').val();
+		var hp = $('#select_hospital').val();
+		var st = $('#select_status').val();
+		if (pv == "") {
+			pv = 0;
 		}
-		if ($('#select_hospital').val() != "") {
-			var hp = $('#select_hospital').val();
-		} else {
-			var hp = '0';
+		if (hp == "") {
+			hp = 0;
 		}
-		if ($('#select_status').val() != "") {
-			var st = $('#select_status').val();
-		} else {
-			var st = '0';
+		if (st == "") {
+			st = 0;
 		}
+		var ok = 'pv='+pv+' hp='+hp+' st='+st;
+		alert(ok);
 		$.ajax({
 			method: 'POST',
 			url: '{{ route('ajax-list-data') }}',
-			data: {pv:pv,hp:hp,st:st},
+			data: {pv:pv, hp:hp, st:st},
 			dataType: 'HTML',
 			success: function(data) {
 				$('#patient_data').html(data);
@@ -549,6 +548,15 @@ $(document).ready(function() {
 function alertMessage(status, message, title) {
 	if (status == 200) {
 		toastr.success(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '600',
+			}
+		);
+	} else if (status == 400) {
+		toastr.warning(message, title,
 			{
 				'closeButton': true,
 				'positionClass': 'toast-top-center',
