@@ -103,14 +103,14 @@ class BoeFrsController extends Controller implements BoeFrs
 	public function provinces() {
 		return DB::connection('mysql')
 			->table('ref_province')
-			->orderBy('province_id', 'asc')
+			->orderBy('province_name', 'asc')
 			->get();
 	}
 
 	public static function provinceList() {
 		$prov = DB::connection('mysql')
 				->table('ref_province')
-				->orderBy('province_id', 'asc')
+				->orderBy('province_name', 'asc')
 				->get();
 		$provinces = $prov->keyBy('province_id');
 		$provinces->all();

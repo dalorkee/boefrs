@@ -204,13 +204,16 @@ input.valid, textarea.valid{
 				</div>
 			</div>
 			<form name="search_frm" class="mx-4" id="search_frm">
+				@php
+					$user_hospital_name = Session::get('user_hospital_name');
+					$provinces = Session::get('provinces');
+				@endphp
 				<div class="form-group row pt-4">
 					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
 					@role('admin')
-						<select name="province" class="form-control selectpicker show-tick" id="select_province" data-size="10">
+						<select name="province" class="form-control selectpicker show-tick" id="select_province">
 							<option value="0">-- จังหวัด --</option>
 							@php
-								$provinces = Session::get('provinces');
 								$provinces->each(function ($item, $key) {
 									echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>";
 								});
@@ -231,7 +234,7 @@ input.valid, textarea.valid{
 					@endrole
 					@role('hospital|lab')
 						<select name="hospcode" class="form-control selectpicker" id="select_hospital" disabled>
-							<option value="{{ auth()->user()->hospcode }}">{{ auth()->user()->hospcode }}</option>
+							<option value="{{ auth()->user()->hospcode }}">{{ $user_hospital_name }}</option>
 						</select>
 					@endrole
 					</div>
@@ -240,7 +243,7 @@ input.valid, textarea.valid{
 						<select name="lab_status" class="form-control my-1 select-status" id="select_status" multiple="multiple" disabled style="width:100%;">
 						@endrole
 						@role('hospital|lab')
-						<select name="lab_status" class="form-control my-1 select-status" id="select_status" multiple="multiple" disabled style="width:100%;">
+						<select name="lab_status" class="form-control my-1 select-status" id="select_status" multiple="multiple" style="width:100%;">
 						@endrole
 							<option value="new">New</option>
 							<option value="hospital">Hospital</option>
@@ -484,8 +487,6 @@ $(document).ready(function() {
 		if (st == "") {
 			st = 0;
 		}
-		var ok = 'pv='+pv+' hp='+hp+' st='+st;
-		alert(ok);
 		$.ajax({
 			method: 'POST',
 			url: '{{ route('ajax-list-data') }}',
