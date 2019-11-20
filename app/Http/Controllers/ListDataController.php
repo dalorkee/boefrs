@@ -183,7 +183,7 @@ class ListDataController extends BoeFrsController
 			<table class=\"display mb-4\" id=\"code_table1\" role=\"table\">
 				<thead>
 					<tr>
-						<th>ลำดับy</th>
+						<th>ลำดับ</th>
 						<th>ชื่อ-สกุล</th>
 						<th>HN</th>
 						<th>รหัส</th>
@@ -294,7 +294,7 @@ class ListDataController extends BoeFrsController
 		<table class=\"display mb-4\" id=\"code_table2\" role=\"table\">
 			<thead>
 				<tr>
-					<th>ลำดับx</th>
+					<th>ลำดับ</th>
 					<th>ชื่อ-สกุล</th>
 					<th>HN</th>
 					<th>รหัส</th>

@@ -116,7 +116,7 @@ input.valid, textarea.valid{
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
 										<label for="province">จังหวัด</label>
-										<select name="province" class="form-control selectpicker show-tick" id="select_province" data-style="btn-danger" >
+										<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" data-style="btn-danger" >
 											<option value="0">-- เลือกจังหวัด --</option>
 											@php
 												$provinces = Session::get('provinces');
@@ -130,7 +130,7 @@ input.valid, textarea.valid{
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<div class="form-group">
 										<label for="hospital">โรงพยาบาล</label>
-										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-style="btn-danger" disabled>
+										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn-danger" disabled>
 											<option value="0">-- เลือกโรงพยาบาล --</option>
 										</select>
 									</div>

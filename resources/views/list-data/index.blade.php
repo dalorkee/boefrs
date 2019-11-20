@@ -109,7 +109,7 @@ input.valid, textarea.valid{
 				<div class="form-group row pt-4">
 					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
 					@role('admin')
-						<select name="province" class="form-control selectpicker show-tick" id="select_province">
+						<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true">
 							<option value="0">-- จังหวัด --</option>
 							@php
 								$provinces->each(function ($item, $key) {
@@ -119,7 +119,7 @@ input.valid, textarea.valid{
 						</select>
 					@endrole
 					@role('hospital|lab')
-						<select name="province" class="form-control selectpicker show-tick" id="select_province" readonly>
+						<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" readonly>
 							<option value="{{ auth()->user()->province }}">{{ $provinces[auth()->user()->province]->province_name }}</option>
 						</select>
 					@endrole
