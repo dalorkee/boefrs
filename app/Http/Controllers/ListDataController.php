@@ -217,8 +217,8 @@ class ListDataController extends BoeFrsController
 						}
 						$htm .= "<tr>";
 						$htm .= "<td>".$val->id."</td>";
-						if ($val->id != 6) {
-							$htm .= "<td>".$titleName[$val->id]->title_name.$val->first_name." ".$val->last_name."</td>";
+						if ($val->title_name != 6) {
+							$htm .= "<td>".$titleName[$val->title_name]->title_name.$val->first_name." ".$val->last_name."</td>";
 						} else {
 							$htm .= "<td>".$val->title_name_other.$val->first_name." ".$val->last_name."</td>";
 						}

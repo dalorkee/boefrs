@@ -76,6 +76,11 @@ input.valid, textarea.valid{
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('contents')
+@php
+	//$titleName = $titleName->all();
+	$user_hospital_name = Session::get('user_hospital_name');
+	$provinces = Session::get('provinces');
+@endphp
 <div class="page-breadcrumb bg-light">
 	<div class="row">
 		<div class="col-12 d-flex no-block align-items-center">
@@ -101,10 +106,6 @@ input.valid, textarea.valid{
 				</div>
 			</div>
 			<form name="search_frm" class="mx-4" id="search_frm">
-				@php
-					$user_hospital_name = Session::get('user_hospital_name');
-					$provinces = Session::get('provinces');
-				@endphp
 				<div class="form-group row pt-4">
 					<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 my-1">
 					@role('admin')
@@ -195,8 +196,8 @@ input.valid, textarea.valid{
 												}
 												echo "<tr>";
 													echo "<td>".$item->id."</td>";
-													if ($item->id != 6) {
-														echo "<td>".$titleName[$item->id]->title_name.$item->first_name." ".$item->last_name."</td>";
+													if ($item->title_name != 6) {
+														echo "<td>".$titleName[$item->title_name]->title_name.$item->first_name." ".$item->last_name."</td>";
 													} else {
 														echo "<td>".$item->title_name_other.$item->first_name." ".$item->last_name."</td>";
 													}
