@@ -18,8 +18,8 @@
 	/* Hide table headers (but not display: none;, for accessibility) */
 	thead tr {
 		position: absolute !important;
-		top: -9999px !important;
-		left: -9999px !important;
+		top: -99999px !important;
+		left: -99999px !important;
 	}
 	tr {
 		margin: 0 0 1rem 0 !important;
@@ -30,7 +30,7 @@
 	td {
 		/* Behave like a "row" */
 		/* border: none; */
-		border-bottom: 1px solid #eee;
+		border-bottom: 1px solid #eeeeee !important;
 		position: relative !important;
 		padding-left: 50% !important;
 	}
@@ -45,13 +45,13 @@
 		white-space: nowrap !important;
 	}
 	/* Label the data */
-	td:nth-of-type(1):before { content: "ลำดับ";margin-top:10px;font-weight:600;}
-	td:nth-of-type(2):before { content: "ชื่อ-สกุล";margin-top:10px;font-weight:600;}
-	td:nth-of-type(3):before { content: "HN";margin-top:10px;font-weight:600;}
-	td:nth-of-type(4):before { content: "รหัส";margin-top:10px;font-weight:600;}
-	td:nth-of-type(6):before { content: "สถานะ";margin-top:10px;font-weight:600;}
-		td:nth-of-type(5):before { content: "วันที่";margin-top:10px;font-weight:600;}
-	td:nth-of-type(7):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
+	td:nth-of-type(1):before {content:"ลำดับ";margin-top:10px;font-weight:600;}
+	td:nth-of-type(2):before {content:"ชื่อ-สกุล";margin-top:10px;font-weight:600;}
+	td:nth-of-type(3):before {content:"HN";margin-top:10px;font-weight:600;}
+	td:nth-of-type(4):before {content:"รหัส";margin-top:10px;font-weight:600;}
+	td:nth-of-type(6):before {content:"สถานะ";margin-top:10px;font-weight:600;}
+	td:nth-of-type(5):before {content:"วันที่";margin-top:10px;font-weight:600;}
+	td:nth-of-type(7):before {content:"จัดการ";margin-top:10px;text-align:left!important;font-weight:600;}
 }
 
 .error{
@@ -191,7 +191,7 @@ input.valid, textarea.valid{
 					@endif
 					</div>
 					<div id="patient_data">
-						<table class="display mT-2 mb-4" id="code_table" role="table">
+						<table class="table display mT-2 mb-4" id="code_table" role="table">
 							<thead>
 								<tr>
 									<th>ลำดับ</th>
@@ -203,25 +203,28 @@ input.valid, textarea.valid{
 									<th>จัดการ</th>
 								</tr>
 							</thead>
+							<tfoot></tfoot>
 							<tbody>
-							@foreach ($patients as $key => $value)
-								<tr>
-									<td>{{ $value->id }}</td>
-									<td><span class="text-danger">{{ $value->lab_code }}</span></td>
-									@if ($value->title_name != 6)
-										<td>{{ $titleName[$value->title_name]->title_name.$value->first_name." ".$value->last_name }}</td>
-									@else
-										<td>{{ $value->title_name_other.$value->first_name." ".$value->last_name }}</td>
-									@endif
-									<td>{{ $value->hn }}</td>
-									<td><span class="badge badge-pill badge-success">{{ $value->lab_status }}</span></td>
-									<td>{{ $value->created_at }}</td>
-									<td>
-										<a href="{{ route('createPatient', ['id'=>$value->id]) }}" class="btn btn-cyan btn-sm"><i class="fas fa-plus-circle"></i></a>&nbsp;
-										<button name="delete" type="button" id="btn_delete{{ $value->id }}" class="btn btn-danger btn-sm" value="{{ $value->id }}"><i class="fas fa-trash"></i></button>
-									</td>
-								</tr>
-							@endforeach
+							@php
+							foreach ($patients as $key => $value) {
+								echo "<tr>";
+									echo "<td>".$value->id."</td>";
+									echo "<td><span class=\"text-danger\">".$value->lab_code."</span></td>";
+									if ($value->title_name != 6) {
+										echo "<td>".$titleName[$value->title_name]->title_name.$value->first_name." ".$value->last_name."</td>";
+									} else {
+										echo "<td>".$value->title_name_other.$value->first_name." ".$value->last_name."</td>";
+									}
+									echo "<td>".$value->hn."</td>";
+									echo "<td><span class=\"badge badge-pill badge-primary\">".ucfirst($value->lab_status)."</span></td>";
+									echo "<td>".$value->created_at."</td>";
+									echo "<td>";
+										echo "<a href=\"".route('createPatient', ['id'=>$value->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+										echo "<button type=\"button\" id=\"btn_delete".$value->id."\" class=\"btn btn-danger btn-sm\" value=\"".$value->id."\"><i class=\"fas fa-trash\"></i></button>";
+									echo "</td>";
+								echo "</tr>";
+							}
+							@endphp
 							</tbody>
 						</table>
 					</div>

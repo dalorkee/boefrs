@@ -200,19 +200,19 @@ class ListDataController extends BoeFrsController
 					foreach($patients as $key => $val) {
 						switch ($val->lab_status) {
 							case 'new':
-								$status_class = 'success';
+								$status_class = 'primary';
 								break;
 							case 'hospital':
-								$status_class = 'warning';
+								$status_class = 'info';
 								break;
 							case 'lab':
-								$status_class = 'danger';
+								$status_class = 'secondary';
 								break;
 							case 'completed':
-								$status_class = 'primary';
+								$status_class = 'success';
 								break;
 							default :
-								$status_class = 'primary';
+								$status_class = 'info';
 								break;
 						}
 						$htm .= "<tr>";
@@ -319,19 +319,19 @@ class ListDataController extends BoeFrsController
 				foreach($patients as $key => $value) {
 					switch ($value->lab_status) {
 						case 'new':
-							$status_class = 'success';
+							$status_class = 'primary';
 							break;
 						case 'hospital':
-							$status_class = 'warning';
+							$status_class = 'info';
 							break;
 						case 'lab':
-							$status_class = 'danger';
+							$status_class = 'secondary';
 							break;
 						case 'completed':
-							$status_class = 'primary';
+							$status_class = 'success';
 							break;
 						default :
-							$status_class = 'primary';
+							$status_class = 'info';
 							break;
 					}
 					$htm .= "<tr>";

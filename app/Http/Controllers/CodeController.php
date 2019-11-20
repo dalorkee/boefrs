@@ -189,7 +189,7 @@ class CodeController extends BoeFrsController {
 			return redirect()->route('logout');
 		}
 		$htm = "
-		<table class=\"display mT-2 mb-4\" id=\"code_table1\" role=\"table\">
+		<table class=\"table display mT-2 mb-4\" id=\"code_table1\" role=\"table\">
 			<thead>
 				<tr>
 					<th>ลำดับ</th>
@@ -212,7 +212,7 @@ class CodeController extends BoeFrsController {
 						$htm .= "<td>".$value->title_name_other.$value->first_name." ".$value->last_name."</td>";
 					}
 					$htm .= "<td>".$value->hn."</td>";
-					$htm .= "<td><span class=\"badge badge-pill badge-success\">".$value->lab_status."</span></td>";
+					$htm .= "<td><span class=\"badge badge-pill badge-primary\">".ucfirst($value->lab_status)."</span></td>";
 					$htm .= "<td>".$value->created_at."</td>";
 					$htm .= "<td>";
 						$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";

@@ -185,19 +185,19 @@ input.valid, textarea.valid{
 											$patients->each(function ($item, $key) use ($titleName) {
 												switch ($item->lab_status) {
 													case 'new':
-														$status_class = 'success';
+														$status_class = 'primary';
 														break;
 													case 'hospital':
-														$status_class = 'warning';
+														$status_class = 'info';
 														break;
 													case 'lab':
-														$status_class = 'danger';
+														$status_class = 'secondary';
 														break;
 													case 'completed':
-														$status_class = 'primary';
+														$status_class = 'success';
 														break;
 													default :
-														$status_class = 'primary';
+														$status_class = 'info';
 														break;
 												}
 												echo "<tr>";
@@ -210,7 +210,7 @@ input.valid, textarea.valid{
 													echo "<td>".$item->hn."</td>";
 													echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 													echo "<td>".$item->ref_user_hospcode."</td>";
-													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
+													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
 														if ($item->lab_status == 'new') {
 															echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
