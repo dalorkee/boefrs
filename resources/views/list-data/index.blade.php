@@ -1,7 +1,8 @@
 @extends('layouts.index')
 @section('custom-style')
-	<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.18/DataTables-1.10.18/css/jquery.dataTables.min.css') }}">
-	<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css') }}">
+	<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.20/datatables.min.css') }}">
+	<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.20/Buttons-1.6.1/css/buttons.bootstrap4.min.css') }}">
+	<link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.20/Responsive-2.2.3/css/responsive.bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ URL::asset('assets/libs/select2/dist/css/select2.min.css') }}">
 	<link rel='stylesheet' href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
 	<link rel="stylesheet" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
@@ -52,8 +53,10 @@
 	td:nth-of-type(4):before { content: "รหัส";margin-top:10px;font-weight:600;}
 	td:nth-of-type(5):before { content: "รหัส รพ.";margin-top:10px;font-weight:600;}
 	td:nth-of-type(6):before { content: "สถานะ";margin-top:10px;font-weight:600;}
-	td:nth-of-type(7):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
+	td:nth-of-type(7):before { content: "จัดการ";margin-top:10px;text-align:left!important;font-weight:600;}
 }
+/* end media */
+
 .error{
 	display: none;
 	margin-left: 10px;
@@ -69,6 +72,9 @@ input.invalid, textarea.invalid{
 
 input.valid, textarea.valid{
 	border: 2px solid green;
+}
+.dataTables_wrapper {
+	font-family: tahoma !important;
 }
 </style>
 @endsection
@@ -160,7 +166,7 @@ input.valid, textarea.valid{
 					<div class="card">
 						<div class="card-body">
 							<div id="patient_data">
-								<table class="display mb-4" id="code_table" role="table">
+								<table class="table display mb-4" id="code_table" role="table">
 									<thead>
 										<tr>
 											<th>ลำดับ</th>
@@ -211,7 +217,7 @@ input.valid, textarea.valid{
 														} else {
 															echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
 														}
-														echo "<button name=\"delete\" type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\"><i class=\"fas fa-trash\"></i></button>";
+														echo "<button type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\"><i class=\"fas fa-trash\"></i></button>";
 													echo "</td>";
 												echo "</tr>";
 											});
@@ -229,8 +235,9 @@ input.valid, textarea.valid{
 </div><!-- contrainer -->
 @endsection
 @section('bottom-script')
-<script src="{{ URL::asset('assets/libs/datatables-1.10.18/DataTables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/datatables-1.10.20/datatables.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/datatables-1.10.20/Buttons-1.6.1/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/datatables-1.10.20/Responsive-2.2.3/js/responsive.bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
@@ -246,14 +253,24 @@ $(document).ready(function() {
 	/* data table */
 	$('#code_table').DataTable({
 		"searching": false,
-		"paging": false,
+		"paging": true,
+		"pageLength": 25,
+		"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
 		"ordering": true,
 		"info": false,
-		responsive: true,
+		responsive: false,
 		columnDefs: [{
 			targets: -1,
 			className: 'dt-head-right dt-body-right'
-		}]
+		}],
+		dom: 'frti"<bottom"Bp>',
+		buttons: [
+			{extend: 'copy', text: '<i class="far fa-copy"></i>', titleAttr: 'Copy', className: 'btn btn-outline-danger'},
+			{extend: 'csv', text: '<i class="far fa-file-alt"></i>', titleAttr: 'CSV', className: 'btn btn-outline-danger'},
+			{extend: 'excel', text: '<i class="far fa-file-excel"></i>', titleAttr: 'Excel', className: 'btn btn-outline-danger'},
+			{extend: 'pdf', text: '<i class="far fa-file-pdf"></i>', titleAttr: 'PDF', className: 'btn btn-outline-danger'},
+			{extend: 'print', text: '<i class="fas fa-print"></i>', titleAttr: 'Print', className: 'btn btn-outline-danger'}
+		]
 	});
 
 	@php

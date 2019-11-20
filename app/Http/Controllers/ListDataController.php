@@ -180,7 +180,7 @@ class ListDataController extends BoeFrsController
 
 		/* data list */
 		$htm = "
-			<table class=\"display mb-4\" id=\"code_table1\" role=\"table\">
+			<table class=\"table display mb-4\" id=\"code_table1\" role=\"table\">
 				<thead>
 					<tr>
 						<th>ลำดับ</th>
@@ -216,24 +216,24 @@ class ListDataController extends BoeFrsController
 								break;
 						}
 						$htm .= "<tr>";
-						$htm .= "<td>".$val->id."</td>";
-						if ($val->title_name != 6) {
-							$htm .= "<td>".$titleName[$val->title_name]->title_name.$val->first_name." ".$val->last_name."</td>";
-						} else {
-							$htm .= "<td>".$val->title_name_other.$val->first_name." ".$val->last_name."</td>";
-						}
-						$htm .= "<td>".$val->hn."</td>";
-						$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
-						$htm .= "<td>".$val->ref_user_hospcode."</td>";
-						$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$val->lab_status."</span></td>";
-						$htm .= "<td>";
-						if ($val->lab_status == 'new') {
-							$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
-						} else {
-							$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
-						}
-						$htm .= "<button name=\"delete\" type=\"button\" id=\"btn_delete_ajax".$val->id."\" class=\"btn btn-danger btn-sm\" value=\"".$val->id."\"><i class=\"fas fa-trash\"></i></button>";
-						$htm .= "</td>";
+							$htm .= "<td>".$val->id."</td>";
+							if ($val->title_name != 6) {
+								$htm .= "<td>".$titleName[$val->title_name]->title_name.$val->first_name." ".$val->last_name."</td>";
+							} else {
+								$htm .= "<td>".$val->title_name_other.$val->first_name." ".$val->last_name."</td>";
+							}
+							$htm .= "<td>".$val->hn."</td>";
+							$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
+							$htm .= "<td>".$val->ref_user_hospcode."</td>";
+							$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$val->lab_status."</span></td>";
+							$htm .= "<td>";
+							if ($val->lab_status == 'new') {
+								$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+							} else {
+								$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+							}
+							$htm .= "<button type=\"button\" id=\"btn_delete_ajax".$val->id."\" class=\"btn btn-danger btn-sm\" value=\"".$val->id."\"><i class=\"fas fa-trash\"></i></button>";
+							$htm .= "</td>";
 						$htm .= "</tr>";
 					}
 				}
@@ -244,14 +244,24 @@ class ListDataController extends BoeFrsController
 				$(document).ready(function() {
 					$('#code_table1').DataTable({
 						'searching': false,
-						'paging': false,
+						'paging': true,
+						'pageLength': 25,
+						'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, \"All\"]],
 						'ordering': true,
 						'info': false,
-						'responsive': true,
+						'responsive': false,
 						'columnDefs': [{
 							targets: -1,
 							className: 'dt-head-right dt-body-right'
-						}]
+						}],
+						dom: 'frti\"<bottom\"Bp>',
+						buttons: [
+							{extend: 'copy', text: '<i class=\"far fa-copy\"></i>', titleAttr: 'Copy', className: 'btn btn-outline-danger'},
+							{extend: 'csv', text: '<i class=\"far fa-file-alt\"></i>', titleAttr: 'CSV', className: 'btn btn-outline-danger'},
+							{extend: 'excel', text: '<i class=\"far fa-file-excel\"></i>', titleAttr: 'Excel', className: 'btn btn-outline-danger'},
+							{extend: 'pdf', text: '<i class=\"far fa-file-pdf\"></i>', titleAttr: 'PDF', className: 'btn btn-outline-danger'},
+							{extend: 'print', text: '<i class=\"fas fa-print\"></i>', titleAttr: 'Print', className: 'btn btn-outline-danger'}
+						]
 					});";
 					if ($status == 200) {
 						foreach($patients as $key => $val) {
@@ -291,7 +301,7 @@ class ListDataController extends BoeFrsController
 			return redirect()->route('logout');
 		}
 		$htm = "
-		<table class=\"display mb-4\" id=\"code_table2\" role=\"table\">
+		<table class=\"table display mb-4\" id=\"code_table2\" role=\"table\">
 			<thead>
 				<tr>
 					<th>ลำดับ</th>
@@ -353,14 +363,24 @@ class ListDataController extends BoeFrsController
 			$(document).ready(function() {
 				$('#code_table2').DataTable({
 					'searching': false,
-					'paging': false,
+					'paging': true,
+					'pageLength': 25,
+					'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, 'All']],
 					'ordering': true,
 					'info': false,
 					'responsive': true,
 					'columnDefs': [{
 						targets: -1,
 						className: 'dt-head-right dt-body-right'
-					}]
+					}],
+					dom: 'frti\"<bottom\"Bp>',
+					buttons: [
+						{extend: 'copy', text: '<i class=\"far fa-copy\"></i>', titleAttr: 'Copy', className: 'btn btn-outline-danger'},
+						{extend: 'csv', text: '<i class=\"far fa-file-alt\"></i>', titleAttr: 'CSV', className: 'btn btn-outline-danger'},
+						{extend: 'excel', text: '<i class=\"far fa-file-excel\"></i>', titleAttr: 'Excel', className: 'btn btn-outline-danger'},
+						{extend: 'pdf', text: '<i class=\"far fa-file-pdf\"></i>', titleAttr: 'PDF', className: 'btn btn-outline-danger'},
+						{extend: 'print', text: '<i class=\"fas fa-print\"></i>', titleAttr: 'Print', className: 'btn btn-outline-danger'}
+					]
 				});";
 				if ($patients) {
 					foreach($patients as $key=>$value) {
