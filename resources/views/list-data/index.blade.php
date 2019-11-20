@@ -50,8 +50,9 @@
 	td:nth-of-type(2):before { content: "ชื่อ-สกุล";margin-top:10px;font-weight:600;}
 	td:nth-of-type(3):before { content: "HN";margin-top:10px;font-weight:600;}
 	td:nth-of-type(4):before { content: "รหัส";margin-top:10px;font-weight:600;}
-	td:nth-of-type(5):before { content: "สถานะ";margin-top:10px;font-weight:600;}
-	td:nth-of-type(6):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
+	td:nth-of-type(5):before { content: "รหัส รพ.";margin-top:10px;font-weight:600;}
+	td:nth-of-type(6):before { content: "สถานะ";margin-top:10px;font-weight:600;}
+	td:nth-of-type(7):before { content: "จัดการ";margin-top:10px;text-align:left;!important;font-weight:600;}
 }
 .error{
 	display: none;
@@ -69,110 +70,6 @@ input.invalid, textarea.invalid{
 input.valid, textarea.valid{
 	border: 2px solid green;
 }
-/*
-// select 2 dropdown icon
-.select2-container--default .select2-selection--multiple:before {
-    content: ' ';
-    display: block;
-    position: absolute;
-    border-color: #888 transparent transparent transparent;
-    border-style: solid;
-    border-width: 5px 4px 0 4px;
-    height: 0;
-    right: 6px;
-    margin-left: -4px;
-    margin-top: -2px;top: 50%;
-    width: 0;cursor: pointer
-}
-
-.select2-container--open .select2-selection--multiple:before {
-    content: ' ';
-    display: block;
-    position: absolute;
-    border-color: transparent transparent #888 transparent;
-    border-width: 0 4px 5px 4px;
-    height: 0;
-    right: 6px;
-    margin-left: -4px;
-    margin-top: -2px;top: 50%;
-    width: 0;cursor: pointer
-}
-// end select 2 dropdown icon
-*/
-/* select 2 dropdown checkbox */
-/*
-.select2-results__option {
-	padding-right: 20px;
-	vertical-align: middle;
-}
-.select2-results__option:before {
-	content: "";
-	display: inline-block;
-	position: relative;
-	height: 20px;
-	width: 20px;
-	border: 2px solid #27A9E3;
-	border-radius: 4px;
-	background-color: #fff;
-	margin-right: 20px;
-	vertical-align: middle;
-}
-.select2-results__option[aria-selected=true]:before {
-	font-family: 'themify';
-	content: "\e64c";
-	color: #fff;
-	background-color: #f77750;
-	border: 0;
-	display: inline-block;
-	padding-left: 3px;
-}
-.select2-container--default .select2-results__option[aria-selected=true] {
-	background-color: #fff;
-}
-.select2-container--default .select2-results__option--highlighted[aria-selected] {
-	background-color: #eaeaeb;
-	color: #272727;
-}
-.select2-container--default .select2-selection--multiple {
-	margin-bottom: 5px;
-}
-.select2-container--default.select2-container--open.select2-container--below .select2-selection--multiple {
-	border-radius: 4px;
-}
-.select2-container--default.select2-container--focus .select2-selection--multiple {
-	border-color: #f77750;
-	border-width: 2px;
-}
-.select2-container--default .select2-selection--multiple {
-	border-width: 2px;
-}
-.select2-container--open .select2-dropdown--below {
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0,0,0,0.5);
-
-}
-.select2-selection .select2-selection--multiple:after {
-	content: 'hhghgh';
-}
-*/
-/* select with icons badges single*/
-/*
-.select-icon .select2-selection__placeholder .badge {
-	display: none;
-}
-.select-icon .placeholder {
-	display: none;
-}
-.select-icon .select2-results__option:before,
-.select-icon .select2-results__option[aria-selected=true]:before {
-	display: none !important; */
-	/* content: "" !important; */
-	/*
-}
-.select-icon  .select2-search--dropdown {
-	display: none;
-}*/
-/* end select 2 dropdown checkbox */
 </style>
 @endsection
 @section('meta-token')
@@ -269,50 +166,55 @@ input.valid, textarea.valid{
 											<th>ชื่อ-สกุล</th>
 											<th>HN</th>
 											<th>รหัส</th>
+											<th>รหัส รพ.</th>
 											<th>สถานะ</th>
 											<th>จัดการ</th>
 										</tr>
 									</thead>
+									<tfoot></tfoot>
 									<tbody>
 									@php
-										$patients->each(function ($item, $key) use ($titleName) {
-											switch ($item->lab_status) {
-												case 'new':
-													$status_class = 'success';
-													break;
-												case 'hospital':
-													$status_class = 'warning';
-													break;
-												case 'lab':
-													$status_class = 'danger';
-													break;
-												case 'completed':
-													$status_class = 'primary';
-													break;
-												default :
-													$status_class = 'primary';
-													break;
-											}
-											echo "<tr>";
-												echo "<td>".$item->id."</td>";
-												if ($item->id != 6) {
-													echo "<td>".$titleName[$item->id]->title_name.$item->first_name." ".$item->last_name."</td>";
-												} else {
-													echo "<td>".$item->title_name_other.$item->first_name." ".$item->last_name."</td>";
+										if ($patients) {
+											$patients->each(function ($item, $key) use ($titleName) {
+												switch ($item->lab_status) {
+													case 'new':
+														$status_class = 'success';
+														break;
+													case 'hospital':
+														$status_class = 'warning';
+														break;
+													case 'lab':
+														$status_class = 'danger';
+														break;
+													case 'completed':
+														$status_class = 'primary';
+														break;
+													default :
+														$status_class = 'primary';
+														break;
 												}
-												echo "<td>".$item->hn."</td>";
-												echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
-												echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
-												echo "<td>";
-													if ($item->lab_status == 'new') {
-														echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+												echo "<tr>";
+													echo "<td>".$item->id."</td>";
+													if ($item->id != 6) {
+														echo "<td>".$titleName[$item->id]->title_name.$item->first_name." ".$item->last_name."</td>";
 													} else {
-														echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+														echo "<td>".$item->title_name_other.$item->first_name." ".$item->last_name."</td>";
 													}
-													echo "<button name=\"delete\" type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\"><i class=\"fas fa-trash\"></i></button>";
-												echo "</td>";
-											echo "</tr>";
-										});
+													echo "<td>".$item->hn."</td>";
+													echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
+													echo "<td>".$item->ref_user_hospcode."</td>";
+													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".$item->lab_status."</span></td>";
+													echo "<td>";
+														if ($item->lab_status == 'new') {
+															echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+														} else {
+															echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+														}
+														echo "<button name=\"delete\" type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\"><i class=\"fas fa-trash\"></i></button>";
+													echo "</td>";
+												echo "</tr>";
+											});
+										}
 									@endphp
 									</tbody>
 								</table>
@@ -354,31 +256,26 @@ $(document).ready(function() {
 	});
 
 	@php
-	$htm = "";
-		foreach ($patients as $key => $value) {
-			$htm .= "
-			$('#btn_delete".$value->id."').click(function(e) {
-				toastr.warning(
-					'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
-					'Flu Right Size',
-					{
-						'closeButton': true,
-						'positionClass': 'toast-top-center',
-						'progressBar': true,
-						'showDuration': '500'
-					}
-				);
-			});";
-		}
-	echo $htm;
+	if ($patients) {
+		$htm = "";
+			foreach ($patients as $key => $value) {
+				$htm .= "
+				$('#btn_delete".$value->id."').click(function(e) {
+					toastr.warning(
+						'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
+						'Flu Right Size',
+						{
+							'closeButton': true,
+							'positionClass': 'toast-top-center',
+							'progressBar': true,
+							'showDuration': '500'
+						}
+					);
+				});";
+			}
+		echo $htm;
+	}
 	@endphp
-
-	/* select2 setting */
-	//$(".select-province").select2();
-	/*$(".select-hospital").select2({
-		closeOnSelect : true
-	});
-	*/
 
 	/* select province */
 	$('#select_province').change(function() {
@@ -419,51 +316,6 @@ $(document).ready(function() {
 		}
 	});
 
-
-	/*
-	$(".select-province").on("select2:select select2:unselect", function(e) {
-		var prov_id = parseInt($(e.currentTarget).val());
-		if (prov_id > 0) {
-			$('#select_hospital').prop('disabled', false);
-			$.ajax({
-				type: "GET",
-				url: "{ route('ajaxGetHospByProv') }",
-				dataType: 'HTML',
-				data: {prov_id: prov_id},
-				success: function(data) {
-					$('#select_hospital').empty();
-					$('#select_hospital').html(data);
-				},
-				error: function(xhr, status, error) {
-					alertMessage(xhr.status, error, 'Flu Right Size');
-				}
-			});
-		} else {
-			$('#select_hospital').empty();
-			$('#select_hospital').append($('<option>', {
-				value: '0',
-				text: '-- โรงพยาบาล --'
-			}));
-			$('#select_hospital').prop('disabled', true);
-			$('#select_status').val(null).trigger('change');
-			$('#select_status').prop('disabled', true);
-		}
-	});
-	*/
-
-	/* select hospital */
-	/*
-	$(".select-hospital").on("select2:select select2:unselect", function(e) {
-		var hid = parseInt($(e.currentTarget).val());
-		if (hid != 0) {
-			$('#select_status').prop('disabled', false);
-		} else {
-			$('#select_status').val(null).trigger('change');
-			$('#select_status').prop('disabled', true);
-		}
-	});
-	*/
-
 	$(".select-status").select2({
 		closeOnSelect : false,
 		placeholder : "-- สถานะ --",
@@ -489,7 +341,7 @@ $(document).ready(function() {
 		}
 		$.ajax({
 			method: 'POST',
-			url: '{{ route('ajax-list-data') }}',
+			url: '{{ route('ajaxSearchData') }}',
 			data: {pv:pv, hp:hp, st:st},
 			dataType: 'HTML',
 			success: function(data) {
@@ -526,8 +378,8 @@ $(document).ready(function() {
 			success: function(data) {
 				if (data.status === '200') {
 					$.ajax({
-						method: 'GET',
-						url: '{{ route('ajaxRequestTable') }}',
+						method: 'POST',
+						url: '{{ route('ajaxListDataAfterDel') }}',
 						data: {pj:data.status},
 						dataType: 'HTML',
 						success: function(data) {
@@ -554,6 +406,7 @@ function alertMessage(status, message, title) {
 				'positionClass': 'toast-top-center',
 				'progressBar': true,
 				'showDuration': '600',
+				"timeOut": "1000",
 			}
 		);
 	} else if (status == 400) {

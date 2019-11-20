@@ -27,7 +27,9 @@ class ListDataController extends BoeFrsController
 			$patients = Patients::whereNull('deleted_at')->get();
 		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
 			$hospcode = auth()->user()->hospcode;
-			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
+			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)
+				->whereNull('deleted_at')
+				->get();
 		} else {
 			return redirect()->route('logout');
 		}
@@ -100,9 +102,6 @@ class ListDataController extends BoeFrsController
 		//
 	}
 
-	public function listData(Request $request) {
-
-	}
 
 	public function ajaxListData(Request $request) {
 		/* get request from form */
@@ -139,11 +138,16 @@ class ListDataController extends BoeFrsController
 				$status = 400;
 				$msg = 'โปรดเลือกโรงพยาบาล!';
 			} elseif ($pv > 0 && $hp > 0 && $cntSt == 0) {
-				$patients = Patients::where('ref_user_hospcode', '=', $hp)->get();
+				$patients = Patients::where('ref_user_hospcode', '=', $hp)
+					->whereNull('deleted_at')
+					->get();
 				$status = 200;
 				$msg = 'ค้นหาข้อมูลสำเร็จ';
 			} elseif ($pv > 0 && $hp > 0 && $cntSt > 0) {
-				$patients = Patients::where('ref_user_hospcode', '=', $hp)->whereIn('lab_status', $st)->get();
+				$patients = Patients::where('ref_user_hospcode', '=', $hp)
+					->whereIn('lab_status', $st)
+					->whereNull('deleted_at')
+					->get();
 				$status = 200;
 				$msg = 'ค้นหาข้อมูลสำเร็จ'.$st[0];
 			} else {
@@ -155,11 +159,16 @@ class ListDataController extends BoeFrsController
 		} elseif ($role == 'hospital') {
 			$hospcode = auth()->user()->hospcode;
 			if ($cntSt == 0) {
-				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->get();
+				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)
+					->whereNull('deleted_at')
+					->get();
 				$status = 200;
 				$msg = 'ค้นหาข้อมูลสำเร็จ';
 			} elseif ($cntSt != 0) {
-				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereIn('lab_status', $st)->get();
+				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)
+					->whereIn('lab_status', $st)
+					->whereNull('deleted_at')
+					->get();
 				$status = 200;
 				$msg = 'ค้นหาข้อมูลสำเร็จ';
 			} else {
@@ -170,70 +179,67 @@ class ListDataController extends BoeFrsController
 		}
 
 		/* data list */
-		$htm = "";
-		$htm .= "
+		$htm = "
 			<table class=\"display mb-4\" id=\"code_table1\" role=\"table\">
 				<thead>
 					<tr>
-						<th>ลำดับ</th>
+						<th>ลำดับy</th>
 						<th>ชื่อ-สกุล</th>
 						<th>HN</th>
 						<th>รหัส</th>
+						<th>รหัส รพ.</th>
 						<th>สถานะ</th>
 						<th>จัดการ</th>
 					</tr>
-			</thead>
-			<tfoot></tfoot>
-		";
-		if ($status == 200) {
-			$provinces = parent::provinces();
-			$titleName = $this->title_name;
-			$htm .= "<tbody>";
-			foreach($patients as $key => $val) {
-				switch ($val->lab_status) {
-					case 'new':
-						$status_class = 'success';
-						break;
-					case 'hospital':
-						$status_class = 'warning';
-						break;
-					case 'lab':
-						$status_class = 'danger';
-						break;
-					case 'completed':
-						$status_class = 'primary';
-						break;
-					default :
-						$status_class = 'primary';
-						break;
+				</thead>
+				<tfoot></tfoot>
+				<tbody>";
+				if ($status == 200) {
+					$provinces = parent::provinces();
+					$titleName = $this->title_name;
+					foreach($patients as $key => $val) {
+						switch ($val->lab_status) {
+							case 'new':
+								$status_class = 'success';
+								break;
+							case 'hospital':
+								$status_class = 'warning';
+								break;
+							case 'lab':
+								$status_class = 'danger';
+								break;
+							case 'completed':
+								$status_class = 'primary';
+								break;
+							default :
+								$status_class = 'primary';
+								break;
+						}
+						$htm .= "<tr>";
+						$htm .= "<td>".$val->id."</td>";
+						if ($val->id != 6) {
+							$htm .= "<td>".$titleName[$val->id]->title_name.$val->first_name." ".$val->last_name."</td>";
+						} else {
+							$htm .= "<td>".$val->title_name_other.$val->first_name." ".$val->last_name."</td>";
+						}
+						$htm .= "<td>".$val->hn."</td>";
+						$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
+						$htm .= "<td>".$val->ref_user_hospcode."</td>";
+						$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$val->lab_status."</span></td>";
+						$htm .= "<td>";
+						if ($val->lab_status == 'new') {
+							$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+						} else {
+							$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+						}
+						$htm .= "<button name=\"delete\" type=\"button\" id=\"btn_delete_ajax".$val->id."\" class=\"btn btn-danger btn-sm\" value=\"".$val->id."\"><i class=\"fas fa-trash\"></i></button>";
+						$htm .= "</td>";
+						$htm .= "</tr>";
+					}
 				}
-				$htm .= "<tr>";
-				$htm .= "<td>".$val->id."</td>";
-				if ($val->id != 6) {
-					$htm .= "<td>".$titleName[$val->id]->title_name.$val->first_name." ".$val->last_name."</td>";
-				} else {
-					$htm .= "<td>".$val->title_name_other.$val->first_name." ".$val->last_name."</td>";
-				}
-				$htm .= "<td>".$val->hn."</td>";
-				$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
-				$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$val->lab_status."</span></td>";
-				$htm .= "<td>";
-				if ($val->lab_status == 'new') {
-					$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
-				} else {
-					$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
-				}
-				$htm .= "<button name=\"delete\" type=\"button\" id=\"btn_delete_ajax".$val->id."\" class=\"btn btn-danger btn-sm\" value=\"".$val->id."\"><i class=\"fas fa-trash\"></i></button>";
-				$htm .= "</td>";
-				$htm .= "</tr>";
-			}
-			$htm .= "</tbody>
-			";
-		} else {
-			$htm .= '<tbody></tbody>';
-		}
-		$htm .= "</table>";
-		$htm .= "
+				$htm .= "
+				</tbody>
+			</table>
 			<script>
 				$(document).ready(function() {
 					$('#code_table1').DataTable({
@@ -269,6 +275,113 @@ class ListDataController extends BoeFrsController
 					$htm .= "alertMessage('".$m['status']."', '".$m['msg']."', '".$m['title']."');
 				});
 			</script>";
+		return $htm;
+	}
+
+	public function ajaxListDataAfterDeleted() {
+		$roleArr = auth()->user()->getRoleNames();
+		if ($roleArr[0] == 'admin') {
+			$patients = Patients::whereNull('deleted_at')->get();
+		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
+			$user_hospcode = auth()->user()->hospcode;
+			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)
+				->whereNull('deleted_at')
+				->get();
+		} else {
+			return redirect()->route('logout');
+		}
+		$htm = "
+		<table class=\"display mb-4\" id=\"code_table2\" role=\"table\">
+			<thead>
+				<tr>
+					<th>ลำดับx</th>
+					<th>ชื่อ-สกุล</th>
+					<th>HN</th>
+					<th>รหัส</th>
+					<th>รหัส รพ.</th>
+					<th>สถานะ</th>
+					<th>จัดการ</th>
+				</tr>
+			</thead>
+			<tfoot></tfoot>
+			<tbody>";
+			if ($patients) {
+				foreach($patients as $key => $value) {
+					switch ($value->lab_status) {
+						case 'new':
+							$status_class = 'success';
+							break;
+						case 'hospital':
+							$status_class = 'warning';
+							break;
+						case 'lab':
+							$status_class = 'danger';
+							break;
+						case 'completed':
+							$status_class = 'primary';
+							break;
+						default :
+							$status_class = 'primary';
+							break;
+					}
+					$htm .= "<tr>";
+						$htm .= "<td>".$value->id."</td>";
+						if ($value->title_name != 6) {
+							$htm .= "<td>".$this->title_name[$value->title_name]->title_name.$value->first_name." ".$value->last_name."</td>";
+						} else {
+							$htm .= "<td>".$value->title_name_other.$value->first_name." ".$value->last_name."</td>";
+						}
+						$htm .= "<td>".$value->hn."</td>";
+						$htm .= "<td><span class=\"text-danger\">".$value->lab_code."</span></td>";
+						$htm .= "<td>".$value->ref_user_hospcode."</td>";
+						$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$value->lab_status."</span></td>";
+						$htm .= "<td>";
+							if ($value->lab_status == 'new') {
+								$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+							} else {
+								$htm .= "<a href=\"".route('editPatient', ['id'=>$value->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+							}
+							$htm .= "<button type=\"button\" id=\"btn_delete_ajax".$value->id."\" class=\"btn btn-danger btn-sm\" value=\"".$value->id."\"><i class=\"fas fa-trash\"></i></button>";
+						$htm .= "</td>";
+					$htm .= "</tr>";
+				}
+			}
+			$htm .= "
+			</tbody>
+		</table>
+		<script>
+			$(document).ready(function() {
+				$('#code_table2').DataTable({
+					'searching': false,
+					'paging': false,
+					'ordering': true,
+					'info': false,
+					'responsive': true,
+					'columnDefs': [{
+						targets: -1,
+						className: 'dt-head-right dt-body-right'
+					}]
+				});";
+				if ($patients) {
+					foreach($patients as $key=>$value) {
+						$htm .= "
+						$('#btn_delete_ajax".$value->id."').click(function(e) {
+							toastr.warning(
+								'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
+								'Flu Right Size',
+								{
+									'closeButton': true,
+									'positionClass': 'toast-top-center',
+									'progressBar': true,
+									'showDuration': '500'
+								}
+							);
+						});";
+					}
+				}
+			$htm .= "
+			});
+		</script>";
 		return $htm;
 	}
 }

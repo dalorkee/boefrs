@@ -20,6 +20,9 @@ class CreateSymptomsTable extends Migration
 			$table->string('symptom_status',36)->charset('utf8mb4')->default('No');
 			$table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
 			$table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+			$table->engine = 'InnoDB';
+			$table->charset = 'utf8mb4';
+			$table->collation = 'utf8mb4_unicode_ci';
 		});
 	}
 

@@ -69,5 +69,6 @@ Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
 Route::post('patient/edit', 'PatientsController@editPatient')->name('editPatient');
 
 /* list data */
-Route::post('data/ajax-list', 'ListDataController@ajaxListData')->name('ajax-list-data');
 Route::post('data/list', 'ListDataController@listData')->name('list-data');
+Route::post('data/search', 'ListDataController@ajaxListData')->name('ajaxSearchData');
+Route::post('data/patients', 'ListDataController@ajaxListDataAfterDeleted')->name('ajaxListDataAfterDel');
