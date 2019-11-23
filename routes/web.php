@@ -72,3 +72,8 @@ Route::post('patient/edit', 'PatientsController@editPatient')->name('editPatient
 Route::post('data/list', 'ListDataController@listData')->name('list-data');
 Route::post('data/search', 'ListDataController@ajaxListData')->name('ajaxSearchData');
 Route::post('data/patients', 'ListDataController@ajaxListDataAfterDeleted')->name('ajaxListDataAfterDel');
+
+/* lab data */
+Route::group(['middleware' => ['auth']], function() {
+	Route::resource('lab', 'LabController');
+});

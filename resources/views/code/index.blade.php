@@ -52,22 +52,26 @@
 	td:nth-of-type(6):before {content:"สถานะ";margin-top:10px;font-weight:600;}
 	td:nth-of-type(5):before {content:"วันที่";margin-top:10px;font-weight:600;}
 	td:nth-of-type(7):before {content:"จัดการ";margin-top:10px;text-align:left!important;font-weight:600;}
+
+	.dataTables_wrapper td {
+		border-bottom: 1px solid #000 !important;
+	}
 }
 
-.error{
+.error {
 	display: none;
 	margin-left: 10px;
 }
 
-.error_show{
+.error_show {
 	color: red;
 	margin-left: 10px;
 }
-input.invalid, textarea.invalid{
+input.invalid, textarea.invalid {
 	border: 2px solid red;
 }
 
-input.valid, textarea.valid{
+input.valid, textarea.valid {
 	border: 2px solid green;
 }
 .toast {
@@ -76,6 +80,9 @@ input.valid, textarea.valid{
 
 #toast-container > div {
   opacity: 1 !important;
+}
+.dataTables_wrapper {
+	font-family: tahoma !important;
 }
 </style>
 @endsection

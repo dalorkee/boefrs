@@ -670,6 +670,42 @@ input:read-only {
 											</div>
 										</div>
 									</div>
+
+
+
+									<div class="form-row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+											<label for="virusMedicine">การให้ยาต้านไวรัส</label>
+											<div class="form-row">
+											@foreach ($symptoms as $key => $val)
+												@if ($val->id != 21)
+													<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+														<div class="form-check form-check-inline">
+															<input type="checkbox" name="symptom{{ $val->id }}" class="custom-control-input form-check-input">
+															<label for="symptom" class="custom-control-label">&nbsp;{{ $val->symptom_name_th }}</label>
+														</div>
+													</div>
+												@else
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+														<div class="form-check form-check-inline">
+															<input type="checkbox" name="symptom{{ $val->id }}" class="custom-control-input form-check-input">
+															<label for="symptom" class="custom-control-label">&nbsp;{{ $val->symptom_name_th }}</label>
+														</div>
+														<input type="text" name="other_symptom_input" class="form-control" id="symptom_other" disabled>
+													</div>
+												@endif
+											@endforeach
+											</div>
+										</div>
+									</div>
+
+
+
+
+
+
+
+
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-12 col-xl-12 mb-3">
 											<label for="sickDateInput">ภาวะสุขภาพ หรือ โรคประจำตัว</label>

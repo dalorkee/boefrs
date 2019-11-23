@@ -225,7 +225,7 @@ class ListDataController extends BoeFrsController
 							$htm .= "<td>".$val->hn."</td>";
 							$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
 							$htm .= "<td>".$val->ref_user_hospcode."</td>";
-							$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$val->lab_status."</span></td>";
+							$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($val->lab_status)."</span></td>";
 							$htm .= "<td>";
 							if ($val->lab_status == 'new') {
 								$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
@@ -344,7 +344,7 @@ class ListDataController extends BoeFrsController
 						$htm .= "<td>".$value->hn."</td>";
 						$htm .= "<td><span class=\"text-danger\">".$value->lab_code."</span></td>";
 						$htm .= "<td>".$value->ref_user_hospcode."</td>";
-						$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".$value->lab_status."</span></td>";
+						$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($value->lab_status)."</span></td>";
 						$htm .= "<td>";
 							if ($value->lab_status == 'new') {
 								$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
