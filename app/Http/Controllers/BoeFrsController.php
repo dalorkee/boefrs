@@ -22,13 +22,17 @@ class BoeFrsController extends Controller implements BoeFrs
 		$this->result = null;
 	}
 
+	public function titleName() {
+		return DB::connection('mysql')->table('ref_title_name')->get();
+	}
+
 	public function symptoms() {
 		return Symptoms::all();
 		//return DB::connection('mysql')->table('ref_symptoms')->get();
 	}
 
-	public function titleName() {
-		return DB::connection('mysql')->table('ref_title_name')->get();
+	public function specimen() {
+		return DB::connection('mysql')->table('ref_specimen')->get();
 	}
 
 	public function patients() {
@@ -228,5 +232,18 @@ class BoeFrsController extends Controller implements BoeFrs
 			$string = NULL;
 		}
 		return $string;
+	}
+
+	protected function arrToStr($arr=array()) {
+		if (count($arr) > 0) {
+			$str = null;
+			for ($i=0; $i < count($arr); $i++) {
+				if ($str != null) {
+					$str = $str.",";
+				}
+				$str = $str.$arr[$i];
+			}
+		}
+		return $str;
 	}
 }

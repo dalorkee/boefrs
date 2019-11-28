@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
  */
 interface BoeFrs
 {
+	/* all title_name */
+	public function titleName();
+
 	/* get all symptoms */
 	public function symptoms();
 
-	/* all title_name */
-	public function titleName();
+	/* specimen */
+	public function specimen();
 
 	/* all patient */
 	public function patients();

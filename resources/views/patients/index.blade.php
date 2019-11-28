@@ -64,7 +64,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="formCode">รหัสแบบฟอร์ม</label>
 											<div class="input-group-append">
-												<span class="btn btn-primary btn-sm">{{ $patient[0]->lab_code }}</span>
+												<span class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="top" title="โปรดเขียนรหัสนี้ลงบนแบบฟอร์ม">{{ $patient[0]->lab_code }}</span>
 												{{ csrf_field() }}
 												<input type="hidden" name="pid" value="{{ $patient[0]->id }}">
 												<input type="hidden" name="formIndexInput" value="{{ $patient[0]->lab_code }}">
@@ -148,8 +148,8 @@ input:read-only {
 												<label for="sex">เพศ</label>
 												<select name="sexInput" class="form-control selectpicker show-tick">
 													<option value="">-- โปรดเลือก --</option>
-													<option value="male">ชาย</option>
-													<option value="female">หญิง</option>
+													<option value="male" @if (old('sexInput') == 'male') selected="selected" @endif>ชาย</option>
+													<option value="female" @if (old('sexInput') == 'female') selected="selected" @endif>หญิง</option>
 												</select>
 											</div>
 											<span class="text-danger">{{ $errors->first('sexInput') }}</span>
@@ -158,7 +158,7 @@ input:read-only {
 											<div class="form-group">
 												<label for="birthDate">ว/ด/ป เกิด</label>
 												<div class="input-group date" data-provide="datepicker" id="birthDayInput">
-													<input  type="text" name="birthDayInput" class="form-control {{ $errors->has('birthDayInput') ? 'border-danger' : '' }}" readonly>
+													<input  type="text" name="birthDayInput" value="{{ old('birthDayInput') }}" class="form-control {{ $errors->has('birthDayInput') ? 'border-danger' : '' }}" readonly>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -186,7 +186,7 @@ input:read-only {
 										</div>
 									</div>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<div class="form-group">
 												<label for="nationality">สัญชาติ</label>
 												<select name="nationalityInput" class="form-control selectpicker show-tick" id="select_nationality">
@@ -197,7 +197,7 @@ input:read-only {
 												</select>
 											</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<div class="form-group">
 												<label for="otherNationality">สัญชาติ อื่นๆ ระบุ</label>
 												<input type="text" name="otherNationalityInput" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" disabled>
@@ -283,7 +283,7 @@ input:read-only {
 										</div>
 									</div>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="occupation">อาชีพ</label>
 											<select name="occupationInput" class="form-control selectpicker show-tick" id="select_occupation">
 												<option value="0">-- โปรดเลือก --</option>
@@ -292,7 +292,7 @@ input:read-only {
 												@endforeach
 											</select>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="occupationOtherInput">อาชีพ อื่นๆ ระบุ</label>
 											<input type="text" name="occupationOtherInput" class="form-control" id="occupation_other_input" placeholder="อาชีพ อื่นๆ" disabled>
 										</div>
@@ -372,7 +372,7 @@ input:read-only {
 											<div class="form-group">
 												<label for="sickDateInput">อุณหภูมิร่างกายแรกรับ</label>
 												<div class="input-group">
-													<input type="number" name="temperatureInput" value="0" class="form-control" max="50" min="0">
+													<input type="text" name="temperatureInput" class="form-control">
 													<div class="input-group-append">
 														<span class="input-group-text">C&#176;</span>
 													</div>
@@ -381,7 +381,7 @@ input:read-only {
 										</div>
 									</div>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-12 col-xl-12 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="sickDateInput">อาการและอาการแสดง</label>
 											<div class="table-responsive">
 												<table class="table" id="symptoms_table">
@@ -600,15 +600,15 @@ input:read-only {
 											<label for="rapidTestResult">ผล Rapid test</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultInput" value="nagative" class="custom-control-input influRapidRs" id="rapidTestNagative">
+													<input type="checkbox" name="rapidTestResultInput[]" value="nagative" class="custom-control-input influRapidRs" id="rapidTestNagative">
 													<label for="rapidTestNagative" class="custom-control-label normal-label">Nagative</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultInput" value="positive-flu-a" class="custom-control-input influRapidRs" id="rapidTestPositiveFluA">
+													<input type="checkbox" name="rapidTestResultInput[]" value="positive-flu-a" class="custom-control-input influRapidRs" id="rapidTestPositiveFluA">
 													<label for="rapidTestPositiveFluA" class="custom-control-label normal-label">Positive Flu A</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultInput" value="positive-flu-b" class="custom-control-input influRapidRs" id="rapidTestPositiveFluB">
+													<input type="checkbox" name="rapidTestResultInput[]" value="positive-flu-b" class="custom-control-input influRapidRs" id="rapidTestPositiveFluB">
 													<label for="rapidTestPositiveFluB" class="custom-control-label normal-label">Positive Flu B</label>
 												</div>
 											</div>
@@ -670,44 +670,158 @@ input:read-only {
 											</div>
 										</div>
 									</div>
-
-
-
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-											<label for="virusMedicine">การให้ยาต้านไวรัส</label>
-											<div class="form-row">
-											@foreach ($symptoms as $key => $val)
-												@if ($val->id != 21)
-													<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-														<div class="form-check form-check-inline">
-															<input type="checkbox" name="symptom{{ $val->id }}" class="custom-control-input form-check-input">
-															<label for="symptom" class="custom-control-label">&nbsp;{{ $val->symptom_name_th }}</label>
-														</div>
-													</div>
-												@else
-													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-														<div class="form-check form-check-inline">
-															<input type="checkbox" name="symptom{{ $val->id }}" class="custom-control-input form-check-input">
-															<label for="symptom" class="custom-control-label">&nbsp;{{ $val->symptom_name_th }}</label>
-														</div>
-														<input type="text" name="other_symptom_input" class="form-control" id="symptom_other" disabled>
-													</div>
-												@endif
-											@endforeach
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
+											<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
+											<div class="table-responsive">
+												<table class="table" id="specimen_table">
+													<thead class="bg-danger text-light">
+														<tr>
+															<th scope="col">ตัวอย่างส่งตรวจ</th>
+															<th scope="col">วันที่เก็บตัวอย่าง</th>
+														</tr>
+													</thead>
+													<tfoot></tfoot>
+													<tbody>
+														<!--
+														<tr id="specimen_tr1">
+															<td>
+																<div class="form-group row">
+																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+																		<div class="custom-control custom-checkbox custom-control-inline">
+																			<input type="checkbox" name="specimen1" value="1" class="custom-control-input form-check-input specimen-chk1" id="specimen_chk1">
+																			<label for="specimen_chk1" class="custom-control-label font-weight-normal">Throat swab</label>
+																		</div>
+																	</div>
+
+																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+																			<input type="text" name="specimenOth" class="form-control" id="specimen_oth" placeholder="{ $oth_str }}" disabled>
+																		</div>
+
+																</div>
+															</td>
+															<td>
+																<div class="form-group row">
+																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																		<div class="input-group date" data-provide="datepicke" id="specimenDate">
+																			<div class="input-group">
+																				<input type="text" name="specimenDate" class="form-control" id="specimenDate" disabled readonly>
+																				<div class="input-group-append">
+																					<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</td>
+														</tr>
+													-->
+
+													@php
+
+													$specimen_htm = "";
+													foreach ($specimen as $key => $val) {
+														if (!empty($val->name_th)) {
+															$speciman_name = $val->name_th;
+														} else {
+															$speciman_name = $val->name_en;
+														}
+														if (!empty($val->abbreviation)) {
+															$abbreviation = "&nbsp;(".$val->abbreviation.")";
+														} else {
+															$abbreviation = null;
+														}
+														if (!empty($val->note)) {
+															$note = "&nbsp;(".$val->note.")";
+														} else {
+															$note = null;
+														}
+														if ($val->other_field == 'Yes') {
+															$oth_str = "ระบุ";
+														} else {
+															$oth_str = null;
+														}
+														echo "<tr id=\"specimen_tr".$val->id."\">\n";
+															echo "<td>\n";
+																echo "<div class=\"form-group row\">\n";
+																	echo "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6\">\n";
+																		echo "<div class=\"custom-control custom-checkbox custom-control-inline\">\n";
+																			echo "<input type=\"checkbox\" name=\"specimen".$val->id."\" value=\"1\" class=\"custom-control-input form-check-input specimen-chk-".$val->id."\" id=\"specimen_chk".$val->id."\">\n";
+																			echo "<label for=\"specimen_chk".$val->id."\" class=\"custom-control-label font-weight-normal\">".$speciman_name." ".$abbreviation."&nbsp;".$note."</label>\n";
+																		echo "</div>\n";
+																	echo "</div>\n";
+																	if ($val->other_field == 'Yes') {
+																	echo "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6\">\n";
+																		echo "<input type=\"text\" name=\"specimenOth".$val->id."\" class=\"form-control\" id=\"specimen_".$val->id."oth\" placeholder=\"".$oth_str."\" disabled>\n";
+																	echo "</div>\n";
+																	}
+																echo "</div>\n";
+															echo "</td>\n";
+															echo "<td>\n";
+																echo "<div class=\"form-group row\">\n";
+																	echo "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12\">\n";
+																		echo "<div class=\"input-group date\" data-provide=\"datepicke\" id=\"specimenDate".$val->id."\">\n";
+																			echo "<div class=\"input-group\">\n";
+																				echo "<input type=\"text\" name=\"specimenDate".$val->id."\" class=\"form-control\" id=\"specimenDate_".$val->id."\" disabled readonly>\n";
+																				echo "<div class=\"input-group-append\">\n";
+																					echo "<span class=\"input-group-text\"><i class=\"mdi mdi-calendar\"></i></span>\n";
+																				echo "</div>\n";
+																			echo "</div>\n";
+																		echo "</div>\n";
+																	echo "</div>\n";
+																echo "</div>\n";
+															echo "</td>\n";
+														echo "</tr>\n";
+														$specimen_htm .= "
+														$('.specimen-chk-".$val->id."').click(function() {
+															$('.specimen-chk-".$val->id."').not(this).prop('checked', false);
+															let number = $('.specimen-chk-".$val->id."').filter(':checked').length;
+															if (number == 1) {
+																let hasClass = $('#specimen_tr".$val->id."').hasClass('highlight');
+																if (!hasClass) {
+																	$('#specimen_tr".$val->id."').addClass('highlight');
+																}
+															} else {
+																$('#specimen_tr".$val->id."').removeClass('highlight');
+															}";
+															if ($val->other_field == 'Yes') {
+																$specimen_htm .= "
+																	if ($('#specimen_chk".$val->id."').prop('checked') == true) {
+																		$('#specimen_".$val->id."oth').prop('disabled', false);
+																		$('#specimenDate_".$val->id."').prop('disabled', false);
+																	} else {
+																		$('#specimen_".$val->id."oth').val('');
+																		$('#specimen_".$val->id."oth').prop('disabled', true);
+																		$('#specimenDate_".$val->id."').val('');
+																		$('#specimenDate_".$val->id."').prop('disabled', true);
+																	}";
+															} else {
+																$specimen_htm .= "
+																	if ($('#specimen_chk".$val->id."').prop('checked') == true) {
+																		$('#specimenDate_".$val->id."').prop('disabled', false);
+																	} else {
+																		$('#specimenDate_".$val->id."').val('');
+																		$('#specimenDate_".$val->id."').prop('disabled', true);
+																	}";
+															}
+															$specimen_htm .= "
+																$('#specimenDate".$val->id."').datepicker({
+																	format: 'dd/mm/yyyy',
+																	todayHighlight: true,
+																	todayBtn: true,
+																	autoclose: true
+																});";
+															$specimen_htm .= "});\n";
+													}
+
+													@endphp
+													</tbody>
+												</table>
 											</div>
 										</div>
 									</div>
-
-
-
-
-
-
-
-
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-12 col-xl-12 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="sickDateInput">ภาวะสุขภาพ หรือ โรคประจำตัว</label>
 											<div class="table-responsive">
 												<table class="table" id="health_table">
@@ -1138,182 +1252,184 @@ input:read-only {
 									<h1>3. ประวัติเสี่ยง</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-											<table class="table">
-												<thead class="bg-warning text-light">
-													<tr>
-														<th scope="col">รายการ</th>
-														<th scope="col">#</th>
-														<th scope="col">#</th>
-													</tr>
-												</thead>
-												<tfoot>
-													<tr><td colspan="3">&nbsp;</td></tr>
-												</tfoot>
-												<tbody>
-													<tr id="risk_table_tr1">
-														<td>ช่วง 7 วันก่อนป่วยได้สัมผัสสัตว์ปีกป่วย/ตายโดยตรง</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="contactPoultry7Input" value="n" class="custom-control-input risk-1" id="pet_touch_n">
-																<label for="pet_touch_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="contactPoultry7Input" value="y" class="custom-control-input risk-1" id="pet_touch_y">
-																<label for="pet_touch_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-													<tr id="risk_table_tr2">
-														<td>
-															<div class="form-group row mt-0 mb-0">
-																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-																	<div class="input-group">
-																		<label for="pet_touch_range" class="font-normal">ช่วง 14 วันก่อนป่วยได้สัมผัสสัตว์ป่วยโดยตรงหรือไม่ ระบุชนิดสัตว์</label>
-																		<input type="text" name="contactPoultry14SpecifyInput" class="form-control form-control-sm ml-2" id="pet_touch_name" disabled>
+											<div class="table-responsive">
+												<table class="table">
+													<thead class="bg-warning text-light">
+														<tr>
+															<th scope="col">รายการ</th>
+															<th scope="col">#</th>
+															<th scope="col">#</th>
+														</tr>
+													</thead>
+													<tfoot>
+														<tr><td colspan="3">&nbsp;</td></tr>
+													</tfoot>
+													<tbody>
+														<tr id="risk_table_tr1">
+															<td>ช่วง 7 วันก่อนป่วยได้สัมผัสสัตว์ปีกป่วย/ตายโดยตรง</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="contactPoultry7Input" value="n" class="custom-control-input risk-1" id="pet_touch_n">
+																	<label for="pet_touch_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="contactPoultry7Input" value="y" class="custom-control-input risk-1" id="pet_touch_y">
+																	<label for="pet_touch_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="risk_table_tr2">
+															<td>
+																<div class="form-group row mt-0 mb-0">
+																	<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+																		<div class="input-group">
+																			<label for="pet_touch_range" class="font-normal">ช่วง 14 วันก่อนป่วยได้สัมผัสสัตว์ป่วยโดยตรงหรือไม่ ระบุชนิดสัตว์</label>
+																			<input type="text" name="contactPoultry14SpecifyInput" class="form-control form-control-sm ml-2" id="pet_touch_name" disabled>
+																		</div>
 																	</div>
 																</div>
-															</div>
-														</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="contactPoultry14Input" value="n" class="custom-control-input risk-2" id="pet_touch_direct_n">
-																<label for="pet_touch_direct_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="contactPoultry14Input" value="y" class="custom-control-input risk-2" id="pet_touch_direct_y">
-																<label for="pet_touch_direct_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-													<tr id="risk_table_tr3">
-														<td>ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่ในพื้นที่ที่มีสัตว์ปีกป่วย/ตายผิดปกติ</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="stayPoultry14Input" value="n" class="custom-control-input risk-3" id="stay_pet_death_n">
-																<label for="stay_pet_death_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="stayPoultry14Input" value="y" class="custom-control-input risk-3" id="stay_pet_death_y">
-																<label for="stay_pet_death_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-													<tr id="risk_table_tr4">
-														<td>
-															<div class="form-group row mt-0 mb-0">
-																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-																	<div class="input-group">
-																		<label for="stay_outbreak" class="font-normal">ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่หรือเดินทางมาจากพื้นที่ที่ไข้หวัดใหญ่/ปอดอักเสบระบาด <span class="text-info">ระบุพื้นที่</span></label>
-																		<input type="text" name="stayFlu14PlaceSpecifyInput" class="form-control form-control-sm ml-2" id="stay_outbreak_input" disabled>
+															</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="contactPoultry14Input" value="n" class="custom-control-input risk-2" id="pet_touch_direct_n">
+																	<label for="pet_touch_direct_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="contactPoultry14Input" value="y" class="custom-control-input risk-2" id="pet_touch_direct_y">
+																	<label for="pet_touch_direct_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="risk_table_tr3">
+															<td>ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่ในพื้นที่ที่มีสัตว์ปีกป่วย/ตายผิดปกติ</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="stayPoultry14Input" value="n" class="custom-control-input risk-3" id="stay_pet_death_n">
+																	<label for="stay_pet_death_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="stayPoultry14Input" value="y" class="custom-control-input risk-3" id="stay_pet_death_y">
+																	<label for="stay_pet_death_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="risk_table_tr4">
+															<td>
+																<div class="form-group row mt-0 mb-0">
+																	<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+																		<div class="input-group">
+																			<label for="stay_outbreak" class="font-normal">ช่วง 14 วันก่อนป่วยได้พักอาศัยอยู่หรือเดินทางมาจากพื้นที่ที่ไข้หวัดใหญ่/ปอดอักเสบระบาด <span class="text-info">ระบุพื้นที่</span></label>
+																			<input type="text" name="stayFlu14PlaceSpecifyInput" class="form-control form-control-sm ml-2" id="stay_outbreak_input" disabled>
+																		</div>
 																	</div>
 																</div>
-															</div>
-														</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="stayFlu14Input" value="n" class="custom-control-input risk-4" id="stay_outbreak_n">
-																<label for="stay_outbreak_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="stayFlu14Input" value="y" class="custom-control-input risk-4" id="stay_outbreak_y">
-																<label for="stay_outbreak_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-													<tr id="risk_table_tr5">
-														<td>ช่วง 14 วันก่อนป่วยได้ดูแลหรือสัมผัสใกล้ชิดกับผู้ป่วยอาการคล้ายไข้หวัดใหญ่/ปอดอักเสบ</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="contactFlu14Input" value="n" class="custom-control-input risk-5" id="close_up_n">
-																<label for="close_up_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="contactFlu14Input" value="y" class="custom-control-input risk-5" id="close_up_y">
-																<label for="close_up_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-													<tr id="risk_table_tr6">
-														<td>ช่วง 14 วันก่อนป่วยไปเยี่ยมผู้ป่วยไข้หวัดใหญ่/ปอดอักเสบ</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="visitFlu14Input" value="n" class="custom-control-input risk-6" id="patient_visit_n">
-																<label for="patient_visit_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="visitFlu14Input" value="y" class="custom-control-input risk-6" id="patient_visit_y">
-																<label for="patient_visit_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-													<tr id="risk_table_tr7">
-														<td>เป็นบุคลากรทางการแพทย์และสาธารณสุขหรือเจ้าหน้าที่ห้องปฏิบัติการ</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="healthcareWorkerInput" value="n" class="custom-control-input risk-7" id="healthcare_n">
-																<label for="healthcare_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="healthcareWorkerInput" value="y" class="custom-control-input risk-7" id="healthcare_y">
-																<label for="healthcare_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-													<tr id="risk_table_tr8">
-														<td>เป็นผู้ป่วยสงสัยไข้หวัดใหญ่/ปอดอักเสบ ที่เข้ารับการรักษาเป็นกลุ่มก้อน</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="suspectFluInput" value="n" class="custom-control-input risk-8" id="suspect_patient_n">
-																<label for="suspect_patient_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="suspectFluInput" value="y" class="custom-control-input risk-8" id="suspect_patient_y">
-																<label for="suspect_patient_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-													<tr id="risk_table_tr9">
-														<td>
-															<div class="form-group row mt-0 mb-0">
-																<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
-																	<div class="input-group">
-																		<label for="other_risk" class="font-normal">อื่นๆ ระบุ</label>
-																		<input type="text" name="otherRiskInputSpecify" class="form-control form-control-sm ml-2" id="other_risk_input" disabled style="width:400px;">
+															</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="stayFlu14Input" value="n" class="custom-control-input risk-4" id="stay_outbreak_n">
+																	<label for="stay_outbreak_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="stayFlu14Input" value="y" class="custom-control-input risk-4" id="stay_outbreak_y">
+																	<label for="stay_outbreak_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="risk_table_tr5">
+															<td>ช่วง 14 วันก่อนป่วยได้ดูแลหรือสัมผัสใกล้ชิดกับผู้ป่วยอาการคล้ายไข้หวัดใหญ่/ปอดอักเสบ</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="contactFlu14Input" value="n" class="custom-control-input risk-5" id="close_up_n">
+																	<label for="close_up_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="contactFlu14Input" value="y" class="custom-control-input risk-5" id="close_up_y">
+																	<label for="close_up_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="risk_table_tr6">
+															<td>ช่วง 14 วันก่อนป่วยไปเยี่ยมผู้ป่วยไข้หวัดใหญ่/ปอดอักเสบ</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="visitFlu14Input" value="n" class="custom-control-input risk-6" id="patient_visit_n">
+																	<label for="patient_visit_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="visitFlu14Input" value="y" class="custom-control-input risk-6" id="patient_visit_y">
+																	<label for="patient_visit_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="risk_table_tr7">
+															<td>เป็นบุคลากรทางการแพทย์และสาธารณสุขหรือเจ้าหน้าที่ห้องปฏิบัติการ</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="healthcareWorkerInput" value="n" class="custom-control-input risk-7" id="healthcare_n">
+																	<label for="healthcare_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="healthcareWorkerInput" value="y" class="custom-control-input risk-7" id="healthcare_y">
+																	<label for="healthcare_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="risk_table_tr8">
+															<td>เป็นผู้ป่วยสงสัยไข้หวัดใหญ่/ปอดอักเสบ ที่เข้ารับการรักษาเป็นกลุ่มก้อน</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="suspectFluInput" value="n" class="custom-control-input risk-8" id="suspect_patient_n">
+																	<label for="suspect_patient_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="suspectFluInput" value="y" class="custom-control-input risk-8" id="suspect_patient_y">
+																	<label for="suspect_patient_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+														<tr id="risk_table_tr9">
+															<td>
+																<div class="form-group row mt-0 mb-0">
+																	<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+																		<div class="input-group">
+																			<label for="other_risk" class="font-normal">อื่นๆ ระบุ</label>
+																			<input type="text" name="otherRiskInputSpecify" class="form-control form-control-sm ml-2" id="other_risk_input" disabled style="width:400px;">
+																		</div>
 																	</div>
 																</div>
-															</div>
-														</td>
-														<td class="text-danger">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="otherRiskInput" value="n" class="custom-control-input risk-9" id="other_risk_n">
-																<label for="other_risk_n" class="custom-control-label normal-label">ไม่ใช่</label>
-															</div>
-														</td>
-														<td class="text-success">
-															<div class="custom-control custom-checkbox">
-																<input type="checkbox" name="otherRiskInput" value="y" class="custom-control-input risk-9" id="other_risk_y">
-																<label for="other_risk_y" class="custom-control-label normal-label">ใช่</label>
-															</div>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+															</td>
+															<td class="text-danger">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="otherRiskInput" value="n" class="custom-control-input risk-9" id="other_risk_n">
+																	<label for="other_risk_n" class="custom-control-label normal-label">ไม่ใช่</label>
+																</div>
+															</td>
+															<td class="text-success">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" name="otherRiskInput" value="y" class="custom-control-input risk-9" id="other_risk_y">
+																	<label for="other_risk_y" class="custom-control-label normal-label">ใช่</label>
+																</div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
 										</div>
 									</div>
 									<div class="row">
@@ -1414,6 +1530,13 @@ $(document).ready(function() {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+
+	@php
+	if (Session::has('message')) {
+		$message = Session::get('message');
+		echo "alertMessage(500, 'ko', 'nok');";
+	}
+	@endphp
 
 	/* title name */
 	$('#title_name_input').change(function() {
@@ -1621,9 +1744,9 @@ $(document).ready(function() {
 	});
 
 	/* influ Rapid Result */
-	$('input.influRapidRs').on('change', function() {
+	/* $('input.influRapidRs').on('change', function() {
 		$('input.influRapidRs').not(this).prop('checked', false);
-	});
+	}); */
 
 	/* influ Vaccine */
 	$('.influVaccineRc').on('change', function() {
@@ -1665,6 +1788,13 @@ $(document).ready(function() {
 		todayBtn: true,
 		autoclose: true
 	});
+
+	/* specimen table */
+	@php
+	if (isset($specimen_htm)) {
+		echo $specimen_htm;
+	}
+	@endphp
 
 	/* health tbl */
 
@@ -2046,4 +2176,38 @@ $(document).ready(function() {
 	$('#report_date').datepicker('update', new Date());
 });
 </script>
+<script>
+function alertMessage(status, message, title) {
+	$status = parseInt(status);
+	if (status == 200) {
+		toastr.success(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '600'
+			}
+		);
+	} else if (status == 204) {
+		toastr.warning(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '800'
+			}
+		);
+	} else {
+		toastr.error(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '800'
+			}
+		);
+	}
+}
+</script>
+
 @endsection

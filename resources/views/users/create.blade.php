@@ -1,6 +1,6 @@
 @extends('layouts.index')
 @section('custom-style')
-<link rel="stylesheet" href="{{ URL::asset('public/assets/libs/select2/dist/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 @section('contents')
 <div class="page-breadcrumb bg-light">
@@ -147,7 +147,7 @@
 </div>
 @endsection
 @section('bottom-script')
-<script src="{{ URL::asset('public/assets/libs/select2/dist/js/select2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script>
 $(document).ready(function() {
 	$('.select-province,.select-hospital,.select-title-name,.role').select2();
