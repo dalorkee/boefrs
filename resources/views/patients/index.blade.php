@@ -169,19 +169,19 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
 											<div class="form-group">
 												<label for="ageYear">อายุ/ปี</label>
-												<input type="text" name="ageYearInput" class="form-control" id="age_year_input" value="0" required readonly>
+												<input type="text" name="ageYearInput" value="{{ old('ageYearInput') }}" class="form-control" id="age_year_input" value="0" required readonly>
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
 											<div class="form-group">
 												<label for="ageMonth">อายุ/เดือน</label>
-												<input type="text" name="ageMonthInput" class="form-control" id="age_month_input" value="0" required readonly>
+												<input type="text" name="ageMonthInput" value="{{ old('ageMonthInput') }}" class="form-control" id="age_month_input" value="0" required readonly>
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-1 col-xl-1 mb-3">
 											<div class="form-group">
 												<label for="ageMonth">อายุ/วัน</label>
-												<input type="text" name="ageDayInput" class="form-control" id="age_day_input" value="0" required readonly>
+												<input type="text" name="ageDayInput" value="{{ old('ageDayInput') }}" class="form-control" id="age_day_input" value="0" required readonly>
 											</div>
 										</div>
 									</div>
@@ -192,7 +192,7 @@ input:read-only {
 												<select name="nationalityInput" class="form-control selectpicker show-tick" id="select_nationality">
 													<option value="0">-- โปรดเลือก --</option>
 													@foreach ($nationality as $key => $value)
-														<option value="{{ $value->id }}">{{ $value->name_th }}</option>
+														<option value="{{ $value->id }}" @if (old('nationalityInput') == $value->id) selected="selected" @endif>{{ $value->name_th }}</option>
 													@endforeach
 												</select>
 											</div>
@@ -200,7 +200,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<div class="form-group">
 												<label for="otherNationality">สัญชาติ อื่นๆ ระบุ</label>
-												<input type="text" name="otherNationalityInput" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" disabled>
+												<input type="text" name="otherNationalityInput" value="{{ old('otherNationalityInput') }}" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" disabled>
 											</div>
 										</div>
 									</div>
@@ -212,11 +212,11 @@ input:read-only {
 													@role('admin')
 														<option value="">-- เลือกโรงพยาบาล --</option>
 														@foreach ($hospital as $key => $val)
-															<option value="{{ $val->hospcode }}">{{ $val->hosp_name }}</option>
+															<option value="{{ $val->hospcode }}" @if (old('hospitalInput') == $val->hospcode) selected="selected" @endif>{{ $val->hosp_name }}</option>
 														@endforeach
 													@endrole
 													@role('hospital|lab')
-														<option value="{{ $user_hospital[0]->hospcode }}">{{ $user_hospital[0]->hosp_name }}</option>
+														<option value="{{ $user_hospital[0]->hospcode }}" @if (old('hospitalInput') == $user_hospital[0]->hospcode) selected="selected" @endif>{{ $user_hospital[0]->hosp_name }}</option>
 													@endrole
 												</select>
 											</div>
@@ -227,23 +227,23 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group">
 												<label for="houseNo">ที่อยู่ปัจจุบัน/ขณะป่วย เลขที่</label>
-												<input type="text" name="houseNoInput" class="form-control" placeholder="บ้านเลขที่">
+												<input type="text" name="houseNoInput" value="{{ old('houseNoInput') }}" class="form-control" placeholder="บ้านเลขที่">
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-3">
 											<div class="form-group">
 												<label for="villageNo">หมู่ที่</label>
-												<input type="text" name="villageNoInput" class="form-control" placeholder="หมู่ที่">
+												<input type="text" name="villageNoInput" value="{{ old('villageNoInput') }}" class="form-control" placeholder="หมู่ที่">
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="village">หมู่บ้าน</label>
-											<input type="text" name="villageInput" class="form-control" placeholder="หมู่บ้าน">
+											<input type="text" name="villageInput" value="{{ old('villageInput') }}" class="form-control" placeholder="หมู่บ้าน">
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<div class="form-group">
 												<label for="lane">ซอย</label>
-												<input type="text" name="laneInput" class="form-control" placeholder="ซอย">
+												<input type="text" name="laneInput" value="{{ old('laneInput') }}" class="form-control" placeholder="ซอย">
 											</div>
 										</div>
 									</div>
@@ -256,7 +256,12 @@ input:read-only {
 													@php
 														$provinces = Session::get('provinces');
 														$provinces->each(function ($item, $key) {
-															echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>\n";
+															$htm = "<option value=\"".$item->province_id."\"";
+																if (old('provinceInput') == $item->province_id) {
+																	$htm .= " selected=\"selected\"";
+																}
+															$htm .= ">".$item->province_name."</option>\n";
+															echo $htm;
 														});
 													@endphp
 												</select>
