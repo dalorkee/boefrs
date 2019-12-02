@@ -358,11 +358,7 @@ class PatientsController extends BoeFrsController
 		$districts = $coll->keyBy('district_id');
 		$htm = "<option value=\"0\">-- โปรดเลือก --</option>";
 		foreach ($districts as $key => $val) {
-			$htm .= "<option value=\"".$val->district_id."\"";
-			if (old('districtInput') == $val->district_id) {
-				$htm .= " selected=\"selected\"";
-			}
-			$htm .= ">".$val->district_name."</option>";
+			$htm .= "<option value=\"".$val->district_id."\">".$val->district_name."</option>";
 		}
 		return $htm;
 	}

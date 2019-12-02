@@ -200,7 +200,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<div class="form-group">
 												<label for="otherNationality">สัญชาติ อื่นๆ ระบุ</label>
-												<input type="text" name="otherNationalityInput" value="{{ old('otherNationalityInput') }}" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" disabled>
+												<input type="text" name="otherNationalityInput" value="{{ old('otherNationalityInput') }}" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" @if (empty(old('otherNationalityInput'))) disabled @else "" @endif>
 											</div>
 										</div>
 									</div>
@@ -293,13 +293,13 @@ input:read-only {
 											<select name="occupationInput" class="form-control selectpicker show-tick" id="select_occupation">
 												<option value="0">-- โปรดเลือก --</option>
 												@foreach ($occupation as $key => $val)
-													<option value="{{ $val->id }}">{{ $val->occu_name_th }}</option>
+													<option value="{{ $val->id }}" @if (old('occupationInput') == $val->id) selected="selected" @endif>{{ $val->occu_name_th }}</option>
 												@endforeach
 											</select>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<label for="occupationOtherInput">อาชีพ อื่นๆ ระบุ</label>
-											<input type="text" name="occupationOtherInput" class="form-control" id="occupation_other_input" placeholder="อาชีพ อื่นๆ" disabled>
+											<input type="text" name="occupationOtherInput" value="{{ old('occupationOtherInput') }}" class="form-control" id="occupation_other_input" placeholder="อาชีพ อื่นๆ" @if (empty(old('occupationOtherInput'))) disabled @else "" @endif>
 										</div>
 									</div>
 								</div><!-- bd-callout -->
@@ -315,15 +315,15 @@ input:read-only {
 												<label for="patient">ผู้ป่วย</label>
 												<div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="opd" class="custom-control-input pt-type" id="opdCheckbox">
+														<input type="checkbox" name="patientType" value="opd" @if (old('patientType') == 'opd') checked @endif class="custom-control-input pt-type" id="opdCheckbox">
 														<label for="opdCheckbox" class="custom-control-label normal-label">ผู้ป่วยนอก (OPD)/ILI</label>
 													</div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="ipd" class="custom-control-input pt-type" id="ipdCheckbox">
+														<input type="checkbox" name="patientType" value="ipd" @if (old('patientType') == 'ipd') checked @endif class="custom-control-input pt-type" id="ipdCheckbox">
 														<label for="ipdCheckbox" class="custom-control-label normal-label">ผู้ป่วยใน (IPD)/SARI</label>
 													</div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="icu" class="custom-control-input pt-type" id="icuCheckbox">
+														<input type="checkbox" name="patientType" value="icu" @if (old('patientType') == 'icu') checked @endif class="custom-control-input pt-type" id="icuCheckbox">
 														<label for="icuCheckbox" class="custom-control-label normal-label">ผู้ป่วยหนัก/ICU</label>
 													</div>
 												</div>
@@ -337,7 +337,7 @@ input:read-only {
 												<label for="sickDateInput">วันที่เริ่มป่วย</label>
 												<div class="input-group date" data-provide="datepicke" id="sickDateInput">
 													<div class="input-group">
-														<input type="text" name="sickDateInput" class="form-control {{ $errors->has('sickDateInput') ? 'border-danger' : '' }}" required readonly>
+														<input type="text" name="sickDateInput" value="{{ old('sickDateInput') }}" class="form-control {{ $errors->has('sickDateInput') ? 'border-danger' : '' }}" required readonly>
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -351,7 +351,7 @@ input:read-only {
 												<label for="treatDateInput">วันที่รักษาครั้งแรก</label>
 												<div class="input-group date" data-provide="datepicke" id="treatDateInput">
 													<div class="input-group">
-														<input type="text" name="treatDateInput" class="form-control {{ $errors->has('treatDateInput') ? 'border-danger' : '' }}" readonly>
+														<input type="text" name="treatDateInput" value="{{ old('treatDateInput') }}" class="form-control {{ $errors->has('treatDateInput') ? 'border-danger' : '' }}" readonly>
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -365,7 +365,7 @@ input:read-only {
 												<label for="admitDateInput">วันที่นอนโรงพยาบาล</label>
 												<div class="input-group date" data-provide="datepicke" id="admitDateInput">
 													<div class="input-group">
-														<input type="text" name="admitDateInput" class="form-control" readonly>
+														<input type="text" name="admitDateInput" value="{{ old('admitDateInput') }}" class="form-control" readonly>
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -377,7 +377,7 @@ input:read-only {
 											<div class="form-group">
 												<label for="sickDateInput">อุณหภูมิร่างกายแรกรับ</label>
 												<div class="input-group">
-													<input type="text" name="temperatureInput" class="form-control">
+													<input type="text" name="temperatureInput" value="{{ old('temperatureInput') }}" class="form-control">
 													<div class="input-group-append">
 														<span class="input-group-text">C&#176;</span>
 													</div>
@@ -402,31 +402,51 @@ input:read-only {
 													@php
 													$symptoms->each(function ($item, $key) {
 														if ($item->id == 21) {
-															$other_symptom = "<input type=\"text\" name=\"other_symptom_input\" class=\"form-control\" id=\"symptom_other\" disabled>";
+															$other_symptom = "<input type=\"text\" name=\"other_symptom_input\" value=\"".old('other_symptom_input')."\" ";
+															$other_symptom .= "class=\"form-control\" id=\"symptom_other\" ";
+															if (empty(old('other_symptom_input'))) {
+																$other_symptom .= "disabled>\n";
+															} else {
+																$other_symptom .= ">\n";
+															}
 														} else {
 															$other_symptom = null;
 														}
-														echo "<tr id=\"symptoms_table_tr".$item->id."\">";
-															echo "<td>".$item->symptom_name_th." (".$item->symptom_name_en.") ".$other_symptom."</td>";
-															echo "<td>";
-																echo "<div class=\"custom-control custom-checkbox\">";
-																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"y\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_yes\">";
-																	echo "<label for=\"symptom_".$item->id."_yes\" class=\"custom-control-label\">&nbsp;</label>";
-																echo "</div>";
-															echo "</td>";
-															echo "<td>";
-																echo "<div class=\"custom-control custom-checkbox\">";
-																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"n\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_no\">";
-																	echo "<label for=\"symptom_".$item->id."_no\" class=\"custom-control-label\"></label>";
-																echo "</div>";
-															echo "</td>";
-															echo "<td>";
-																echo "<div class=\"custom-control custom-checkbox\">";
-																	echo "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"u\" class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_un\">";
-																	echo "<label for=\"symptom_".$item->id."_un\" class=\"custom-control-label\"></label>";
-																echo "</div>";
-															echo "</td>";
-														echo "</tr>\n";
+														$htm = "";
+														$htm .= "<tr id=\"symptoms_table_tr".$item->id."\">\n";
+															$htm .= "<td>".$item->symptom_name_th." (".$item->symptom_name_en.") ".$other_symptom."</td>\n";
+															$htm .= "<td>\n";
+																$htm .= "<div class=\"custom-control custom-checkbox\">\n";
+																	$htm .= "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"y\" ";
+																	if (old("symptom_".$item->id."_Input") == "y") {
+																		$htm .= "checked ";
+																	}
+																	$htm .= "class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_yes\">\n";
+																	$htm .= "<label for=\"symptom_".$item->id."_yes\" class=\"custom-control-label\">&nbsp;</label>\n";
+																$htm .= "</div>\n";
+															$htm .= "</td>\n";
+															$htm .= "<td>\n";
+																$htm .= "<div class=\"custom-control custom-checkbox\">\n";
+																	$htm .= "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"n\"";
+																	if (old("symptom_".$item->id."_Input") == "n") {
+																		$htm .= "checked ";
+																	}
+																	$htm .= "class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_no\">\n";
+																	$htm .= "<label for=\"symptom_".$item->id."_no\" class=\"custom-control-label\"></label>\n";
+																$htm .= "</div>\n";
+															$htm .= "</td>\n";
+															$htm .= "<td>\n";
+																$htm .= "<div class=\"custom-control custom-checkbox\">\n";
+																	$htm .= "<input type=\"checkbox\" name=\"symptom_".$item->id."_Input\" value=\"u\"";
+																	if (old("symptom_".$item->id."_Input") == "u") {
+																		$htm .= "checked ";
+																	}
+																	$htm .= "class=\"custom-control-input symptom-".$item->id."\" id=\"symptom_".$item->id."_un\">\n";
+																	$htm .= "<label for=\"symptom_".$item->id."_un\" class=\"custom-control-label\"></label>\n";
+																$htm .= "</div>\n";
+															$htm .= "</td>\n";
+														$htm .= "</tr>\n";
+														echo $htm;
 													})
 													@endphp
 													</tbody>
@@ -439,11 +459,11 @@ input:read-only {
 											<label for="firstXrayInput">เอกซเรย์ปอด (ครั้งแรก)</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="lungXrayInput" value="n" class="custom-control-input lungXray" id="lungXrayNo">
+													<input type="checkbox" name="lungXrayInput" value="n" @if (old('lungXrayInput') == 'n') checked @endif class="custom-control-input lungXray" id="lungXrayNo">
 													<label for="lungXrayNo" class="custom-control-label normal-label">ไม่ได้ทำ</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="lungXrayInput" value="y" class="custom-control-input lungXray" id="lungXrayYes">
+													<input type="checkbox" name="lungXrayInput" value="y" @if (old('lungXrayInput') == 'y') checked @endif class="custom-control-input lungXray" id="lungXrayYes">
 													<label for="lungXrayYes" class="custom-control-label normal-label">ทำ</label>
 												</div>
 											</div>
@@ -452,7 +472,7 @@ input:read-only {
 											<label for="xRayDateInput">ระบุวันที่</label>
 											<div class="input-group date" data-provide="datepicke" id="xRayDateInput">
 												<div class="input-group">
-													<input type="text" name="xRayDateInput" class="form-control" id="xRayDate" disabled readonly>
+													<input type="text" name="xRayDateInput" value="{{ old('xRayDateInput') }}" class="form-control" id="xRayDate" disabled readonly>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -461,7 +481,7 @@ input:read-only {
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-8 mb-3">
 											<label for="xRayResult">ระบุผล</label>
-											<input type="text" name="xRayResultInput" class="form-control" id="xRayRs" disabled>
+											<input type="text" name="xRayResultInput" value="{{ old('xRayResultInput') }}" class="form-control" id="xRayRs" @if (empty(old('xRayResultInput'))) disabled @else "" @endif>
 										</div>
 									</div>
 									<div class="form-row">
@@ -469,7 +489,7 @@ input:read-only {
 											<label for="cbcDateInput">CBC (ครั้งแรก): วันที่</label>
 											<div class="input-group date" data-provide="datepicke" id="cbcDateInput">
 												<div class="input-group">
-													<input type="text" name="cbcDateInput" class="form-control" readonly>
+													<input type="text" name="cbcDateInput" value="{{ old('cbcDateInput') }}" class="form-control" readonly>
 													<div class="input-group-append">
 														<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 													</div>
@@ -479,7 +499,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="hbInput">ผล Hb</label>
 											<div class="input-group">
-												<input type="text" name="hbInput" class="form-control">
+												<input type="text" name="hbInput" value="{{ old('hbInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">mg%</span>
 												</div>
@@ -488,7 +508,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="htcInput">Hct</label>
 											<div class="input-group">
-												<input type="text" name="htcInput" class="form-control">
+												<input type="text" name="htcInput" value="{{ old('htcInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">%</span>
 												</div>
@@ -497,7 +517,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="plateletCountInput">Plate count</label>
 											<div class="input-group">
-												<input type="text" name="plateletInput" class="form-control">
+												<input type="text" name="plateletInput" value="{{ old('plateletInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">x10<sup>3</sup></span>
 												</div>
@@ -507,12 +527,12 @@ input:read-only {
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="wbcInput">WBC</label>
-											<input type="text" name="wbcInput" class="form-control">
+											<input type="text" name="wbcInput" value="{{ old('wbcInput') }}" class="form-control">
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="nInput">N</label>
 											<div class="input-group">
-												<input type="text" name="nInput" class="form-control">
+												<input type="text" name="nInput" value="{{ old('nInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">%</span>
 												</div>
@@ -521,7 +541,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="lInput">L</label>
 											<div class="input-group">
-												<input type="text" name="lInput" class="form-control">
+												<input type="text" name="lInput" value="{{ old('lInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">%</span>
 												</div>
@@ -530,7 +550,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="atypLymphInput">Atyp lymph</label>
 											<div class="input-group">
-												<input type="text" name="atypLymphInput" class="form-control">
+												<input type="text" name="atypLymphInput" value="{{ old('atypLymphInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">%</span>
 												</div>
@@ -541,7 +561,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="monoInput">Mono</label>
 											<div class="input-group">
-												<input type="text" name="monoInput" class="form-control">
+												<input type="text" name="monoInput" value="{{ old('monoInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">%</span>
 												</div>
@@ -550,7 +570,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="basoInput">Baso</label>
 											<div class="input-group">
-												<input type="text" name="basoInput" class="form-control">
+												<input type="text" name="basoInput" value="{{ old('basoInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">%</span>
 												</div>
@@ -559,7 +579,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="eoInput">Eo</label>
 											<div class="input-group">
-												<input type="text" name="eoInput" class="form-control">
+												<input type="text" name="eoInput" value="{{ old('eoInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">%</span>
 												</div>
@@ -568,7 +588,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<label for="bandInput">Band</label>
 											<div class="input-group">
-												<input type="text" name="bandInput" class="form-control">
+												<input type="text" name="bandInput" value="{{ old('bandInput') }}" class="form-control">
 												<div class="input-group-append">
 													<span class="input-group-text">%</span>
 												</div>
@@ -578,7 +598,7 @@ input:read-only {
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="firstDiagnosis">การวินิจฉัยเบื้องต้น</label>
-											<input type="text" name="firstDiagnosisInput" class="form-control" placeholder="การวินิจฉัยเบื้องต้น">
+											<input type="text" name="firstDiagnosisInput" value="{{ old('firstDiagnosisInput') }}" class="form-control" placeholder="การวินิจฉัยเบื้องต้น">
 										</div>
 									</div>
 									<div class="form-row">
@@ -586,18 +606,18 @@ input:read-only {
 											<label for="influenzaRapid">มีการตรวจ Influenza rapid test</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="influRapidInput" value="n" class="custom-control-input influRapid" id="influRapidUnChecked">
+													<input type="checkbox" name="influRapidInput" value="n" @if (old('influRapidInput') == 'n') checked @endif class="custom-control-input influRapid" id="influRapidUnChecked">
 													<label for="influRapidUnChecked" class="custom-control-label normal-label">ไม่ตรวจ</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="influRapidInput" value="y" class="custom-control-input influRapid" id="influRaidCheckd">
+													<input type="checkbox" name="influRapidInput" value="y" @if (old('influRapidInput') == 'y') checked @endif class="custom-control-input influRapid" id="influRaidCheckd">
 													<label for="influRaidCheckd" class="custom-control-label normal-label">ตรวจ</label>
 												</div>
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
 											<label for="influTestName">ระบุชื่อ test</label>
-											<input type="text" name="influRapidtestName" class="form-control" placeholder="ระบุชื่อ test" id="influRapidTestName" disabled>
+											<input type="text" name="influRapidtestName" value="{{ old('influRapidtestName') }}" class="form-control" placeholder="ระบุชื่อ test" id="influRapidTestName" @if (empty(old('influRapidtestName'))) disabled @else "" @endif>
 										</div>
 									</div>
 									<div class="form-row">
@@ -605,15 +625,15 @@ input:read-only {
 											<label for="rapidTestResult">ผล Rapid test</label>
 											<div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultInput[]" value="nagative" class="custom-control-input influRapidRs" id="rapidTestNagative">
+													<input type="checkbox" name="rapidTestResultInput[]" value="nagative" @if(is_array(old('rapidTestResultInput')) && in_array('nagative', old('rapidTestResultInput'))) checked @endif class="custom-control-input influRapidRs" id="rapidTestNagative">
 													<label for="rapidTestNagative" class="custom-control-label normal-label">Nagative</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultInput[]" value="positive-flu-a" class="custom-control-input influRapidRs" id="rapidTestPositiveFluA">
+													<input type="checkbox" name="rapidTestResultInput[]" value="positive-flu-a" @if(is_array(old('rapidTestResultInput')) && in_array('positive-flu-a', old('rapidTestResultInput'))) checked @endif class="custom-control-input influRapidRs" id="rapidTestPositiveFluA">
 													<label for="rapidTestPositiveFluA" class="custom-control-label normal-label">Positive Flu A</label>
 												</div>
 												<div class="custom-control custom-checkbox custom-control-inline">
-													<input type="checkbox" name="rapidTestResultInput[]" value="positive-flu-b" class="custom-control-input influRapidRs" id="rapidTestPositiveFluB">
+													<input type="checkbox" name="rapidTestResultInput[]" value="positive-flu-b" @if(is_array(old('rapidTestResultInput')) && in_array('positive-flu-b', old('rapidTestResultInput'))) checked @endif class="custom-control-input influRapidRs" id="rapidTestPositiveFluB">
 													<label for="rapidTestPositiveFluB" class="custom-control-label normal-label">Positive Flu B</label>
 												</div>
 											</div>
@@ -1684,6 +1704,15 @@ $(document).ready(function() {
 	@php
 	$symptoms->each(function ($item, $key) {
 		echo "
+			var number = $('.symptom-".$item->id."').filter(':checked').length;
+			if (number === 1) {
+				var hasClass = $('#symptoms_table_tr".$item->id."').hasClass('highlight');
+				if (!hasClass) {
+					$('#symptoms_table_tr".$item->id."').addClass('highlight');
+				}
+			}
+		";
+		echo "
 			$('.symptom-".$item->id."').click(function() {
 				$('.symptom-".$item->id."').not(this).prop('checked', false);
 				var number = $('.symptom-".$item->id."').filter(':checked').length;
@@ -1699,6 +1728,7 @@ $(document).ready(function() {
 				if (symp === 'y') {
 					$('#symptom_other').prop('disabled', false);
 				} else {
+					$('#symptom_other').val('');
 					$('#symptom_other').prop('disabled', true);
 				}
 			});
@@ -1749,9 +1779,13 @@ $(document).ready(function() {
 	});
 
 	/* influ Rapid Result */
-	/* $('input.influRapidRs').on('change', function() {
-		$('input.influRapidRs').not(this).prop('checked', false);
-	}); */
+	$('.influRapidRs').on('change', function() {
+		var ids = [];
+		$('input[class="influRapidRs"]:checked').each(function() {
+			ids.push(this.value);
+			alert(ids);
+		//$('input.influRapidRs').not(this).prop('checked', false);
+	});
 
 	/* influ Vaccine */
 	$('.influVaccineRc').on('change', function() {
