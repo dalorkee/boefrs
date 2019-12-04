@@ -41,7 +41,7 @@ class PatientsController extends BoeFrsController
 		$symptoms = parent::symptoms();
 		$specimen = parent::specimen();
 		$patient = parent::patientsById($request->id);
-		$user_hospital = parent::hospitalByCode($patient[0]->ref_user_hospcode);
+		$user_hospital = parent::hospitalByCode(auth()->user()->hospcode);
 		$hospital = parent::hospitalByBoeFrsActive();
 		return view(
 			'patients.index',

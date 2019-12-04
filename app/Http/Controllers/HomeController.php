@@ -29,22 +29,22 @@ class HomeController extends BoeFrsController
 	*/
 	public function index(Request $request)
 	{
-		/* get role name */
+		/* set thai province to session */
+		$provinces = BoeFrsController::provinceList();
+		Session::put('provinces', $provinces);
+
+		/* set role name to session */
 		$roleArr = auth()->user()->roles->pluck('name');
 		$userRole = $roleArr[0];
 		Session::put('user_role_name', $userRole);
 
-		/* chk user hospital code */
-		if (auth()->user()->hospcode == -1) {
-			$user_hosp_name = 'สำนักระบาดวิทยา';
-		} else {
-			$user_hosp = parent::hospitalByCode(auth()->user()->hospcode);
-			$user_hosp = $user_hosp->pluck('hosp_name')->all();
-			$user_hosp_name = $user_hosp[0];
-		}
+		/* set user hospital to session */
+		$user_hosp = parent::hospitalByCode(auth()->user()->hospcode);
+		$user_hosp = $user_hosp->pluck('hosp_name')->all();
+		$user_hosp_name = $user_hosp[0];
 		Session::put('user_hospital_name', $user_hosp_name);
 
-		/* route by permission */
+		/* router by permission */
 		if ($userRole == 'admin') {
 			return redirect()->route('dashboard.index');
 		} elseif ($userRole == 'hospital' || $userRole == 'lab') {
@@ -53,4 +53,5 @@ class HomeController extends BoeFrsController
 			return redirect()->route('logout');
 		}
 	}
+
 }

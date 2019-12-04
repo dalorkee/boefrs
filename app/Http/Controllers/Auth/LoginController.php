@@ -39,7 +39,7 @@ class LoginController extends Controller
 	public function __construct()
 	{
 		$this->middleware('guest')->except('logout');
-		$this->setProvList();
+		//$this->setProvList();
 	}
 
 	public function logout(Request $request) {
@@ -48,8 +48,9 @@ class LoginController extends Controller
 		return redirect('/login');
 	}
 
-	public function setProvList() {
+/*	public function setProvList() {
 		$provinces = BoeFrsController::provinceList();
 		session(['provinces' => $provinces]);
 	}
+	*/
 }
