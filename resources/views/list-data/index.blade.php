@@ -217,6 +217,7 @@ input.valid, textarea.valid{
 														} else {
 															echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
 														}
+														//echo "<a href=\"".route('lab', ['id'=>$item->id])."\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-tasks\"></i></a>&nbsp;";
 														echo "<button type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\"><i class=\"fas fa-trash\"></i></button>";
 													echo "</td>";
 												echo "</tr>";

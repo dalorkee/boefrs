@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::resource('dashboard', 'DashboardController');
 	Route::resource('code', 'CodeController');
 	Route::resource('list-data', 'ListDataController');
+	Route::resource('lab', 'LabController');
 });
 
 /* Register */
@@ -74,6 +75,4 @@ Route::post('data/search', 'ListDataController@ajaxListData')->name('ajaxSearchD
 Route::post('data/patients', 'ListDataController@ajaxListDataAfterDeleted')->name('ajaxListDataAfterDel');
 
 /* lab data */
-Route::group(['middleware' => ['auth']], function() {
-	Route::resource('lab', 'LabController');
-});
+Route::get('/lab/add/{id}', 'LabController@index')->name('lab');

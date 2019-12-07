@@ -11,8 +11,8 @@
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-flask"></i><span class="hide-menu">Form </span></a>
 					<ul aria-expanded="false" class="collapse  first-level">
 						<li class="sidebar-item"><a href="{{ route('code.index') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> Create Code</span></a></li>
-						<li class="sidebar-item"><a href="{{ route('list-data.index') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> All Data</span></a></li>
-						<!-- <li class="sidebar-item"><a href=" URL::route('sample-submission.form') }}" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Lab </span></a></li> -->
+						<li class="sidebar-item"><a href="{{ route('list-data.index') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> Hospital</span></a></li>
+						<li class="sidebar-item"><a href="{{ route('lab.index') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> Laboratory</span></a></li>
 					</ul>
 				</li>
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-poll"></i><span class="hide-menu">Report </span></a>

@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Patients;
+use Session;
 
 class LabController extends BoeFrsController
 {
@@ -18,7 +23,26 @@ class LabController extends BoeFrsController
 	* @return \Illuminate\Http\Response
 	*/
 	public function index() {
-		return $this->create();
+		$roleArr = auth()->user()->getRoleNames();
+		if ($roleArr[0] == 'admin') {
+			$patients = Patients::where('lab_status', '!=', 'new')
+				->whereNull('deleted_at')->get();
+		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
+			$hospcode = auth()->user()->hospcode;
+			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)
+				->where('lab_status', '!=', 'new')
+				->whereNull('deleted_at')
+				->get();
+		} else {
+			return redirect()->route('logout');
+		}
+		return view(
+			'lab.index',
+			[
+				'titleName' => $this->title_name,
+				'patients' => $patients
+			]
+		);
 	}
 
 	/**
