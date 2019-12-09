@@ -21,9 +21,11 @@ class User extends Authenticatable
 		'province',
 		'hospcode',
 		'title_name',
+		'title_name_other',
 		'name',
 		'lastname',
 		'email',
+		'phone',
 		'password',
 		'user_hospital_name'
 	];

@@ -18,9 +18,11 @@ class CreateUsersTable extends Migration
 			$table->string('province');
 			$table->string('hospcode');
 			$table->string('title_name');
+			$table->string('title_name_other');
 			$table->string('name');
 			$table->string('lastname');
 			$table->string('email');
+			$table->string('phone');
 			$table->string('password');
 			$table->enum('status', ['active', 'reject'])->default('active');
 			$table->rememberToken();

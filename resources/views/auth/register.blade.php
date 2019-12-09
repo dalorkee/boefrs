@@ -117,7 +117,7 @@ input[type=text], input[type=password] {
 											<option value="0">-- โปรดเลือก --</option>
 											@php
 												$titleName->each(function ($item, $key) {
-													echo "<option value=\"".$item->id."\">".$item->title_name."</option>";
+													echo "<option value=\"".$item->id."\">".$item->title_name."</option>\n";
 												});
 											@endphp
 										</select>
@@ -154,7 +154,7 @@ input[type=text], input[type=password] {
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
 									<div class="form-group">
 										<label for="phone">โทรศัพท์ :</label>
-										<input type="text" name="phone" class="form-control form-control-lg" value="{{ old('phone') }}" placeholder="อีเมล์">
+										<input type="text" name="phone" class="form-control form-control-lg" value="{{ old('phone') }}" placeholder="โทรศัพท์">
 									</div>
 								</div>
 							</div>

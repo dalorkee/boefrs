@@ -104,25 +104,16 @@ class RegisterController extends BoefrsController
 		$this->validate($request, [
 			'province' => 'required|numeric|min:0|not_in:0',
 			'hospcode' => 'required|numeric|min:0|not_in:0',
-			'title_name' => 'required',
+			'title_name' => 'required|numeric|min:0|not_in:0',
 			'name' => 'required|string|max:255',
 			'email' => 'required|email|max:255|unique:users,email',
 			'password' => 'required|same:confirm-password',
 			'captcha' => 'required|captcha',
 		]);
-
 		$input = $request->all();
-
-		if ($input['title_name'] != 0 && $input['title_name'] != 6) {
-			$title_name_coll = $this->title_name[$input['title_name']];
-			$title_name = $title_name_coll->title_name;
-			$input['title_name'] = $title_name;
-		} elseif (isset($input['title_name_other']) && $input['title_name'] == 6) {
-			$input['title_name'] = $input['title_name_other'];
-		} else {
-			$input['title_name'] = null;
+		if (!isset($input['title_name_other'])) {
+			$input['title_name_other'] = NULL;
 		}
-
 		$input['password'] = Hash::make($input['password']);
 		$user = User::create($input);
 		$user->assignRole($request->input('roles'));

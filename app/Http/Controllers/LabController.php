@@ -50,12 +50,16 @@ class LabController extends BoeFrsController
 	*
 	* @return \Illuminate\Http\Response
 	*/
-	public function create() {
+	public function create(Request $request) {
 		$symptoms = parent::symptoms();
-		return view('lab.index',
+		$patient = Patients::where('id', '=', $request->id)
+			->where('lab_status', '!=', 'new')
+			->whereNull('deleted_at')->get();
+		return view('lab.create',
 			[
 				'titleName'=>$this->title_name,
-				'symptoms'=>$symptoms
+				'symptoms'=>$symptoms,
+				'patient'=>$patient
 			]
 		);
 	}

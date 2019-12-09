@@ -56,11 +56,25 @@ input:read-only {
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
+									<div style="position:absolute; top:2px; right:2px;">
+										<img src="{{ URL::asset('qrcode/qr'.$patient[0]->lab_code.'.png') }}" />
+									</div>
+									<div class="form-row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+											<div class="input-group-append">
+												<span class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="top" title="โปรดเขียนรหัสนี้ลงบนแบบฟอร์ม">{{ $patient[0]->lab_code }}</span>
+												{{ csrf_field() }}
+												<input type="hidden" name="pid" value="{{ $patient[0]->id }}">
+												<input type="hidden" name="formIndexInput" value="{{ $patient[0]->lab_code }}">
+											</div>
+										</div>
+									</div>
 									<h1 class="text-info">1. ชื่อและที่อยู่ของผู้นำส่งตัวอย่าง</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-3">
 											<div class="form-group">
 												<label for="titleName">คำนำหน้าชื่อ</label>
+												<input type="hidden" name="title_name_cache" value="{{ auth()->user()->title_name }}">
 												<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
 													<option value="0">-- โปรดเลือก --</option>
 													@php

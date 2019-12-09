@@ -75,4 +75,5 @@ Route::post('data/search', 'ListDataController@ajaxListData')->name('ajaxSearchD
 Route::post('data/patients', 'ListDataController@ajaxListDataAfterDeleted')->name('ajaxListDataAfterDel');
 
 /* lab data */
-Route::get('/lab/add/{id}', 'LabController@index')->name('lab');
+Route::get('/lab/create/{id}', 'LabController@create')->name('createLab');
+Route::post('/lab/edit/{id}', 'LabController@add')->name('editLab');
