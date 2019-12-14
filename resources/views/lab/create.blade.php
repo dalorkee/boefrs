@@ -57,77 +57,41 @@ input:read-only {
 							<div class="card-body">
 								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
 									<div style="position:absolute; top:2px; right:2px;">
-										<img src="{{ URL::asset('qrcode/qr'.$patient[0]->lab_code.'.png') }}" />
+										<img src="{{ URL::asset('qrcode/qr'.$data['patient_lab_code'].'.png') }}" />
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<div class="input-group-append">
-												<span class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="top" title="โปรดเขียนรหัสนี้ลงบนแบบฟอร์ม">{{ $patient[0]->lab_code }}</span>
+												<span class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="top" title="โปรดเขียนรหัสนี้ลงบนแบบฟอร์ม">{{ $data['patient_lab_code'] }}</span>
 												{{ csrf_field() }}
-												<input type="hidden" name="pid" value="{{ $patient[0]->id }}">
-												<input type="hidden" name="formIndexInput" value="{{ $patient[0]->lab_code }}">
+												<input type="hidden" name="pid" value="{{ $data['patient_id'] }}">
+												<input type="hidden" name="lab_code" value="{{ $data['patient_lab_code'] }}">
 											</div>
 										</div>
 									</div>
 									<h1 class="text-info">1. ชื่อและที่อยู่ของผู้นำส่งตัวอย่าง</h1>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-3">
-											<div class="form-group">
-												<label for="titleName">คำนำหน้าชื่อ</label>
-												<input type="hidden" name="title_name_cache" value="{{ auth()->user()->title_name }}">
-												<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
-													<option value="0">-- โปรดเลือก --</option>
-													@php
-														$titleName->each(function ($item, $key) {
-															echo "<option value=\"".$item->id."\">".$item->title_name."</option>";
-														});
-													@endphp
-												</select>
-											</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="userNameInput">ชื่อ-สกุล</label>
+											<input type="text" name="uFullNameInput" class="form-control" value="{{ $data['user_fullname'] }}" placeholder="ชื่อ-สกุล" readonly>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-3">
-											<label for="otherTitleNameInput">อื่นๆ ระบุ</label>
-											<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-3">
-											<label for="firstNameInput">ชื่อจริง</label>
-											<input type="text" name="firstNameInput" class="form-control" value="{{ auth()->user()->name }}" placeholder="ชื่อ">
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-3">
-											<label for="lastNameInput">นามสกุล</label>
-											<input type="text" name="lastNameInput" class="form-control" value="{{ auth()->user()->lastname }}" placeholder="นามสกุล">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="userOffice">โรงพยาบาล/หน่วยงาน</label>
+											<input type="text" name="uOffice" class="form-control" value="{{ $data['user_office'] }}" placeholder="หน่วยงาน" readonly>
 										</div>
 									</div>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
-											<div class="form-group">
-												<label for="province">จังหวัด</label>
-												<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" >
-													<option value="0">-- เลือกจังหวัด --</option>
-													@php
-														$provinces = Session::get('provinces');
-														$provinces->each(function ($item, $key) {
-															echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>\n";
-														});
-													@endphp
-												</select>
-											</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="userProvince">จังหวัด</label>
+											<input type="text" name="uProvince" value="{{ $data['user_province'] }}" class="form-control" placeholder="จังหวัด" readonly>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
-											<div class="form-group">
-												<label for="hospital">โรงพยาบาล</label>
-												<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" disabled>
-													<option value="0">-- เลือกโรงพยาบาล --</option>
-												</select>
-											</div>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="phoneInput">โทรศัพท์</label>
-											<input type="text" name="phoneInput" class="form-control" id="phone_input" placeholder="โทรศัพท์">
+											<input type="text" name="phoneInput" value="{{ $data['user_phone'] }}" class="form-control" placeholder="โทรศัพท์" readonly>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="faxInput">โทรสาร</label>
-											<input type="text" name="faxInput" class="form-control" id="fax_input" placeholder="โทรสาร">
+											<input type="text" name="faxInput" value="{{ $data['user_fax'] }}" class="form-control" placeholder="โทรสาร" readonly>
 										</div>
 									</div>
 								</div>
@@ -135,98 +99,76 @@ input:read-only {
 									<h1 class="text-info">2. ข้อมูลผู้ป่วย</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
-											<label for="patientName">ชื่อ</label>
-											<input type="text" name="pNameInput" class="form-control" value="" placeholder="ชื่อ-สกุล">
+											<label for="patientName">ชื่อ-สกุล</label>
+											<input type="text" name="pNameInput" class="form-control" value="{{ $data['patient_fullname'] }}" placeholder="ชื่อ-สกุล" readonly>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
-											<label for="patientName">นามสกุล</label>
-											<input type="text" name="pLastnameInput" class="form-control" value="" placeholder="ชื่อ-สกุล">
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
-											<label for="patientName">เพศ</label>
+											<label for="patientGender">เพศ</label>
 											<div class="custom-control custom-checkbox">
 												<div class="form-check form-check-inline">
-													<input type="checkbox" name="cerebralInput" value="" class="custom-control-input form-check-input" id="sex_male">
+													<input type="checkbox" name="cerebralInput" value="male" @if ($data['patient_gender'] == 'male') checked @endif class="custom-control-input form-check-input" readonly>
 													<label for="male" class="custom-control-label">&nbsp;ชาย</label>
 												</div>
 												<div class="form-check form-check-inline">
-													<input type="checkbox" name="cerebralInput" value="" class="custom-control-input form-check-input" id="sex_female">
+													<input type="checkbox" name="cerebralInput" value="female" @if ($data['patient_gender'] == 'female') checked @endif class="custom-control-input form-check-input" readonly>
 													<label for="female" class="custom-control-label">&nbsp;หญิง</label>
 												</div>
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
 											<label for="HN">HN</label>
-											<input type="text" name="hnInput" class="form-control" placeholder="HN" value="">
+											<input type="text" name="hnInput" value="{{ $data['patient_hn'] }}" class="form-control" placeholder="HN" readonly>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
-											<label for="age">อายุ</label>
-											<input type="text" name="ageInput" class="form-control" placeholder="อายุ" value="">
+											<label for="age">อายุ (ปี-เดือน-วัน)</label>
+											<input type="text" name="ageInput"  value="{{ $data['patient_age'] }}" class="form-control" placeholder="อายุ" readonly>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group">
 												<label for="houseNo">ที่อยู่ปัจจุบัน/ขณะป่วย เลขที่</label>
-												<input type="text" name="houseNoInput" class="form-control" placeholder="บ้านเลขที่">
+												<input type="text" name="houseNoInput" value="{{ $data['patient_house_no'] }}" class="form-control" placeholder="บ้านเลขที่" readonly>
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-3">
 											<div class="form-group">
 												<label for="villageNo">หมู่ที่</label>
-												<input type="text" name="villageNoInput" class="form-control" placeholder="หมู่ที่">
+												<input type="text" name="villageNoInput" value="{{ $data['patient_village_no'] }}" class="form-control" placeholder="หมู่ที่" readonly>
 											</div>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="village">หมู่บ้าน</label>
-											<input type="text" name="villageInput" class="form-control" placeholder="หมู่บ้าน">
+											<input type="text" name="villageInput" value="{{ $data['patient_village'] }}" class="form-control" placeholder="หมู่บ้าน" readonly>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-4 mb-3">
 											<div class="form-group">
 												<label for="lane">ซอย</label>
-												<input type="text" name="laneInput" class="form-control" placeholder="ซอย">
+												<input type="text" name="laneInput" value="{{ $data['patient_lane'] }}" class="form-control" placeholder="ซอย" readonly>
 											</div>
 										</div>
 									</div>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<div class="form-group {{ $errors->has('provinceInput') ? 'has-error' : '' }}">
-												<label for="province">จังหวัด</label>
-												<select name="provinceInput" class="form-control selectpicker show-tick" id="select_province">
-													<option value="">-- เลือกจังหวัด --</option>
-													@php
-														$provinces = Session::get('provinces');
-														$provinces->each(function ($item, $key) {
-															echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>\n";
-														});
-													@endphp
-												</select>
-											</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="patientProvince">จังหวัด</label>
+											<input type="text" name="pProvince" value="{{ $data['patient_province'] }}" class="form-control" placeholder="จังหวัด" readonly>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<div class="form-group">
-												<label for="district">อำเภอ</label>
-												<select name="districtInput" class="form-control selectpicker show-tick" id="select_district">
-													<option value="">-- โปรดเลือก --</option>
-												</select>
-											</div>
+											<label for="patientDistrict">อำเภอ</label>
+											<input type="text" name="pDistrict" value="{{ $data['patient_district'] }}" class="form-control" placeholder="อำเภอ" readonly>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
-											<div class="form-group">
-												<label for="subDistrict">ตำบล</label>
-												<select name="subDistrictInput" class="form-control selectpicker show-tick" id="select_sub_district">
-													<option value="">-- โปรดเลือก --</option>
-												</select>
-											</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="patientSubDistrict">ตำบล</label>
+											<input type="text" name="pSubDistrict" value="{{ $data['patient_sub_district'] }}" class="form-control" placeholder="ตำบล" readonly>
 										</div>
 									</div>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<div class="form-group">
 												<label for="sickDateInput">วันที่เริ่มป่วย</label>
 												<div class="input-group date" data-provide="datepicke" id="sickDateInput">
 													<div class="input-group">
-														<input type="text" name="sickDateInput" class="form-control">
+														<input type="text" name="sickDateInput" value="{{ $data['patient_sickDate'] }}" class="form-control" readonly>
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -237,15 +179,15 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<div class="form-group">
 												<label for="hospital">โรงพยาบาล</label>
-												<input type="text" name="hospitalNoInput" class="form-control" placeholder="โรงพยาบาล">
+												<input type="text" name="hospitalNoInput" value="{{ $data['patient_hospital'] }}" class="form-control" placeholder="โรงพยาบาล" readonly>
 											</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<div class="form-group">
-												<label for="treatDateInput">วันที่เข้ารับการรักษา</label>
-												<div class="input-group date" data-provide="datepicke" id="treatDateInput">
+												<label for="dateDefine">วันที่เข้ารับการรักษา</label>
+												<div class="input-group date" data-provide="datepicke" id="dateDefineInput">
 													<div class="input-group">
-														<input type="text" name="treatDateInput" class="form-control">
+														<input type="text" name="dateDefineInput" value="{{ $data['patient_dateDefine'] }}" class="form-control" readonly>
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -263,34 +205,75 @@ input:read-only {
 											<div class="form-group">
 												<label for="temperature">อุณหภูมิร่างกาย</label>
 												<div class="input-group">
-													<input type="text" name="temperatureInput" value="" class="form-control">
+													<input type="text" name="temperatureInput" value="{{ $data['patient_temperature']}}" class="form-control" readonly>
 													<div class="input-group-append">
 														<span class="input-group-text">C&#176;</span>
 													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-									<div class="form-row">
-										@foreach ($symptoms as $key => $val)
-											@if ($val->id != 21)
-												<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="symptom{{ $val->id }}" class="custom-control-input form-check-input">
-														<label for="symptom" class="custom-control-label">&nbsp;{{ $val->symptom_name_th }}</label>
+
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+											<div class="form-group">
+												<label for="feverDay">จำนวนวันที่เป็นไข้</label>
+												<div class="input-group">
+													<input type="number" name="feverDayInput" value="0" min="0" max="90" class="form-control">
+													<div class="input-group-append">
+														<span class="input-group-text">วัน</span>
 													</div>
 												</div>
-											@else
+											</div>
+										</div>
+
+									</div>
+									<div class="form-row">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="form-check form-check-inline">
+												<input type="checkbox" name="fever_sym" class="custom-control-input form-check-input">
+												<label for="symptom" class="custom-control-label">&nbsp;ไข้</label>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="form-check form-check-inline">
+												<input type="checkbox" name="fever_sym" class="custom-control-input form-check-input">
+												<label for="symptom" class="custom-control-label">&nbsp;ไอ (Cough)</label>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="form-check form-check-inline">
+												<input type="checkbox" name="fever_sym" class="custom-control-input form-check-input">
+												<label for="symptom" class="custom-control-label">&nbsp;เจ็บคอ (Sore throat)</label>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="form-check form-check-inline">
+												<input type="checkbox" name="fever_sym" class="custom-control-input form-check-input">
+												<label for="symptom" class="custom-control-label">&nbsp;มีน้ำมูก/คัดจมูก (Runny or stuffy nose)</label>
+											</div>
+										</div>
+									</div>
+									<!--
+									<div class="form-row">
+										foreach ($symptoms as $key => $val)
+											if ($val->id != 21)
+												<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+													<div class="form-check form-check-inline">
+														<input type="checkbox" name="symptom{ $val->id }}" class="custom-control-input form-check-input">
+														<label for="symptom" class="custom-control-label">&nbsp;{ $val->symptom_name_th }}</label>
+													</div>
+												</div>
+											else
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 													<div class="form-check form-check-inline">
-														<input type="checkbox" name="symptom{{ $val->id }}" class="custom-control-input form-check-input">
-														<label for="symptom" class="custom-control-label">&nbsp;{{ $val->symptom_name_th }}</label>
+														<input type="checkbox" name="symptom{ $val->id }}" class="custom-control-input form-check-input">
+														<label for="symptom" class="custom-control-label">&nbsp;{ $val->symptom_name_th }}</label>
 													</div>
 													<input type="text" name="other_symptom_input" class="form-control" id="symptom_other" disabled>
 												</div>
-											@endif
-										@endforeach
+											endif
+										endforeach
 									</div>
+									-->
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="rapidTestResult">ผลการตรวจ Rapid test</label>

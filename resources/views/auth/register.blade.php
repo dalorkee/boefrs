@@ -151,10 +151,18 @@ input[type=text], input[type=password] {
 										<input type="text" name="email" class="form-control form-control-lg" value="{{ old('email') }}" placeholder="อีเมล์">
 									</div>
 								</div>
+							</div>
+							<div class="row">
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
 									<div class="form-group">
 										<label for="phone">โทรศัพท์ :</label>
 										<input type="text" name="phone" class="form-control form-control-lg" value="{{ old('phone') }}" placeholder="โทรศัพท์">
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+									<div class="form-group">
+										<label for="fax">โทรสาร :</label>
+										<input type="text" name="fax" class="form-control form-control-lg" value="{{ old('fax') }}" placeholder="โทรสาร">
 									</div>
 								</div>
 							</div>

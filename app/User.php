@@ -26,6 +26,7 @@ class User extends Authenticatable
 		'lastname',
 		'email',
 		'phone',
+		'fax',
 		'password',
 		'user_hospital_name'
 	];

@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
 			$table->string('lastname');
 			$table->string('email');
 			$table->string('phone');
+			$table->string('fax');
 			$table->string('password');
 			$table->enum('status', ['active', 'reject'])->default('active');
 			$table->rememberToken();

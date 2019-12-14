@@ -111,6 +111,16 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
+	public function provinceListArr() {
+		$prov = DB::connection('mysql')
+				->table('ref_province')
+				->orderBy('province_name', 'asc')
+				->get();
+		$provinces = $prov->keyBy('province_id');
+		$provinces->all();
+		return $provinces;
+	}
+
 	public static function provinceList() {
 		$prov = DB::connection('mysql')
 				->table('ref_province')
@@ -136,10 +146,26 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
+	public function districtById($ds_id=0) {
+		return DB::connection('mysql')
+			->table('ref_district')
+			->where('district_id', '=', $ds_id)
+			->orderBy('district_id', 'asc')
+			->get();
+	}
+
 	public function subDistrictByDistrict($dist_code=0) {
 		return DB::connection('mysql')
 			->table('ref_sub_district')
 			->where('district_id', '=', $dist_code)
+			->orderBy('sub_district_id', 'asc')
+			->get();
+	}
+
+	public function suBdistrictById($sub_district_id=0) {
+		return DB::connection('mysql')
+			->table('ref_sub_district')
+			->where('sub_district_id', '=', $sub_district_id)
 			->orderBy('sub_district_id', 'asc')
 			->get();
 	}
@@ -228,6 +254,15 @@ class BoeFrsController extends Controller implements BoeFrs
 		if (!is_null($date) || !empty($date)) {
 			$ep = explode("/", $date);
 			$string = $ep[2]."-".$ep[1]."-".$ep[0];
+		} else {
+			$string = NULL;
+		}
+		return $string;
+	}
+	protected function convertMySQLDateFormat($date='00-00-0000', $seperator="/") {
+		if (!is_null($date) || !empty($date)) {
+			$ep = explode("-", $date);
+			$string = $ep[2].$seperator.$ep[1].$seperator.$ep[0];
 		} else {
 			$string = NULL;
 		}
