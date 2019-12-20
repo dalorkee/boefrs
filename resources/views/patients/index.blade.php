@@ -760,7 +760,7 @@ input:read-only {
 															$htm .= "<td>\n";
 																$htm .= "<div class=\"form-group row\">\n";
 																	$htm .= "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12\">\n";
-																		$htm .= "<div class=\"input-group date\" data-provide=\"datepicke\" id=\"specimenDate".$val->id."\">\n";
+																		$htm .= "<div class=\"input-group date\" id=\"specimenDate".$val->id."\">\n";
 																			$htm .= "<div class=\"input-group\">\n";
 																				$htm .= "<input type=\"text\" name=\"specimenDate".$val->id."\" value=\"".old("specimenDate".$val->id)."\" class=\"form-control\" id=\"specimenDate_".$val->id."\"";
 																				if (empty(old("specimenDate".$val->id))) {

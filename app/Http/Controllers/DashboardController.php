@@ -17,6 +17,7 @@ class DashboardController extends Controller
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
 		//$this->middleware(['permission:manageuser']);
+		$this->middleware('page_session');
 	}
 
 	public function index()

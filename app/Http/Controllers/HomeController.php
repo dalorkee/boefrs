@@ -19,7 +19,9 @@ class HomeController extends BoeFrsController
 	{
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
-//		$this->middleware(['permission:manageuser']);
+		//$this->middleware(['permission:manageuser']);
+		$this->middleware('page_session');
+
 	}
 
 	/**
@@ -30,21 +32,32 @@ class HomeController extends BoeFrsController
 	public function index(Request $request)
 	{
 		/* set thai province to session */
-		$provinces = BoeFrsController::provinceList();
-		Session::put('provinces', $provinces);
-
+		/*
+		if (!Session::has('provinces')) {
+			$provinces = BoeFrsController::provinceList();
+			Session::put('provinces', $provinces);
+		}
+		*/
 		/* set role name to session */
+		/*
+		if (!Session::has('user_role_name')) {
+			$roleArr = auth()->user()->roles->pluck('name');
+			$userRole = $roleArr[0];
+			Session::put('user_role_name', $userRole);
+		}
+		*/
+		/* set user hospital to session */
+		/*
+		if (!Session::has('user_hospital_name')) {
+			$user_hosp = parent::hospitalByCode(auth()->user()->hospcode);
+			$user_hosp = $user_hosp->pluck('hosp_name')->all();
+			$user_hosp_name = $user_hosp[0];
+			Session::put('user_hospital_name', $user_hosp_name);
+		}
+		*/
+		/* router by permission */
 		$roleArr = auth()->user()->roles->pluck('name');
 		$userRole = $roleArr[0];
-		Session::put('user_role_name', $userRole);
-
-		/* set user hospital to session */
-		$user_hosp = parent::hospitalByCode(auth()->user()->hospcode);
-		$user_hosp = $user_hosp->pluck('hosp_name')->all();
-		$user_hosp_name = $user_hosp[0];
-		Session::put('user_hospital_name', $user_hosp_name);
-
-		/* router by permission */
 		if ($userRole == 'admin') {
 			return redirect()->route('dashboard.index');
 		} elseif ($userRole == 'hospital' || $userRole == 'lab') {

@@ -16,6 +16,7 @@ class CodeController extends BoeFrsController {
 		parent::__construct();
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware('page_session');
 	}
 
 	/**
@@ -25,6 +26,12 @@ class CodeController extends BoeFrsController {
 	*/
 
 	public function index(Request $request) {
+		/* set thai province to session */
+		if (!Session::has('provinces')) {
+			$provinces = BoeFrsController::provinceList();
+			Session::put('provinces', $provinces);
+		}
+
 		$roleArr = auth()->user()->getRoleNames();
 		if ($roleArr[0] == 'admin') {
 			$patients = parent::patientByAdmin('new');

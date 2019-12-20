@@ -47,10 +47,4 @@ class LoginController extends Controller
 		Session::flush();
 		return redirect('/login');
 	}
-
-/*	public function setProvList() {
-		$provinces = BoeFrsController::provinceList();
-		session(['provinces' => $provinces]);
-	}
-	*/
 }

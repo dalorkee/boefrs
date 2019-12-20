@@ -19,6 +19,7 @@ class PatientsController extends BoeFrsController
 		parent::__construct();
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware('page_session');
 	}
 
 	/**
