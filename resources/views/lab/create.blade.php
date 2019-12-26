@@ -2,6 +2,7 @@
 @section('custom-style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-table/dist/bootstrap-table.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
 <style>
 input:-moz-read-only { /* For Firefox */
@@ -52,7 +53,8 @@ input:read-only {
 							<h5 class="card-subtitle">ID Flu-BOE</h5>
 						</div>
 					</div>
-					<Form action="{{ route('Lab') }}" method="POST" class="needs-validation custom-form-legend" novalidate>
+					<Form action="/lab" method="POST" class="needs-validation custom-form-legend" novalidate>
+						@method('POST')
 						<div class="card">
 							<div class="card-body">
 								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
@@ -64,43 +66,15 @@ input:read-only {
 											<div class="input-group-append">
 												<span class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="top" title="โปรดเขียนรหัสนี้ลงบนแบบฟอร์ม">{{ $data['patient_lab_code'] }}</span>
 												{{ csrf_field() }}
-												<input type="hidden" name="pid" value="{{ $data['patient_id'] }}">
-												<input type="hidden" name="lab_code" value="{{ $data['patient_lab_code'] }}">
 											</div>
 										</div>
 									</div>
-									<h1 class="text-info">1. ชื่อและที่อยู่ของผู้นำส่งตัวอย่าง</h1>
-									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="userNameInput">ชื่อ-สกุล</label>
-											<input type="text" name="uFullNameInput" class="form-control" value="{{ $data['user_fullname'] }}" placeholder="ชื่อ-สกุล" readonly>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="userOffice">โรงพยาบาล/หน่วยงาน</label>
-											<input type="text" name="uOffice" class="form-control" value="{{ $data['user_office'] }}" placeholder="หน่วยงาน" readonly>
-										</div>
-									</div>
-									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="userProvince">จังหวัด</label>
-											<input type="text" name="uProvince" value="{{ $data['user_province'] }}" class="form-control" placeholder="จังหวัด" readonly>
-
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="phoneInput">โทรศัพท์</label>
-											<input type="text" name="phoneInput" value="{{ $data['user_phone'] }}" class="form-control" placeholder="โทรศัพท์" readonly>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="faxInput">โทรสาร</label>
-											<input type="text" name="faxInput" value="{{ $data['user_fax'] }}" class="form-control" placeholder="โทรสาร" readonly>
-										</div>
-									</div>
-								</div>
-								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
-									<h1 class="text-info">2. ข้อมูลผู้ป่วย</h1>
+									<h1 class="text-info">1. ข้อมูลผู้ป่วย</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
 											<label for="patientName">ชื่อ-สกุล</label>
+											<input type="hidden" name="pid" value="{{ $data['patient_id'] }}">
+											<input type="hidden" name="lab_code" value="{{ $data['patient_lab_code'] }}">
 											<input type="text" name="pNameInput" class="form-control" value="{{ $data['patient_fullname'] }}" placeholder="ชื่อ-สกุล" readonly>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
@@ -196,11 +170,10 @@ input:read-only {
 												</div>
 											</div>
 										</div>
-
 									</div>
 								</div>
 								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
-									<h1 class="text-info">3. อาการ</h1>
+									<h1 class="text-info">2. อาการ</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group">
@@ -225,7 +198,6 @@ input:read-only {
 												</div>
 											</div>
 										</div>
-
 									</div>
 									<div class="form-row pt-3 pb-3">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
@@ -427,16 +399,17 @@ input:read-only {
 									</div>
 								</div>
 								<div class="bd-callout bd-callout-custom-6" style="margin-top:0;position:relative">
-									<h1 class="text-color-custom-2">4. ตัวอย่างส่งตรวจเพื่อหาสารพันธุกรรมหรือแยกเชื้อ</h1>
+									<h1 class="text-color-custom-2">3. ตัวอย่างส่งตรวจเพื่อหาสารพันธุกรรมหรือแยกเชื้อ</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
-											<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
+											<label for="specimenInput" style="display:none;">ชนิดของตัวอย่างที่ส่งตรวจ</label>
 											<div class="table-responsive">
-												<table class="table" id="specimen_table">
+												<table class="table" data-show-columns="true" data-search="true" data-mobile-responsive="true" data-check-on-init="true" id="specimen_table">
 													<thead class="bg-custom-2 text-light">
 														<tr>
-															<th scope="col">ตัวอย่างส่งตรวจ</th>
-															<th scope="col">วันที่เก็บตัวอย่าง</th>
+															<th>ตัวอย่างส่งตรวจ</th>
+															<th>วันที่เก็บตัวอย่าง</th>
+															<th>ผลการตรวจ</th>
 														</tr>
 													</thead>
 													<tfoot></tfoot>
@@ -445,15 +418,15 @@ input:read-only {
 														<tr id="specimen_tr{{ $val['rs_id'] }}">
 															<td>
 																<div class="form-group row">
-																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-12">
 																		<div class="custom-control custom-checkbox custom-control-inline">
-																			<input type="checkbox" name="specimen{{ $val['rs_id'] }}" value="{{ $val['s_id'] }}" @if ($val['s_id'] != null) checked @endif class="custom-control-input form-check-input specimen-chk-{{ $val['rs_id'] }}" id="specimen_chk{{ $val['rs_id'] }}">
+																			<input type="checkbox" name="specimen{{ $val['rs_id'] }}" value="{{ $val['rs_id'] }}" @if ($val['s_id'] != null) checked @endif class="custom-control-input form-check-input specimen-chk-{{ $val['rs_id'] }}" id="specimen_chk{{ $val['rs_id'] }}" disabled>
 																			<label for="specimen_chk{{ $val['rs_id'] }}" class="custom-control-label font-weight-normal">{{ $val['rs_name_en'] }}  {{ $val['rs_abbreviation'] != null ? " (".$val['rs_abbreviation'].")" : "" }} {{ $val['rs_note'] }}</label>
 																		</div>
 																	</div>
 																	@if ($val['rs_other_field'] == 'Yes')
-																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-																			<input type="text" name="specimenOth{{ $val['rs_id'] }}" value="{{ $val['s_specimen_other'] }}" class="form-control" id="specimen_{{ $val['rs_id']."oth" }}">
+																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																			<input type="text" name="specimenOth{{ $val['rs_id'] }}" value="{{ $val['s_specimen_other'] }}" class="form-control" id="specimen_{{ $val['rs_id']."oth" }}" readonly>
 																		</div>
 																	@endif
 																</div>
@@ -472,6 +445,17 @@ input:read-only {
 																	</div>
 																</div>
 															</td>
+															<td>
+																<div class="form-group row">
+																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																		<div class="input-group">
+																			<div class="input-group">
+																				<input type="text" name="specimenResult{{ $val['rs_id'] }}" value="" class="form-control" id="specimenResult_{{ $val['rs_id'] }}">
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</td>
 														</tr>
 													@endforeach
 													</tbody>
@@ -479,7 +463,35 @@ input:read-only {
 											</div>
 										</div>
 									</div>
-								</div><!-- bd-collout-4 -->
+								</div><!-- bd-collout-3 -->
+								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
+									<h1 class="text-info">4. ชื่อและที่อยู่ของผู้นำส่งตัวอย่าง</h1>
+									<div class="form-row">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="userNameInput">ชื่อ-สกุล</label>
+											<input type="text" name="uFullNameInput" class="form-control" value="{{ $data['user_fullname'] }}" placeholder="ชื่อ-สกุล" readonly>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="userOffice">โรงพยาบาล/หน่วยงาน</label>
+											<input type="text" name="uOffice" class="form-control" value="{{ $data['user_office'] }}" placeholder="หน่วยงาน" readonly>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="userProvince">จังหวัด</label>
+											<input type="text" name="uProvince" value="{{ $data['user_province'] }}" class="form-control" placeholder="จังหวัด" readonly>
+
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="phoneInput">โทรศัพท์</label>
+											<input type="text" name="phoneInput" value="{{ $data['user_phone'] }}" class="form-control" placeholder="โทรศัพท์" readonly>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+											<label for="faxInput">โทรสาร</label>
+											<input type="text" name="faxInput" value="{{ $data['user_fax'] }}" class="form-control" placeholder="โทรสาร" readonly>
+										</div>
+									</div>
+								</div><!-- bd-collout 4 -->
 							</div><!-- card-body -->
 						</div><!-- card -->
 						<div class="border-top">
@@ -500,6 +512,8 @@ input:read-only {
 <script src="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/bootstrap-table/dist/bootstrap-table.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile.min.js') }}"></script>
 <script>
 $(document).ready(function() {
 	/* ajax request */
@@ -508,6 +522,10 @@ $(document).ready(function() {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+
+	$(function() {
+		$('#specimen_table').bootstrapTable()
+	})
 
 	/* title name */
 	$('#title_name_input').change(function() {
@@ -570,8 +588,9 @@ $(document).ready(function() {
 		}\n";
 	}
 	/* specimen hilight switch*/
+	/*$htm = "";
 	foreach ($data['patient_specimen'] as $key => $val) {
-		echo "
+		$htm .= "
 		$('.specimen-chk-".$val['rs_id']."').click(function() {
 			$('.specimen-chk-".$val['rs_id']."').not(this).prop('checked', false);
 			let number = $('.specimen-chk-".$val['rs_id']."').filter(':checked').length;
@@ -582,17 +601,33 @@ $(document).ready(function() {
 				}
 			} else {
 				$('#specimen_tr".$val['rs_id']."').removeClass('highlight');
-			}
-			if ($('#specimen_chk".$val['rs_id']."').prop('checked') == true) {
-				$('#specimenDate_".$val['rs_id']."').prop('disabled', false);
+			}\n";
+			if ($val['rs_other_field'] == 'Yes') {
+				$htm .= "
+				if ($('#specimen_chk".$val['rs_id']."').prop('checked') == true) {
+					$('#specimen_".$val['rs_id']."oth').prop('disabled', false);
+					$('#specimenDate_".$val['rs_id']."').prop('disabled', false);
+				} else {
+					$('#specimen_".$val['rs_id']."oth').val('');
+					$('#specimen_".$val['rs_id']."oth').prop('disabled', true);
+					$('#specimenDate_".$val['rs_id']."').val('');
+					$('#specimenDate_".$val['rs_id']."').prop('disabled', true);
+				}\n";
 			} else {
-				$('#specimenDate_".$val['rs_id']."').val('');
-				$('#specimenDate_".$val['rs_id']."').prop('disabled', true);
+				$htm .= "
+				if ($('#specimen_chk".$val['rs_id']."').prop('checked') == true) {
+					$('#specimenDate_".$val['rs_id']."').prop('disabled', false);
+				} else {
+					$('#specimenDate_".$val['rs_id']."').val('');
+					$('#specimenDate_".$val['rs_id']."').prop('disabled', true);
+				}\n";
 			}
-		});\n
-		";
+		$htm .= "});\n";
 	}
+	echo $htm;
+	/
 	/* specimen date picker */
+	/*
 	foreach ($data['patient_specimen'] as $key => $val) {
 		echo "
 		$('#specimenDate".$val['rs_id']."').datepicker({
@@ -601,7 +636,7 @@ $(document).ready(function() {
 			todayBtn: true,
 			autoclose: true
 		});\n";
-	}
+	}*/
 	@endphp
 });
 </script>

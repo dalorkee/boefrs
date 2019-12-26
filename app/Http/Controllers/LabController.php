@@ -59,25 +59,23 @@ class LabController extends BoeFrsController
 		$symptoms = parent::symptoms();
 		$specimen = parent::specimen();
 		$specimen = $specimen->keyBy('id');
+		$pathogen = parent::pathogen();
+		$pathogen = $pathogen->keyBy('id');
+
 		$patient = Patients::where('id', '=', $request->id)
 		->where('lab_status', '!=', 'new')
 		->whereNull('deleted_at')
 		->get();
+
 		$clinical = Clinical::where('ref_pt_id', $patient[0]->id)
 		->whereNull('deleted_at')
 		->get();
-		/*
-		$specimen_data = RefSpecimen::leftJoin('specimen', function($join) {
-			$join->on('ref_specimen.id', '=', 'specimen.id');
-		})
-		->where('specimen.ref_pt_id', '=', $request->id)
-		->whereNull('deleted_at')
-		->get();
-		*/
+
 		$specimen_data = Specimen::where('ref_pt_id', '=', $request->id)
 		->whereNull('deleted_at')
 		->get();
 		$specimen_data = $specimen_data->keyBy('specimen_id');
+
 		$specimen_rs = collect();
 		$rs = $specimen->each(function($item, $key) use ($specimen_rs, $specimen_data) {
 			$tmp['rs_id'] = $item->id;
@@ -225,27 +223,33 @@ class LabController extends BoeFrsController
 		$data['patient_first_diag'] = $clinical[0]->first_diag;
 		$data['patient_specimen'] = $specimen_rs;
 
-		//dd($specimen_rs);
-
 		return view('lab.create',
 			[
-				'symptoms'=>$symptoms,
-				'specimen'=>$specimen,
-				'specimen_data'=>$specimen_data,
-				'data'=>$data
+				'symptoms' => $symptoms,
+				'specimen' => $specimen,
+				'pathogen' => $pathogen,
+				'specimen_data' => $specimen_data,
+				'data' => $data
 			]
 		);
 	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+	/**
+	* Store a newly created resource in storage.
+	*
+	* @param  \Illuminate\Http\Request  $request
+	* @return \Illuminate\Http\Response
+	*/
 	public function store(Request $request)
 	{
-		//
+		$data = $request->all();
+		dd($data);
+
+
+
+
+
+
 	}
 
     /**

@@ -32,5 +32,7 @@ interface BoeFrs
 
 	public function nationality();
 
+	public function pathogen();
+
 }
 ?>

@@ -226,6 +226,13 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
+	public function pathogen() {
+		return DB::connection('mysql')
+			->table('ref_pathogen')
+			->orderBy('id', 'asc')
+			->get();
+	}
+
 
 	/* random for generate the pin */
 	public function randPin($prefix=null, $separator=null) {
