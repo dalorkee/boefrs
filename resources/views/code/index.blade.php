@@ -325,7 +325,6 @@ $(document).ready(function() {
 	echo $htm;
 	@endphp
 
-
 	/* submit ajax */
 	$("#btn_submit").click(function(e) {
 		var input = ConvertFormToJSON("#patient_form");

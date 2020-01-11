@@ -47,6 +47,9 @@ Route::post('ajaxSelect', 'CodeController@ajaxRequestSelect')->name('ajaxSelect'
 /* Ajax request hosp */
 Route::get('/ajaxGetHospByProv', 'UserController@ajaxGetHospByProv')->name('ajaxGetHospByProv');
 
+/* Ajax lab */
+Route::post('ajaxAddLab', 'LabController@ajaxAddLab')->name('ajaxAddLab');
+
 /* Captcha */
 Route::get('/refreshcaptcha', 'CaptchaController@refreshCaptcha');
 
@@ -76,3 +79,4 @@ Route::post('data/patients', 'ListDataController@ajaxListDataAfterDeleted')->nam
 
 /* lab data */
 Route::get('/lab/create/{id}', 'LabController@create')->name('createLab');
+Route::get('/lab/show/{id}', 'LabController@show')->name('viewLab');

@@ -94,7 +94,8 @@ input.valid, textarea.valid{
 			<div class="ml-auto text-right">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Form</a></li>
+						<li class="breadcrumb-item"><a href="#">Lab</a></li>
+						<li class="breadcrumb-item"><a href="#">List</a></li>
 						<li class="breadcrumb-item active" aria-current="page">All</li>
 					</ol>
 				</nav>
@@ -211,8 +212,8 @@ input.valid, textarea.valid{
 													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
 														if ($item->lab_status == 'hospital') {
-															echo "<a href=\"".route('createLab', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
-															echo "<a href=\"".route('createLab', ['id'=>$item->id])."\" class=\"btn btn-primary btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"New\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+															echo "<a href=\"".route('viewLab', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
+															echo "<a href=\"".route('createLab', ['id'=>$item->id])."\" class=\"btn btn-primary btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Create\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 														} else {
 															echo "<a href=\"".route('editLab', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
 														}
