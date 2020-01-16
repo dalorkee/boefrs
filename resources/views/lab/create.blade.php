@@ -131,9 +131,9 @@ table.table td .add {
 						</div>
 					</div>
 
-					<form action="/lab" method="POST" class="needs-validation custom-form-legend" novalidate>
-						{{ csrf_field() }}
-					<!--<form id="lab_form" class="mt-4 mb-3"> -->
+					<!--<form action="/lab" method="POST" class="needs-validation custom-form-legend" novalidate>
+						{ csrf_field() }} -->
+					<form id="lab_form" class="mt-4 mb-3">
 						<div class="bd-callout" style="margin-top:0;position:relative">
 							<div class="card">
 								<div class="card-body">
@@ -273,13 +273,6 @@ $(document).ready(function() {
 		}
 	});
 
-	@php
-	if (Session::has('message')) {
-		$message = Session::get('message');
-		echo "alertMessage(500, 'ko', 'nok');";
-	}
-	@endphp
-
 	/* receiveDate date input */
 	$('#receiveDateInput').datepicker({
 		autoclose: true,
@@ -312,13 +305,12 @@ $(document).ready(function() {
 
 	/* submit ajax */
 	$("#btn_submit").click(function(e) {
-		e.preventDefault();
-		var input = ConvertFormToJSON("#lab_form");
-
-		/*
+		//e.preventDefault();
+		//var input = ConvertFormToJSON("#lab_form");
+		var input = $("#lab_form").serialize();
 		$.ajax({
-			type: 'POST',
-			url: "{ route('lab-store') }}",
+			method: 'POST',
+			url: "{{ route('lab-store') }}",
 			data: input,
 			success: function(data) {
 				if (data.status == 204) {
@@ -339,11 +331,11 @@ $(document).ready(function() {
 							"showDuration": "500"
 						}
 					);
-
+					/*
 					window.setTimeout(function() {
 						window.location.replace("{ route('lab.index') }}");
 					}, 10000);
-
+					*/
 				}
 			},
 			error: function(data, status, error) {
@@ -357,7 +349,7 @@ $(document).ready(function() {
 					}
 				);
 			}
-		}); */
+		});
 	});
 });
 </script>
@@ -462,37 +454,6 @@ function ConvertFormToJSON(form){
 		json[this.name] = this.value || '';
 	});
 	return json;
-}
-function alertMessage(status, message, title) {
-	status = parseInt(status);
-	if (status == 200) {
-		toastr.success(message, title,
-			{
-				'closeButton': true,
-				'positionClass': 'toast-top-center',
-				'progressBar': true,
-				'showDuration': '600'
-			}
-		);
-	} else if (status == 204) {
-		toastr.warning(message, title,
-			{
-				'closeButton': true,
-				'positionClass': 'toast-top-center',
-				'progressBar': true,
-				'showDuration': '800'
-			}
-		);
-	} else {
-		toastr.error(message, title,
-			{
-				'closeButton': true,
-				'positionClass': 'toast-top-center',
-				'progressBar': true,
-				'showDuration': '800'
-			}
-		);
-	}
 }
 </script>
 @endsection

@@ -127,7 +127,7 @@ class LabController extends BoeFrsController
 		}
 		*/
 		if (count($data['pt_specimen']) == count($data['pathogen'])) {
-			//DB::beginTransaction();
+			DB::beginTransaction();
 			try {
 				$lab_data = array();
 				for ($i=0; $i<count($data['pt_specimen']); $i++) {
@@ -150,15 +150,15 @@ class LabController extends BoeFrsController
 				//$patient = Patients::find($data['patientId']);
 				//$patient->lab_status = 'lab';
 				//$patient_saved = $patient->save();
-				//DB::commit();
+				DB::commit();
 				if ($lab_saved) {
 					$message = ['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site'];
 				} else {
-					//DB::rollback();
+					DB::rollback();
 					$message = ['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site'];
 				}
 			} catch (Exception $e) {
-				//DB::rollback();
+				DB::rollback();
 				$message = ['status'=>500, 'msg'=>$e->getMessage(), 'title'=>'Flu Right Site'];
 			}
 			return response()->json($message);
