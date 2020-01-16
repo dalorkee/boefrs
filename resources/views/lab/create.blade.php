@@ -130,8 +130,10 @@ table.table td .add {
 							<h5 class="card-subtitle">ID Flu-BOE</h5>
 						</div>
 					</div>
-					<Form action="/lab" method="POST" class="needs-validation custom-form-legend" novalidate>
-						@method('POST')
+
+					<form action="/lab" method="POST" class="needs-validation custom-form-legend" novalidate>
+						{{ csrf_field() }}
+					<!--<form id="lab_form" class="mt-4 mb-3"> -->
 						<div class="bd-callout" style="margin-top:0;position:relative">
 							<div class="card">
 								<div class="card-body">
@@ -142,7 +144,6 @@ table.table td .add {
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<div class="input-group-append">
 												<span class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="top" title="รหัสแบบฟอร์ม">{{ $patient[0]->lab_code }}</span>
-												{{ csrf_field() }}
 											</div>
 										</div>
 									</div>
@@ -152,22 +153,24 @@ table.table td .add {
 								<div class="card-body border-top">
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="hospital">โรงพยาบาล</label>
-											<input type="hidden" name="hospitalInput" value="{{ $user_hospital[0]->hosp_name }}">
-											<input type="text" name="hospitalInputName" value="{{ $user_hospital[0]->hosp_name }}" class="form-control" placeholder="Hospital" readonly>
+											<label for="analyze_id">หมายเลขวิเคราะห์</label>
+											<input type="text" name="analyzeId" value="{{ old('analyzeId') }}" class="form-control" style="border:1px solid red;font-weight:bold;color:red;" placeholder="หมายเลขวิเคราะห์" required autofocus>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-											<label for="analysis_number">หมายเลขวิเคราะห์</label>
-											<input type="text" name="analysisNoInput" value="" class="form-control" placeholder="หมายเลขวิเคราะห์">
+											<label for="hospital">โรงพยาบาล</label>
+											<input type="hidden" name="patientId" value="{{ $patient[0]->id }}">
+											<input type="hidden" name="userIdInput" value="{{ auth()->user()->id }}">
+											<input type="hidden" name="patientHospitalCode" value="{{ $patient_hospital[0]->hospcode }}">
+											<input type="text" name="patientHospitalName" value="{{ $patient_hospital[0]->hosp_name }}" class="form-control" placeholder="Hospital" readonly>
 										</div>
 									</div>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<div class="form-group">
-												<label for="sickDateInput">วันที่รับตัวอย่าง</label>
+												<label for="receive_date">วันที่รับตัวอย่าง</label>
 												<div class="input-group date" data-provide="datepicke" id="receiveDateInput">
 													<div class="input-group">
-														<input type="text" name="receiveDateInput" value="" class="form-control">
+														<input type="text" name="receiveDate" class="form-control">
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -177,14 +180,14 @@ table.table td .add {
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<div class="form-group">
-												<label for="analysis_date">วันที่ทำการวิเคราะห์</label>
-												<div class="input-group date input-daterange" data-provide="datepicke" id="analysisDateInput">
+												<label for="analyze_date">วันที่ทำการวิเคราะห์</label>
+												<div class="input-group date input-daterange" data-provide="datepicke" id="analyzeDateInput">
 													<div class="input-group">
-														<input type="text" name="analysisStartDateInput" class="form-control">
+														<input type="text" name="analyzeDateStart" class="form-control">
 														<div class="input-group-append">
 															<span class="input-group-text">to</span>
 														</div>
-														<input type="text" name="analysisEndDateInput" class="form-control">
+														<input type="text" name="analyzeDateEnd" class="form-control">
 														<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -197,7 +200,7 @@ table.table td .add {
 												<label for="resultDate">วันที่รายงานผล</label>
 												<div class="input-group date" data-provide="datepicke" id="resultDateInput">
 													<div class="input-group">
-														<input type="text" name="resultDateInput" class="form-control">
+														<input type="text" name="resultDate" class="form-control">
 															<div class="input-group-append">
 															<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 														</div>
@@ -242,6 +245,7 @@ table.table td .add {
 							<div class="card">
 								<div class="card-body border-top">
 									<button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+									<button type="button" class="btn btn-danger" id="btn_submit">สับมีด</button>
 								</div>
 							</div><!-- end card#3 -->
 						</div><!-- bd -collout -->
@@ -268,6 +272,13 @@ $(document).ready(function() {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		}
 	});
+
+	@php
+	if (Session::has('message')) {
+		$message = Session::get('message');
+		echo "alertMessage(500, 'ko', 'nok');";
+	}
+	@endphp
 
 	/* receiveDate date input */
 	$('#receiveDateInput').datepicker({
@@ -299,10 +310,59 @@ $(document).ready(function() {
 		todayHighlight: true,
 	}).datepicker("setDate", "0");
 
+	/* submit ajax */
+	$("#btn_submit").click(function(e) {
+		e.preventDefault();
+		var input = ConvertFormToJSON("#lab_form");
+
+		/*
+		$.ajax({
+			type: 'POST',
+			url: "{ route('lab-store') }}",
+			data: input,
+			success: function(data) {
+				if (data.status == 204) {
+					toastr.warning(data.msg, "Flu Right Size",
+						{
+							"closeButton": true,
+							"positionClass": "toast-top-center",
+							"progressBar": true,
+							"showDuration": "500"
+						}
+					);
+				} else if (data.status == 200) {
+					toastr.success(data.msg, "Flu Right Size",
+						{
+							"closeButton": false,
+							"positionClass": "toast-top-center",
+							"progressBar": true,
+							"showDuration": "500"
+						}
+					);
+
+					window.setTimeout(function() {
+						window.location.replace("{ route('lab.index') }}");
+					}, 10000);
+
+				}
+			},
+			error: function(data, status, error) {
+				toastr.error(data.status + " " + status + " " + error, " Flu Right Size",
+					{
+						"closeButton": true,
+						"positionClass": "toast-top-center",
+						"progressBar": true,
+						"timeOut": 0,
+						"extendedTimeOut": 0
+					}
+				);
+			}
+		}); */
+	});
 });
 </script>
-<script type="text/javascript">
-$(document).ready(function(){
+<script>
+$(document).ready(function() {
 	$('[data-toggle="tooltip"]').tooltip();
 	var actions = $("table td:last-child").html();
 
@@ -316,7 +376,7 @@ $(document).ready(function(){
 		var index = $("table tbody tr:last-child").index();
 		var row = '<tr>' +
 			'<td>' +
-				'<select name="pathogen[]" class="form-control" id="pathogen">' +
+				'<select name="pt_specimen[]" class="form-control" id="pathogen">' +
 					'<option value="0">-- โปรดเลือก --</option>' +
 					@php
 						foreach($patient_specimen as $key => $value) {
@@ -335,8 +395,8 @@ $(document).ready(function(){
 					@endphp
 				'</select>' +
 			'</td>' +
-			'<td><input type="text" class="form-control" name="pathogen_m[]" id="pathogen_m"></td>' +
-			'<td><input type="text" class="form-control" name="note[]" id="note"></td>' +
+			'<td><input type="text" class="form-control" name="pathogen_strain[]" id="pathogen_m"></td>' +
+			'<td><input type="text" class="form-control" name="pathogen_note[]" id="note"></td>' +
 			'<td>' + actions + '</td>' +
 		'</tr>';
 		$("table").append(row);
@@ -386,14 +446,53 @@ $(document).ready(function(){
 		$(this).parents("tr").find(".add, .edit").toggle();
 		$(".add-new").attr("disabled", "disabled");
 	});
+
 	// Delete row on delete button click
 	$(document).on("click", ".delete", function(){
-        $(this).parents("tr").remove();
+		$(this).parents("tr").remove();
 		$(".add-new").removeAttr("disabled");
-    });
-
-
-
+	});
 });
+</script>
+<script>
+function ConvertFormToJSON(form){
+	var array = jQuery(form).serializeArray();
+	var json = {};
+	jQuery.each(array, function() {
+		json[this.name] = this.value || '';
+	});
+	return json;
+}
+function alertMessage(status, message, title) {
+	status = parseInt(status);
+	if (status == 200) {
+		toastr.success(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '600'
+			}
+		);
+	} else if (status == 204) {
+		toastr.warning(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '800'
+			}
+		);
+	} else {
+		toastr.error(message, title,
+			{
+				'closeButton': true,
+				'positionClass': 'toast-top-center',
+				'progressBar': true,
+				'showDuration': '800'
+			}
+		);
+	}
+}
 </script>
 @endsection

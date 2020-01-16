@@ -181,7 +181,7 @@ class BoeFrsController extends Controller implements BoeFrs
 	public function hospitalByActive() {
 		return DB::connection('mysql')
 			->table('hospitals')
-			->where('active', '=', 1)
+			->where('boefrs_active', '=', 1)
 			->orderBy('id', 'asc')
 			->limit(100)
 			->get();

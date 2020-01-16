@@ -327,6 +327,7 @@ $(document).ready(function() {
 
 	/* submit ajax */
 	$("#btn_submit").click(function(e) {
+		//e.preventDefault();
 		var input = ConvertFormToJSON("#patient_form");
 		$.ajax({
 			type: 'POST',
