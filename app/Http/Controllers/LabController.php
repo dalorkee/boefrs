@@ -94,7 +94,6 @@ class LabController extends BoeFrsController
 	public function store(Request $request)
 	{
 		$data = $request->all();
-		/*
 		if (!isset($data['analyzeId']) || empty($data['analyzeId'])) {
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกหมายเลขวิเคราะห์ !!']);
 			exit;
@@ -114,7 +113,7 @@ class LabController extends BoeFrsController
 			exit;
 		}
 		if (empty($data['resultDate'])) {
-			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูล วันที่รายงานผลการตรวจ !!']);
+			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูล วันที่รายงานผล !!']);
 			exit;
 		}
 		if (!isset($data['pt_specimen'])) {
@@ -125,7 +124,6 @@ class LabController extends BoeFrsController
 			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลผลการตรวจ !!']);
 			exit;
 		}
-		*/
 		if (count($data['pt_specimen']) == count($data['pathogen'])) {
 			DB::beginTransaction();
 			try {
@@ -143,13 +141,15 @@ class LabController extends BoeFrsController
 					$lab['ref_user_id'] = $data['userIdInput'];
 					$lab['pathogen_strain'] = $data['pathogen_strain'][$i];
 					$lab['pathogen_note'] = $data['pathogen_note'][$i];
+					$lab['created_at'] = date('Y-m-d H:i:s');
+					$lab['updated_at'] = date('Y-m-d H:i:s');
 					array_push($lab_data, $lab);
 				}
 				$lab_saved = Lab::insert($lab_data);
 
-				//$patient = Patients::find($data['patientId']);
-				//$patient->lab_status = 'lab';
-				//$patient_saved = $patient->save();
+				$patient = Patients::find($data['patientId']);
+				$patient->lab_status = 'lab';
+				$patient_saved = $patient->save();
 				DB::commit();
 				if ($lab_saved) {
 					$message = ['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site'];
@@ -177,6 +177,8 @@ class LabController extends BoeFrsController
 	public function show($id)
 	{
 		/* prepare data */
+		$titleName = parent::titleName();
+		$title_name = $titleName->keyBy('id');
 		$provinces = parent::provinceListArr();
 		$symptoms = parent::symptoms();
 		$specimen = parent::specimen();

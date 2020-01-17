@@ -496,7 +496,7 @@ input:read-only {
 						</div><!-- card -->
 						<div class="border-top">
 							<div class="card-body">
-								<button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+								<a href="{{ route('lab.index') }}" type="button" class="btn btn-primary">ปิดหน้านี้</a>
 							</div>
 						</div>
 					</form>

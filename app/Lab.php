@@ -10,4 +10,5 @@ class Lab extends Model
 	use SoftDeletes;
 
 	protected $table = 'lab';
+	protected $primaryKey = 'id';
 }

@@ -331,11 +331,9 @@ $(document).ready(function() {
 							"showDuration": "500"
 						}
 					);
-					/*
 					window.setTimeout(function() {
-						window.location.replace("{ route('lab.index') }}");
-					}, 10000);
-					*/
+						window.location.replace("{{ route('lab.index') }}");
+					}, 5000);
 				}
 			},
 			error: function(data, status, error) {
@@ -372,7 +370,13 @@ $(document).ready(function() {
 					'<option value="0">-- โปรดเลือก --</option>' +
 					@php
 						foreach($patient_specimen as $key => $value) {
-							echo "'<option value=\"".$key."\">".$specimen[$value['id']]->name_en."</option>' + \n";
+								$specimen_val = $value['specimen_id'];
+							if ($value['specimen_id'] == 9) {
+								$specimen_name = $specimen[$value['specimen_id']]->name_en." [".$value['specimen_other']."]";
+							} else {
+								$specimen_name = $specimen[$value['specimen_id']]->name_en;
+							}
+							echo "'<option value=\"".$specimen_val."\">".$specimen_name."</option>' + \n";
 						}
 					@endphp
 				'</select>' +
