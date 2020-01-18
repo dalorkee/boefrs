@@ -108,6 +108,15 @@
 			</div>
 		</div>
 	</div>
+	<!-- <div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-body">
+					@include('dashboard.fluStackChart')
+				</div>
+			</div>
+		</div>
+	</div> -->
 </div>
 @endsection
 @section('bottom-script')
@@ -118,12 +127,12 @@
 			theme: "light2",
 			animationEnabled: true,
 			title: {
-				text: "Total By Sex"
+				text: "Average Composition of Magma"
 			},
 			data: [{
 				type: "doughnut",
 				indexLabel: "{symbol} - {y}",
-				//yValueFormatString: "#,##0.0\"%\"",
+				yValueFormatString: "#,##0.0\"%\"",
 				showInLegend: true,
 				legendText: "{label} : {y}",
 				dataPoints: <?php echo json_encode($donut_charts_arr, JSON_NUMERIC_CHECK); ?>

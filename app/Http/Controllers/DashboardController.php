@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use DB;
 
 class DashboardController extends Controller
 {
@@ -18,11 +22,39 @@ class DashboardController extends Controller
 		$this->middleware(['role:admin|hospital|lab']);
 		//$this->middleware(['permission:manageuser']);
 		$this->middleware('page_session');
+		$this->middleware(function ($request, $next) {
+				$this->user = Auth::user();
+				return $next($request);
+		});
 	}
 
 	public function index()
 	{
-		return view('dashboard.index');
+		if (Auth::check()){
+			$hospcode = Auth::user()->hospcode;
+		}
+		$roleArr = auth()->user()->roles->pluck('name');
+		$userRole = isset($roleArr[0]) ? $roleArr[0] : "";
+
+		if($userRole=='admin'){
+			$case_gen_code = DB::table('first_dash')->sum('case_gen_code');
+			$case_hos_send = DB::table('first_dash')->sum('case_hos_send');
+			$case_lab_confirm = DB::table('first_dash')->sum('case_lab_confirm');
+			$case_male = DB::table('first_dash')->sum('case_male');
+			$case_female = DB::table('first_dash')->sum('case_female');
+		}elseif($userRole=='hospital' || $userRole=='lab'){
+			$case_gen_code = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_gen_code');
+			$case_hos_send = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_hos_send');
+			$case_lab_confirm = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_lab_confirm');
+			$case_male = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_male');
+			$case_female = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_female');
+		}
+		$case_all = $case_gen_code+$case_hos_send+$case_lab_confirm;
+		$donut_charts_arr = array(
+													array("label" => "Male" ,"symbol" => "M","y" =>$case_male),
+													array("label" => "Female" ,"symbol" => "F","y" =>$case_female)
+												);
+		return view('dashboard.index',compact('case_gen_code','case_hos_send','case_lab_confirm','case_all','donut_charts_arr'));
 	}
 
 	/**
@@ -90,4 +122,8 @@ class DashboardController extends Controller
     {
         //
     }
+
+		public function Dashboard_Card(){
+
+		}
 }
