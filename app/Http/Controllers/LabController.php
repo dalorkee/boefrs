@@ -346,6 +346,7 @@ class LabController extends BoeFrsController
 
 		$data['patient_first_diag'] = $clinical[0]->first_diag;
 		$data['patient_specimen'] = $specimen_rs;
+		dd($data['patient_specimen']);
 
 		return view('lab.show',
 			[

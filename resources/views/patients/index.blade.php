@@ -1480,7 +1480,7 @@ input:read-only {
 						</div><!-- card -->
 						<div class="border-top">
 							<div class="card-body">
-								<button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+								<input type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
 							</div>
 						</div>
 					</form>

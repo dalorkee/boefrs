@@ -70,7 +70,7 @@ Route::post('province/district/sub-district', 'PatientsController@subDistrictFet
 /* patient */
 Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
 Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
-Route::post('patient/edit', 'PatientsController@editPatient')->name('editPatient');
+Route::get('/patient/edit/{id}', 'PatientsController@editPatient')->name('editPatient');
 
 /* list data */
 Route::post('data/list', 'ListDataController@listData')->name('list-data');
