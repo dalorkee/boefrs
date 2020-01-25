@@ -160,8 +160,8 @@ table.table td .add {
 											<label for="hospital">โรงพยาบาล</label>
 											<input type="hidden" name="patientId" value="{{ $patient[0]->id }}">
 											<input type="hidden" name="userIdInput" value="{{ auth()->user()->id }}">
-											<input type="hidden" name="patientHospitalCode" value="{{ $patient_hospital[0]->hospcode }}">
-											<input type="text" name="patientHospitalName" value="{{ $patient_hospital[0]->hosp_name }}" class="form-control" placeholder="Hospital" readonly>
+											<input type="hidden" name="patientHospitalCode" value="{{ $user_hospital != null ? $user_hospital[0]->hospcode : null }}">
+											<input type="text" name="patientHospitalName" value="{{ $user_hospital != null ? $user_hospital[0]->hosp_name : null }}" class="form-control" placeholder="Hospital" readonly>
 										</div>
 									</div>
 									<div class="form-row">
@@ -244,8 +244,8 @@ table.table td .add {
 								</div><!-- end card#3 -->
 							<div class="card">
 								<div class="card-body border-top">
-									<button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
-									<button type="button" class="btn btn-danger" id="btn_submit">สับมีด</button>
+									<!-- <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button> -->
+									<button type="button" class="btn btn-primary" id="btn_submit">บันทึกข้อมูล</button>
 								</div>
 							</div><!-- end card#3 -->
 						</div><!-- bd -collout -->

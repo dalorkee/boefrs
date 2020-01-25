@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Code;
+use App\Clinical;
+use App\Specimen;
 use Session;
 use Storage;
 
@@ -31,7 +33,7 @@ class CodeController extends BoeFrsController {
 			$provinces = BoeFrsController::provinceList();
 			Session::put('provinces', $provinces);
 		}
-
+		$specimen = parent::specimen();
 		$roleArr = auth()->user()->getRoleNames();
 		if ($roleArr[0] == 'admin') {
 			$patients = parent::patientByAdmin('new');
@@ -43,6 +45,7 @@ class CodeController extends BoeFrsController {
 		}
 		return view('code.index',
 			[
+				'specimen'=>$specimen,
 				'titleName' => $this->title_name,
 				'patients' => $patients
 			]
@@ -174,8 +177,47 @@ class CodeController extends BoeFrsController {
 			$code->ref_user_id = auth()->user()->id;
 			$code->ref_user_hospcode = $hospcode;
 			$code->created_by = $created_by;
-
 			$saved = $code->save();
+			$last_patient_insert_id = $code->id;
+
+			/* Clinical save method */
+			$clinical = new Clinical;
+			$clinical->ref_pt_id = $last_patient_insert_id;
+			$clinical->pt_type = $request->patientType;
+			$clinical->ref_user_id = auth()->user()->id;
+			$clinical_saved = $clinical->save();
+
+			/* specimen save method */
+			$specimen_data = parent::specimen();
+			$specimen_data = $specimen_data->keyBy('id');
+			foreach ($specimen_data as $key=>$val) {
+				if ($request->has('specimen'.$val->id)) {
+					$specimen = new Specimen;
+					$specimen->ref_pt_id = $last_patient_insert_id;
+					$specimen->specimen_id = $request->specimen.$val->id;
+
+					if ($val->other_field == 'Yes') {
+						$othStr = 'specimenOth'.$val->id;
+						$specimenOth = $request->$othStr;
+						$specimen->specimen_other = $specimenOth;
+					}
+
+					$dateStr = 'specimenDate'.$val->id;
+					$specimenDate = $request->$dateStr;
+					if (!empty($specimenDate)) {
+						$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
+					} else {
+						$specimen->specimen_date = NULL;
+					}
+
+					$specimen->ref_user_id = auth()->user()->id;
+					$specimen_saved = $specimen->save();
+				} else {
+					continue;
+				}
+			}
+
+			/* validate saved */
 			if ($saved) {
 				$this->simpleQrcode($code->lab_code);
 				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);

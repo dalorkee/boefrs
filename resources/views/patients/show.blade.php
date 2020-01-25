@@ -562,7 +562,7 @@ input:read-only {
 						</div><!-- card -->
 						<div class="border-top">
 							<div class="card-body">
-								<a href="{{ route('lab.index') }}" type="button" class="btn btn-primary">ปิดหน้านี้</a>
+								<a href="{{ route('list-data.index') }}" type="button" class="btn btn-primary">ปิดหน้านี้</a>
 							</div>
 						</div>
 					</form>

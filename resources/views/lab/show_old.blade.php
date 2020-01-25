@@ -11,28 +11,6 @@ input:-moz-read-only { /* For Firefox */
 input:read-only {
 	background-color: #fafafa !important;
 }
-
-/* inner table */
-.table1 {
-	width: 100%;
-	max-width: 100%;
-	margin: 16px 5px;
-}
-.table1 thead tr th {
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	font-weight: bold;
-	border-bottom: 1px solid #ccc;
-}
-.table1>tbody>tr>td {
-	padding: 2px 4px;
-	vertical-align: middle;
-	border-top: none;
-	border-right: none;
-	border-left: none;
-	border-bottom: 1px solid #eee;
-}
 </style>
 @endsection
 @section('meta-token')
@@ -93,23 +71,13 @@ input:read-only {
 									</div>
 									<h1 class="text-info">1. ข้อมูลผู้ป่วย</h1>
 									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-											<label for="patientName">ชื่อ-นามสกุล</label>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
+											<label for="patientName">ชื่อ-สกุล</label>
 											<input type="hidden" name="pid" value="{{ $data['patient_id'] }}">
 											<input type="hidden" name="lab_code" value="{{ $data['patient_lab_code'] }}">
 											<input type="text" name="pNameInput" class="form-control" value="{{ $data['patient_fullname'] }}" placeholder="ชื่อ-สกุล" readonly>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-											<label for="HN">HN</label>
-											<input type="text" name="hnInput" value="{{ $data['patient_hn'] }}" class="form-control" placeholder="HN" readonly>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-											<label for="HN">AN</label>
-											<input type="text" name="anInput" value="{{ $data['patient_an'] }}" class="form-control" placeholder="HN" readonly>
-										</div>
-									</div>
-									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
 											<label for="patientGender">เพศ</label>
 											<div class="custom-control custom-checkbox">
 												<div class="form-check form-check-inline">
@@ -122,7 +90,11 @@ input:read-only {
 												</div>
 											</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
+											<label for="HN">HN</label>
+											<input type="text" name="hnInput" value="{{ $data['patient_hn'] }}" class="form-control" placeholder="HN" readonly>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-2 mb-3">
 											<label for="age">อายุ (ปี-เดือน-วัน)</label>
 											<input type="text" name="ageInput"  value="{{ $data['patient_age'] }}" class="form-control" placeholder="อายุ" readonly>
 										</div>
@@ -130,21 +102,21 @@ input:read-only {
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group">
-												<label for="houseNo">ที่อยู่ เลขที่</label>
+												<label for="houseNo">ที่อยู่ปัจจุบัน/ขณะป่วย เลขที่</label>
 												<input type="text" name="houseNoInput" value="{{ $data['patient_house_no'] }}" class="form-control" placeholder="บ้านเลขที่" readonly>
 											</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-1 col-xl-1 mb-3">
 											<div class="form-group">
 												<label for="villageNo">หมู่ที่</label>
 												<input type="text" name="villageNoInput" value="{{ $data['patient_village_no'] }}" class="form-control" placeholder="หมู่ที่" readonly>
 											</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="village">หมู่บ้าน</label>
 											<input type="text" name="villageInput" value="{{ $data['patient_village'] }}" class="form-control" placeholder="หมู่บ้าน" readonly>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-4 mb-3">
 											<div class="form-group">
 												<label for="lane">ซอย</label>
 												<input type="text" name="laneInput" value="{{ $data['patient_lane'] }}" class="form-control" placeholder="ซอย" readonly>
@@ -201,29 +173,7 @@ input:read-only {
 									</div>
 								</div>
 								<div class="bd-callout bd-callout-info" style="margin-top:0;position:relative">
-									<h1 class="text-info">2. ข้อมูลทางคลินิก</h1>
-									<div class="form-row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3 {{ $errors->has('patientType') ? 'border-danger' : '' }}">
-											<div class="form-group">
-												<label for="patient">ประเภทผู้ป่วย</label>
-												<div>
-													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="opd" @if ($data['patient_type'] == 'opd') checked @endif class="custom-control-input pt-type" id="opdCheckbox" disabled>
-														<label for="opdCheckbox" class="custom-control-label normal-label">ผู้ป่วยนอก (OPD)/ILI</label>
-													</div>
-													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="ipd" @if ($data['patient_type'] == 'ipd') checked @endif class="custom-control-input pt-type" id="ipdCheckbox" disabled>
-														<label for="ipdCheckbox" class="custom-control-label normal-label">ผู้ป่วยใน (IPD)/SARI</label>
-													</div>
-													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="icu" @if ($data['patient_type'] == 'icu') checked @endif class="custom-control-input pt-type" id="icuCheckbox" disabled>
-														<label for="icuCheckbox" class="custom-control-label normal-label">ผู้ป่วยหนัก/ICU</label>
-													</div>
-												</div>
-											</div>
-											<span class="text-danger">{{ $errors->first('patientType') }}</span>
-										</div>
-									</div>
+									<h1 class="text-info">2. อาการ</h1>
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group">
@@ -236,6 +186,7 @@ input:read-only {
 												</div>
 											</div>
 										</div>
+
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group">
 												<label for="feverDay">จำนวนวันที่เป็นไข้</label>
@@ -248,180 +199,177 @@ input:read-only {
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
-										<label for="patient">อาการ</label>
-										<div class="form-row pt-3 pb-3">
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="fever_sym" @if ($data['patient_fever_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="fever" disabled>
-														<label for="fever" class="custom-control-label">&nbsp;ไข้</label>
-													</div>
+									<div class="form-row pt-3 pb-3">
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="fever_sym" @if ($data['patient_fever_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="fever" disabled>
+													<label for="fever" class="custom-control-label">&nbsp;ไข้</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="cough_sym" @if ($data['patient_cough_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="cough" disabled>
-														<label for="cough" class="custom-control-label">&nbsp;ไอ (Cough)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="cough_sym" @if ($data['patient_cough_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="cough" disabled>
+													<label for="cough" class="custom-control-label">&nbsp;ไอ (Cough)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="sore_throat_sym" @if ($data['patient_sore_throat_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="sore_throat" disabled>
-														<label for="sore_throat" class="custom-control-label">&nbsp;เจ็บคอ (Sore throat)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="sore_throat_sym" @if ($data['patient_sore_throat_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="sore_throat" disabled>
+													<label for="sore_throat" class="custom-control-label">&nbsp;เจ็บคอ (Sore throat)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="runny_stuffy_sym" @if ($data['patient_runny_stuffy_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="runny_stuffy" disabled>
-														<label for="runny_stuffy" class="custom-control-label">&nbsp;มีน้ำมูก/คัดจมูก (Runny or stuffy nose)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="runny_stuffy_sym" @if ($data['patient_runny_stuffy_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="runny_stuffy" disabled>
+													<label for="runny_stuffy" class="custom-control-label">&nbsp;มีน้ำมูก/คัดจมูก (Runny or stuffy nose)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="sputum_sym" @if ($data['patient_sputum_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="sputum" disabled>
-														<label for="sputum" class="custom-control-label">&nbsp;มีเสมหะ (Sputum)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="sputum_sym" @if ($data['patient_sputum_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="sputum" disabled>
+													<label for="sputum" class="custom-control-label">&nbsp;มีเสมหะ (Sputum)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="headache_sym" @if ($data['patient_headache_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="headache" disabled>
-														<label for="headache" class="custom-control-label">&nbsp;ปวดศรีษะ (Headache)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="headache_sym" @if ($data['patient_headache_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="headache" disabled>
+													<label for="headache" class="custom-control-label">&nbsp;ปวดศรีษะ (Headache)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="myalgia_sym" @if ($data['patient_myalgia_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="myalgia" disabled>
-														<label for="myalgia" class="custom-control-label">&nbsp;ปวดเมื่อยกล้ามเนื้อ (Myalgia)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="myalgia_sym" @if ($data['patient_myalgia_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="myalgia" disabled>
+													<label for="myalgia" class="custom-control-label">&nbsp;ปวดเมื่อยกล้ามเนื้อ (Myalgia)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="fatigue_sym" @if ($data['patient_fatigue_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="fatigue" disabled>
-														<label for="fatigue" class="custom-control-label">&nbsp;อ่อนเพลีย (Fatigue)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="fatigue_sym" @if ($data['patient_fatigue_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="fatigue" disabled>
+													<label for="fatigue" class="custom-control-label">&nbsp;อ่อนเพลีย (Fatigue)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="dyspnea_sym" @if ($data['patient_dyspnea_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="dyspnea" disabled>
-														<label for="dyspnea" class="custom-control-label">&nbsp;หอบเหนื่อย (Dyspnea)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="dyspnea_sym" @if ($data['patient_dyspnea_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="dyspnea" disabled>
+													<label for="dyspnea" class="custom-control-label">&nbsp;หอบเหนื่อย (Dyspnea)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="tachypnea_sym" @if ($data['patient_tachypnea_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="tachypnea" disabled>
-														<label for="tachypnea" class="custom-control-label">&nbsp;หายใจเร็ว (Tachpnea)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="tachypnea_sym" @if ($data['patient_tachypnea_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="tachypnea" disabled>
+													<label for="tachypnea" class="custom-control-label">&nbsp;หายใจเร็ว (Tachpnea)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="wheezing_sym" @if ($data['patient_wheezing_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="wheezing" disabled>
-														<label for="wheezing" class="custom-control-label">&nbsp;หายใจมีเสียงวี๊ด (Weezing)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="wheezing_sym" @if ($data['patient_wheezing_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="wheezing" disabled>
+													<label for="wheezing" class="custom-control-label">&nbsp;หายใจมีเสียงวี๊ด (Weezing)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="conjunctivitis_sym" @if ($data['patient_conjunctivitis_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="conjunctivitis" disabled>
-														<label for="conjunctivitis" class="custom-control-label">&nbsp;เยื่อบุตาอักเสบ/ตาแดง (Conjunctivitis)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="conjunctivitis_sym" @if ($data['patient_conjunctivitis_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="conjunctivitis" disabled>
+													<label for="conjunctivitis" class="custom-control-label">&nbsp;เยื่อบุตาอักเสบ/ตาแดง (Conjunctivitis)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="vomiting_sym" @if ($data['patient_vomiting_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="vomiting" disabled>
-														<label for="vomiting" class="custom-control-label">&nbsp;อาเจียน (Vomiting)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="vomiting_sym" @if ($data['patient_vomiting_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="vomiting" disabled>
+													<label for="vomiting" class="custom-control-label">&nbsp;อาเจียน (Vomiting)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="diarrhea_sym" @if ($data['patient_diarrhea_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="diarrhea" disabled>
-														<label for="diarrhea" class="custom-control-label">&nbsp;ท้องเสีย (Diarrhea)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="diarrhea_sym" @if ($data['patient_diarrhea_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="diarrhea" disabled>
+													<label for="diarrhea" class="custom-control-label">&nbsp;ท้องเสีย (Diarrhea)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="apnea_sym" @if ($data['patient_apnea_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="apnea" disabled>
-														<label for="apnea" class="custom-control-label">&nbsp;Apnea (เด็ก อายุ 0-6 เดือน)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="apnea_sym" @if ($data['patient_apnea_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="apnea" disabled>
+													<label for="apnea" class="custom-control-label">&nbsp;Apnea (เด็ก อายุ 0-6 เดือน)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="sepsis_sym" @if ($data['patient_sepsis_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="sepsis" disabled>
-														<label for="sepsis" class="custom-control-label">&nbsp;Sepsis</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="sepsis_sym" @if ($data['patient_sepsis_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="sepsis" disabled>
+													<label for="sepsis" class="custom-control-label">&nbsp;Sepsis</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="encephalitis_sym" @if ($data['patient_encephalitis_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="encephalitis" disabled>
-														<label for="encephalitis" class="custom-control-label">&nbsp;สมองอักเสบ (Encephalitis)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="encephalitis_sym" @if ($data['patient_encephalitis_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="encephalitis" disabled>
+													<label for="encephalitis" class="custom-control-label">&nbsp;สมองอักเสบ (Encephalitis)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="intubation_sym" @if ($data['patient_intubation_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="intubation" disabled>
-														<label for="intubation" class="custom-control-label">&nbsp;ใส่ท่อช่วยหายใจ (Intubation)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="intubation_sym" @if ($data['patient_intubation_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="intubation" disabled>
+													<label for="intubation" class="custom-control-label">&nbsp;ใส่ท่อช่วยหายใจ (Intubation)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="pneumonia_sym" @if ($data['patient_pneumonia_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="pneumonia" disabled>
-														<label for="pneumonia" class="custom-control-label">&nbsp;ปอดบวม/ปอดอักเสบ (Pneumonia)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="pneumonia_sym" @if ($data['patient_pneumonia_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="pneumonia" disabled>
+													<label for="pneumonia" class="custom-control-label">&nbsp;ปอดบวม/ปอดอักเสบ (Pneumonia)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="kidney_sym" @if ($data['patient_kidney_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="kidney" disabled>
-														<label for="kidney" class="custom-control-label">&nbsp;ไตวาย (Kidney)</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="kidney_sym" @if ($data['patient_kidney_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="kidney" disabled>
+													<label for="kidney" class="custom-control-label">&nbsp;ไตวาย (Kidney)</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-												<div class="custom-control custom-checkbox">
-													<div class="form-check form-check-inline">
-														<input type="checkbox" name="other_sym" @if ($data['patient_other_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="other_sym_chk" disabled>
-														<label for="other_sym_chk" class="custom-control-label">&nbsp;อื่นๆ โปรดระบุ</label>
-													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+											<div class="custom-control custom-checkbox">
+												<div class="form-check form-check-inline">
+													<input type="checkbox" name="other_sym" @if ($data['patient_other_sym'] == 'y') checked @endif class="custom-control-input form-check-input" id="other_sym_chk" disabled>
+													<label for="other_sym_chk" class="custom-control-label">&nbsp;อื่นๆ โปรดระบุ</label>
 												</div>
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-												<input type="text" name="other_sym_text" value="{{ $data['patient_other_sym_text'] }}" class="form-control" id="other_sym_text" placeholder="อาการอื่นๆ ระบุ" readonly>
-											</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+											<input type="text" name="other_sym_text" value="{{ $data['patient_other_sym_text'] }}" class="form-control" id="other_sym_text" placeholder="อาการอื่นๆ ระบุ" readonly>
 										</div>
 									</div>
 									<div class="form-row">
@@ -467,9 +415,6 @@ input:read-only {
 													<tfoot></tfoot>
 													<tbody>
 													@foreach ($data['patient_specimen'] as $key => $val)
-														@if ($val['s_id'] == null)
-															@continue
-														@endif
 														<tr id="specimen_tr{{ $val['rs_id'] }}">
 															<td>
 																<div class="form-group row">
@@ -501,26 +446,15 @@ input:read-only {
 																</div>
 															</td>
 															<td>
-																<table class="table1 fixed">
-																	<thead>
-																		<tr>
-																			<th scope="col">ชื่อเชื้อ </th>
-																			<th scope="col">สายพันธุ์</th>
-																			<th scope="col">หมายเหตุ</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		@foreach ($patient_lab as $lab_key => $lab_val)
-																			@if ($lab_val['ref_specimen_id'] == $val['rs_id'])
-																				<tr>
-																					<td class="text-danger">{{ $pathogen[$lab_val['ref_pathogen_id']]->patho_name_en }}</td>
-																					<td class="text-success">{{ $lab_val['pathogen_strain'] }}</td>
-																					<td>{{ $lab_val['pathogen_note'] }}</td>
-																				</tr>
-																			@endif
-																		@endforeach
-																	</tbody>
-																</table>
+																<div class="form-group row">
+																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																		<div class="input-group">
+																			<div class="input-group">
+																				<input type="text" name="specimenResult{{ $val['rs_id'] }}" value="" class="form-control" id="specimenResult_{{ $val['rs_id'] }}">
+																			</div>
+																		</div>
+																	</div>
+																</div>
 															</td>
 														</tr>
 													@endforeach

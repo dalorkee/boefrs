@@ -8,7 +8,7 @@ canvas {
 </style>
 @endsection
 <div style="width: 90%">
-	<canvas id="canvas"></canvas>
+	<canvas id="canvas1"></canvas>
 </div>
 @section('bottom-script')
 	<script>
@@ -359,7 +359,7 @@ canvas {
 			}]
 		};
 		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
+			var ctx = document.getElementById('canvas1').getContext('2d');
 			window.myBar = new Chart(ctx, {
 				type: 'bar',
 				data: barChartData,

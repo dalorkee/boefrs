@@ -1,5 +1,6 @@
 @extends('layouts.index')
 @section('custom-style')
+	<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 <link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.18/DataTables-1.10.18/css/jquery.dataTables.min.css') }}">
 <link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/css/responsive.bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
@@ -162,16 +163,17 @@ input.valid, textarea.valid {
 									<label for="otherTitleNameInput">อื่นๆ ระบุ</label>
 									<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
 								</div>
-							</div>
-							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<label for="firstNameInput">ชื่อจริง</label>
 									<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="ชื่อ">
 								</div>
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-3 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
 									<label for="lastNameInput">นามสกุล</label>
 									<input type="text" name="lastNameInput" class="form-control" id="last_name_input" placeholder="นามสกุล">
 								</div>
+							</div>
+							<div class="form-row">
+
 							</div>
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-3">
@@ -183,6 +185,132 @@ input.valid, textarea.valid {
 									<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN">
 								</div>
 							</div>
+
+							<div class="form-row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3 {{ $errors->has('patientType') ? 'border-danger' : '' }}">
+									<div class="form-group">
+										<label for="patient">ประเภทผู้ป่วย</label>
+										<div>
+											<div class="custom-control custom-checkbox custom-control-inline">
+												<input type="checkbox" name="patientType" value="opd" @if (old('patientType') == 'opd') checked @endif class="custom-control-input pt-type" id="opdCheckbox">
+												<label for="opdCheckbox" class="custom-control-label normal-label">ผู้ป่วยนอก (OPD)/ILI</label>
+											</div>
+											<div class="custom-control custom-checkbox custom-control-inline">
+												<input type="checkbox" name="patientType" value="ipd" @if (old('patientType') == 'ipd') checked @endif class="custom-control-input pt-type" id="ipdCheckbox">
+												<label for="ipdCheckbox" class="custom-control-label normal-label">ผู้ป่วยใน (IPD)/SARI</label>
+											</div>
+											<div class="custom-control custom-checkbox custom-control-inline">
+												<input type="checkbox" name="patientType" value="icu" @if (old('patientType') == 'icu') checked @endif class="custom-control-input pt-type" id="icuCheckbox">
+												<label for="icuCheckbox" class="custom-control-label normal-label">ผู้ป่วยหนัก/ICU</label>
+											</div>
+										</div>
+									</div>
+									<span class="text-danger">{{ $errors->first('patientType') }}</span>
+								</div>
+							</div>
+
+
+							<div class="form-row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
+									<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
+									<div class="table-responsive">
+										<table class="table" id="specimen_table">
+											<thead class="bg-danger text-light">
+												<tr>
+													<th scope="col">ตัวอย่างส่งตรวจ</th>
+													<th scope="col">วันที่เก็บตัวอย่าง</th>
+												</tr>
+											</thead>
+											<tfoot></tfoot>
+											<tbody>
+											@php
+											$oldSpecimenDate = "";
+											foreach ($specimen as $key => $val) {
+												if (!empty($val->name_th)) {
+													$speciman_name = $val->name_th;
+												} else {
+													$speciman_name = $val->name_en;
+												}
+												if (!empty($val->abbreviation)) {
+													$abbreviation = "&nbsp;(".$val->abbreviation.")";
+												} else {
+													$abbreviation = null;
+												}
+												if (!empty($val->note)) {
+													$note = "&nbsp;(".$val->note.")";
+												} else {
+													$note = null;
+												}
+												if ($val->other_field == 'Yes') {
+													$oth_str = "ระบุ";
+												} else {
+													$oth_str = null;
+												}
+												$htm = "";
+												$htm .= "<tr id=\"specimen_tr".$val->id."\">\n";
+													$htm .= "<td>\n";
+														$htm .= "<div class=\"form-group row\">\n";
+															$htm .= "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6\">\n";
+																$htm .= "<div class=\"custom-control custom-checkbox custom-control-inline\">\n";
+																	$htm .= "<input type=\"checkbox\" name=\"specimen".$val->id."\" value=\"1\" ";
+																	if (old("specimen".$val->id) == "1") {
+																		$htm .= "checked ";
+																	}
+																	$htm .= "class=\"custom-control-input form-check-input specimen-chk-".$val->id."\" id=\"specimen_chk".$val->id."\">\n";
+																	$htm .= "<label for=\"specimen_chk".$val->id."\" class=\"custom-control-label font-weight-normal\">".$speciman_name." ".$abbreviation."&nbsp;".$note."</label>\n";
+																$htm .= "</div>\n";
+															$htm .= "</div>\n";
+															if ($val->other_field == 'Yes') {
+																$htm .= "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6\">\n";
+																	$htm .= "<input type=\"text\" name=\"specimenOth".$val->id."\" value=\"".old("specimenOth".$val->id)."\" class=\"form-control\" id=\"specimen_".$val->id."oth\" placeholder=\"".$oth_str."\"";
+																	if (empty(old("specimenOth".$val->id))) {
+																		$htm .= " disabled>\n";
+																	} else {
+																		$htm .= ">\n";
+																	}
+																$htm .= "</div>\n";
+															}
+														$htm .= "</div>\n";
+													$htm .= "</td>\n";
+													$htm .= "<td>\n";
+														$htm .= "<div class=\"form-group row\">\n";
+															$htm .= "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12\">\n";
+																$htm .= "<div class=\"input-group date\" id=\"specimenDate".$val->id."\">\n";
+																	$htm .= "<div class=\"input-group\">\n";
+																		$htm .= "<input type=\"text\" name=\"specimenDate".$val->id."\" value=\"".old("specimenDate".$val->id)."\" class=\"form-control\" id=\"specimenDate_".$val->id."\"";
+																		if (empty(old("specimenDate".$val->id))) {
+																			$htm .= " disabled";
+																		} else {
+																			$htm .= "";
+																			$oldSpecimenDate .= "
+																			$('#specimenDate".$val->id."').datepicker({
+																				format: 'dd/mm/yyyy',
+																				todayHighlight: true,
+																				todayBtn: true,
+																				autoclose: true
+																			});\n";
+																		}
+																		$htm .= " readonly>\n";
+																		$htm .= "<div class=\"input-group-append\">\n";
+																			$htm .= "<span class=\"input-group-text\"><i class=\"mdi mdi-calendar\"></i></span>\n";
+																		$htm .= "</div>\n";
+																	$htm .= "</div>\n";
+																$htm .= "</div>\n";
+															$htm .= "</div>\n";
+														$htm .= "</div>\n";
+													$htm .= "</td>\n";
+												$htm .= "</tr>\n";
+												echo $htm;
+											}
+											@endphp
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+
+
 							<button type="button" class="btn btn-primary" id="btn_submit">สร้างรหัส</button>
 						</form>
 					</div>
@@ -246,6 +374,7 @@ input.valid, textarea.valid {
 <script src="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <script>
 $(document).ready(function() {
 	/* ajax request */
@@ -305,6 +434,11 @@ $(document).ready(function() {
 		}
 	});
 
+	/* patient type */
+	$('.pt-type').click(function() {
+		$('.pt-type').not(this).prop('checked', false);
+	});
+
 	@php
 	$htm = "";
 		foreach ($patients as $key => $value) {
@@ -323,6 +457,62 @@ $(document).ready(function() {
 			});";
 		}
 	echo $htm;
+	/* specimen table && checkbox */
+	foreach ($specimen as $key => $val) {
+		echo "
+			var spec_n = $('.specimen-chk-".$val->id."').filter(':checked').length;
+			if (spec_n === 1) {
+				var hasClass = $('#specimen_tr".$val->id."').hasClass('highlight');
+				if (!hasClass) {
+					$('#specimen_tr".$val->id."').addClass('highlight');
+				}
+			}
+		\n";
+
+		echo "
+		$('.specimen-chk-".$val->id."').click(function() {
+			$('.specimen-chk-".$val->id."').not(this).prop('checked', false);
+			let number = $('.specimen-chk-".$val->id."').filter(':checked').length;
+			if (number == 1) {
+				let hasClass = $('#specimen_tr".$val->id."').hasClass('highlight');
+				if (!hasClass) {
+					$('#specimen_tr".$val->id."').addClass('highlight');
+				}
+			} else {
+				$('#specimen_tr".$val->id."').removeClass('highlight');
+			}";
+			if ($val->other_field == 'Yes') {
+				echo "
+					if ($('#specimen_chk".$val->id."').prop('checked') == true) {
+						$('#specimen_".$val->id."oth').prop('disabled', false);
+						$('#specimenDate_".$val->id."').prop('disabled', false);
+					} else {
+						$('#specimen_".$val->id."oth').val('');
+						$('#specimen_".$val->id."oth').prop('disabled', true);
+						$('#specimenDate_".$val->id."').val('');
+						$('#specimenDate_".$val->id."').prop('disabled', true);
+					}";
+			} else {
+				echo "
+					if ($('#specimen_chk".$val->id."').prop('checked') == true) {
+						$('#specimenDate_".$val->id."').prop('disabled', false);
+					} else {
+						$('#specimenDate_".$val->id."').val('');
+						$('#specimenDate_".$val->id."').prop('disabled', true);
+					}";
+			}
+			echo "
+				$('#specimenDate".$val->id."').datepicker({
+					format: 'dd/mm/yyyy',
+					todayHighlight: true,
+					todayBtn: true,
+					autoclose: true
+				});";
+			echo "});\n";
+		}
+		if (isset($oldSpecimenDate)) {
+			echo $oldSpecimenDate;
+		}
 	@endphp
 
 	/* submit ajax */
@@ -362,6 +552,7 @@ $(document).ready(function() {
 									"showDuration": "500"
 								}
 							);
+							$("#patient_form")[0].reset();
 						},
 						error: function(jqXhr, textStatus, errorMessage) {
 							$("#select_province").val('0').selectpicker("refresh");

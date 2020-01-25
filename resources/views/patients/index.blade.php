@@ -315,15 +315,15 @@ input:read-only {
 												<label for="patient">ผู้ป่วย</label>
 												<div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="opd" @if (old('patientType') == 'opd') checked @endif class="custom-control-input pt-type" id="opdCheckbox">
+														<input type="checkbox" name="patientType" value="opd" @if (old('patientType') == 'opd' || $clinical['pt_type'] == 'opd') checked @endif class="custom-control-input pt-type" id="opdCheckbox">
 														<label for="opdCheckbox" class="custom-control-label normal-label">ผู้ป่วยนอก (OPD)/ILI</label>
 													</div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="ipd" @if (old('patientType') == 'ipd') checked @endif class="custom-control-input pt-type" id="ipdCheckbox">
+														<input type="checkbox" name="patientType" value="ipd" @if (old('patientType') == 'ipd' || $clinical['pt_type'] == 'ipd') checked @endif class="custom-control-input pt-type" id="ipdCheckbox">
 														<label for="ipdCheckbox" class="custom-control-label normal-label">ผู้ป่วยใน (IPD)/SARI</label>
 													</div>
 													<div class="custom-control custom-checkbox custom-control-inline">
-														<input type="checkbox" name="patientType" value="icu" @if (old('patientType') == 'icu') checked @endif class="custom-control-input pt-type" id="icuCheckbox">
+														<input type="checkbox" name="patientType" value="icu" @if (old('patientType') == 'icu' || $clinical['pt_type'] == 'icu') checked @endif class="custom-control-input pt-type" id="icuCheckbox">
 														<label for="icuCheckbox" class="custom-control-label normal-label">ผู้ป่วยหนัก/ICU</label>
 													</div>
 												</div>
@@ -695,6 +695,7 @@ input:read-only {
 											</div>
 										</div>
 									</div>
+									<!--
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
 											<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
@@ -708,7 +709,7 @@ input:read-only {
 													</thead>
 													<tfoot></tfoot>
 													<tbody>
-													@php
+													php
 													$oldSpecimenDate = "";
 													foreach ($specimen as $key => $val) {
 														if (!empty($val->name_th)) {
@@ -787,12 +788,13 @@ input:read-only {
 														$htm .= "</tr>\n";
 														echo $htm;
 													}
-													@endphp
+													endphp
 													</tbody>
 												</table>
 											</div>
 										</div>
 									</div>
+									-->
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="sickDateInput">ภาวะสุขภาพ หรือ โรคประจำตัว</label>
@@ -1480,7 +1482,7 @@ input:read-only {
 						</div><!-- card -->
 						<div class="border-top">
 							<div class="card-body">
-								<input type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+								<button type="submit" class="btn btn-info">บันทึกข้อมูล</button>
 							</div>
 						</div>
 					</form>

@@ -71,6 +71,7 @@ Route::post('province/district/sub-district', 'PatientsController@subDistrictFet
 Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
 Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
 Route::get('/patient/edit/{id}', 'PatientsController@editPatient')->name('editPatient');
+Route::get('/patient/show/{id}', 'PatientsController@show')->name('viewPatient');
 
 /* list data */
 Route::post('data/list', 'ListDataController@listData')->name('list-data');

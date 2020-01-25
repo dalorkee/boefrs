@@ -212,7 +212,8 @@ input.valid, textarea.valid{
 													echo "<td>".$item->ref_user_hospcode."</td>";
 													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
-														if ($item->lab_status == 'new') {
+													echo "<a href=\"".route('viewPatient', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
+														if ($item->lab_status == 'new' || $item->lab_status == 'hospital' || $item->lab_status == 'lab') {
 															echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 														} else {
 															echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";

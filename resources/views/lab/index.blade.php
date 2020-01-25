@@ -212,7 +212,7 @@ input.valid, textarea.valid{
 													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
 														echo "<a href=\"".route('viewLab', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
-														if ($item->lab_status == 'hospital') {
+														if ($item->lab_status == 'new' || $item->lab_status == 'hospital' || $item->lab_status == 'lab') {
 															echo "<a href=\"".route('createLab', ['id'=>$item->id])."\" class=\"btn btn-primary btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Create\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 														} else {
 															echo "<a href=\"".route('editLab', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
