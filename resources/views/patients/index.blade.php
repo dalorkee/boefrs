@@ -1572,6 +1572,7 @@ $(document).ready(function() {
 	$('#select_province').change(function() {
 		if ($(this).val() != '') {
 			var id = $(this).val();
+			alert(id);
 			$.ajax({
 				method: "POST",
 				url: "{{ route('districtFetch') }}",

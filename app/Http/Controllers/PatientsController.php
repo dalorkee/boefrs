@@ -657,4 +657,5 @@ class PatientsController extends BoeFrsController
 		}
 		return $htm;
 	}
+	
 }
