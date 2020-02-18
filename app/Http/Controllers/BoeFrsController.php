@@ -58,10 +58,10 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
-	protected function patientByAdmin($lab_status='new') {
+	protected function patientByAdmin($hosp_status='new') {
 		return DB::connection('mysql')
 			->table('patients')
-			->where('lab_status', '=', $lab_status)
+			->where('hosp_status', '=', $hosp_status)
 			->whereNull('deleted_at')
 			->get();
 	}
@@ -88,11 +88,11 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
-	protected function patientByUserHospcode($hospcode=null, $lab_status='new') {
+	protected function patientByUserHospcode($hospcode=null, $hosp_status='new') {
 		return DB::connection('mysql')
 			->table('patients')
 			->where('ref_user_hospcode', '=', $hospcode)
-			->where('lab_status', '=', $lab_status)
+			->where('hosp_status', '=', $hosp_status)
 			->whereNull('deleted_at')
 			->get();
 	}

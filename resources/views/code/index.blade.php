@@ -121,7 +121,7 @@ input.valid, textarea.valid {
 						<form id="patient_form" class="mt-4 mb-3">
 							@role('admin')
 							<div class="form-row">
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<div class="form-group">
 										<label for="province">จังหวัด</label>
 										<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" data-style="btn-danger" >
@@ -135,7 +135,7 @@ input.valid, textarea.valid {
 										</select>
 									</div>
 								</div>
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<div class="form-group">
 										<label for="hospital">โรงพยาบาล</label>
 										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn-danger" disabled>
@@ -146,7 +146,7 @@ input.valid, textarea.valid {
 							</div>
 							@endrole
 							<div class="form-row">
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<div class="form-group">
 										<label for="titleName">คำนำหน้าชื่อ</label>
 										<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
@@ -159,15 +159,15 @@ input.valid, textarea.valid {
 										</select>
 									</div>
 								</div>
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<label for="otherTitleNameInput">อื่นๆ ระบุ</label>
 									<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
 								</div>
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<label for="firstNameInput">ชื่อจริง</label>
 									<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="ชื่อ">
 								</div>
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<label for="lastNameInput">นามสกุล</label>
 									<input type="text" name="lastNameInput" class="form-control" id="last_name_input" placeholder="นามสกุล">
 								</div>
@@ -176,11 +176,11 @@ input.valid, textarea.valid {
 
 							</div>
 							<div class="form-row">
-								<div class="col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<label for="hnInput">HN</label>
 									<input type="text" name="hnInput" class="form-control" id="hn_input" placeholder="HN">
 								</div>
-								<div class="col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-3">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<label for="anInput">AN</label>
 									<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN">
 								</div>
@@ -308,10 +308,7 @@ input.valid, textarea.valid {
 									</div>
 								</div>
 							</div>
-
-
-
-							<button type="button" class="btn btn-primary" id="btn_submit">สร้างรหัส</button>
+							<button type="button" class="btn btn-success" id="btn_submit">สร้างรหัสใหม่</button>
 						</form>
 					</div>
 					<div>
@@ -517,7 +514,7 @@ $(document).ready(function() {
 
 	/* submit ajax */
 	$("#btn_submit").click(function(e) {
-		//e.preventDefault();
+		e.preventDefault();
 		var input = ConvertFormToJSON("#patient_form");
 		$.ajax({
 			type: 'POST',

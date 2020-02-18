@@ -35,10 +35,8 @@ Route::get('/getHospByProv', '\App\Http\Controllers\Auth\RegisterController@getH
 /* Logout */
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-/* Ajax request for generate lab code */
+/* CodeGen :: Ajax request for generate lab code */
 Route::post('ajaxRequest', 'CodeController@ajaxRequestPost')->name('ajaxRequest');
-
-/* Ajax request for update patient table */
 Route::get('/ajaxRequestTable', 'CodeController@ajaxRequestTable')->name('ajaxRequestTable');
 
 /* Ajax select */
