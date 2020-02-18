@@ -45,7 +45,7 @@ class CodeController extends BoeFrsController {
 		}
 		return view('code.index',
 			[
-				'specimen'=>$specimen,
+				'specimen'=> $specimen,
 				'titleName' => $this->title_name,
 				'patients' => $patients
 			]

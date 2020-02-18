@@ -107,6 +107,19 @@ input.valid, textarea.valid {
 	</div>
 </div>
 <div class="container-fluid">
+	@if(count($errors) > 0)
+	<div class="row">
+		<div class="col-md-12">
+			<div class="alert alert-danger">
+				<ul>
+					@foreach ($errors->all as $error)
+						<li>{{ $error }}</li>
+					@endforeach
+				</ul>
+			</div>
+		</div>
+	</div>
+	@endif
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
@@ -173,7 +186,6 @@ input.valid, textarea.valid {
 								</div>
 							</div>
 							<div class="form-row">
-
 							</div>
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
@@ -185,7 +197,6 @@ input.valid, textarea.valid {
 									<input type="text" name="anInput" class="form-control" id="an_input" placeholder="AN">
 								</div>
 							</div>
-
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3 {{ $errors->has('patientType') ? 'border-danger' : '' }}">
 									<div class="form-group">
@@ -208,8 +219,7 @@ input.valid, textarea.valid {
 									<span class="text-danger">{{ $errors->first('patientType') }}</span>
 								</div>
 							</div>
-
-
+							<!-- specimen -->
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
 									<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
@@ -308,19 +318,9 @@ input.valid, textarea.valid {
 									</div>
 								</div>
 							</div>
+							<!-- end specimen -->
 							<button type="button" class="btn btn-success" id="btn_submit">สร้างรหัสใหม่</button>
 						</form>
-					</div>
-					<div>
-					@if(count($errors) > 0)
-						<div class="alert alert-danger">
-							<ul>
-							@foreach ($errors->all as $error)
-								<li>{{ $error }}</li>
-							@endforeach
-							</ul>
-						</div>
-					@endif
 					</div>
 					<div id="patient_data">
 						<table class="table display mT-2 mb-4" id="code_table" role="table">

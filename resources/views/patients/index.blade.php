@@ -33,19 +33,23 @@ input:read-only {
 	</div>
 </div>
 <div class="container-fluid">
+@if (count($errors) > 0)
+	<div class="row">
+		<div class="col-md-12">
+			<div class="alert alert-danger">
+				<ul>
+				@foreach ($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+				</ul>
+			</div>
+		</div>
+	</div>
+	@endif
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-body">
-					@if (count($errors) > 0)
-						<div class="alert alert-danger">
-							<ul>
-							@foreach ($errors->all() as $error)
-								<li>{{ $error }}</li>
-							@endforeach
-							</ul>
-						</div>
-					@endif
 					<div class="d-md-flex align-items-center">
 						<div>
 							<h4 class="card-title">แบบเก็บข้อมูลโครงการเฝ้าระวังเชื้อไวรัสก่อโรคระบบทางเดินหายใจ</h4>
@@ -695,7 +699,9 @@ input:read-only {
 											</div>
 										</div>
 									</div>
-									<!--
+
+
+
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
 											<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
@@ -709,7 +715,7 @@ input:read-only {
 													</thead>
 													<tfoot></tfoot>
 													<tbody>
-													php
+													@php
 													$oldSpecimenDate = "";
 													foreach ($specimen as $key => $val) {
 														if (!empty($val->name_th)) {
@@ -739,8 +745,12 @@ input:read-only {
 																	$htm .= "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6\">\n";
 																		$htm .= "<div class=\"custom-control custom-checkbox custom-control-inline\">\n";
 																			$htm .= "<input type=\"checkbox\" name=\"specimen".$val->id."\" value=\"1\" ";
-																			if (old("specimen".$val->id) == "1") {
+																			if ($val->psp_specimen_id == 1) {
 																				$htm .= "checked ";
+																			} else {
+																				if (old("specimen".$val->id) == 1) {
+																					$htm .= "checked ";
+																				}
 																			}
 																			$htm .= "class=\"custom-control-input form-check-input specimen-chk-".$val->id."\" id=\"specimen_chk".$val->id."\">\n";
 																			$htm .= "<label for=\"specimen_chk".$val->id."\" class=\"custom-control-label font-weight-normal\">".$speciman_name." ".$abbreviation."&nbsp;".$note."</label>\n";
@@ -788,13 +798,15 @@ input:read-only {
 														$htm .= "</tr>\n";
 														echo $htm;
 													}
-													endphp
+													@endphp
 													</tbody>
 												</table>
 											</div>
 										</div>
 									</div>
-									-->
+
+
+
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="sickDateInput">ภาวะสุขภาพ หรือ โรคประจำตัว</label>

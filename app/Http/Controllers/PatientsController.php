@@ -280,10 +280,11 @@ class PatientsController extends BoeFrsController
 
 		/* get patient specimen */
 		$specimen_data = Specimen::where('ref_pt_id', '=', $request->id)
-		->whereNull('deleted_at')
-		->get();
+			->whereNull('deleted_at')
+			->get();
 		$specimen_data = $specimen_data->keyBy('specimen_id');
 		$specimen_rs = collect();
+
 		$rs = $specimen->each(function($item, $key) use ($specimen_rs, $specimen_data) {
 			$tmp['sp_id'] = $item->id;
 			$tmp['sp_name_en'] = $item->name_en;
@@ -657,5 +658,5 @@ class PatientsController extends BoeFrsController
 		}
 		return $htm;
 	}
-	
+
 }
