@@ -745,13 +745,11 @@ input:read-only {
 																	$htm .= "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6\">\n";
 																		$htm .= "<div class=\"custom-control custom-checkbox custom-control-inline\">\n";
 																			$htm .= "<input type=\"checkbox\" name=\"specimen".$val->id."\" value=\"1\" ";
-																			if ($val->psp_specimen_id == 1) {
-																				$htm .= "checked ";
-																			} else {
+
 																				if (old("specimen".$val->id) == 1) {
 																					$htm .= "checked ";
 																				}
-																			}
+																			
 																			$htm .= "class=\"custom-control-input form-check-input specimen-chk-".$val->id."\" id=\"specimen_chk".$val->id."\">\n";
 																			$htm .= "<label for=\"specimen_chk".$val->id."\" class=\"custom-control-label font-weight-normal\">".$speciman_name." ".$abbreviation."&nbsp;".$note."</label>\n";
 																		$htm .= "</div>\n";
