@@ -23,13 +23,78 @@ class PatientsController extends BoeFrsController
 		$this->middleware('page_session');
 	}
 
+	public function create(Request $request) {
+		$nationality = parent::nationality();
+		$occupation = parent::occupation();
+		$symptoms = parent::symptoms();
+		$specimen = parent::specimen();
+		$patient = parent::patientsById($request->id);
+		$user_hospital = parent::hospitalByCode(auth()->user()->hospcode);
+		$hospital = parent::hospitalByBoeFrsActive();
 
-	/**
-	* Display the specified resource.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
+		/* get patient clinical */
+		$clinical = Clinical::find($request->id);
+		$clinical = $clinical->toArray();
+
+		/* get patient specimen */
+		$specimen_data = Specimen::where('ref_pt_id', '=', $request->id)
+			->whereNull('deleted_at')
+			->get()->keyBy('specimen_id');
+		$specimen_rs = collect();
+		$rs = $specimen->each(function($item, $key) use ($specimen_rs, $specimen_data) {
+			$tmp['sp_id'] = $item->id;
+			$tmp['sp_name_en'] = $item->name_en;
+			$tmp['sp_name_th'] = $item->name_th;
+			$tmp['sp_abbreviation'] = $item->abbreviation;
+			$tmp['sp_note'] = $item->note;
+			$tmp['sp_other_field'] = $item->other_field;
+			if (count($specimen_data) > 0) {
+				foreach ($specimen_data as $k => $v) {
+					if ($v['specimen_id'] == $item->id) {
+						$tmp['psp_id'] = $v['id'];
+						$tmp['psp_ref_pt_id'] = $v['ref_pt_id'];
+						$tmp['psp_specimen_id'] = $v['specimen_id'];
+						$tmp['psp_specimen_other'] = $v['specimen_other'];
+						$tmp['psp_specimen_date'] = parent::convertMySQLDateFormat($v['specimen_date']);
+						$tmp['psp_specimen_result'] = $v['specimen_result'];
+						$tmp['psp_ref_user_id'] = $v['ref_user_id'];
+						$tmp['psp_created_at'] = $v['created_at'];
+						$tmp['psp_updated_at'] = $v['updated_at'];
+						$tmp['psp_deleted_at'] = $v['deleted_at'];
+						break;
+					} else {
+						$tmp['psp_id'] = null;
+						$tmp['psp_ref_pt_id'] = null;
+						$tmp['psp_specimen_id'] = null;
+						$tmp['psp_specimen_other'] = null;
+						$tmp['psp_specimen_date'] = null;
+						$tmp['psp_specimen_result'] = null;
+						$tmp['psp_ref_user_id'] = null;
+						$tmp['psp_created_at'] = null;
+						$tmp['psp_updated_at'] = null;
+						$tmp['psp_deleted_at'] = null;
+					}
+				}
+			}
+			$specimen_rs->put($item->id, $tmp);
+		});
+		$specimen_rs->all();
+		dd($specimen_rs);
+		return view(
+			'patients.index',				[
+			'titleName'=>$this->title_name,
+			'nationality'=>$nationality,
+			'occupation'=>$occupation,
+			'symptoms'=>$symptoms,
+			'specimen'=>$specimen,
+			'patient'=>$patient,
+			'user_hospital'=>$user_hospital,
+			'hospital'=>$hospital,
+			'clinical'=>$clinical
+			]
+		);
+	}
+
 	public function show($id)
 	{
 		/* prepare data */
@@ -258,84 +323,6 @@ class PatientsController extends BoeFrsController
 	*/
 	public function index(Request $request) {
 		return $this->create($request);
-	}
-
-	/**
-	* Show the form for creating a new resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-	public function create(Request $request) {
-		$nationality = parent::nationality();
-		$occupation = parent::occupation();
-		$symptoms = parent::symptoms();
-		$specimen = parent::specimen();
-		$patient = parent::patientsById($request->id);
-		$user_hospital = parent::hospitalByCode(auth()->user()->hospcode);
-		$hospital = parent::hospitalByBoeFrsActive();
-
-		/* get patient clinical */
-		$clinical = Clinical::find($request->id);
-		$clinical = $clinical->toArray();
-
-		/* get patient specimen */
-		$specimen_data = Specimen::where('ref_pt_id', '=', $request->id)
-			->whereNull('deleted_at')
-			->get()->keyBy('specimen_id');
-		$specimen_rs = collect();
-		$rs = $specimen->each(function($item, $key) use ($specimen_rs, $specimen_data) {
-			$tmp['sp_id'] = $item->id;
-			$tmp['sp_name_en'] = $item->name_en;
-			$tmp['sp_name_th'] = $item->name_th;
-			$tmp['sp_abbreviation'] = $item->abbreviation;
-			$tmp['sp_note'] = $item->note;
-			$tmp['sp_other_field'] = $item->other_field;
-			if (count($specimen_data) > 0) {
-				foreach ($specimen_data as $k => $v) {
-					if ($v['specimen_id'] == $item->id) {
-						$tmp['psp_id'] = $v['id'];
-						$tmp['psp_ref_pt_id'] = $v['ref_pt_id'];
-						$tmp['psp_specimen_id'] = $v['specimen_id'];
-						$tmp['psp_specimen_other'] = $v['specimen_other'];
-						$tmp['psp_specimen_date'] = parent::convertMySQLDateFormat($v['specimen_date']);
-						$tmp['psp_specimen_result'] = $v['specimen_result'];
-						$tmp['psp_ref_user_id'] = $v['ref_user_id'];
-						$tmp['psp_created_at'] = $v['created_at'];
-						$tmp['psp_updated_at'] = $v['updated_at'];
-						$tmp['psp_deleted_at'] = $v['deleted_at'];
-						break;
-					} else {
-						$tmp['psp_id'] = null;
-						$tmp['psp_ref_pt_id'] = null;
-						$tmp['psp_specimen_id'] = null;
-						$tmp['psp_specimen_other'] = null;
-						$tmp['psp_specimen_date'] = null;
-						$tmp['psp_specimen_result'] = null;
-						$tmp['psp_ref_user_id'] = null;
-						$tmp['psp_created_at'] = null;
-						$tmp['psp_updated_at'] = null;
-						$tmp['psp_deleted_at'] = null;
-					}
-				}
-			}
-			$specimen_rs->put($item->id, $tmp);
-		});
-		$specimen_rs->all();
-		dd($specimen_rs);
-		return view(
-			'patients.index',
-			[
-				'titleName'=>$this->title_name,
-				'nationality'=>$nationality,
-				'occupation'=>$occupation,
-				'symptoms'=>$symptoms,
-				'specimen'=>$specimen,
-				'patient'=>$patient,
-				'user_hospital'=>$user_hospital,
-				'hospital'=>$hospital,
-				'clinical'=>$clinical
-			]
-		);
 	}
 
 	public function addPatient(Request $request) {
