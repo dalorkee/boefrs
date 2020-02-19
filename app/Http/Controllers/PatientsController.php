@@ -78,19 +78,20 @@ class PatientsController extends BoeFrsController
 			}
 			$specimen_rs->put($item->id, $tmp);
 		});
-		$specimen_rs->all();
-		dd($specimen_rs);
+		//$specimen_rs->all();
+		//dd($specimen_rs);
 		return view(
-			'patients.index',				[
-			'titleName'=>$this->title_name,
-			'nationality'=>$nationality,
-			'occupation'=>$occupation,
-			'symptoms'=>$symptoms,
-			'specimen'=>$specimen,
-			'patient'=>$patient,
-			'user_hospital'=>$user_hospital,
-			'hospital'=>$hospital,
-			'clinical'=>$clinical
+			'patients.index', [
+				'titleName' => $this->title_name,
+				'nationality' => $nationality,
+				'occupation' => $occupation,
+				'symptoms' => $symptoms,
+				//'specimen'=>$specimen,
+				'specimen_rs' => $specimen_rs,
+				'patient' => $patient,
+				'user_hospital' => $user_hospital,
+				'hospital' => $hospital,
+				'clinical' => $clinical
 			]
 		);
 	}
