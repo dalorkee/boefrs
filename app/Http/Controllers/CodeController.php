@@ -245,7 +245,8 @@ class CodeController extends BoeFrsController {
 					<th>รหัส</th>
 					<th>ชื่อ-สกุล</th>
 					<th>HN</th>
-					<th>สถานะ</th>
+					<th>สถานะ (รพ.)</th>
+					<th>สถานะ (Lab)</th>
 					<th>วัน/เวลา</th>
 					<th>จัดการ</th>
 				</tr>
@@ -261,6 +262,7 @@ class CodeController extends BoeFrsController {
 						$htm .= "<td>".$value->title_name_other.$value->first_name." ".$value->last_name."</td>";
 					}
 					$htm .= "<td>".$value->hn."</td>";
+					$htm .= "<td><span class=\"badge badge-pill badge-primary\">".ucfirst($value->hosp_status)."</span></td>";
 					$htm .= "<td><span class=\"badge badge-pill badge-primary\">".ucfirst($value->lab_status)."</span></td>";
 					$htm .= "<td>".$value->created_at."</td>";
 					$htm .= "<td>";

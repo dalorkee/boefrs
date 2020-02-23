@@ -81,14 +81,17 @@ input:read-only {
 												<label for="titleName">คำนำหน้าชื่อ</label>
 												<input type="hidden" name="title_name_cache" value="{{ $patient[0]->title_name }}">
 												<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
-												@php
-													if ($patient[0]->title_name == 6) {
-														$cache_title_name = array( -6, $patient[0]->title_name_other);
-													} else {
-														$cache_title_name = array($patient[0]->title_name, $titleName[$patient[0]->title_name]->title_name);
-													}
-												@endphp
-													<option value="{{ $cache_title_name[0] }}">{{ $cache_title_name[1] }}</option>
+													@php
+													/*
+														if ($patient[0]->title_name == 6) {
+															$cache_title_name = array( -6, $patient[0]->title_name_other);
+														} else {
+															$cache_title_name = array($patient[0]->title_name, $titleName[$patient[0]->title_name]->title_name);
+														}
+														*/
+													@endphp
+													<!--<option value="{ $cache_title_name[0] }}">{ $cache_title_name[1] }}</option>-->
+													<option value="{{ $patient[0]->title_name }}">{{ $titleName[$patient[0]->title_name]->title_name }}</option>
 													<option value="0">-- โปรดเลือก --</option>
 													@php
 														$titleName->each(function ($item, $key) {
@@ -119,7 +122,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
 											<div class="form-group {{ $errors->has('firstNameInput') ? 'has-error' : '' }}">
 												<label for="firstName">ชื่อจริง</label>
-												<input type="text" name="firstNameInput"value="{{ $patient[0]->first_name }}" class="form-control" id="first_name_input" placeholder="ชื่อ" required>
+												<input type="text" name="firstNameInput" value="{{ $patient[0]->first_name }}" class="form-control" id="first_name_input" placeholder="ชื่อ" required>
 											</div>
 											<span class="text-danger">{{ $errors->first('firstNameInput') }}</span>
 										</div>
@@ -255,7 +258,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group {{ $errors->has('provinceInput') ? 'has-error' : '' }}">
 												<label for="province">จังหวัด</label>
-												<select name="provinceInput" class="form-control selectpicker show-tick" id="select_province">
+												<select name="provinceInput" class="form-control selectpicker show-tick" data-live-search="true" id="select_province">
 													<option value="">-- เลือกจังหวัด --</option>
 													@php
 														$provinces = Session::get('provinces');
@@ -716,37 +719,39 @@ input:read-only {
 													<tfoot></tfoot>
 													<tbody>
 													@foreach ($specimen_rs as $key => $val)
-													<tr id="specimen_tr{{ $val['sp_id'] }}">
-														<td>
-															<div class="form-group row">
-																<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-																	<div class="custom-control custom-checkbox custom-control-inline">
-																		<input type="checkbox" name="specimen{{ $val['sp_id'] }}" value="1" class="custom-control-input form-check-input specimen-chk-{{ $val['sp_id'] }}" id="specimen_chk_{{ $val['sp_id'] }}">
-																		<label for="specimen_chk_{{ $val['sp_id'] }}" class="custom-control-label font-weight-normal">{{ $val['sp_name_en'] }}</label>
+														@if (!is_null($val['psp_id']))
+															<tr id="specimen_tr{{ $val['sp_id'] }}">
+																<td>
+																	<div class="form-group row">
+																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+																			<div class="custom-control custom-checkbox custom-control-inline">
+																				<input type="checkbox" name="specimen{{ $val['sp_id'] }}" value="{{ $val['psp_id'] }}" disabled @if (!is_null($val['psp_id'])) checked @endif class="custom-control-input form-check-input specimen-chk-{{ $val['sp_id'] }}" id="specimen_chk_{{ $val['sp_id'] }}">
+																				<label for="specimen_chk_{{ $val['sp_id'] }}" class="custom-control-label font-weight-normal">{{ $val['sp_name_en'] }}</label>
+																			</div>
+																		</div>
+																		@if ($val['sp_other_field'] == 'Yes')
+																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+																			<input type="text" name="specimenOth{{ $val['sp_id'] }}" value="{{ $val['psp_specimen_other'] }}" class="form-control">
+																		</div>
+																		@endif
 																	</div>
-																</div>
-																@if ($val['sp_other_field'] == 'Yes')
-																<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-																	<input type="text" name="specimenOth{{ $val['sp_id'] }}" value="{{ $val['psp_specimen_other'] }}" class="form-control">
-																</div>
-																@endif
-															</div>
-														</td>
-														<td>
-															<div class="form-group row">
-																<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																	<div class="input-group date" id="specimenDate{{ $val['sp_id'] }}">
-																		<div class="input-group">
-																			<input type="text" name="specimenDate{{ $val['sp_id'] }}" value="{{ $val['psp_specimen_date'] }}" class="form-control" id="specimenDate_{{ $val['psp_id'] }}">
-																			<div class="input-group-append">
-																				<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+																</td>
+																<td>
+																	<div class="form-group row">
+																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																			<div class="input-group date" data-provide="datepicke" id="specimenDate{{ $val['sp_id'] }}">
+																				<div class="input-group">
+																					<input type="text" name="specimenDate{{ $val['sp_id'] }}" value="{{ $val['psp_specimen_date'] }}" class="form-control" id="specimenDate_{{ $val['sp_id'] }}" readonly>
+																					<div class="input-group-append">
+																						<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+																					</div>
+																				</div>
 																			</div>
 																		</div>
 																	</div>
-																</div>
-															</div>
-														</td>
-													</tr>
+																</td>
+															</tr>
+														@endif
 													@endforeach
 													@php
 													/*
@@ -1564,10 +1569,12 @@ $(document).ready(function() {
 		if (id === '6') {
 			$('#other_title_name_input').val('');
 			$('#other_title_name_input').prop('disabled', false);
+		/*
 		} else if (id === '-6') {
-			$('#other_title_name_input').val('{{ $cache_title_name[1] }}');
+			$('#other_title_name_input').val('{ $cache_title_name[1] }}');
 
 			$('#other_title_name_input').prop('disabled', false);
+		*/
 		} else {
 			$('#other_title_name_input').val('');
 			$('#other_title_name_input').prop('disabled', true);
@@ -1733,56 +1740,58 @@ $(document).ready(function() {
 
 	/* specimen table && checkbox */
 	foreach ($specimen_rs as $key => $val) {
-		echo "
-			var spec_n = $('.specimen-chk-".$val['sp_id']."').filter(':checked').length;
-			if (spec_n === 1) {
-				var hasClass = $('#specimen_tr".$val['sp_id']."').hasClass('highlight');
-				if (!hasClass) {
-					$('#specimen_tr".$val['sp_id']."').addClass('highlight');
-				}
-			}
-		\n";
-
-		echo "
-		$('.specimen-chk-".$val['sp_id']."').click(function() {
-			$('.specimen-chk-".$val['sp_id']."').not(this).prop('checked', false);
-			let number = $('.specimen-chk-".$val['sp_id']."').filter(':checked').length;
-			if (number == 1) {
-				let hasClass = $('#specimen_tr".$val['sp_id']."').hasClass('highlight');
-				if (!hasClass) {
-					$('#specimen_tr".$val['sp_id']."').addClass('highlight');
-				}
-			} else {
-				$('#specimen_tr".$val['sp_id']."').removeClass('highlight');
-			}";
-			if ($val['sp_other_field'] == 'Yes') {
-				echo "
-					if ($('#specimen_chk".$val['sp_id']."').prop('checked') == true) {
-						$('#specimen_oth".$val['sp_id']."').prop('disabled', false);
-						$('#specimenDate_".$val['sp_id']."').prop('disabled', false);
-					} else {
-						$('#specimen_oth".$val['sp_id']."').val('');
-						$('#specimen_oth".$val['sp_id']."').prop('disabled', true);
-						$('#specimenDate_".$val['sp_id']."').val('');
-						$('#specimenDate_".$val['sp_id']."').prop('disabled', true);
-					}";
-			} else {
-				echo "
-					if ($('#specimen_chk".$val['sp_id']."').prop('checked') == true) {
-						$('#specimenDate_".$val['sp_id']."').prop('disabled', false);
-					} else {
-						$('#specimenDate_".$val['sp_id']."').val('');
-						$('#specimenDate_".$val['sp_id']."').prop('disabled', true);
-					}";
-			}
+		if (!is_null($val['psp_id'])) {
 			echo "
-				$('#specimenDate".$val['sp_id']."').datepicker({
-					format: 'dd/mm/yyyy',
-					todayHighlight: true,
-					todayBtn: true,
-					autoclose: true
-				});";
-			echo "});\n";
+				var spec_n = $('.specimen-chk-".$val['sp_id']."').filter(':checked').length;
+				if (spec_n === 1) {
+					var hasClass = $('#specimen_tr".$val['sp_id']."').hasClass('highlight');
+					if (!hasClass) {
+						$('#specimen_tr".$val['sp_id']."').addClass('highlight');
+					}
+				}
+			\n";
+
+			echo "
+			$('.specimen-chk-".$val['sp_id']."').click(function() {
+				$('.specimen-chk-".$val['sp_id']."').not(this).prop('checked', false);
+				let number = $('.specimen-chk-".$val['sp_id']."').filter(':checked').length;
+				if (number == 1) {
+					let hasClass = $('#specimen_tr".$val['sp_id']."').hasClass('highlight');
+					if (!hasClass) {
+						$('#specimen_tr".$val['sp_id']."').addClass('highlight');
+					}
+				} else {
+					$('#specimen_tr".$val['sp_id']."').removeClass('highlight');
+				}";
+				if ($val['sp_other_field'] == 'Yes') {
+					echo "
+						if ($('#specimen_chk".$val['sp_id']."').prop('checked') == true) {
+							$('#specimen_oth".$val['sp_id']."').prop('disabled', false);
+							$('#specimenDate_".$val['sp_id']."').prop('disabled', false);
+						} else {
+							$('#specimen_oth".$val['sp_id']."').val('');
+							$('#specimen_oth".$val['sp_id']."').prop('disabled', true);
+							$('#specimenDate_".$val['sp_id']."').val('');
+							$('#specimenDate_".$val['sp_id']."').prop('disabled', true);
+						}";
+				} else {
+					echo "
+						if ($('#specimen_chk".$val['sp_id']."').prop('checked') == true) {
+							$('#specimenDate_".$val['sp_id']."').prop('disabled', false);
+						} else {
+							$('#specimenDate_".$val['sp_id']."').val('');
+							$('#specimenDate_".$val['sp_id']."').prop('disabled', true);
+						}";
+				}
+				echo "
+					$('#specimenDate".$val['sp_id']."').datepicker({
+						format: 'dd/mm/yyyy',
+						todayHighlight: true,
+						todayBtn: true,
+						autoclose: true
+					});";
+				echo "});\n";
+			}
 		}
 	@endphp
 

@@ -262,8 +262,8 @@ input.valid, textarea.valid {
 														$htm .= "<div class=\"form-group row\">\n";
 															$htm .= "<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6\">\n";
 																$htm .= "<div class=\"custom-control custom-checkbox custom-control-inline\">\n";
-																	$htm .= "<input type=\"checkbox\" name=\"specimen".$val->id."\" value=\"1\" ";
-																	if (old("specimen".$val->id) == "1") {
+																	$htm .= "<input type=\"checkbox\" name=\"specimen".$val->id."\" value=\"".$val->id."\" ";
+																	if (old("specimen".$val->id) == $val->id) {
 																		$htm .= "checked ";
 																	}
 																	$htm .= "class=\"custom-control-input form-check-input specimen-chk-".$val->id."\" id=\"specimen_chk".$val->id."\">\n";
@@ -330,7 +330,8 @@ input.valid, textarea.valid {
 									<th>รหัส</th>
 									<th>ชื่อ-สกุล</th>
 									<th>HN</th>
-									<th>สถานะ</th>
+									<th>สถานะ (รพ.)</th>
+									<th>สถานะ (Lab)</th>
 									<th>วัน/เวลา</th>
 									<th>จัดการ</th>
 								</tr>
@@ -348,6 +349,7 @@ input.valid, textarea.valid {
 										echo "<td>".$value->title_name_other.$value->first_name." ".$value->last_name."</td>";
 									}
 									echo "<td>".$value->hn."</td>";
+									echo "<td><span class=\"badge badge-pill badge-primary\">".ucfirst($value->hosp_status)."</span></td>";
 									echo "<td><span class=\"badge badge-pill badge-primary\">".ucfirst($value->lab_status)."</span></td>";
 									echo "<td>".$value->created_at."</td>";
 									echo "<td>";

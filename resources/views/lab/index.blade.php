@@ -172,8 +172,9 @@ input.valid, textarea.valid{
 											<th>ชื่อ-สกุล</th>
 											<th>HN</th>
 											<th>รหัส</th>
-											<th>รหัส รพ.</th>
-											<th>สถานะ</th>
+											<th>รหัส</th>
+											<th>สถานะ (รพ.)</th>
+											<th>สถานะ (Lab)</th>
 											<th>จัดการ</th>
 										</tr>
 									</thead>
@@ -184,12 +185,12 @@ input.valid, textarea.valid{
 											$patients->each(function ($item, $key) use ($titleName) {
 												switch ($item->lab_status) {
 													case 'new':
-														$status_class = 'primary';
+														$status_class = 'danger';
 														break;
-													case 'hospital':
+													case 'pending':
 														$status_class = 'info';
 														break;
-													case 'lab':
+													case 'updated':
 														$status_class = 'success';
 														break;
 													case 'completed':
@@ -209,10 +210,11 @@ input.valid, textarea.valid{
 													echo "<td>".$item->hn."</td>";
 													echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 													echo "<td>".$item->ref_user_hospcode."</td>";
+													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->hosp_status)."</span></td>";
 													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
 														echo "<a href=\"".route('viewLab', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
-														if ($item->lab_status == 'new' || $item->lab_status == 'hospital' || $item->lab_status == 'lab') {
+														if ($item->lab_status == 'pending') {
 															echo "<a href=\"".route('createLab', ['id'=>$item->id])."\" class=\"btn btn-primary btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Create\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 														} else {
 															echo "<a href=\"".route('editLab', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";

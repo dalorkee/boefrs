@@ -150,8 +150,7 @@ input.valid, textarea.valid{
 						<select name="lab_status" class="form-control my-1 select-status" id="select_status" multiple="multiple" style="width:100%;">
 						@endrole
 							<option value="new">New</option>
-							<option value="hospital">Hospital</option>
-							<option value="lab">Lab</option>
+							<option value="hospital">Updated</option>
 							<option value="completed">Completed</option>
 						</select>
 					</div>
@@ -174,7 +173,8 @@ input.valid, textarea.valid{
 											<th>HN</th>
 											<th>รหัส</th>
 											<th>รหัส รพ.</th>
-											<th>สถานะ</th>
+											<th>สถานะ [รพ]</th>
+											<th>สถานะ [Lab]</th>
 											<th>จัดการ</th>
 										</tr>
 									</thead>
@@ -185,13 +185,13 @@ input.valid, textarea.valid{
 											$patients->each(function ($item, $key) use ($titleName) {
 												switch ($item->lab_status) {
 													case 'new':
-														$status_class = 'primary';
+														$status_class = 'danger';
 														break;
-													case 'hospital':
+													case 'pending':
 														$status_class = 'info';
 														break;
-													case 'lab':
-														$status_class = 'secondary';
+													case 'updated':
+														$status_class = 'success';
 														break;
 													case 'completed':
 														$status_class = 'success';
@@ -210,10 +210,11 @@ input.valid, textarea.valid{
 													echo "<td>".$item->hn."</td>";
 													echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 													echo "<td>".$item->ref_user_hospcode."</td>";
+													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->hosp_status)."</span></td>";
 													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
 													echo "<a href=\"".route('viewPatient', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
-														if ($item->lab_status == 'new' || $item->lab_status == 'hospital' || $item->lab_status == 'lab') {
+														if ($item->hosp_status == 'new') {
 															echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 														} else {
 															echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";

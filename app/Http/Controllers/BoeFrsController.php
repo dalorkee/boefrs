@@ -43,8 +43,7 @@ class BoeFrsController extends Controller implements BoeFrs
 		return DB::connection('mysql')
 			->table('patients')
 			->where([
-				['id', '=', $id],
-				['status', '=', 'active'],
+				['id', '=', $id]
 			])
 			->whereNull('deleted_at')
 			->orderBy('id', 'desc')->get();

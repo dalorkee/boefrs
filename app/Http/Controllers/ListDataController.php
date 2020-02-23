@@ -189,7 +189,8 @@ class ListDataController extends BoeFrsController
 						<th>HN</th>
 						<th>รหัส</th>
 						<th>รหัส รพ.</th>
-						<th>สถานะ</th>
+						<th>สถานะ [รพ]</th>
+						<th>สถานะ [Lab]</th>
 						<th>จัดการ</th>
 					</tr>
 				</thead>
@@ -201,13 +202,13 @@ class ListDataController extends BoeFrsController
 					foreach($patients as $key => $val) {
 						switch ($val->lab_status) {
 							case 'new':
-								$status_class = 'primary';
+								$status_class = 'danger';
 								break;
-							case 'hospital':
+							case 'pending':
 								$status_class = 'info';
 								break;
-							case 'lab':
-								$status_class = 'secondary';
+							case 'updated':
+								$status_class = 'success';
 								break;
 							case 'completed':
 								$status_class = 'success';
@@ -226,9 +227,10 @@ class ListDataController extends BoeFrsController
 							$htm .= "<td>".$val->hn."</td>";
 							$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
 							$htm .= "<td>".$val->ref_user_hospcode."</td>";
+							$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($val->hosp_status)."</span></td>";
 							$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($val->lab_status)."</span></td>";
 							$htm .= "<td>";
-							if ($val->lab_status == 'new') {
+							if ($val->hosp_status == 'new') {
 								$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 							} else {
 								$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";

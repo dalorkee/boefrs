@@ -23,6 +23,246 @@ class PatientsController extends BoeFrsController
 		$this->middleware('page_session');
 	}
 
+	public function addPatient(Request $request) {
+		/* check repeat patient data */
+		$chk_patient = Patients::where('id', '=', $request->pid)
+			->where('hosp_status', '!=', 'new')
+			->whereNull('deleted_at')
+			->first();
+		if ($chk_patient) {
+			$chk_patient = $chk_patient->all();
+			$message = collect(['status'=>500, 'msg'=>'มีข้อมูลนี้อยู่ในระบบแล้ว โปรดตรวจสอบ!', 'title'=>'Error!']);
+			return redirect()->route('list-data.index')->with('message', $message);
+		} else {
+			/* validation */
+			$this->validate($request, [
+				'titleNameInput' => 'required',
+				'firstNameInput' => 'required',
+				'lastNameInput' => 'required',
+				'hnInput' => 'required',
+				'sexInput' => 'required',
+				//'birthDayInput' => 'required',
+				'hospitalInput' => 'required',
+				'provinceInput' => 'required',
+				'districtInput' => 'required',
+				'subDistrictInput' => 'required',
+				'patientType' => 'required',
+				'sickDateInput' => 'required',
+				'treatDateInput' => 'required'
+
+			],[
+				'titleNameInput.required' => 'Title name field is required.',
+				'firstNameInput.required' => 'Firstname field is required',
+				'lastNameInput.required' => 'Lastname field is required',
+				'hnInput.required' => 'HN field is required',
+				'sexInput.required' => 'Gender field is required.',
+				//'birthDayInput.required' => 'Birth date field is required.',
+				'hospitalInput.required' => 'Hospital field is required',
+				'provinceInput.required' => 'Province field is required',
+				'districtInput.required' => 'District field is required',
+				'subDistrictInput.required' => 'Sub-district field is required',
+				'patientType.required' => 'Patient type field is required',
+				'sickDateInput.required' => 'Sick date field is required',
+				'treatDateInput.required' => 'Date define field is required'
+			]);
+
+			/* find patient by id */
+			$patient = Patients::find($request->pid);
+
+			/* General section */
+			if ($request->titleNameInput == -6) {
+				$patient->title_name = 6;
+			} else {
+				$patient->title_name = $request->titleNameInput;
+			}
+			if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
+				$patient->title_name_other = $request->otherTitleNameInput;
+			}
+
+			$patient->first_name = $request->firstNameInput;
+			$patient->last_name = $request->lastNameInput;
+			$patient->hn = $request->hnInput;
+			$patient->an = $request->anInput;
+			$patient->gender = $request->sexInput;
+			$patient->date_of_birth = parent::convertDateToMySQL($request->birthDayInput);
+			$patient->age_year = $request->ageYearInput;
+			$patient->age_month = $request->ageMonthInput;
+			$patient->age_day = $request->ageDayInput;
+			$patient->nationality = $request->nationalityInput;
+
+			if (isset($request->otherNationalityInput) && !empty($request->otherNationalityInput)) {
+				$patient->nationality_other = $request->otherNationalityInput;
+			}
+
+			$patient->hospital = $request->hospitalInput;
+			$patient->house_no = $request->houseNoInput;
+			$patient->village_no = $request->villageNoInput;
+			$patient->village = $request->villageInput;
+			$patient->lane = $request->laneInput;
+			$patient->province = $request->provinceInput;
+			$patient->district = $request->districtInput;
+			$patient->sub_district = $request->subDistrictInput;
+			$patient->occupation = $request->occupationInput;
+
+			if (isset($request->occupationOtherInput) && !empty($request->occupationOtherInput)) {
+				$patient->occupation_other = $request->occupationOtherInput;
+			}
+			$patient->hosp_status = 'updated';
+
+			/* Clinical section */
+			$clinical = Clinical::find($request->pid);
+			//$clinical->ref_pt_id = $request->pid;
+			$clinical->pt_type = $request->patientType;
+			$clinical->date_sick = parent::convertDateToMySQL($request->sickDateInput);
+			$clinical->date_define = parent::convertDateToMySQL($request->treatDateInput);
+			$clinical->date_admit = parent::convertDateToMySQL($request->admitDateInput);
+			$clinical->pt_temperature = $request->temperatureInput;
+			$clinical->fever_sym = $request->symptom_1_Input;
+			$clinical->cough_sym = $request->symptom_2_Input;
+			$clinical->sore_throat_sym = $request->symptom_3_Input;
+			$clinical->runny_stuffy_sym = $request->symptom_4_Input;
+			$clinical->sputum_sym = $request->symptom_5_Input;
+			$clinical->headache_sym = $request->symptom_6_Input;
+			$clinical->myalgia_sym = $request->symptom_7_Input;
+			$clinical->fatigue_sym = $request->symptom_8_Input;
+			$clinical->dyspnea_sym = $request->symptom_9_Input;
+			$clinical->tachypnea_sym = $request->symptom_10_Input;
+			$clinical->wheezing_sym = $request->symptom_11_Input;
+			$clinical->conjunctivitis_sym = $request->symptom_12_Input;
+			$clinical->vomiting_sym = $request->symptom_13_Input;
+			$clinical->diarrhea_sym = $request->symptom_14_Input;
+			$clinical->apnea_sym = $request->symptom_15_Input;
+			$clinical->sepsis_sym = $request->symptom_16_Input;
+			$clinical->encephalitis_sym = $request->symptom_17_Input;
+			$clinical->intubation_sym = $request->symptom_18_Input;
+			$clinical->pneumonia_sym = $request->symptom_19_Input;
+			$clinical->kidney_sym = $request->symptom_20_Input;
+			$clinical->other_symptom = $request->symptom_21_Input;
+			$clinical->other_symptom_specify = $request->other_symptom_input;
+			$clinical->lung = $request->lungXrayInput;
+			$clinical->lung_date = parent::convertDateToMySQL($request->xRayDateInput);
+			$clinical->lung_result = $request->xRayResultInput;
+			$clinical->cbc_date = parent::convertDateToMySQL($request->cbcDateInput);
+			$clinical->hb = $request->hbInput;
+			$clinical->hct = $request->htcInput;
+			$clinical->platelet_count = $request->plateletInput;
+			$clinical->wbc = $request->wbcInput;
+			$clinical->n = $request->nInput;
+			$clinical->l = $request->lInput;
+			$clinical->atyp_lymph = $request->atypLymphInput;
+			$clinical->mono = $request->monoInput;
+			$clinical->baso = $request->basoInput;
+			$clinical->eo = $request->eoInput;
+			$clinical->band = $request->bandInput;
+			$clinical->first_diag = $request->firstDiagnosisInput;
+			$clinical->rapid_test = $request->influRapidInput;
+			$clinical->rapid_test_name = $request->influRapidtestName;
+			if ($request->has('rapidTestResultInput') && count($request->rapidTestResultInput) > 0) {
+				$clinical->rapid_test_result = parent::arrToStr($request->rapidTestResultInput);
+			}
+			$clinical->flu_vaccine = $request->influVaccineInput;
+			$clinical->flu_vaccine_date = parent::convertDateToMySQL($request->influVaccineDateInput);
+			$clinical->antiviral = $request->virusMedicineInput;
+			$clinical->antiviral_name = $request->medicineNameInput;
+			$clinical->antiviral_date = parent::convertDateToMySQL($request->medicineGiveDateInput);
+			$clinical->pregnant_wk = $request->pregnantWeekInput;
+			$clinical->pregnant = $request->pregnantInput;
+			$clinical->post_pregnant = $request->postPregnantInput;
+			$clinical->fat_high = $request->fatHeightInput;
+			$clinical->fat_weight = $request->fatWeightInput;
+			$clinical->fat = $request->fatInput;
+			$clinical->diabetes = $request->diabetesInput;
+			$clinical->immune = $request->immuneInput;
+			$clinical->immune_specify = $request->immuneSpecifyInput;
+			$clinical->early_birth = $request->earlyBirthInput;
+			$clinical->early_birth_wk = $request->earlyBirthWeekInput;
+			$clinical->malnutrition = $request->malnutritionInput;
+			$clinical->copd = $request->copdInput;
+			$clinical->asthma = $request->asthmaInput;
+			$clinical->heart_disease = $request->heartDiseaseInput;
+			$clinical->cerebral = $request->cerebralInput;
+			$clinical->kidney_fail = $request->kidneyFailInput;
+			$clinical->cancer_specify = $request->cancerSpecifyInput;
+			$clinical->cancer = $request->cancerInput;
+			$clinical->other_congenital = $request->otherCongenitalInput;
+			$clinical->other_congenital_specify = $request->otherCongenitalSpecifyInput;
+			$clinical->contact_poultry7 = $request->contactPoultry7Input;
+			$clinical->contact_poultry14 = $request->contactPoultry14Input;
+			$clinical->contact_poultry14_specify = $request->contactPoultry14SpecifyInput;
+			$clinical->stay_poultry14 = $request->stayPoultry14Input;
+			$clinical->stay_flu14 = $request->stayFlu14Input;
+			$clinical->stay_flu14_place_specify = $request->stayFlu14PlaceSpecifyInput;
+			$clinical->contact_flu14 = $request->contactFlu14Input;
+			$clinical->visit_flu14 = $request->visitFlu14Input;
+			$clinical->health_care_worker = $request->healthcareWorkerInput;
+			$clinical->suspect_flu = $request->suspectFluInput;
+			$clinical->other_risk = $request->otherRiskInput;
+			$clinical->other_risk_specify = $request->otherRiskInputSpecify;
+			$clinical->result_cli = $request->resultCliInput;
+			$clinical->result_cli_refer = $request->resultCliReferInput;
+			$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
+			//$clinical->ref_user_id = $request->userIdInput;
+
+			/* get specimen ref data from ref_specimen table  */
+			$specimen_data = parent::specimen();
+			$specimen_data = $specimen_data->keyBy('id');
+
+			/* update patient specimen from patient form soon */
+			/*
+			* get specimen by patient id *
+			$patient_specimen = Specimen::where('ref_pt_id', '=', $request->pid)->get()->toArray();
+			dd($patient_specimen);
+			* loop for saved speicimen *
+			foreach ($specimen_data as $key=>$val) {
+				if ($request->has('specimen'.$val->id)) {
+					$specimen = new Specimen;
+					$specimen->ref_pt_id = $request->pid;
+					$specimen->specimen_id = $request->specimen.$val->id;
+
+					if ($val->other_field == 'Yes') {
+						$othStr = 'specimenOth'.$val->id;
+						$specimenOth = $request->$othStr;
+						$specimen->specimen_other = $specimenOth;
+					}
+
+					$dateStr = 'specimenDate'.$val->id;
+					$specimenDate = $request->$dateStr;
+					if (!empty($specimenDate)) {
+						$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
+					} else {
+						$specimen->specimen_date = NULL;
+					}
+
+					$specimen->ref_user_id = $request->userIdInput;
+					$specimen_saved = $specimen->save();
+				} else {
+					continue;
+				}
+			}
+			*/
+
+			/* save method */
+			DB::beginTransaction();
+			try {
+				$patient_saved = $this->storePatient($patient);
+				$clinical_saved = $clinical->save();
+
+				DB::commit();
+				if ($patient_saved == true && $clinical_saved == true) {
+					$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site']);
+				} else {
+					DB::rollback();
+					$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
+				}
+			} catch (Exception $e) {
+				DB::rollback();
+				$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
+			}
+			return redirect()->route('list-data.index')->with('message', $message);
+		}
+
+	}
+
 	public function create(Request $request) {
 		$nationality = parent::nationality();
 		$occupation = parent::occupation();
@@ -313,10 +553,6 @@ class PatientsController extends BoeFrsController
 		);
 	}
 
-
-
-
-
 	/**
 	* Display a listing of the resource.
 	*
@@ -324,246 +560,6 @@ class PatientsController extends BoeFrsController
 	*/
 	public function index(Request $request) {
 		return $this->create($request);
-	}
-
-	public function addPatient(Request $request) {
-		/* check repeat patient data */
-		$chk_patient = Patients::where('id', '=', $request->pid)
-			->where('lab_status', '!=', 'new')
-			->whereNull('deleted_at')
-			->first();
-		if ($chk_patient) {
-			$chk_patient = $chk_patient->all();
-			$message = collect(['status'=>500, 'msg'=>'มีข้อมูลนี้อยู่ในระบบแล้ว โปรดตรวจสอบ!', 'title'=>'Error!']);
-			return redirect()->route('list-data.index')->with('message', $message);
-		} else {
-			/* validation */
-			$this->validate($request, [
-				'titleNameInput' => 'required',
-				'firstNameInput' => 'required',
-				'lastNameInput' => 'required',
-				'hnInput' => 'required',
-				'sexInput' => 'required',
-				//'birthDayInput' => 'required',
-				'hospitalInput' => 'required',
-				'provinceInput' => 'required',
-				'districtInput' => 'required',
-				'subDistrictInput' => 'required',
-				'patientType' => 'required',
-				'sickDateInput' => 'required',
-				'treatDateInput' => 'required'
-
-			],[
-				'titleNameInput.required' => 'Title name field is required.',
-				'firstNameInput.required' => 'Firstname field is required',
-				'lastNameInput.required' => 'Lastname field is required',
-				'hnInput.required' => 'HN field is required',
-				'sexInput.required' => 'Gender field is required.',
-				//'birthDayInput.required' => 'Birth date field is required.',
-				'hospitalInput.required' => 'Hospital field is required',
-				'provinceInput.required' => 'Province field is required',
-				'districtInput.required' => 'District field is required',
-				'subDistrictInput.required' => 'Sub-district field is required',
-				'patientType.required' => 'Patient type field is required',
-				'sickDateInput.required' => 'Sick date field is required',
-				'treatDateInput.required' => 'Date define field is required'
-			]);
-
-			/* find patient by id */
-			$patient = Patients::find($request->pid);
-
-			/* General section */
-			if ($request->titleNameInput == -6) {
-				$patient->title_name = 6;
-			} else {
-				$patient->title_name = $request->titleNameInput;
-			}
-			if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
-				$patient->title_name_other = $request->otherTitleNameInput;
-			}
-
-			$patient->first_name = $request->firstNameInput;
-			$patient->last_name = $request->lastNameInput;
-			$patient->hn = $request->hnInput;
-			$patient->an = $request->anInput;
-			$patient->gender = $request->sexInput;
-			$patient->date_of_birth = parent::convertDateToMySQL($request->birthDayInput);
-			$patient->age_year = $request->ageYearInput;
-			$patient->age_month = $request->ageMonthInput;
-			$patient->age_day = $request->ageDayInput;
-			$patient->nationality = $request->nationalityInput;
-
-			if (isset($request->otherNationalityInput) && !empty($request->otherNationalityInput)) {
-				$patient->nationality_other = $request->otherNationalityInput;
-			}
-
-			$patient->hospital = $request->hospitalInput;
-			$patient->house_no = $request->houseNoInput;
-			$patient->village_no = $request->villageNoInput;
-			$patient->village = $request->villageInput;
-			$patient->lane = $request->laneInput;
-			$patient->province = $request->provinceInput;
-			$patient->district = $request->districtInput;
-			$patient->sub_district = $request->subDistrictInput;
-			$patient->occupation = $request->occupationInput;
-
-			if (isset($request->occupationOtherInput) && !empty($request->occupationOtherInput)) {
-				$patient->occupation_other = $request->occupationOtherInput;
-			}
-			$patient->lab_status = 'hospital';
-
-			/* Clinical section */
-			$clinical = Clinical::find($request->pid);
-			//$clinical->ref_pt_id = $request->pid;
-			//$clinical->pt_type = $request->patientType;
-			$clinical->date_sick = parent::convertDateToMySQL($request->sickDateInput);
-			$clinical->date_define = parent::convertDateToMySQL($request->treatDateInput);
-			$clinical->date_admit = parent::convertDateToMySQL($request->admitDateInput);
-			$clinical->pt_temperature = $request->temperatureInput;
-			$clinical->fever_sym = $request->symptom_1_Input;
-			$clinical->cough_sym = $request->symptom_2_Input;
-			$clinical->sore_throat_sym = $request->symptom_3_Input;
-			$clinical->runny_stuffy_sym = $request->symptom_4_Input;
-			$clinical->sputum_sym = $request->symptom_5_Input;
-			$clinical->headache_sym = $request->symptom_6_Input;
-			$clinical->myalgia_sym = $request->symptom_7_Input;
-			$clinical->fatigue_sym = $request->symptom_8_Input;
-			$clinical->dyspnea_sym = $request->symptom_9_Input;
-			$clinical->tachypnea_sym = $request->symptom_10_Input;
-			$clinical->wheezing_sym = $request->symptom_11_Input;
-			$clinical->conjunctivitis_sym = $request->symptom_12_Input;
-			$clinical->vomiting_sym = $request->symptom_13_Input;
-			$clinical->diarrhea_sym = $request->symptom_14_Input;
-			$clinical->apnea_sym = $request->symptom_15_Input;
-			$clinical->sepsis_sym = $request->symptom_16_Input;
-			$clinical->encephalitis_sym = $request->symptom_17_Input;
-			$clinical->intubation_sym = $request->symptom_18_Input;
-			$clinical->pneumonia_sym = $request->symptom_19_Input;
-			$clinical->kidney_sym = $request->symptom_20_Input;
-			$clinical->other_symptom = $request->symptom_21_Input;
-			$clinical->other_symptom_specify = $request->other_symptom_input;
-			$clinical->lung = $request->lungXrayInput;
-			$clinical->lung_date = parent::convertDateToMySQL($request->xRayDateInput);
-			$clinical->lung_result = $request->xRayResultInput;
-			$clinical->cbc_date = parent::convertDateToMySQL($request->cbcDateInput);
-			$clinical->hb = $request->hbInput;
-			$clinical->hct = $request->htcInput;
-			$clinical->platelet_count = $request->plateletInput;
-			$clinical->wbc = $request->wbcInput;
-			$clinical->n = $request->nInput;
-			$clinical->l = $request->lInput;
-			$clinical->atyp_lymph = $request->atypLymphInput;
-			$clinical->mono = $request->monoInput;
-			$clinical->baso = $request->basoInput;
-			$clinical->eo = $request->eoInput;
-			$clinical->band = $request->bandInput;
-			$clinical->first_diag = $request->firstDiagnosisInput;
-			$clinical->rapid_test = $request->influRapidInput;
-			$clinical->rapid_test_name = $request->influRapidtestName;
-			if ($request->has('rapidTestResultInput') && count($request->rapidTestResultInput) > 0) {
-				$clinical->rapid_test_result = parent::arrToStr($request->rapidTestResultInput);
-			}
-			$clinical->flu_vaccine = $request->influVaccineInput;
-			$clinical->flu_vaccine_date = parent::convertDateToMySQL($request->influVaccineDateInput);
-			$clinical->antiviral = $request->virusMedicineInput;
-			$clinical->antiviral_name = $request->medicineNameInput;
-			$clinical->antiviral_date = parent::convertDateToMySQL($request->medicineGiveDateInput);
-			$clinical->pregnant_wk = $request->pregnantWeekInput;
-			$clinical->pregnant = $request->pregnantInput;
-			$clinical->post_pregnant = $request->postPregnantInput;
-			$clinical->fat_high = $request->fatHeightInput;
-			$clinical->fat_weight = $request->fatWeightInput;
-			$clinical->fat = $request->fatInput;
-			$clinical->diabetes = $request->diabetesInput;
-			$clinical->immune = $request->immuneInput;
-			$clinical->immune_specify = $request->immuneSpecifyInput;
-			$clinical->early_birth = $request->earlyBirthInput;
-			$clinical->early_birth_wk = $request->earlyBirthWeekInput;
-			$clinical->malnutrition = $request->malnutritionInput;
-			$clinical->copd = $request->copdInput;
-			$clinical->asthma = $request->asthmaInput;
-			$clinical->heart_disease = $request->heartDiseaseInput;
-			$clinical->cerebral = $request->cerebralInput;
-			$clinical->kidney_fail = $request->kidneyFailInput;
-			$clinical->cancer_specify = $request->cancerSpecifyInput;
-			$clinical->cancer = $request->cancerInput;
-			$clinical->other_congenital = $request->otherCongenitalInput;
-			$clinical->other_congenital_specify = $request->otherCongenitalSpecifyInput;
-			$clinical->contact_poultry7 = $request->contactPoultry7Input;
-			$clinical->contact_poultry14 = $request->contactPoultry14Input;
-			$clinical->contact_poultry14_specify = $request->contactPoultry14SpecifyInput;
-			$clinical->stay_poultry14 = $request->stayPoultry14Input;
-			$clinical->stay_flu14 = $request->stayFlu14Input;
-			$clinical->stay_flu14_place_specify = $request->stayFlu14PlaceSpecifyInput;
-			$clinical->contact_flu14 = $request->contactFlu14Input;
-			$clinical->visit_flu14 = $request->visitFlu14Input;
-			$clinical->health_care_worker = $request->healthcareWorkerInput;
-			$clinical->suspect_flu = $request->suspectFluInput;
-			$clinical->other_risk = $request->otherRiskInput;
-			$clinical->other_risk_specify = $request->otherRiskInputSpecify;
-			$clinical->result_cli = $request->resultCliInput;
-			$clinical->result_cli_refer = $request->resultCliReferInput;
-			$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
-			//$clinical->ref_user_id = $request->userIdInput;
-
-			/* get specimen ref data from ref_specimen table  */
-			$specimen_data = parent::specimen();
-			$specimen_data = $specimen_data->keyBy('id');
-
-			/* update patient specimen from patient form soon */
-			/*
-			* get specimen by patient id *
-			$patient_specimen = Specimen::where('ref_pt_id', '=', $request->pid)->get()->toArray();
-			dd($patient_specimen);
-			* loop for saved speicimen *
-			foreach ($specimen_data as $key=>$val) {
-				if ($request->has('specimen'.$val->id)) {
-					$specimen = new Specimen;
-					$specimen->ref_pt_id = $request->pid;
-					$specimen->specimen_id = $request->specimen.$val->id;
-
-					if ($val->other_field == 'Yes') {
-						$othStr = 'specimenOth'.$val->id;
-						$specimenOth = $request->$othStr;
-						$specimen->specimen_other = $specimenOth;
-					}
-
-					$dateStr = 'specimenDate'.$val->id;
-					$specimenDate = $request->$dateStr;
-					if (!empty($specimenDate)) {
-						$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
-					} else {
-						$specimen->specimen_date = NULL;
-					}
-
-					$specimen->ref_user_id = $request->userIdInput;
-					$specimen_saved = $specimen->save();
-				} else {
-					continue;
-				}
-			}
-			*/
-
-			/* save method */
-			DB::beginTransaction();
-			try {
-				$patient_saved = $this->storePatient($patient);
-				$clinical_saved = $clinical->save();
-
-				DB::commit();
-				if ($patient_saved == true && $clinical_saved == true) {
-					$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site']);
-				} else {
-					DB::rollback();
-					$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
-				}
-			} catch (Exception $e) {
-				DB::rollback();
-				$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
-			}
-			return redirect()->route('list-data.index')->with('message', $message);
-		}
-
 	}
 
 	public function editPatient(Request $request) {
