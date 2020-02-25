@@ -38,7 +38,8 @@ class ListDataController extends BoeFrsController
 			'list-data.index',
 			[
 				'titleName' => $this->title_name,
-				'patients' => $patients
+				'patients' => $patients,
+				'userRole' => $roleArr[0]
 			]
 		);
 	}

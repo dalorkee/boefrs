@@ -9,10 +9,59 @@
 @endsection
 @section('internal-style')
 <style>
+@media
+	only screen
+	and (max-width: 760px), (min-device-width: 768px)
+	and (max-device-width: 1024px)  {
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, td, tr {
+		display: block !important;
+	}
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr {
+		position: absolute !important;
+		top: -9999px !important;
+		left: -9999px !important;
+	}
+	tr {
+		margin: 0 0 1rem 0 !important;
+	}
+	tr:nth-child(odd) {
+		background: #eee;
+	}
+	td {
+		/* Behave like a "row" */
+		/* border: none; */
+		border-bottom: 1px solid #eee;
+		position: relative !important;
+		padding-left: 50% !important;
+	}
+	td:before {
+		/* Now like a table header */
+		position: absolute !important;
+		/* Top/left values mimic padding */
+		top: 0 !important;
+		left: 6px !important;
+		width: 45% !important;
+		padding-right: 10px !important;
+		white-space: nowrap !important;
+	}
+	/* Label the data */
+	td:nth-of-type(1):before { content: "ลำดับ";margin-top:10px;font-weight:600;}
+	td:nth-of-type(2):before { content: "ชื่อ-สกุล";margin-top:10px;font-weight:600;}
+	td:nth-of-type(3):before { content: "HN";margin-top:10px;font-weight:600;}
+	td:nth-of-type(4):before { content: "รหัส";margin-top:10px;font-weight:600;}
+	td:nth-of-type(5):before { content: "รหัส รพ.";margin-top:10px;font-weight:600;}
+	td:nth-of-type(6):before { content: "สถานะ";margin-top:10px;font-weight:600;}
+	td:nth-of-type(7):before { content: "จัดการ";margin-top:10px;text-align:left!important;font-weight:600;}
+}
+/* end media */
+
 .error{
 	display: none;
 	margin-left: 10px;
 }
+
 .error_show{
 	color: red;
 	margin-left: 10px;
@@ -25,11 +74,7 @@ input.valid, textarea.valid{
 	border: 2px solid green;
 }
 .dataTables_wrapper {
-	width: 100% !important;
 	font-family: tahoma !important;
-}
-table {
-	width: 100% !important;
 }
 </style>
 @endsection
@@ -137,26 +182,21 @@ table {
 									@php
 										if ($patients) {
 											$patients->each(function ($item, $key) use ($titleName) {
-												switch ($item->hosp_status) {
-													case 'new':
-														$hosp_class = 'danger';
-														break;
-													case 'updated':
-														$hosp_class = 'success';
-														break;
-													default :
-														$hosp_class = 'info';
-														break;
-												}
 												switch ($item->lab_status) {
+													case 'new':
+														$status_class = 'danger';
+														break;
 													case 'pending':
-														$lab_class = 'warning';
+														$status_class = 'info';
 														break;
 													case 'updated':
-														$lab_class = 'success';
+														$status_class = 'success';
+														break;
+													case 'completed':
+														$status_class = 'success';
 														break;
 													default :
-														$lab_class = 'info';
+														$status_class = 'info';
 														break;
 												}
 												echo "<tr>";
@@ -169,16 +209,17 @@ table {
 													echo "<td>".$item->hn."</td>";
 													echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 													echo "<td>".$item->ref_user_hospcode."</td>";
-													echo "<td><span class=\"badge badge-pill badge-".$hosp_class."\">".ucfirst($item->hosp_status)."</span></td>";
-													echo "<td><span class=\"badge badge-pill badge-".$lab_class."\">".ucfirst($item->lab_status)."</span></td>";
+													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->hosp_status)."</span></td>";
+													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
-														echo "<a href=\"".route('viewPatient', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\">View</a>&nbsp;";
-															if ($item->hosp_status == 'new') {
-																echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\">Update</a>&nbsp;";
-															} else {
-																echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\">Edit</a>&nbsp;";
-															}
-															echo "<button type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\">Delete</button>";
+													echo "<a href=\"".route('viewPatient', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
+														if ($item->hosp_status == 'new') {
+															echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+														} else {
+															echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
+														}
+														//echo "<a href=\"".route('lab', ['id'=>$item->id])."\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-tasks\"></i></a>&nbsp;";
+														echo "<button type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\"><i class=\"fas fa-trash\"></i></button>";
 													echo "</td>";
 												echo "</tr>";
 											});
@@ -226,11 +267,11 @@ $(document).ready(function() {
 		}],
 		dom: 'frti"<bottom"Bp>',
 		buttons: [
-			{extend: 'copy', text: '<i class="far fa-copy"></i>', titleAttr: 'Copy', className: 'btn btn-outline-info'},
-			{extend: 'csv', text: '<i class="far fa-file-alt"></i>', titleAttr: 'CSV', className: 'btn btn-outline-info'},
-			{extend: 'excel', text: '<i class="far fa-file-excel"></i>', titleAttr: 'Excel', className: 'btn btn-outline-info'},
-			{extend: 'pdf', text: '<i class="far fa-file-pdf"></i>', titleAttr: 'PDF', className: 'btn btn-outline-info'},
-			{extend: 'print', text: '<i class="fas fa-print"></i>', titleAttr: 'Print', className: 'btn btn-outline-info'}
+			{extend: 'copy', text: '<i class="far fa-copy"></i>', titleAttr: 'Copy', className: 'btn btn-outline-danger'},
+			{extend: 'csv', text: '<i class="far fa-file-alt"></i>', titleAttr: 'CSV', className: 'btn btn-outline-danger'},
+			{extend: 'excel', text: '<i class="far fa-file-excel"></i>', titleAttr: 'Excel', className: 'btn btn-outline-danger'},
+			{extend: 'pdf', text: '<i class="far fa-file-pdf"></i>', titleAttr: 'PDF', className: 'btn btn-outline-danger'},
+			{extend: 'print', text: '<i class="fas fa-print"></i>', titleAttr: 'Print', className: 'btn btn-outline-danger'}
 		]
 	});
 

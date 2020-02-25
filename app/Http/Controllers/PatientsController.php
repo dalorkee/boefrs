@@ -273,8 +273,9 @@ class PatientsController extends BoeFrsController
 		$hospital = parent::hospitalByBoeFrsActive();
 
 		/* get patient clinical */
-		$clinical = Clinical::find($request->id);
-		$clinical = $clinical->toArray();
+		$clinical = Clinical::where('ref_pt_id', '=', $request->id)->get()->toArray();
+		$clinical = $clinical[0];
+		//dd($clinical);
 
 		/* get patient specimen */
 		$specimen_data = Specimen::where('ref_pt_id', '=', $request->id)
