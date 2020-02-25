@@ -246,16 +246,6 @@ class BoeFrsController extends Controller implements BoeFrs
 		return $string;
 	}
 
-	/* get hospital from model */
-	/*
-	public function getHospital() {
-		$hospitals = Hospitals::select('hospcode', 'hosp_name')
-						->orderBy('id', 'asc')
-						->take(100)
-						->get();
-		return $hospitals;
-	}
-	*/
 	protected function convertDateToMySQL($date='00/00/0000') {
 		if (!is_null($date) || !empty($date)) {
 			$ep = explode("/", $date);

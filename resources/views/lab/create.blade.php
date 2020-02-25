@@ -154,7 +154,7 @@ table.table td .add {
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="analyze_id">หมายเลขวิเคราะห์</label>
-											<input type="text" name="analyzeId" value="{{ old('analyzeId') }}" class="form-control" style="border:1px solid red;font-weight:bold;color:red;" placeholder="หมายเลขวิเคราะห์" required autofocus>
+											<input type="text" name="analyzeId" value="{{ $analyze_id }}" class="form-control" style="border:1px solid red;" placeholder="หมายเลขวิเคราะห์" readonly required autofocus>
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<label for="hospital">โรงพยาบาล</label>

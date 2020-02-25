@@ -76,6 +76,7 @@ class LabController extends BoeFrsController
 		} else {
 			$patient_hospital = null;
 		}
+		$analyze_id = parent::randPin('L');
 		return view('lab.create',
 			[
 				'user_hospital'=>$user_hospital,
@@ -83,7 +84,8 @@ class LabController extends BoeFrsController
 				'pathogen'=>$pathogen,
 				'patient'=>$patient,
 				'patient_hospital'=>$patient_hospital,
-				'patient_specimen'=>$patient_specimen
+				'patient_specimen'=>$patient_specimen,
+				'analyze_id'=>$analyze_id
 
 			]
 		);
@@ -153,7 +155,7 @@ class LabController extends BoeFrsController
 				$lab_saved = Lab::insert($lab_data);
 
 				$patient = Patients::find($data['patientId']);
-				$patient->lab_status = 'lab';
+				$patient->lab_status = 'updated';
 				$patient_saved = $patient->save();
 				DB::commit();
 				if ($lab_saved) {
