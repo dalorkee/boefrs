@@ -137,7 +137,7 @@ input.valid, textarea.valid {
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<div class="form-group">
 										<label for="province">จังหวัด</label>
-										<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" data-style="btn-danger" >
+										<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" data-style="btn-info" >
 											<option value="0">-- เลือกจังหวัด --</option>
 											@php
 												$provinces = Session::get('provinces');
@@ -151,7 +151,7 @@ input.valid, textarea.valid {
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<div class="form-group">
 										<label for="hospital">โรงพยาบาล</label>
-										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn-danger" disabled>
+										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn-info" disabled>
 											<option value="0">-- เลือกโรงพยาบาล --</option>
 										</select>
 									</div>
@@ -225,7 +225,7 @@ input.valid, textarea.valid {
 									<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
 									<div class="table-responsive">
 										<table class="table" id="specimen_table">
-											<thead class="bg-danger text-light">
+											<thead class="bg-info text-light">
 												<tr>
 													<th scope="col">ตัวอย่างส่งตรวจ</th>
 													<th scope="col">วันที่เก็บตัวอย่าง</th>

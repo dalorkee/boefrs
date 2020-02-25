@@ -215,7 +215,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<div class="form-group {{ $errors->has('hospitalInput') ? 'has-error' : '' }}">
 												<label for="hospital">โรงพยาบาล</label>
-												<select name="hospitalInput" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true">
+												<select name="hospitalInput" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn btn-success">
 													@role('admin')
 														<option value="">-- เลือกโรงพยาบาล --</option>
 														@foreach ($hospital as $key => $val)
@@ -258,7 +258,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group {{ $errors->has('provinceInput') ? 'has-error' : '' }}">
 												<label for="province">จังหวัด</label>
-												<select name="provinceInput" class="form-control selectpicker show-tick" data-live-search="true" id="select_province">
+												<select name="provinceInput" class="form-control selectpicker show-tick" data-live-search="true" data-style="btn btn-info" id="select_province">
 													<option value="">-- เลือกจังหวัด --</option>
 													@php
 														$provinces = Session::get('provinces');
@@ -278,7 +278,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group {{ $errors->has('districtInput') ? 'has-error' : '' }}">
 												<label for="district">อำเภอ</label>
-												<select name="districtInput" class="form-control selectpicker show-tick" id="select_district">
+												<select name="districtInput" class="form-control selectpicker show-tick" id="select_district" data-style="btn btn-info">
 													<option value="">-- โปรดเลือก --</option>
 												</select>
 											</div>
@@ -287,7 +287,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group {{ $errors->has('subDistrictInput') ? 'has-error' : '' }}">
 												<label for="subDistrict">ตำบล</label>
-												<select name="subDistrictInput" class="form-control selectpicker show-tick" id="select_sub_district">
+												<select name="subDistrictInput" class="form-control selectpicker show-tick" id="select_sub_district" data-style="btn btn-info">
 													<option value="">-- โปรดเลือก --</option>
 												</select>
 											</div>
@@ -1624,7 +1624,6 @@ $(document).ready(function() {
 	$('#select_province').change(function() {
 		if ($(this).val() != '') {
 			var id = $(this).val();
-			alert(id);
 			$.ajax({
 				method: "POST",
 				url: "{{ route('districtFetch') }}",
