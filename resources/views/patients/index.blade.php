@@ -10,6 +10,9 @@ input:-moz-read-only { /* For Firefox */
 input:read-only {
 	background-color: #fafafa !important;
 }
+.frmCode {
+	font-family: 'Fira-code', tahoma !important;
+}
 </style>
 @endsection
 @section('meta-token')
@@ -68,7 +71,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 											<label for="formCode">รหัสแบบฟอร์ม</label>
 											<div class="input-group-append">
-												<span class="btn btn-danger btn-lg" data-toggle="tooltip" data-placement="top" title="โปรดเขียนรหัสนี้ลงบนแบบฟอร์ม">{{ $patient[0]->lab_code }}</span>
+												<span class="btn btn-info btn-lg frmCode" data-toggle="tooltip" data-placement="top" title="โปรดเขียนรหัสนี้ลงบนแบบฟอร์ม">{{ $patient[0]->lab_code }}</span>
 												{{ csrf_field() }}
 												<input type="hidden" name="pid" value="{{ $patient[0]->id }}">
 												<input type="hidden" name="formIndexInput" value="{{ $patient[0]->lab_code }}">
@@ -215,7 +218,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 											<div class="form-group {{ $errors->has('hospitalInput') ? 'has-error' : '' }}">
 												<label for="hospital">โรงพยาบาล</label>
-												<select name="hospitalInput" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn btn-success">
+												<select name="hospitalInput" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn btn-danger">
 													@role('admin')
 														<option value="">-- เลือกโรงพยาบาล --</option>
 														@foreach ($hospital as $key => $val)
@@ -258,7 +261,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group {{ $errors->has('provinceInput') ? 'has-error' : '' }}">
 												<label for="province">จังหวัด</label>
-												<select name="provinceInput" class="form-control selectpicker show-tick" data-live-search="true" data-style="btn btn-info" id="select_province">
+												<select name="provinceInput" class="form-control selectpicker show-tick" data-live-search="true" data-style="btn btn-warning" id="select_province">
 													<option value="">-- เลือกจังหวัด --</option>
 													@php
 														$provinces = Session::get('provinces');
@@ -278,7 +281,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group {{ $errors->has('districtInput') ? 'has-error' : '' }}">
 												<label for="district">อำเภอ</label>
-												<select name="districtInput" class="form-control selectpicker show-tick" id="select_district" data-style="btn btn-info">
+												<select name="districtInput" class="form-control selectpicker show-tick" id="select_district" data-style="btn btn-warning">
 													<option value="">-- โปรดเลือก --</option>
 												</select>
 											</div>
@@ -287,7 +290,7 @@ input:read-only {
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-3">
 											<div class="form-group {{ $errors->has('subDistrictInput') ? 'has-error' : '' }}">
 												<label for="subDistrict">ตำบล</label>
-												<select name="subDistrictInput" class="form-control selectpicker show-tick" id="select_sub_district" data-style="btn btn-info">
+												<select name="subDistrictInput" class="form-control selectpicker show-tick" id="select_sub_district" data-style="btn btn-warning">
 													<option value="">-- โปรดเลือก --</option>
 												</select>
 											</div>
@@ -704,7 +707,6 @@ input:read-only {
 									</div>
 
 
-
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
 											<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
@@ -718,40 +720,38 @@ input:read-only {
 													</thead>
 													<tfoot></tfoot>
 													<tbody>
-													@foreach ($specimen_rs as $key => $val)
-														@if (!is_null($val['psp_id']))
-															<tr id="specimen_tr{{ $val['sp_id'] }}">
-																<td>
-																	<div class="form-group row">
-																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-																			<div class="custom-control custom-checkbox custom-control-inline">
-																				<input type="checkbox" name="specimen{{ $val['sp_id'] }}" value="{{ $val['psp_id'] }}" disabled @if (!is_null($val['psp_id'])) checked @endif class="custom-control-input form-check-input specimen-chk-{{ $val['sp_id'] }}" id="specimen_chk_{{ $val['sp_id'] }}">
-																				<label for="specimen_chk_{{ $val['sp_id'] }}" class="custom-control-label font-weight-normal">{{ $val['sp_name_en'] }}</label>
-																			</div>
+													@foreach ($specimen_data as $key => $val)
+														<tr id="specimen_tr{{ $val['sp_id'] }}">
+															<td>
+																<div class="form-group row">
+																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+																		<div class="custom-control custom-checkbox custom-control-inline">
+																			<input type="checkbox" name="specimen{{ $val['sp_id'] }}" value="{{ $val['psp_id'] }}" @if (!is_null($val['psp_id'])) checked @endif class="custom-control-input form-check-input specimen-chk-{{ $val['sp_id'] }}" id="specimen_chk_{{ $val['sp_id'] }}">
+																			<label for="specimen_chk_{{ $val['sp_id'] }}" class="custom-control-label font-weight-normal">{{ $val['sp_name_en'] }}</label>
 																		</div>
-																		@if ($val['sp_other_field'] == 'Yes')
-																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-																			<input type="text" name="specimenOth{{ $val['sp_id'] }}" value="{{ $val['psp_specimen_other'] }}" class="form-control">
-																		</div>
-																		@endif
 																	</div>
-																</td>
-																<td>
-																	<div class="form-group row">
-																		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																			<div class="input-group date" data-provide="datepicke" id="specimenDate{{ $val['sp_id'] }}">
-																				<div class="input-group">
-																					<input type="text" name="specimenDate{{ $val['sp_id'] }}" value="{{ $val['psp_specimen_date'] }}" class="form-control" id="specimenDate_{{ $val['sp_id'] }}" readonly>
-																					<div class="input-group-append">
-																						<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-																					</div>
+																	@if ($val['sp_other_field'] == 'Yes')
+																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
+																		<input type="text" name="specimenOth{{ $val['sp_id'] }}" value="{{ $val['psp_specimen_other'] }}" id="specimen_oth{{$val['sp_id'] }}" class="form-control">
+																	</div>
+																	@endif
+																</div>
+															</td>
+															<td>
+																<div class="form-group row">
+																	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																		<div class="input-group date" data-provide="datepicke" id="specimenDate{{ $val['sp_id'] }}">
+																			<div class="input-group">
+																				<input type="text" name="specimenDate{{ $val['sp_id'] }}" value="{{ $val['psp_specimen_date'] }}" class="form-control" id="specimenDate_{{ $val['sp_id'] }}" @if (empty($val['psp_specimen_date'])) disabled @endif readonly>
+																				<div class="input-group-append">
+																					<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
 																				</div>
 																			</div>
 																		</div>
 																	</div>
-																</td>
-															</tr>
-														@endif
+																</div>
+															</td>
+														</tr>
 													@endforeach
 													@php
 													/*
@@ -1738,60 +1738,59 @@ $(document).ready(function() {
 	});
 
 	/* specimen table && checkbox */
-	foreach ($specimen_rs as $key => $val) {
-		if (!is_null($val['psp_id'])) {
-			echo "
-				var spec_n = $('.specimen-chk-".$val['sp_id']."').filter(':checked').length;
-				if (spec_n === 1) {
-					var hasClass = $('#specimen_tr".$val['sp_id']."').hasClass('highlight');
-					if (!hasClass) {
-						$('#specimen_tr".$val['sp_id']."').addClass('highlight');
-					}
+	foreach ($specimen_data as $key => $val) {
+		echo "
+			var spec".$val['sp_id']." = $('.specimen-chk-".$val['sp_id']."').filter(':checked').length;
+			if (spec".$val['sp_id']." === 1) {
+				var hasClass = $('#specimen_tr".$val['sp_id']."').hasClass('highlight');
+				if (!hasClass) {
+					$('#specimen_tr".$val['sp_id']."').addClass('highlight');
 				}
-			\n";
-
-			echo "
-			$('.specimen-chk-".$val['sp_id']."').click(function() {
-				$('.specimen-chk-".$val['sp_id']."').not(this).prop('checked', false);
-				let number = $('.specimen-chk-".$val['sp_id']."').filter(':checked').length;
-				if (number == 1) {
-					let hasClass = $('#specimen_tr".$val['sp_id']."').hasClass('highlight');
-					if (!hasClass) {
-						$('#specimen_tr".$val['sp_id']."').addClass('highlight');
-					}
-				} else {
-					$('#specimen_tr".$val['sp_id']."').removeClass('highlight');
-				}";
-				if ($val['sp_other_field'] == 'Yes') {
-					echo "
-						if ($('#specimen_chk".$val['sp_id']."').prop('checked') == true) {
-							$('#specimen_oth".$val['sp_id']."').prop('disabled', false);
-							$('#specimenDate_".$val['sp_id']."').prop('disabled', false);
-						} else {
-							$('#specimen_oth".$val['sp_id']."').val('');
-							$('#specimen_oth".$val['sp_id']."').prop('disabled', true);
-							$('#specimenDate_".$val['sp_id']."').val('');
-							$('#specimenDate_".$val['sp_id']."').prop('disabled', true);
-						}";
-				} else {
-					echo "
-						if ($('#specimen_chk".$val['sp_id']."').prop('checked') == true) {
-							$('#specimenDate_".$val['sp_id']."').prop('disabled', false);
-						} else {
-							$('#specimenDate_".$val['sp_id']."').val('');
-							$('#specimenDate_".$val['sp_id']."').prop('disabled', true);
-						}";
-				}
-				echo "
-					$('#specimenDate".$val['sp_id']."').datepicker({
-						format: 'dd/mm/yyyy',
-						todayHighlight: true,
-						todayBtn: true,
-						autoclose: true
-					});";
-				echo "});\n";
 			}
-		}
+		\n";
+
+		echo "
+		$('.specimen-chk-".$val['sp_id']."').click(function() {
+			$('.specimen-chk-".$val['sp_id']."').not(this).prop('checked', false);
+			let number = $('.specimen-chk-".$val['sp_id']."').filter(':checked').length;
+			if (number == 1) {
+				let hasClass = $('#specimen_tr".$val['sp_id']."').hasClass('highlight');
+				if (!hasClass) {
+					$('#specimen_tr".$val['sp_id']."').addClass('highlight');
+				}
+			} else {
+				$('#specimen_tr".$val['sp_id']."').removeClass('highlight');
+			}";
+
+			if ($val['sp_other_field'] == 'Yes') {
+				echo "
+					if ($('#specimen_chk_".$val['sp_id']."').prop('checked') == true) {
+						$('#specimen_oth".$val['sp_id']."').prop('disabled', false);
+						$('#specimenDate_".$val['sp_id']."').prop('disabled', false);
+					} else {
+						$('#specimen_oth".$val['sp_id']."').val('');
+						$('#specimen_oth".$val['sp_id']."').prop('disabled', true);
+						$('#specimenDate_".$val['sp_id']."').val('');
+						$('#specimenDate_".$val['sp_id']."').prop('disabled', true);
+					}";
+			} else {
+				echo "
+					if ($('#specimen_chk_".$val['sp_id']."').prop('checked') == true) {
+						$('#specimenDate_".$val['sp_id']."').prop('disabled', false);
+					} else {
+						$('#specimenDate_".$val['sp_id']."').val('');
+						$('#specimenDate_".$val['sp_id']."').prop('disabled', true);
+					}";
+			}
+		echo "});\n";
+		echo "
+			$('#specimenDate".$val['sp_id']."').datepicker({
+				format: 'dd/mm/yyyy',
+				todayHighlight: true,
+				todayBtn: true,
+				autoclose: true
+			});";
+	}
 	@endphp
 
 	/* xrayh check */

@@ -32,7 +32,7 @@ class BoeFrsController extends Controller implements BoeFrs
 	}
 
 	public function specimen() {
-		return DB::connection('mysql')->table('ref_specimen')->get();
+		return DB::connection('mysql')->table('ref_specimen_type')->get();
 	}
 
 	public function patients() {

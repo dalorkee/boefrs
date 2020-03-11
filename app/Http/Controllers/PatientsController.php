@@ -13,6 +13,7 @@ use App\Specimen;
 use App\Lab;
 use Session;
 use DB;
+use Redirect;
 
 class PatientsController extends BoeFrsController
 {
@@ -22,6 +23,87 @@ class PatientsController extends BoeFrsController
 		$this->middleware(['role:admin|hospital|lab']);
 		$this->middleware('page_session');
 	}
+
+	public function create(Request $request) {
+		$nationality = parent::nationality();
+		$occupation = parent::occupation();
+		$symptoms = parent::symptoms();
+		$ref_specimen = parent::specimen()->keyBy('id');
+		$patient = parent::patientsById($request->id);
+		$user_hospital = parent::hospitalByCode(auth()->user()->hospcode);
+		$hospital = parent::hospitalByBoeFrsActive();
+
+		/* get patient clinical */
+		$clinical_query = Clinical::where('ref_pt_id', '=', $request->id)->get()->toArray();
+		if (count($clinical_query) > 0) {
+			$clinical = $clinical_query[0];
+		} else {
+			$clinical = null;
+		}
+
+		/* get patient specimen */
+		$specimen_query = Specimen::where('ref_pt_id', '=', $request->id)->whereNull('deleted_at')->get()->keyBy('specimen_type_id')->toArray();
+		if (count($specimen_query) > 0) {
+			$specimen = $specimen_query;
+		} else {
+			$specimen = null;
+		}
+
+		//dd($ref_specimen);
+		//dd($specimen);
+		//echo $specimen[1]['id'];
+
+		$specimen_data = collect();
+		foreach ($ref_specimen as $key => $value) {
+			$tmp['sp_id'] = $value->id;
+			$tmp['sp_name_en'] = $value->name_en;
+			$tmp['sp_name_th'] = $value->name_th;
+			$tmp['sp_abbreviation'] = $value->abbreviation;
+			$tmp['sp_note'] = $value->note;
+			$tmp['sp_other_field'] = $value->other_field;
+			if (isset($specimen[$value->id])) {
+				$tmp['psp_id'] = $specimen[$value->id]['id'];
+				$tmp['psp_ref_pt_id'] = $specimen[$value->id]['ref_pt_id'];
+				$tmp['psp_specimen_id'] = $specimen[$value->id]['specimen_type_id'];
+				$tmp['psp_specimen_other'] = $specimen[$value->id]['specimen_other'];
+				$tmp['psp_specimen_date'] = parent::convertMySQLDateFormat($specimen[$value->id]['specimen_date']);
+				$tmp['psp_specimen_result'] = $specimen[$value->id]['specimen_result'];
+				$tmp['psp_ref_user_id'] = $specimen[$value->id]['ref_user_id'];
+				$tmp['psp_created_at'] = $specimen[$value->id]['created_at'];
+				$tmp['psp_updated_at'] = $specimen[$value->id]['updated_at'];
+				$tmp['psp_deleted_at'] = $specimen[$value->id]['deleted_at'];
+			} else {
+				$tmp['psp_id'] = null;
+				$tmp['psp_ref_pt_id'] = null;
+				$tmp['psp_specimen_id'] = null;
+				$tmp['psp_specimen_other'] = null;
+				$tmp['psp_specimen_date'] = null;
+				$tmp['psp_specimen_result'] = null;
+				$tmp['psp_ref_user_id'] = null;
+				$tmp['psp_created_at'] = null;
+				$tmp['psp_updated_at'] = null;
+				$tmp['psp_deleted_at'] = null;
+			}
+			$specimen_data->put($key, $tmp);
+		}
+
+		//dd($specimen_data);
+
+		return view(
+			'patients.index', [
+				'titleName' => $this->title_name,
+				'nationality' => $nationality,
+				'occupation' => $occupation,
+				'symptoms' => $symptoms,
+				'user_hospital' => $user_hospital,
+				'hospital' => $hospital,
+				'patient' => $patient,
+				'clinical' => $clinical,
+				'specimen_data' => $specimen_data
+			]
+		);
+	}
+
 
 	public function addPatient(Request $request) {
 		/* check repeat patient data */
@@ -110,7 +192,13 @@ class PatientsController extends BoeFrsController
 			$patient->hosp_status = 'updated';
 
 			/* Clinical section */
-			$clinical = Clinical::find($request->pid);
+			$clinical = Clinical::where('ref_pt_id', '=', $request->pid)
+				->whereNull('deleted_at')
+				->first();
+			if (is_null($clinical)) {
+				$clinical = new Clinical;
+
+			}
 			//$clinical->ref_pt_id = $request->pid;
 			$clinical->pt_type = $request->patientType;
 			$clinical->date_sick = parent::convertDateToMySQL($request->sickDateInput);
@@ -203,139 +291,116 @@ class PatientsController extends BoeFrsController
 			$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
 			//$clinical->ref_user_id = $request->userIdInput;
 
-			/* get specimen ref data from ref_specimen table  */
-			$specimen_data = parent::specimen();
-			$specimen_data = $specimen_data->keyBy('id');
 
-			/* update patient specimen from patient form soon */
-			/*
-			* get specimen by patient id *
-			$patient_specimen = Specimen::where('ref_pt_id', '=', $request->pid)->get()->toArray();
-			dd($patient_specimen);
-			* loop for saved speicimen *
+			/* get specimen ref data from ref_specimen table  */
+			$specimen_data = parent::specimen()->keyBy('id');
+
+			/* chk specimen input or not  */
+			$chk_specimen_count = 0;
 			foreach ($specimen_data as $key=>$val) {
 				if ($request->has('specimen'.$val->id)) {
-					$specimen = new Specimen;
-					$specimen->ref_pt_id = $request->pid;
-					$specimen->specimen_id = $request->specimen.$val->id;
-
-					if ($val->other_field == 'Yes') {
-						$othStr = 'specimenOth'.$val->id;
-						$specimenOth = $request->$othStr;
-						$specimen->specimen_other = $specimenOth;
-					}
-
-					$dateStr = 'specimenDate'.$val->id;
-					$specimenDate = $request->$dateStr;
-					if (!empty($specimenDate)) {
-						$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
-					} else {
-						$specimen->specimen_date = NULL;
-					}
-
-					$specimen->ref_user_id = $request->userIdInput;
-					$specimen_saved = $specimen->save();
+					$chk_specimen_count += 1;
 				} else {
 					continue;
 				}
 			}
-			*/
 
-			/* save method */
-			DB::beginTransaction();
-			try {
-				$patient_saved = $this->storePatient($patient);
-				$clinical_saved = $clinical->save();
-
-				DB::commit();
-				if ($patient_saved == true && $clinical_saved == true) {
-					$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site']);
+			/* chk specimen_date_input */
+			$chk_specimen_date_input = 0;
+			foreach ($specimen_data as $key=>$val) {
+				if ($request->has('specimen'.$val->id)) {
+					$specimenDateInput = $request->input('specimenDate'.$val->id);
+					if (!empty($specimenDateInput) || !is_null($specimenDateInput)) {
+						$chk_specimen_date_input += 1;
+					} else {
+						$chk_specimen_date_input += 0;
+					}
 				} else {
+					continue;
+				}
+			}
+
+			if ($chk_specimen_count != $chk_specimen_date_input) {
+				return Redirect::back()->withErrors('โปรดกรอกข้อมูลตัวอย่างให้ครบถ้วน');
+				exit;
+			} else {
+				foreach ($specimen_data as $key=>$val) {
+					if ($request->has('specimen'.$val->id)) {
+						$params1['ref_pt_id'] = $request->pid;
+						$params1['specimen_type_id'] = $request->specimen.$val->id;
+
+						if ($request->has('specimenOth'.$val->id)) {
+							$othStr = 'specimenOth'.$val->id;
+							$params2['specimen_other'] = $request->$othStr;
+						} else {
+							$params2['specimen_other'] = NULL;
+						}
+
+						$dateStr = 'specimenDate'.$val->id;
+						$specimenDate = $request->$dateStr;
+						if (!empty($specimenDate)) {
+							$params2['specimen_date'] = parent::convertDateToMySQL($specimenDate);
+						} else {
+							$params2['specimen_date'] = NULL;
+						}
+						$params2['ref_user_id'] = $request->userIdInput;
+						$specimen_saved = Specimen::updateOrCreate($params1, $params2);
+					} else {
+						continue;
+					}
+				}
+				/*
+				foreach ($specimen_data as $key=>$val) {
+					if ($request->has('specimen'.$val->id)) {
+						$specimen = new Specimen;
+						$specimen->ref_pt_id = $request->pid;
+						$specimen->specimen_type_id = $request->specimen.$val->id;
+
+						if ($val->other_field == 'Yes') {
+							$othStr = 'specimenOth'.$val->id;
+							$specimenOth = $request->$othStr;
+							$specimen->specimen_other = $specimenOth;
+						}
+
+						$dateStr = 'specimenDate'.$val->id;
+						$specimenDate = $request->$dateStr;
+						if (!empty($specimenDate)) {
+							$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
+						} else {
+							$specimen->specimen_date = NULL;
+						}
+
+						$specimen->ref_user_id = $request->userIdInput;
+						$specimen_saved = $specimen->save();
+					} else {
+						continue;
+					}
+				}
+				*/
+				/* save method */
+				DB::beginTransaction();
+				try {
+					$patient_saved = $this->storePatient($patient);
+					$clinical_saved = $clinical->save();
+
+					DB::commit();
+					if ($patient_saved == true && $clinical_saved == true) {
+						$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site']);
+					} else {
+						DB::rollback();
+						$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
+					}
+				} catch (Exception $e) {
 					DB::rollback();
 					$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
 				}
-			} catch (Exception $e) {
-				DB::rollback();
-				$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
+				return redirect()->route('list-data.index')->with('message', $message);
 			}
-			return redirect()->route('list-data.index')->with('message', $message);
 		}
 
 	}
 
-	public function create(Request $request) {
-		$nationality = parent::nationality();
-		$occupation = parent::occupation();
-		$symptoms = parent::symptoms();
-		$specimen = parent::specimen();
-		$patient = parent::patientsById($request->id);
-		$user_hospital = parent::hospitalByCode(auth()->user()->hospcode);
-		$hospital = parent::hospitalByBoeFrsActive();
 
-		/* get patient clinical */
-		$clinical = Clinical::where('ref_pt_id', '=', $request->id)->get()->toArray();
-		$clinical = $clinical[0];
-		//dd($clinical);
-
-		/* get patient specimen */
-		$specimen_data = Specimen::where('ref_pt_id', '=', $request->id)
-			->whereNull('deleted_at')
-			->get()->keyBy('specimen_id');
-		$specimen_rs = collect();
-		$rs = $specimen->each(function($item, $key) use ($specimen_rs, $specimen_data) {
-			$tmp['sp_id'] = $item->id;
-			$tmp['sp_name_en'] = $item->name_en;
-			$tmp['sp_name_th'] = $item->name_th;
-			$tmp['sp_abbreviation'] = $item->abbreviation;
-			$tmp['sp_note'] = $item->note;
-			$tmp['sp_other_field'] = $item->other_field;
-			if (count($specimen_data) > 0) {
-				foreach ($specimen_data as $k => $v) {
-					if ($v['specimen_id'] == $item->id) {
-						$tmp['psp_id'] = $v['id'];
-						$tmp['psp_ref_pt_id'] = $v['ref_pt_id'];
-						$tmp['psp_specimen_id'] = $v['specimen_id'];
-						$tmp['psp_specimen_other'] = $v['specimen_other'];
-						$tmp['psp_specimen_date'] = parent::convertMySQLDateFormat($v['specimen_date']);
-						$tmp['psp_specimen_result'] = $v['specimen_result'];
-						$tmp['psp_ref_user_id'] = $v['ref_user_id'];
-						$tmp['psp_created_at'] = $v['created_at'];
-						$tmp['psp_updated_at'] = $v['updated_at'];
-						$tmp['psp_deleted_at'] = $v['deleted_at'];
-						break;
-					} else {
-						$tmp['psp_id'] = null;
-						$tmp['psp_ref_pt_id'] = null;
-						$tmp['psp_specimen_id'] = null;
-						$tmp['psp_specimen_other'] = null;
-						$tmp['psp_specimen_date'] = null;
-						$tmp['psp_specimen_result'] = null;
-						$tmp['psp_ref_user_id'] = null;
-						$tmp['psp_created_at'] = null;
-						$tmp['psp_updated_at'] = null;
-						$tmp['psp_deleted_at'] = null;
-					}
-				}
-			}
-			$specimen_rs->put($item->id, $tmp);
-		});
-		//$specimen_rs->all();
-		//dd($specimen_rs);
-		return view(
-			'patients.index', [
-				'titleName' => $this->title_name,
-				'nationality' => $nationality,
-				'occupation' => $occupation,
-				'symptoms' => $symptoms,
-				//'specimen'=>$specimen,
-				'specimen_rs' => $specimen_rs,
-				'patient' => $patient,
-				'user_hospital' => $user_hospital,
-				'hospital' => $hospital,
-				'clinical' => $clinical
-			]
-		);
-	}
 
 	public function show($id)
 	{

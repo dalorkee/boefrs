@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Http\Controllers\BoeFrsController;
 use App\Code;
 use App\Clinical;
 use App\Specimen;
@@ -162,67 +163,103 @@ class CodeController extends BoeFrsController {
 				$created_by = 'user';
 			}
 
-			$code = new Code;
-			$code->title_name = $request->titleNameInput;
-			if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
-				$code->title_name_other = $request->otherTitleNameInput;
-			} else {
-				$code->title_name_other = NULL;
-			}
-			$code->first_name = $request->firstNameInput;
-			$code->last_name = $request->lastNameInput;
-			$code->hn = $request->hnInput;
-			$code->an = $request->anInput;
-			$code->lab_code = parent::randPin();
-			$code->ref_user_id = auth()->user()->id;
-			$code->ref_user_hospcode = $hospcode;
-			$code->created_by = $created_by;
-			$saved = $code->save();
-			$last_patient_insert_id = $code->id;
-
-			/* Clinical save method */
-			$clinical = new Clinical;
-			$clinical->ref_pt_id = $last_patient_insert_id;
-			$clinical->pt_type = $request->patientType;
-			$clinical->ref_user_id = auth()->user()->id;
-			$clinical_saved = $clinical->save();
-
-			/* specimen save method */
+			/* get defalut specimen data */
 			$specimen_data = parent::specimen();
 			$specimen_data = $specimen_data->keyBy('id');
+
+			/* chk specimen input or not  */
+			$chk_specimen_count = 0;
 			foreach ($specimen_data as $key=>$val) {
 				if ($request->has('specimen'.$val->id)) {
-					$specimen = new Specimen;
-					$specimen->ref_pt_id = $last_patient_insert_id;
-					$specimen->specimen_id = $request->specimen.$val->id;
-
-					if ($val->other_field == 'Yes') {
-						$othStr = 'specimenOth'.$val->id;
-						$specimenOth = $request->$othStr;
-						$specimen->specimen_other = $specimenOth;
-					}
-
-					$dateStr = 'specimenDate'.$val->id;
-					$specimenDate = $request->$dateStr;
-					if (!empty($specimenDate)) {
-						$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
-					} else {
-						$specimen->specimen_date = NULL;
-					}
-
-					$specimen->ref_user_id = auth()->user()->id;
-					$specimen_saved = $specimen->save();
+					$chk_specimen_count += 1;
 				} else {
 					continue;
 				}
 			}
 
-			/* validate saved */
-			if ($saved) {
-				$this->simpleQrcode($code->lab_code);
-				return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+			/* chk specimen_date_input */
+			$chk_specimen_date_input = 0;
+			foreach ($specimen_data as $key=>$val) {
+				if ($request->has('specimen'.$val->id)) {
+					$specimenDateInput = $request->input('specimenDate'.$val->id);
+					if (!empty($specimenDateInput) || !is_null($specimenDateInput)) {
+						$chk_specimen_date_input += 1;
+					} else {
+						$chk_specimen_date_input += 0;
+					}
+				} else {
+					continue;
+				}
+			}
+
+			/* validate and save data to db */
+			if ($chk_specimen_count <= 0) {
+				return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลตัวอย่างให้ครบถ้วน!']);
+				exit;
 			} else {
-				return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
+				if ($chk_specimen_count != $chk_specimen_date_input) {
+					return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลตัวอย่างให้ครบถ้วน!']);
+					exit;
+				} else {
+					$code = new Code;
+					$code->title_name = $request->titleNameInput;
+					if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
+						$code->title_name_other = $request->otherTitleNameInput;
+					} else {
+						$code->title_name_other = NULL;
+					}
+					$code->first_name = $request->firstNameInput;
+					$code->last_name = $request->lastNameInput;
+					$code->hn = $request->hnInput;
+					$code->an = $request->anInput;
+					$code->lab_code = parent::randPin();
+					$code->ref_user_id = auth()->user()->id;
+					$code->ref_user_hospcode = $hospcode;
+					$code->created_by = $created_by;
+					$saved = $code->save();
+					$last_patient_insert_id = $code->id;
+
+					/* Clinical save method */
+					$clinical = new Clinical;
+					$clinical->ref_pt_id = $last_patient_insert_id;
+					$clinical->pt_type = $request->patientType;
+					$clinical->ref_user_id = auth()->user()->id;
+					$clinical_saved = $clinical->save();
+
+					/* specimen save method */
+					foreach ($specimen_data as $key=>$val) {
+						if ($request->has('specimen'.$val->id)) {
+							$specimen = new Specimen;
+							$specimen->ref_pt_id = $last_patient_insert_id;
+							$specimen->specimen_type_id = $request->specimen.$val->id;
+
+							if ($val->other_field == 'Yes') {
+								$othStr = 'specimenOth'.$val->id;
+								$specimenOth = $request->$othStr;
+								$specimen->specimen_other = $specimenOth;
+							}
+							$dateStr = 'specimenDate'.$val->id;
+							$specimenDate = $request->$dateStr;
+							if (!empty($specimenDate)) {
+								$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
+							} else {
+								$specimen->specimen_date = NULL;
+							}
+							$specimen->ref_user_id = auth()->user()->id;
+							$specimen_saved = $specimen->save();
+						} else {
+							continue;
+						}
+					}
+
+					/* validate saved */
+					if ($saved) {
+						$this->simpleQrcode($code->lab_code);
+						return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+					} else {
+						return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
+					}
+				}
 			}
 		}
 	}

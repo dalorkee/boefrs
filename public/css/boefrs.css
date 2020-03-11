@@ -22,11 +22,23 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Fira-code";
+  src: url(../fonts/FiraCode-Regular.woff2?ea8e341601f69d25bb335b834f77e732) format("woff2"), url(../fonts/FiraCode-Regular.ttf?1b433a821ef8f9a70eac6aea64f7cac8) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .page-wrapper-custom {
   background-color: #fff;
 }
 
 .card {
+  font-family: "Motosansthai-Light" !important;
+  font-style: normal;
+}
+
+nav.sidebar-nav {
   font-family: "Motosansthai-Light" !important;
   font-style: normal;
 }
