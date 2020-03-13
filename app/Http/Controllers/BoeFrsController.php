@@ -265,6 +265,17 @@ class BoeFrsController extends Controller implements BoeFrs
 		return $string;
 	}
 
+	protected function convertMySQLDateTimeFormat($dateTime='0000-00-00 00:00:00', $seperator="/") {
+		if (!is_null($dateTime) || !empty($dateTime)) {
+			$ep_date_time = explode(" ", $dateTime);
+			$ep_date = explode("-", $ep_date_time[0]);
+			$string = $ep_date[2].$seperator.$ep_date[1].$seperator.$ep_date[0]." ".$ep_date_time[1];
+		} else {
+			$string = NULL;
+		}
+		return $string;
+	}
+
 	protected function arrToStr($arr=array()) {
 		if (count($arr) > 0) {
 			$str = null;

@@ -44,6 +44,10 @@ class ListDataController extends BoeFrsController
 		);
 	}
 
+	public function renderDatatable() {
+
+	}
+
 	/**
 	* Show the form for creating a new resource.
 	*
@@ -104,9 +108,7 @@ class ListDataController extends BoeFrsController
 		//
 	}
 
-
 	public function ajaxListData(Request $request) {
-		/* get request from form */
 		if ($request->pv == 0 || empty($request->pv)) {
 			$pv = 0;
 		} else {
@@ -126,7 +128,6 @@ class ListDataController extends BoeFrsController
 		}
 		$cntSt = count($st);
 
-		/* set alert message */
 		$roleArr = auth()->user()->getRoleNames();
 		$role = $roleArr[0];
 
@@ -192,7 +193,7 @@ class ListDataController extends BoeFrsController
 						<th>รหัส รพ.</th>
 						<th>สถานะ [รพ]</th>
 						<th>สถานะ [Lab]</th>
-						<th>จัดการ</th>
+						<th>#</th>
 					</tr>
 				</thead>
 				<tfoot></tfoot>
@@ -201,21 +202,26 @@ class ListDataController extends BoeFrsController
 					$provinces = parent::provinces();
 					$titleName = $this->title_name;
 					foreach($patients as $key => $val) {
-						switch ($val->lab_status) {
+						switch ($val->hosp_status) {
 							case 'new':
-								$status_class = 'danger';
-								break;
-							case 'pending':
-								$status_class = 'info';
+								$hosp_class = 'primary';
 								break;
 							case 'updated':
-								$status_class = 'success';
-								break;
-							case 'completed':
-								$status_class = 'success';
+								$hosp_class = 'success';
 								break;
 							default :
-								$status_class = 'info';
+								$hosp_class = 'info';
+								break;
+						}
+						switch ($val->lab_status) {
+							case 'pending':
+								$lab_class = 'primary';
+								break;
+							case 'updated':
+								$lab_class = 'success';
+								break;
+							default :
+								$lab_class = 'info';
 								break;
 						}
 						$htm .= "<tr>";
@@ -228,15 +234,16 @@ class ListDataController extends BoeFrsController
 							$htm .= "<td>".$val->hn."</td>";
 							$htm .= "<td><span class=\"text-danger\">".$val->lab_code."</span></td>";
 							$htm .= "<td>".$val->ref_user_hospcode."</td>";
-							$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($val->hosp_status)."</span></td>";
-							$htm .= "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($val->lab_status)."</span></td>";
+							$htm .= "<td><span class=\"badge badge-pill badge-".$hosp_class."\">".ucfirst($val->hosp_status)."</span></td>";
+							$htm .= "<td><span class=\"badge badge-pill badge-".$lab_class."\">".ucfirst($val->lab_status)."</span></td>";
 							$htm .= "<td>";
-							if ($val->hosp_status == 'new') {
-								$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
-							} else {
-								$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-pencil-alt\"></i></a>&nbsp;";
-							}
-							$htm .= "<button type=\"button\" id=\"btn_delete_ajax".$val->id."\" class=\"btn btn-danger btn-sm\" value=\"".$val->id."\"><i class=\"fas fa-trash\"></i></button>";
+								$htm .= "<a href=\"".route('viewPatient', ['id'=>$val->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
+								if ($val->hosp_status == 'new') {
+									$htm .= "<a href=\"".route('createPatient', ['id'=>$val->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
+								} else {
+									$htm .= "<a href=\"".route('editPatient', ['id'=>$val->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-edit\"></i></a>&nbsp;";
+								}
+								$htm .= "<button type=\"button\" id=\"btn_delete_ajax".$val->id."\" class=\"btn btn-danger btn-sm\" value=\"".$val->id."\"><i class=\"fas fa-trash-alt\"></i></button>";
 							$htm .= "</td>";
 						$htm .= "</tr>";
 					}

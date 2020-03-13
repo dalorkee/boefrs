@@ -9,6 +9,15 @@
 @endsection
 @section('internal-style')
 <style>
+.dataTables_wrapper {
+	width: 100% !important;
+	font-family: 'Fira-code' !important;
+}
+table {
+	width: 100% !important;
+}
+table.dataTable tr.odd { background-color: #F6F6F6;  border:1px lightgrey;}
+table.dataTable tr.even{ background-color: white; border:1px lightgrey; }
 .error{
 	display: none;
 	margin-left: 10px;
@@ -23,13 +32,6 @@ input.invalid, textarea.invalid{
 
 input.valid, textarea.valid{
 	border: 2px solid green;
-}
-.dataTables_wrapper {
-	width: 100% !important;
-	font-family: tahoma !important;
-}
-table {
-	width: 100% !important;
 }
 </style>
 @endsection
@@ -49,8 +51,8 @@ table {
 			<div class="ml-auto text-right">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Form</a></li>
-						<li class="breadcrumb-item active" aria-current="page">All</li>
+						<li class="breadcrumb-item"><a href="#">Data</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Lists</li>
 					</ol>
 				</nav>
 			</div>
@@ -139,7 +141,7 @@ table {
 											$patients->each(function ($item, $key) use ($titleName) {
 												switch ($item->hosp_status) {
 													case 'new':
-														$hosp_class = 'danger';
+														$hosp_class = 'primary';
 														break;
 													case 'updated':
 														$hosp_class = 'success';
@@ -150,7 +152,7 @@ table {
 												}
 												switch ($item->lab_status) {
 													case 'pending':
-														$lab_class = 'warning';
+														$lab_class = 'primary';
 														break;
 													case 'updated':
 														$lab_class = 'success';
@@ -172,13 +174,13 @@ table {
 													echo "<td><span class=\"badge badge-pill badge-".$hosp_class."\">".ucfirst($item->hosp_status)."</span></td>";
 													echo "<td><span class=\"badge badge-pill badge-".$lab_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
-														echo "<a href=\"".route('viewPatient', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\">View</a>&nbsp;";
+														echo "<a href=\"".route('viewPatient', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
 															if ($item->hosp_status == 'new') {
-																echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\">Update</a>&nbsp;";
+																echo "<a href=\"".route('createPatient', ['id'=>$item->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 															} else {
-																echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\">Edit</a>&nbsp;";
+																echo "<a href=\"".route('editPatient', ['id'=>$item->id])."\" class=\"btn btn-warning btn-sm\"><i class=\"fas fa-edit\"></i></a>&nbsp;";
 															}
-															echo "<button type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\">Delete</button>";
+															echo "<button type=\"button\" id=\"btn_delete".$item->id."\" class=\"btn btn-danger btn-sm\" value=\"".$item->id."\"><i class=\"fas fa-trash-alt\"></i></button>";
 													echo "</td>";
 												echo "</tr>";
 											});

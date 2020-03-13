@@ -301,7 +301,7 @@ class CodeController extends BoeFrsController {
 					$htm .= "<td>".$value->hn."</td>";
 					$htm .= "<td><span class=\"badge badge-pill badge-primary\">".ucfirst($value->hosp_status)."</span></td>";
 					$htm .= "<td><span class=\"badge badge-pill badge-primary\">".ucfirst($value->lab_status)."</span></td>";
-					$htm .= "<td>".$value->created_at."</td>";
+					$htm .= "<td>".parent::convertMySQLDateTimeFormat($value->created_at)."</td>";
 					$htm .= "<td>";
 						$htm .= "<a href=\"".route('createPatient', ['id'=>$value->id])."\" class=\"btn btn-cyan btn-sm\"><i class=\"fas fa-plus-circle\"></i></a>&nbsp;";
 						$htm .= "<button name=\"delete\" type=\"button\" id=\"btn_delete_ajax".$value->id."\" class=\"btn btn-danger btn-sm\" value=\"".$value->id."\"><i class=\"fas fa-trash\"></i></button>";
