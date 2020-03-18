@@ -214,13 +214,13 @@ table.table td .add {
 								<div class="card">
 									<div class="card-body border-top">
 										<div class="form-row">
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 												<div class="table-wrapper">
 													<div class="table-title">
 														<div class="row">
-															<div class="col-sm-8"><h2>Laboratory</h2></div>
-															<div class="col-sm-4">
-																<button type="button" class="btn btn-info add-new"><i class="fas fa-plus"></i> เพิ่มข้อมูล</button>
+															<!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><h4>เพิ่มข้อมูลผลตรวจ</h4></div>-->
+															<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																<button type="button" class="btn btn-success add-new"><i class="fas fa-plus"></i> เพิ่มข้อมูล</button>
 															</div>
 														</div>
 													</div>
@@ -370,11 +370,11 @@ $(document).ready(function() {
 					'<option value="0">-- โปรดเลือก --</option>' +
 					@php
 						foreach($patient_specimen as $key => $value) {
-								$specimen_val = $value['specimen_id'];
-							if ($value['specimen_id'] == 9) {
-								$specimen_name = $specimen[$value['specimen_id']]->name_en." [".$value['specimen_other']."]";
+								$specimen_val = $value['specimen_type_id'];
+							if ($specimen_val == 9) {
+								$specimen_name = $specimen[$specimen_val]->name_en." [".$value['specimen_other']."]";
 							} else {
-								$specimen_name = $specimen[$value['specimen_id']]->name_en;
+								$specimen_name = $specimen[$specimen_val]->name_en;
 							}
 							echo "'<option value=\"".$specimen_val."\">".$specimen_name."</option>' + \n";
 						}

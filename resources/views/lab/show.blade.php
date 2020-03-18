@@ -47,8 +47,8 @@ input:read-only {
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Form</li>
-						<li class="breadcrumb-item active" aria-current="page">Lab</li>
+						<li class="breadcrumb-item active" aria-current="page">Patient</li>
+						<li class="breadcrumb-item active" aria-current="page">View</li>
 					</ol>
 				</nav>
 			</div>

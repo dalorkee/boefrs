@@ -54,7 +54,6 @@ class LabController extends BoeFrsController
 	*/
 	public function create(Request $request) {
 		$user_hospital = parent::hospitalByCode(auth()->user()->hospcode);
-		//dd($user_hospital);
 		$specimen = parent::specimen();
 		$specimen = $specimen->keyBy('id')->toArray();
 		$patient_specimen = Specimen::where('ref_pt_id', '=', $request->id)
@@ -185,34 +184,33 @@ class LabController extends BoeFrsController
 
 		/* get patient */
 		$patient = Patients::where('id', '=', $id)
-		//->where('lab_status', '!=', 'new')
 		->whereNull('deleted_at')
 		->get();
 
 		/* get patient clinical */
-		$clinical = Clinical::where('ref_pt_id', $patient[0]->id)
+		$clinical = Clinical::where('ref_pt_id', '=', $id)
 		->whereNull('deleted_at')
 		->get();
 
 		/* get patient specimen */
-		$specimen_data = Specimen::where('ref_pt_id', '=', $id)
+		$patient_specimen = Specimen::where('ref_pt_id', '=', $id)
 		->whereNull('deleted_at')
-		->get();
-		$specimen_data = $specimen_data->keyBy('specimen_id');
+		->get()->keyBy('specimen_type_id');
+
 		$specimen_rs = collect();
-		$rs = $specimen->each(function($item, $key) use ($specimen_rs, $specimen_data) {
+		$rs = $specimen->each(function($item, $key) use ($specimen_rs, $patient_specimen) {
 			$tmp['rs_id'] = $item->id;
 			$tmp['rs_name_en'] = $item->name_en;
 			$tmp['rs_name_th'] = $item->name_th;
 			$tmp['rs_abbreviation'] = $item->abbreviation;
 			$tmp['rs_note'] = $item->note;
 			$tmp['rs_other_field'] = $item->other_field;
-			if (count($specimen_data) > 0) {
-				foreach ($specimen_data as $k => $v) {
-					if ($v['specimen_id'] == $item->id) {
+			if (count($patient_specimen) > 0) {
+				foreach ($patient_specimen as $k => $v) {
+					if ($v['specimen_type_id'] == $item->id) {
 						$tmp['s_id'] = $v['id'];
 						$tmp['s_ref_pt_id'] = $v['ref_pt_id'];
-						$tmp['s_specimen_id'] = $v['specimen_id'];
+						$tmp['s_specimen_id'] = $v['specimen_type_id'];
 						$tmp['s_specimen_other'] = $v['specimen_other'];
 						$tmp['s_specimen_date'] = parent::convertMySQLDateFormat($v['specimen_date']);
 						$tmp['s_specimen_result'] = $v['specimen_result'];
@@ -240,7 +238,7 @@ class LabController extends BoeFrsController
 		$specimen_rs->all();
 
 		/* get patient lab result */
-		$patient_lab = Lab::where('ref_patient_id', $patient[0]->id)
+		$patient_lab = Lab::where('ref_patient_id', $id)
 			->whereNull('deleted_at')
 			->get();
 		$patient_lab = $patient_lab->toArray();

@@ -183,21 +183,26 @@ input.valid, textarea.valid{
 									@php
 										if ($patients) {
 											$patients->each(function ($item, $key) use ($titleName) {
-												switch ($item->lab_status) {
+												switch ($item->hosp_status) {
 													case 'new':
-														$status_class = 'danger';
-														break;
-													case 'pending':
-														$status_class = 'info';
+														$hosp_class = 'primary';
 														break;
 													case 'updated':
-														$status_class = 'success';
-														break;
-													case 'completed':
-														$status_class = 'success';
+														$hosp_class = 'success';
 														break;
 													default :
-														$status_class = 'info';
+														$hosp_class = 'info';
+														break;
+												}
+												switch ($item->lab_status) {
+													case 'pending':
+														$lab_class = 'primary';
+														break;
+													case 'updated':
+														$lab_class = 'success';
+														break;
+													default :
+														$lab_class = 'info';
 														break;
 												}
 												echo "<tr>";
@@ -210,8 +215,8 @@ input.valid, textarea.valid{
 													echo "<td>".$item->hn."</td>";
 													echo "<td><span class=\"text-danger\">".$item->lab_code."</span></td>";
 													echo "<td>".$item->ref_user_hospcode."</td>";
-													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->hosp_status)."</span></td>";
-													echo "<td><span class=\"badge badge-pill badge-".$status_class."\">".ucfirst($item->lab_status)."</span></td>";
+													echo "<td><span class=\"badge badge-pill badge-".$hosp_class."\">".ucfirst($item->hosp_status)."</span></td>";
+													echo "<td><span class=\"badge badge-pill badge-".$lab_class."\">".ucfirst($item->lab_status)."</span></td>";
 													echo "<td>";
 														echo "<a href=\"".route('viewLab', ['id'=>$item->id])."\" class=\"btn btn-success btn-sm\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"View\"><i class=\"fas fa-eye\"></i></a>&nbsp;";
 														if ($item->lab_status == 'pending') {
