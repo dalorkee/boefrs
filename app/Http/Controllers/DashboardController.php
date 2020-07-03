@@ -12,33 +12,24 @@ use DB;
 
 class DashboardController extends Controller
 {
-	/**
-	* Display a listing of the resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-
-	public function __construct()
-	{
+	public function __construct() {
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
-		//$this->middleware(['permission:manageuser']);
 		$this->middleware('page_session');
 		$this->middleware(function ($request, $next) {
-				$this->user = Auth::user();
-				return $next($request);
+			$this->user = Auth::user();
+			return $next($request);
 		});
 	}
 
-	public function index()
-	{
-		if (Auth::check()){
+	public function index() {
+		if (Auth::check()) {
 			$hospcode = Auth::user()->hospcode;
 		}
 		$roleArr = auth()->user()->roles->pluck('name');
 		$userRole = isset($roleArr[0]) ? $roleArr[0] : "";
 
-		if($userRole=='admin') {
+		if ($userRole == 'admin') {
 			$case_gen_code = DB::table('first_dash')->sum('case_gen_code');
 			$case_hos_send = DB::table('first_dash')->sum('case_hos_send');
 			$case_lab_confirm = DB::table('first_dash')->sum('case_lab_confirm');
@@ -68,8 +59,7 @@ class DashboardController extends Controller
 				$antiResult['anti_unknown'] += $value['anti_unknow'];
 			}
 
-
-		} elseif($userRole=='hospital' || $userRole=='lab') {
+		} elseif ($userRole=='hospital' || $userRole=='lab') {
 			$case_gen_code = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_gen_code');
 			$case_hos_send = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_hos_send');
 			$case_lab_confirm = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_lab_confirm');
@@ -78,37 +68,40 @@ class DashboardController extends Controller
 
 			/* rapid test data for graph */
 			$rapid = RapidGraph::where('hospital', '=', $hospcode)->get();
-			$rapid = $rapid->keyBy('hospital')->toArray();
-			$rapidResult = array('flua'=>0, 'flub'=>0, 'nagative'=>0, 'unknown'=>0);
-			$rapidResult['flua'] = $rapid[$hospcode]['rapid_flua'];
-			$rapidResult['flub'] = $rapid[$hospcode]['rapid_flub'];
-			$rapidResult['nagative'] = $rapid[$hospcode]['rapid_nagative'];
-			$rapidResult['unknown'] = $rapid[$hospcode]['rapid_unknow'];
+			if (count($rapid) > 0) {
+				$rapid = $rapid->keyBy('hospital')->toArray();
+				$rapidResult['flua'] = $rapid[$hospcode]['rapid_flua'];
+				$rapidResult['flub'] = $rapid[$hospcode]['rapid_flub'];
+				$rapidResult['nagative'] = $rapid[$hospcode]['rapid_nagative'];
+				$rapidResult['unknown'] = $rapid[$hospcode]['rapid_unknow'];
 
-			/* anti */
-			$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
-			$antiResult['anti_arv'] = $rapid[$hospcode]['anti_arv'];
-			$antiResult['anti_osel'] = $rapid[$hospcode]['anti_osel'];
-			$antiResult['anti_tamiflu'] = $rapid[$hospcode]['anti_tamiflu'];
-			$antiResult['anti_unknown'] = $rapid[$hospcode]['anti_unknow'];
+				/* anti */
+				$antiResult['anti_arv'] = $rapid[$hospcode]['anti_arv'];
+				$antiResult['anti_osel'] = $rapid[$hospcode]['anti_osel'];
+				$antiResult['anti_tamiflu'] = $rapid[$hospcode]['anti_tamiflu'];
+				$antiResult['anti_unknown'] = $rapid[$hospcode]['anti_unknow'];
+			} else {
+				$rapidResult = array('flua' => 0, 'flub' => 0, 'nagative' => 0, 'unknown' => 0);
+				$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
+			}
 
 		}
 		$case_all = $case_gen_code+$case_hos_send+$case_lab_confirm;
 		$donut_charts_arr = array(
-													array("label" => "Male" ,"symbol" => "M","y" =>$case_male),
-													array("label" => "Female" ,"symbol" => "F","y" =>$case_female)
-												);
+			array("label" => "Male" ,"symbol" => "M","y" =>$case_male),
+			array("label" => "Female" ,"symbol" => "F","y" =>$case_female)
+		);
 		return view('dashboard.index',
-					compact(
-						'case_gen_code',
-						'case_hos_send',
-						'case_lab_confirm',
-						'case_all',
-						'donut_charts_arr',
-						'rapidResult',
-						'antiResult'
-					)
-				);
+				compact(
+					'case_gen_code',
+					'case_hos_send',
+					'case_lab_confirm',
+					'case_all',
+					'donut_charts_arr',
+					'rapidResult',
+					'antiResult'
+				)
+		);
 	}
 
 	/**

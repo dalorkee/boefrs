@@ -332,7 +332,7 @@ $(document).ready(function() {
 						}
 					);
 					window.setTimeout(function() {
-						window.location.replace("{{ route('lab.index') }}");
+						window.location.replace("{{ route('lab') }}");
 					}, 5000);
 				}
 			},

@@ -562,7 +562,7 @@ input:read-only {
 						</div><!-- card -->
 						<div class="border-top">
 							<div class="card-body">
-								<a href="{{ route('lab.index') }}" type="button" class="btn btn-primary">ปิดหน้านี้</a>
+								<a href="{{ route('lab') }}" type="button" class="btn btn-primary">ปิดหน้านี้</a>
 							</div>
 						</div>
 					</form>
@@ -573,8 +573,6 @@ input:read-only {
 </div><!-- container -->
 @endsection
 @section('bottom-script')
-<script src="{{ URL::asset('assets/libs/datatables-1.10.18/DataTables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ URL::asset('assets/libs/datatables-1.10.18/Responsive-2.2.2/js/responsive.bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-validate-2.2.0/dist/bootstrap-validate.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>

@@ -12,6 +12,7 @@ use App\Specimen;
 use App\Lab;
 use DB;
 use Session;
+use App\DataTables\PatientsDataTableForLab;
 
 class LabController extends BoeFrsController
 {
@@ -22,20 +23,23 @@ class LabController extends BoeFrsController
 		$this->middleware('page_session');
 	}
 
-	/**
-	* Display a listing of the resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
+	public function listToDatatable(PatientsDataTableForLab $dataTable) {
+		return $dataTable->render('lab.list');
+	}
+
 	public function index() {
 		$roleArr = auth()->user()->getRoleNames();
-		if ($roleArr[0] == 'admin') {
-			$patients = Patients::whereNull('deleted_at')->get();
-		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-			$hospcode = auth()->user()->hospcode;
-			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
-		} else {
-			return redirect()->route('logout');
+		switch ($roleArr[0]) {
+			case 'admin':
+				$patients = Patients::whereNull('deleted_at')->get();
+				break;
+			case 'lab':
+				$hospcode = auth()->user()->hospcode;
+				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->toSql();
+				dd($patients);
+				break;
+			default:
+				return redirect()->route('logout');
 		}
 		return view(
 			'lab.index',
@@ -46,30 +50,19 @@ class LabController extends BoeFrsController
 		);
 	}
 
-
-	/**
-	* Show the form for creating a new resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
 	public function create(Request $request) {
 		$user_hospital = parent::hospitalByCode(auth()->user()->hospcode);
-		$specimen = parent::specimen();
-		$specimen = $specimen->keyBy('id')->toArray();
-		$patient_specimen = Specimen::where('ref_pt_id', '=', $request->id)
-			->whereNull('deleted_at')
-			->get();
-		$patient_specimen = $patient_specimen->keyBy('id')->toArray();
-		$pathogen = parent::pathogen();
-		$pathogen= $pathogen->keyBy('id');
-		$patient = Patients::where('id', '=', $request->id)
-			//->where('lab_status', '!=', 'new')
-			->whereNull('deleted_at')
-			->get();
-		if (!empty($patient[0]->hospital)) {
-			$patient_hospital = parent::hospitalByCode($patient[0]->hospital);
-		} else {
-			$patient_hospital = null;
+		$specimen = parent::specimen()->keyBy('id')->toArray();
+		$patient_specimen = Specimen::where('ref_pt_id', '=', $request->id)->get()->keyBy('id')->toArray();
+		$pathogen = parent::pathogen()->keyBy('id');
+
+		$patient = Patients::where('id', '=', $request->id)->get();
+		if (count($patient) > 0) {
+			if (!empty($patient[0]->hospital)) {
+				$patient_hospital = parent::hospitalByCode($patient[0]->hospital);
+			} else {
+				$patient_hospital = null;
+			}
 		}
 		$analyze_id = parent::randPin('L');
 		return view('lab.create',

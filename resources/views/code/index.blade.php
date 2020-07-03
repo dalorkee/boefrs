@@ -7,7 +7,10 @@
 <link rel="stylesheet" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
 @endsection
 @section('internal-style')
-<style>
+<style type="text/css">
+.page-wrapper {
+	background: white !important;
+}
 .dataTables_wrapper {
 	width: 100% !important;
 	font-family: 'Fira-code' !important;
@@ -59,6 +62,21 @@ input.valid, textarea.valid {
 	</div>
 </div>
 <div class="container-fluid">
+	@if(Session::has('success'))
+		<div class="alert alert-success">
+			<i class="fas fa-check-circle"></i> {{ Session::get('success') }}
+			@php
+				Session::forget('success');
+			@endphp
+		</div>
+	@elseif(Session::has('error'))
+		<div class="alert alert-danger">
+			<i class="fas fa-times-circle"></i> {{ Session::get('error') }}
+			@php
+				Session::forget('error');
+			@endphp
+		</div>
+	@endif
 	@if(count($errors) > 0)
 	<div class="row">
 		<div class="col-md-12">
@@ -73,7 +91,7 @@ input.valid, textarea.valid {
 	</div>
 	@endif
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 			<div class="card">
 				<div class="card-body">
 					<div class="d-md-flex align-items-center">
@@ -83,33 +101,34 @@ input.valid, textarea.valid {
 						</div>
 					</div>
 					<div class="alert" role="alert" style="border:1px solid #ccc;">
-						<form id="patient_form" class="mt-4 mb-3">
-							@role('admin')
-							<div class="form-row">
-								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-									<div class="form-group">
-										<label for="province">จังหวัด</label>
-										<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" data-style="btn-danger" >
-											<option value="0">-- เลือกจังหวัด --</option>
-											@php
-												$provinces = Session::get('provinces');
-												$provinces->each(function ($item, $key) {
-													echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>\n";
-												});
-											@endphp
-										</select>
+						<div class="card">
+							<form id="patient_form" class="mt-4 mb-3">
+								@role('admin')
+								<div class="form-row">
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+										<div class="form-group">
+											<label for="province">จังหวัด (ผู้กรอกข้อมูล)</label>
+											<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" data-style="btn-danger" >
+												<option value="0">-- เลือกจังหวัด --</option>
+												@php
+													$provinces = Session::get('provinces');
+													$provinces->each(function ($item, $key) {
+														echo "<option value=\"".$item->province_id."\">".$item->province_name."</option>\n";
+													});
+												@endphp
+											</select>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+										<div class="form-group">
+											<label for="hospital">โรงพยาบาล (ผู้กรอกข้อมูล)</label>
+											<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn-danger" disabled>
+												<option value="0">-- เลือกโรงพยาบาล --</option>
+											</select>
+										</div>
 									</div>
 								</div>
-								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-									<div class="form-group">
-										<label for="hospital">โรงพยาบาล</label>
-										<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn-danger" disabled>
-											<option value="0">-- เลือกโรงพยาบาล --</option>
-										</select>
-									</div>
-								</div>
-							</div>
-							@endrole
+								@endrole
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<div class="form-group">
@@ -177,7 +196,7 @@ input.valid, textarea.valid {
 									<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
 									<div class="table-responsive">
 										<table class="table" id="specimen_table">
-											<thead class="bg-custom-2 text-light">
+											<thead class="bg-custom-1 text-light">
 												<tr>
 													<th scope="col">ตัวอย่างส่งตรวจ</th>
 													<th scope="col">วันที่เก็บตัวอย่าง</th>
@@ -354,12 +373,7 @@ input.valid, textarea.valid {
 <script src="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
 <script>
 $(document).ready(function() {
-	/* ajax request */
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
+	$.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')} });
 
 	/* default get data tot tbl */
 	$.ajax({

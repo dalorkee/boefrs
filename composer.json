@@ -16,8 +16,11 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "~5.0",
         "mews/captcha": "^3.0",
+        "rap2hpoutre/laravel-log-viewer": "^1.6",
         "simplesoftwareio/simple-qrcode": "^2.0",
-        "spatie/laravel-permission": "^3.0"
+        "spatie/laravel-permission": "^3.0",
+        "yajra/laravel-datatables": "^1.5",
+        "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

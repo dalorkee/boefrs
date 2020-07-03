@@ -12,16 +12,16 @@
 				@endrole
 				@role('admin|hospital')
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-hospital"></i><span class="hide-menu">โรงพยาบาล </span></a>
-					<ul aria-expanded="false" class="collapse  first-level">
+					<ul aria-expanded="false" class="collapse first-level">
 						<li class="sidebar-item"><a href="{{ route('code.index') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> สร้างรหัสใหม่</span></a></li>
-						<li class="sidebar-item"><a href="{{ route('list-data.index') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> รายการข้อมูล</span></a></li>
+						<li class="sidebar-item"><a href="{{ route('list') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> รายการข้อมูล</span></a></li>
 					</ul>
 				</li>
 				@endrole
 				@role('admin|lab')
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-flask"></i><span class="hide-menu">ห้องปฏิบัติการ </span></a>
-					<ul aria-expanded="false" class="collapse  first-level">
-						<li class="sidebar-item"><a href="{{ route('lab.index') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> รายการข้อมูล</span></a></li>
+					<ul aria-expanded="false" class="collapse first-level">
+						<li class="sidebar-item"><a href="{{ route('lab') }}" class="sidebar-link"><i class="mdi mdi-plus"></i><span class="hide-menu"> รายการข้อมูล</span></a></li>
 					</ul>
 				</li>
 				@endrole

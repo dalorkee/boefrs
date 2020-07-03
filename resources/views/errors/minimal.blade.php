@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+	<head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -57,6 +57,7 @@
             <div class="message" style="padding: 10px;">
                 @yield('message')
             </div>
+							<button>Back to Login</button>
         </div>
     </body>
 </html>
