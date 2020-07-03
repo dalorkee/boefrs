@@ -1,8 +1,24 @@
+<?php
+function DateThai($strDate)
+{
+  $strYear = date("Y",strtotime($strDate))+543;
+  $strMonth= date("n",strtotime($strDate));
+  $strDay= date("j",strtotime($strDate));
+  $strHour= date("H",strtotime($strDate));
+  $strMinute= date("i",strtotime($strDate));
+  $strSeconds= date("s",strtotime($strDate));
+  $strMonthCut = Array("","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค.");
+  $strMonthThai=$strMonthCut[$strMonth];
+  return "$strDay $strMonthThai $strYear";
+}
+
+$current_date = DateThai(date('Y-m-d'));
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Page Title</title>
-<meta charset="UTF-8">
+<title>LABResult-</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 @font-face{
@@ -51,27 +67,29 @@ body{
 </style>
 </head>
 <body>
-<div>สวัสดีวันจันทร์</div>
-<table style="width: 100%; margin-left: auto; margin-right: auto;">
+
+<table style="width: 100%;">
 <tbody>
 <tr>
-<td style="width: 100%;">
+<td style="width: 100%; ">
 <table style="width: 675px;">
 <tbody>
 <tr>
-<td style="width: 253px;">&nbsp;</td>
+<td style="width: 253px;" valig="top"><img src="{{ asset('images/dmsLOGO1.png') }}" width="220px" height="140px"></td>
 <td style="width: 272px;">&nbsp;</td>
-<td style="width: 149px;">&nbsp;ลำดับที่ 63-01119</td>
+<td style="width: 149px;" align="right">&nbsp;ลำดับที่ 63-01119</td>
 </tr>
 </tbody>
 </table>
 </td>
 </tr>
 <tr>
-<td style="width: 100%;" align="center">รายงานผลการตรวจวิเคราะห์<br />สถาบันวิจัยวิทยาศาสตร์สาธารณสุข กรมวิทยาศาสตร์การแพทย์ กระทรวงสาธารณสุข<br />ถนนติวานนท์ อำเภอเมือง จังหวัดนนทบุรี&nbsp;</td>
+<td style="width: 100%;" align="center">รายงานผลการตรวจวิเคราะห์<br />สถาบันวิจัยวิทยาศาสตร์สาธารณสุข กรมวิทยาศาสตร์การแพทย์ กระทรวงสาธารณสุข<br />ถนนติวานนท์ อำเภอเมือง จังหวัดนนทบุรี 11000&nbsp;</td>
 </tr>
+
 <tr>
 <td style="width: 100%;">
+  <hr size=3 noshadow>
 <table style="width: 677px;">
 <tbody>
 <tr style="height: 23px;">
@@ -117,7 +135,7 @@ body{
 </tr>
 <tr>
 <td style="width: 149px;">&nbsp;13-63-01462</td>
-<td style="width: 327px;">นางมีนะ เพียวเซกู่<br />อายุ 54 ปี<br />ชินดตัวอย่าง Throat swab</td>
+<td style="width: 327px;">นางมีนะ เพียวเซกู่<br />อายุ 54 ปี<br />ชนิดตัวอย่าง Throat swab</td>
 <td style="width: 200px;">&nbsp;</td>
 </tr>
 </tbody>
@@ -126,11 +144,11 @@ body{
 </tr>
 <tr>
 <td style="width: 100%;">
-<table style="width: 678px;">
+<table style="width: 700px;">
 <tbody>
 <tr>
-<td style="width: 318px;" align="center">......................................................... ผู้วิเคราะห์<br />(นายภากร ภิรมย์ทอง)<br />นักวิทยาศาสตร์การแพทย์<br /> 25 มกราคม 2563</td>
-<td style="width: 359px;" align="center">........................................................... ผู้รับรองรายงานผล<br />(นางสาวสิริภาภรณ์ ผุยกัน)<br />นักวิทยาศาสตร์การแพทย์ชำนาญการ<br /> 25 มกราคม 2563</td>
+<td style="width: 350px;" align="center">......................................................... ผู้วิเคราะห์<br />(นายภากร ภิรมย์ทอง)<br />นักวิทยาศาสตร์การแพทย์<br /> {{ $current_date }}</td>
+<td style="width: 350px;" align="center">......................................................... ผู้รับรองรายงานผล<br />(นางสาวสิริภาภรณ์ ผุยกัน)<br />นักวิทยาศาสตร์การแพทย์ชำนาญการ<br /> {{ $current_date }}</td>
 </tr>
 </tbody>
 </table>
