@@ -7,12 +7,13 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\BoeFrsController;
 use App\Code;
 use App\Clinical;
 use App\Specimen;
-use Session;
-use Storage;
 
 class CodeController extends BoeFrsController {
 	public function __construct() {
@@ -22,28 +23,30 @@ class CodeController extends BoeFrsController {
 		$this->middleware('page_session');
 	}
 
-	/**
-	* Display a listing of the resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-
 	public function index(Request $request) {
-		/* set thai province to session */
 		if (!Session::has('provinces')) {
 			$provinces = BoeFrsController::provinceList();
 			Session::put('provinces', $provinces);
 		}
 		$specimen = parent::specimen();
+
 		$roleArr = auth()->user()->getRoleNames();
-		if ($roleArr[0] == 'admin') {
-			$patients = parent::patientByAdmin('new');
-		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-			$hospital = auth()->user()->hospcode;
-			$patients = parent::patientByUserHospcode($hospital, 'new');
-		} else {
-			return redirect()->route('logout');
+		switch ($roleArr[0]) {
+			case 'admin':
+				$patients = parent::patientByAdmin('new');
+				break;
+			case 'hospital':
+				$hospital = auth()->user()->hospcode;
+				$patients = parent::patientByUserHospcode($hospital, 'new');
+				break;
+			case 'lab':
+				$hospital = auth()->user()->hospcode;
+				$patients = parent::patientByUserHospcode($hospital, 'new');
+				break;
+			default:
+				return redirect()->route('logout');
 		}
+
 		return view('code.index',
 			[
 				'specimen'=> $specimen,
@@ -53,214 +56,127 @@ class CodeController extends BoeFrsController {
 		);
 	}
 
-	/**
-	* Show the form for creating a new resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-	public function create() {
-		//
-	}
-
-	/**
-	* Store a newly created resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @return \Illuminate\Http\Response
-	*/
-	public function store(Request $request) {
-		//
-	}
-
-	/**
-	* Display the specified resource.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	* Show the form for editing the specified resource.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function edit($id) {
-		//
-	}
-
-	/**
-	* Update the specified resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function update(Request $request, $id) {
-		//
-	}
-
-	/**
-	* Remove the specified resource from storage.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function destroy($id) {
-		$code = Code::destroy($id);
-		if ($code) {
-			response()->json(['status'=>200, 'msg'=>'ลบข้อมูลสำเร็จแล้ว']);
-		} else {
-			response()->json(['status'=>503, 'msg'=>'Service Unavailable']);
-		}
-		return redirect()->route('code.index');
-	}
-
-	public function confirmDestroy(Request $request) {
-		$id = trim($request->val);
-		$code = Code::destroy($id);
-		if ($code) {
-			return response()->json(['status'=>'200', 'msg'=>'ลบข้อมูลสำเร็จแล้ว', 'title'=>'Deleted']);
-		} else {
-			return response()->json(['status'=>'500', 'msg'=>'Service Unavailable', 'title'=>'Alert']);
-		}
-	}
-
-	private function notFoundMessage() {
-		return [
-			'code' => 404,
-			'message' => 'Note not found',
-			'success' => false,
-		];
-	}
-
-	private function successfulMessage($code, $message, $status, $count, $payload) {
-		return [
-			'code' => $code,
-			'message' => $message,
-			'success' => $status,
-			'count' => $count,
-			'data' => $payload,
-		];
-	}
-
 	public function ajaxRequestPost(Request $request) {
-		if (!isset($request) || empty($request->titleNameInput) || empty($request->firstNameInput) || empty($request->hnInput)) {
-			return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
-		} else {
-			$roleArr = auth()->user()->getRoleNames();
-			if ($roleArr[0] == 'admin') {
-				$province = $request->province;
-				$hospcode = $request->hospcode;
-				$created_by = 'admin';
+		try {
+			if (!isset($request) || empty($request->titleNameInput) || empty($request->firstNameInput) || empty($request->hnInput)) {
+				return response()->json(['status' => 204, 'msg' => 'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
 			} else {
-				$province = auth()->user()->province;
-				$hospcode = auth()->user()->hospcode;
-				$created_by = 'user';
-			}
-
-			/* get defalut specimen data */
-			$specimen_data = parent::specimen();
-			$specimen_data = $specimen_data->keyBy('id');
-
-			/* chk specimen input or not  */
-			$chk_specimen_count = 0;
-			foreach ($specimen_data as $key=>$val) {
-				if ($request->has('specimen'.$val->id)) {
-					$chk_specimen_count += 1;
+				$roleArr = auth()->user()->getRoleNames();
+				if ($roleArr[0] == 'admin') {
+					$province = $request->province;
+					$hospcode = $request->hospcode;
+					$hospital = $request->hospcode;
+					$created_by = 'admin';
 				} else {
-					continue;
+					$province = auth()->user()->province;
+					$hospcode = auth()->user()->hospcode;
+					$hospital = auth()->user()->hospcode;
+					$created_by = 'user';
 				}
-			}
 
-			/* chk specimen_date_input */
-			$chk_specimen_date_input = 0;
-			foreach ($specimen_data as $key=>$val) {
-				if ($request->has('specimen'.$val->id)) {
-					$specimenDateInput = $request->input('specimenDate'.$val->id);
-					if (!empty($specimenDateInput) || !is_null($specimenDateInput)) {
-						$chk_specimen_date_input += 1;
+				/* get defalut specimen data */
+				$specimen_data = parent::specimen();
+				$specimen_data = $specimen_data->keyBy('id');
+
+				/* chk specimen input or not  */
+				$chk_specimen_count = 0;
+				foreach ($specimen_data as $key=>$val) {
+					if ($request->has('specimen'.$val->id)) {
+						$chk_specimen_count += 1;
 					} else {
-						$chk_specimen_date_input += 0;
+						continue;
 					}
-				} else {
-					continue;
 				}
-			}
 
-			/* validate and save data to db */
-			if ($chk_specimen_count <= 0) {
-				return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลตัวอย่างให้ครบถ้วน!']);
-				exit;
-			} else {
-				if ($chk_specimen_count != $chk_specimen_date_input) {
+				/* chk specimen_date_input */
+				$chk_specimen_date_input = 0;
+				foreach ($specimen_data as $key=>$val) {
+					if ($request->has('specimen'.$val->id)) {
+						$specimenDateInput = $request->input('specimenDate'.$val->id);
+						if (!empty($specimenDateInput) || !is_null($specimenDateInput)) {
+							$chk_specimen_date_input += 1;
+						} else {
+							$chk_specimen_date_input += 0;
+						}
+					} else {
+						continue;
+					}
+				}
+
+				/* validate and save data to db */
+				if ($chk_specimen_count <= 0) {
 					return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลตัวอย่างให้ครบถ้วน!']);
 					exit;
 				} else {
-					$code = new Code;
-					$code->title_name = $request->titleNameInput;
-					if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
-						$code->title_name_other = $request->otherTitleNameInput;
+					if ($chk_specimen_count != $chk_specimen_date_input) {
+						return response()->json(['status'=>204, 'msg'=>'โปรดกรอกข้อมูลตัวอย่างให้ครบถ้วน!']);
+						exit;
 					} else {
-						$code->title_name_other = NULL;
-					}
-					$code->first_name = $request->firstNameInput;
-					$code->last_name = $request->lastNameInput;
-					$code->hn = $request->hnInput;
-					$code->an = $request->anInput;
-					$code->lab_code = parent::randPin();
-					$code->ref_user_id = auth()->user()->id;
-					$code->ref_user_hospcode = $hospcode;
-					$code->created_by = $created_by;
-					$saved = $code->save();
-					$last_patient_insert_id = $code->id;
-
-					/* Clinical save method */
-					$clinical = new Clinical;
-					$clinical->ref_pt_id = $last_patient_insert_id;
-					$clinical->pt_type = $request->patientType;
-					$clinical->ref_user_id = auth()->user()->id;
-					$clinical_saved = $clinical->save();
-
-					/* specimen save method */
-					foreach ($specimen_data as $key=>$val) {
-						if ($request->has('specimen'.$val->id)) {
-							$specimen = new Specimen;
-							$specimen->ref_pt_id = $last_patient_insert_id;
-							$specimen->specimen_type_id = $request->specimen.$val->id;
-
-							if ($val->other_field == 'Yes') {
-								$othStr = 'specimenOth'.$val->id;
-								$specimenOth = $request->$othStr;
-								$specimen->specimen_other = $specimenOth;
-							}
-							$dateStr = 'specimenDate'.$val->id;
-							$specimenDate = $request->$dateStr;
-							if (!empty($specimenDate)) {
-								$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
-							} else {
-								$specimen->specimen_date = NULL;
-							}
-							$specimen->ref_user_id = auth()->user()->id;
-							$specimen_saved = $specimen->save();
+						$code = new Code;
+						$code->title_name = $request->titleNameInput;
+						if (isset($request->otherTitleNameInput) && !empty($request->otherTitleNameInput)) {
+							$code->title_name_other = $request->otherTitleNameInput;
 						} else {
-							continue;
+							$code->title_name_other = NULL;
 						}
-					}
+						$code->first_name = $request->firstNameInput;
+						$code->last_name = $request->lastNameInput;
+						$code->hn = $request->hnInput;
+						$code->an = $request->anInput;
+						$code->hospital = $hospital;
+						$code->lab_code = parent::randPin();
+						$code->ref_user_id = auth()->user()->id;
+						$code->ref_user_hospcode = $hospcode;
+						$code->created_by = $created_by;
+						$saved = $code->save();
+						$last_patient_insert_id = $code->id;
 
-					/* validate saved */
-					if ($saved) {
-						$this->simpleQrcode($code->lab_code);
-						return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
-					} else {
-						return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
+						/* Clinical save method */
+						$clinical = new Clinical;
+						$clinical->ref_pt_id = $last_patient_insert_id;
+						$clinical->pt_type = $request->patientType;
+						$clinical->ref_user_id = auth()->user()->id;
+						$clinical_saved = $clinical->save();
+
+						/* specimen save method */
+						foreach ($specimen_data as $key=>$val) {
+							if ($request->has('specimen'.$val->id)) {
+								$specimen = new Specimen;
+								$specimen->ref_pt_id = $last_patient_insert_id;
+								$specimen->specimen_type_id = $request->specimen.$val->id;
+
+								if ($val->other_field == 'Yes') {
+									$othStr = 'specimenOth'.$val->id;
+									$specimenOth = $request->$othStr;
+									$specimen->specimen_other = $specimenOth;
+								}
+								$dateStr = 'specimenDate'.$val->id;
+								$specimenDate = $request->$dateStr;
+								if (!empty($specimenDate)) {
+									$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
+								} else {
+									$specimen->specimen_date = NULL;
+								}
+								$specimen->ref_user_id = auth()->user()->id;
+								$specimen_saved = $specimen->save();
+							} else {
+								continue;
+							}
+						}
+
+						/* validate saved */
+						if ($saved) {
+							$this->simpleQrcode($code->lab_code);
+							return response()->json(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว']);
+						} else {
+							return response()->json(['status'=>500, 'msg'=>'Internal Server Error!']);
+						}
 					}
 				}
 			}
+		} catch (Exception $e) {
+			Log::error($e->getMessage());
+			return response()->json(['status' => 500, 'msg' => $e->getMessage()]);
 		}
 	}
 
@@ -345,8 +261,47 @@ class CodeController extends BoeFrsController {
 		return $htm;
 	}
 
-	public function ajaxGetHospByProv(Request $request)
-	{
+
+		public function destroy($id) {
+			$code = Code::destroy($id);
+			if ($code) {
+				response()->json(['status'=>200, 'msg'=>'ลบข้อมูลสำเร็จแล้ว']);
+			} else {
+				response()->json(['status'=>503, 'msg'=>'Service Unavailable']);
+			}
+			return redirect()->route('code.index');
+		}
+
+		public function confirmDestroy(Request $request) {
+			$id = trim($request->val);
+			$code = Code::destroy($id);
+			if ($code) {
+				return response()->json(['status'=>'200', 'msg'=>'ลบข้อมูลสำเร็จแล้ว', 'title'=>'Deleted']);
+			} else {
+				return response()->json(['status'=>'500', 'msg'=>'Service Unavailable', 'title'=>'Alert']);
+			}
+		}
+
+		private function notFoundMessage() {
+			return [
+				'code' => 404,
+				'message' => 'Note not found',
+				'success' => false,
+			];
+		}
+
+		private function successfulMessage($code, $message, $status, $count, $payload) {
+			return [
+				'code' => $code,
+				'message' => $message,
+				'success' => $status,
+				'count' => $count,
+				'data' => $payload,
+			];
+		}
+
+
+	public function ajaxGetHospByProv(Request $request) {
 		$this->result = parent::hospitalByProv($request->prov_id);
 		$htm = "<option value=\"0\">-- โปรดเลือก --</option>\n";
 		foreach($this->result as $key=>$value) {

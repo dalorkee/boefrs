@@ -83,7 +83,7 @@ input[type=text], input[type=password] {
 								</ul>
 							</div>
 						@endif
-						<form method="POST" action="{{ route('register') }}" class="mt-4 mb-3">
+						<form method="POST" action="#" class="mt-4 mb-3">
 							<div class="row">
 								<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
 									<div class="form-group">

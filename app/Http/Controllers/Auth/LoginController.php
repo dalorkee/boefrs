@@ -36,12 +36,22 @@ class LoginController extends Controller
 	*
 	* @return void
 	*/
-	public function __construct()
-	{
+	public function __construct() {
 		$this->middleware('guest')->except('logout');
-		//$this->setProvList();
 	}
-
+/*
+	public function login(Request $request) {
+		$this->validate($request, [
+			'email' => 'required|max:255|email',
+			'password' => 'required|confirmed',
+		]);
+		if (Auth::attempt(['email' => $email, 'password' => $password])) {
+			return redirect()->intended('/home');
+		} else {
+			return redirect()->back();
+		}
+	}
+*/
 	public function logout(Request $request) {
 		Auth::logout();
 		Session::flush();

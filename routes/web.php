@@ -27,6 +27,9 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::resource('lab', 'LabController');
 });
 
+/* log */
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+
 /* Register */
 Route::get('/register', '\App\Http\Controllers\Auth\RegisterController@index')->name('register');
 Route::post('register', '\App\Http\Controllers\Auth\RegisterController@register')->name('register');
@@ -65,18 +68,21 @@ Route::get('/code/delete/{id}','CodeController@destroy')->name('codeSoftDelete')
 Route::post('province/district', 'PatientsController@districtFetch')->name('districtFetch');
 Route::post('province/district/sub-district', 'PatientsController@subDistrictFetch')->name('subDistrictFetch');
 
+
 /* patient */
 Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
 Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
-Route::get('/patient/edit/{id}', 'PatientsController@editPatient')->name('editPatient');
+Route::get('patient/edit/{id}', 'PatientsController@editPatient')->name('editPatient');
 Route::get('/patient/show/{id}', 'PatientsController@show')->name('viewPatient');
 
 /* list data */
-Route::post('data/list', 'ListDataController@listData')->name('list-data');
+Route::get('list', 'ListDataController@listToDatatable')->name('list');
+//Route::post('data/list', 'ListDataController@listData')->name('list-data');
 Route::post('data/search', 'ListDataController@ajaxListData')->name('ajaxSearchData');
 Route::post('data/patients', 'ListDataController@ajaxListDataAfterDeleted')->name('ajaxListDataAfterDel');
 
 /* lab data */
+Route::get('lab', 'LabController@listToDatatable')->name('lab');
 Route::get('/lab/create/{id}', 'LabController@create')->name('createLab');
 Route::get('/lab/show/{id}', 'LabController@show')->name('viewLab');
 Route::get('/lab/edit/{id}', 'LabController@edit')->name('editLab');

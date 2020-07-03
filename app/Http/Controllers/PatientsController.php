@@ -3,16 +3,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use App\Provinces;
+use App\District;
+use App\SubDistrict;
+use App\Occupation;
 use App\Patients;
 use App\Clinical;
 use App\Specimen;
 use App\Lab;
-use Session;
-use DB;
 use Redirect;
 
 class PatientsController extends BoeFrsController
@@ -25,13 +29,34 @@ class PatientsController extends BoeFrsController
 	}
 
 	public function create(Request $request) {
-		$nationality = parent::nationality();
-		$occupation = parent::occupation();
-		$symptoms = parent::symptoms();
-		$ref_specimen = parent::specimen()->keyBy('id');
 		$patient = parent::patientsById($request->id);
+		$nationality = parent::nationality()->keyBy('id');
+		$occupation = Occupation::all()->keyBy('id')->toArray();
+		$symptoms = parent::symptoms()->keyBy('id');
+		$ref_specimen = parent::specimen()->keyBy('id');
 		$user_hospital = parent::hospitalByCode(auth()->user()->hospcode);
-		$hospital = parent::hospitalByBoeFrsActive();
+		$hospital = parent::hospitalByBoeFrsActive()->keyBy('hospcode');
+		$refGender = parent::getRefData('gender');
+
+		$provinces = Provinces::all()->sortBy('province_name')->keyBy('province_id')->toArray();
+		/* district */
+		if (empty($patient[0]->district) || is_null($patient[0]->district) || $patient[0]->district == '0') {
+			$district = null;
+		} else {
+			$district = District::where('district_id', '=', $patient[0]->district)->get()->toArray();
+			if (count($district) <= 0) {
+				Log::warning('District field not match - uid:  '.auth()->user()->id.' - pid: '.$request->id);
+			}
+		}
+		/* sub district */
+		if (empty($patient[0]->sub_district) || is_null($patient[0]->sub_district) || $patient[0]->sub_district == '0') {
+			$sub_district = null;
+		} else {
+			$sub_district = SubDistrict::where('sub_district_id', '=', $patient[0]->sub_district)->get()->toArray();
+			if (count($sub_district) <= 0) {
+				Log::warning('Sub_district field not match - uid: '.auth()->user()->id.' - pid: '.$request->id);
+			}
+		}
 
 		/* get patient clinical */
 		$clinical_query = Clinical::where('ref_pt_id', '=', $request->id)->get()->toArray();
@@ -41,6 +66,16 @@ class PatientsController extends BoeFrsController
 			$clinical = null;
 		}
 
+		$data['date_of_birth'] = parent::convertMySQLDateFormat($patient[0]->date_of_birth) ?? null;
+		$data['date_sick'] = parent::convertMySQLDateFormat($clinical['date_sick']) ?? null;
+		$data['date_define'] = parent::convertMySQLDateFormat($clinical['date_define']) ?? null;
+		$data['date_admit'] = parent::convertMySQLDateFormat($clinical['date_admit']) ?? null;
+		$data['lung_date'] = parent::convertMySQLDateFormat($clinical['lung_date']) ?? null;
+		$data['cbc_date'] = parent::convertMySQLDateFormat($clinical['cbc_date']) ?? null;
+		$data['flu_vaccine_date'] = parent::convertMySQLDateFormat($clinical['flu_vaccine_date']) ?? null;
+		$data['antiviral_date'] = parent::convertMySQLDateFormat($clinical['antiviral_date']) ?? null;
+
+		$rapid_result = explode(',', $clinical['rapid_test_result']);
 		/* get patient specimen */
 		$specimen_query = Specimen::where('ref_pt_id', '=', $request->id)->whereNull('deleted_at')->get()->keyBy('specimen_type_id')->toArray();
 		if (count($specimen_query) > 0) {
@@ -48,10 +83,6 @@ class PatientsController extends BoeFrsController
 		} else {
 			$specimen = null;
 		}
-
-		//dd($ref_specimen);
-		//dd($specimen);
-		//echo $specimen[1]['id'];
 
 		$specimen_data = collect();
 		foreach ($ref_specimen as $key => $value) {
@@ -87,11 +118,10 @@ class PatientsController extends BoeFrsController
 			$specimen_data->put($key, $tmp);
 		}
 
-		//dd($specimen_data);
-
 		return view(
 			'patients.index', [
 				'titleName' => $this->title_name,
+				'refGender' => $refGender,
 				'nationality' => $nationality,
 				'occupation' => $occupation,
 				'symptoms' => $symptoms,
@@ -99,23 +129,25 @@ class PatientsController extends BoeFrsController
 				'hospital' => $hospital,
 				'patient' => $patient,
 				'clinical' => $clinical,
-				'specimen_data' => $specimen_data
+				'specimen_data' => $specimen_data,
+				'provinces' => $provinces,
+				'district' => $district,
+				'sub_district' => $sub_district,
+				'data' => $data,
+				'rapid_result' => $rapid_result
 			]
 		);
 	}
 
 
 	public function addPatient(Request $request) {
-		/* check repeat patient data */
-		$chk_patient = Patients::where('id', '=', $request->pid)
-			->where('hosp_status', '!=', 'new')
-			->whereNull('deleted_at')
-			->first();
-		if ($chk_patient) {
-			$chk_patient = $chk_patient->all();
-			$message = collect(['status'=>500, 'msg'=>'มีข้อมูลนี้อยู่ในระบบแล้ว โปรดตรวจสอบ!', 'title'=>'Error!']);
+		/* find patient by id */
+		$patient = Patients::find($request->pid);
+		if (is_null($patient)) {
+			$message = collect(['status'=>500, 'msg'=>'ไม่พบข้อมูลรหัสนี้ โปรดตรวจสอบ!', 'title'=>'Error!']);
 			return redirect()->route('list-data.index')->with('message', $message);
 		} else {
+
 			/* validation */
 			$this->validate($request, [
 				'titleNameInput' => 'required',
@@ -123,7 +155,6 @@ class PatientsController extends BoeFrsController
 				'lastNameInput' => 'required',
 				'hnInput' => 'required',
 				'sexInput' => 'required',
-				//'birthDayInput' => 'required',
 				'hospitalInput' => 'required',
 				'provinceInput' => 'required',
 				'districtInput' => 'required',
@@ -138,7 +169,6 @@ class PatientsController extends BoeFrsController
 				'lastNameInput.required' => 'Lastname field is required',
 				'hnInput.required' => 'HN field is required',
 				'sexInput.required' => 'Gender field is required.',
-				//'birthDayInput.required' => 'Birth date field is required.',
 				'hospitalInput.required' => 'Hospital field is required',
 				'provinceInput.required' => 'Province field is required',
 				'districtInput.required' => 'District field is required',
@@ -147,9 +177,6 @@ class PatientsController extends BoeFrsController
 				'sickDateInput.required' => 'Sick date field is required',
 				'treatDateInput.required' => 'Date define field is required'
 			]);
-
-			/* find patient by id */
-			$patient = Patients::find($request->pid);
 
 			/* General section */
 			if ($request->titleNameInput == -6) {
@@ -199,7 +226,6 @@ class PatientsController extends BoeFrsController
 				$clinical = new Clinical;
 
 			}
-			//$clinical->ref_pt_id = $request->pid;
 			$clinical->pt_type = $request->patientType;
 			$clinical->date_sick = parent::convertDateToMySQL($request->sickDateInput);
 			$clinical->date_define = parent::convertDateToMySQL($request->treatDateInput);
@@ -247,6 +273,8 @@ class PatientsController extends BoeFrsController
 			$clinical->rapid_test_name = $request->influRapidtestName;
 			if ($request->has('rapidTestResultInput') && count($request->rapidTestResultInput) > 0) {
 				$clinical->rapid_test_result = parent::arrToStr($request->rapidTestResultInput);
+			} else {
+				$clinical->rapid_test_result = null;
 			}
 			$clinical->flu_vaccine = $request->influVaccineInput;
 			$clinical->flu_vaccine_date = parent::convertDateToMySQL($request->influVaccineDateInput);
@@ -349,58 +377,33 @@ class PatientsController extends BoeFrsController
 						continue;
 					}
 				}
-				/*
-				foreach ($specimen_data as $key=>$val) {
-					if ($request->has('specimen'.$val->id)) {
-						$specimen = new Specimen;
-						$specimen->ref_pt_id = $request->pid;
-						$specimen->specimen_type_id = $request->specimen.$val->id;
-
-						if ($val->other_field == 'Yes') {
-							$othStr = 'specimenOth'.$val->id;
-							$specimenOth = $request->$othStr;
-							$specimen->specimen_other = $specimenOth;
-						}
-
-						$dateStr = 'specimenDate'.$val->id;
-						$specimenDate = $request->$dateStr;
-						if (!empty($specimenDate)) {
-							$specimen->specimen_date = parent::convertDateToMySQL($specimenDate);
-						} else {
-							$specimen->specimen_date = NULL;
-						}
-
-						$specimen->ref_user_id = $request->userIdInput;
-						$specimen_saved = $specimen->save();
-					} else {
-						continue;
-					}
-				}
-				*/
 				/* save method */
 				DB::beginTransaction();
 				try {
 					$patient_saved = $this->storePatient($patient);
 					$clinical_saved = $clinical->save();
-
 					DB::commit();
 					if ($patient_saved == true && $clinical_saved == true) {
-						$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site']);
+						//$message = collect(['status'=>200, 'msg'=>'บันทึกข้อมูลสำเร็จแล้ว', 'title'=>'Flu Right Site']);
+						Log::notice('Added or Updated data successfully - uid:  '.auth()->user()->id.' - pid: '.$request->pid);
+						return redirect()->back()->with('success', 'บันทึกข้อมูลสำเร็จแล้ว');
 					} else {
 						DB::rollback();
-						$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
+						//$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
+						Log::error('Added or Updated Error - uid:  '.auth()->user()->id.' - pid: '.$request->pid);
+						return redirect()->back()->with('error', 'ไม่สามารถบันทึกข้อมูลได้ โปรดตรวจสอบอีกครั้ง');
 					}
 				} catch (Exception $e) {
 					DB::rollback();
-					$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
+					//$message = collect(['status'=>500, 'msg'=>'Internal Server Error! Something Went Wrong!', 'title'=>'Flu Right Site']);
+					Log::error('Error - uid:  '.auth()->user()->id.' - pid: '.$request->pid.' Message:'.$e->getMessage());
+					return redirect()->back()->with('error', 'ไม่สามารถบันทึกข้อมูลได้ โปรดตรวจสอบอีกครั้ง');
 				}
-				return redirect()->route('list-data.index')->with('message', $message);
+				//return redirect()->route('list')->with('message', $message);
 			}
 		}
 
 	}
-
-
 
 	public function show($id)
 	{

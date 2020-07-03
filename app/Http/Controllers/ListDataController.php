@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Patients;
 use Session;
+use App\DataTables\PatientsDataTable;
 
 class ListDataController extends BoeFrsController
 {
@@ -17,22 +18,29 @@ class ListDataController extends BoeFrsController
 		$this->middleware(['role:admin|hospital|lab']);
 		$this->middleware('page_session');
 	}
-	/**
-	* Display a listing of the resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
+
+	public function listToDatatable(PatientsDataTable $dataTable) {
+		return $dataTable->render('list-data.list');
+	}
+
+
 	public function index() {
 		$roleArr = auth()->user()->getRoleNames();
-		if ($roleArr[0] == 'admin') {
-			$patients = Patients::whereNull('deleted_at')->get();
-		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-			$hospcode = auth()->user()->hospcode;
-			$patients = Patients::where('ref_user_hospcode', '=', $hospcode)
-				->whereNull('deleted_at')
-				->get();
-		} else {
-			return redirect()->route('logout');
+		switch ($roleArr[0]) {
+			case 'admin':
+				$patients = Patients::whereNull('deleted_at')->get();
+				break;
+			case 'hospital':
+				$hospcode = auth()->user()->hospcode;
+				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->toSql();
+				break;
+			case 'lab':
+				$hospcode = auth()->user()->hospcode;
+				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
+				break;
+			default:
+				return redirect()->route('logout');
+				break;
 		}
 		return view(
 			'list-data.index',
@@ -42,70 +50,6 @@ class ListDataController extends BoeFrsController
 				'userRole' => $roleArr[0]
 			]
 		);
-	}
-
-	public function renderDatatable() {
-
-	}
-
-	/**
-	* Show the form for creating a new resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-	public function create() {
-		//
-	}
-
-	/**
-	* Store a newly created resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @return \Illuminate\Http\Response
-	*/
-	public function store(Request $request) {
-		//
-	}
-
-	/**
-	* Display the specified resource.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function show($id) {
-		return '<p>ok ja</p>';
-	}
-
-	/**
-	* Show the form for editing the specified resource.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function edit($id) {
-		//
-	}
-
-	/**
-	* Update the specified resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function update(Request $request, $id) {
-		//
-	}
-
-	/**
-	* Remove the specified resource from storage.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function destroy($id) {
-		//
 	}
 
 	public function ajaxListData(Request $request) {

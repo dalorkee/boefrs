@@ -16,22 +16,38 @@ input:read-only {
 .table1 {
 	width: 100%;
 	max-width: 100%;
-	margin: 16px 5px;
+	margin: 0;
+	padding: 0;
+	border: none;
 }
 .table1 thead tr th {
 	border-top: none;
 	border-right: none;
 	border-left: none;
 	font-weight: bold;
-	border-bottom: 1px solid #ccc;
+	/* border-bottom: 1px solid #ccc; */
 }
 .table1>tbody>tr>td {
-	padding: 2px 4px;
+	width: 100%;
+	margin: 0 !important;
+	padding: 0 !important;
 	vertical-align: middle;
 	border-top: none;
 	border-right: none;
 	border-left: none;
-	border-bottom: 1px solid #eee;
+	/* border-bottom: 1px solid #eee; */
+}
+.tb-callout {
+	padding: 4px !important;
+	margin: 0;
+	border: 1px solid #eee;
+	border-left-width: .25rem;
+	border-radius: .25rem;
+	display: inline-block;
+	background: #F9FAFB;
+}
+.tb-callout-1 {
+	border-left-color: #FF2E96;
 }
 </style>
 @endsection
@@ -455,6 +471,24 @@ input:read-only {
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
 											<label for="specimenInput" style="display:none;">ชนิดของตัวอย่างที่ส่งตรวจ</label>
+											<div>
+												<table class="table1">
+													<thead>
+														<tr>
+															<th>ok na ja</th>
+														</tr>
+													</thead>
+													<tfoot></tfoot>
+													<tbody>
+														<tr>
+															<td><span class="tb-callout tb-callout-1">test ja</span></td>
+															<td><span class="tb-callout tb-callout-1">test ja</span></td>
+															<td><span class="tb-callout tb-callout-1">test ja</span></td>
+															<td><span class="tb-callout tb-callout-1">test ja</span></td>
+														<tr>
+													</tbody>
+												</table>
+											</div>
 											<div class="table-responsive">
 												<table class="table" data-show-columns="true" data-search="true" data-mobile-responsive="true" data-check-on-init="true" id="specimen_table">
 													<thead class="bg-custom-2 text-light">
@@ -562,7 +596,7 @@ input:read-only {
 						</div><!-- card -->
 						<div class="border-top">
 							<div class="card-body">
-								<a href="{{ route('list-data.index') }}" type="button" class="btn btn-primary">ปิดหน้านี้</a>
+								<button class="btn btn-primary" onclick="window.open('', '_self', ''); window.close();">ปิดหน้านี้</button>
 							</div>
 						</div>
 					</form>
@@ -582,128 +616,11 @@ input:read-only {
 <script src="{{ URL::asset('assets/libs/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile.min.js') }}"></script>
 <script>
 $(document).ready(function() {
-	/* ajax request */
-	$.ajaxSetup({
-		headers: {
-			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		}
-	});
+	$.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')} });
 
-	$(function() {
-		$('#specimen_table').bootstrapTable()
-	})
-
-	/* title name */
-	$('#title_name_input').change(function() {
-		if ($('select#title_name_input').val() === '6') {
-			$('#other_title_name_input').prop('disabled', false);
-		} else {
-			$('#other_title_name_input').val('');
-			$('#other_title_name_input').prop('disabled', true);
-		}
-	});
-
-	/* select province */
-	$('#select_province').change(function() {
-		var prov_id = $('#select_province').val();
-		if (prov_id > 0) {
-			$('#select_hospital').prop('disabled', false);
-			$.ajax({
-				type: "GET",
-				url: "{{ route('ajaxGetHospByProv') }}",
-				dataType: 'HTML',
-				data: {prov_id: prov_id},
-				success: function(data) {
-					$('#select_hospital').empty();
-					$('#select_hospital').html(data);
-					$('#select_hospital').selectpicker("refresh");
-				},
-				error: function(xhr, status, error) {
-					alertMessage(xhr.status, error, 'Flu Right Size');
-				}
-			});
-		} else {
-			$('#select_hospital').empty();
-			$('#select_hospital').append('<option val="0">-- เลือกโรงพยาบาล --</option>');
-			$('#select_hospital').prop('disabled', true);
-			$('#select_hospital').selectpicker("refresh");
-		}
-	});
-
-	/* Other symptom textbox */
-	$('#other_sym_chk').click(function() {
-		$('#other_sym_chk').not(this).prop('checked', false);
-		if ($('#other_sym_chk').prop('checked') == true) {
-			$('#other_sym_text').prop('disabled', false);
-		} else {
-			$('#other_sym_text').val('');
-			$('#other_sym_text').prop('disabled', true);
-		}
-	});
-
-	@php
-	/* specimen tbl hilight on load */
-	foreach ($data['patient_specimen'] as $key => $val) {
-		echo "
-		var n = $('.specimen-chk-".$val['rs_id']."').filter(':checked').length;
-		if (n === 1) {
-			var hasClass = $('#specimen_tr".$val['rs_id']."').hasClass('highlight');
-			if (!hasClass) {
-				$('#specimen_tr".$val['rs_id']."').addClass('highlight');
-			}
-		}\n";
-	}
-	/* specimen hilight switch*/
-	/*$htm = "";
-	foreach ($data['patient_specimen'] as $key => $val) {
-		$htm .= "
-		$('.specimen-chk-".$val['rs_id']."').click(function() {
-			$('.specimen-chk-".$val['rs_id']."').not(this).prop('checked', false);
-			let number = $('.specimen-chk-".$val['rs_id']."').filter(':checked').length;
-			if (number == 1) {
-				let hasClass =  $('#specimen_tr".$val['rs_id']."').hasClass('highlight');
-				if (!hasClass) {
-					$('#specimen_tr".$val['rs_id']."').addClass('highlight');
-				}
-			} else {
-				$('#specimen_tr".$val['rs_id']."').removeClass('highlight');
-			}\n";
-			if ($val['rs_other_field'] == 'Yes') {
-				$htm .= "
-				if ($('#specimen_chk".$val['rs_id']."').prop('checked') == true) {
-					$('#specimen_".$val['rs_id']."oth').prop('disabled', false);
-					$('#specimenDate_".$val['rs_id']."').prop('disabled', false);
-				} else {
-					$('#specimen_".$val['rs_id']."oth').val('');
-					$('#specimen_".$val['rs_id']."oth').prop('disabled', true);
-					$('#specimenDate_".$val['rs_id']."').val('');
-					$('#specimenDate_".$val['rs_id']."').prop('disabled', true);
-				}\n";
-			} else {
-				$htm .= "
-				if ($('#specimen_chk".$val['rs_id']."').prop('checked') == true) {
-					$('#specimenDate_".$val['rs_id']."').prop('disabled', false);
-				} else {
-					$('#specimenDate_".$val['rs_id']."').val('');
-					$('#specimenDate_".$val['rs_id']."').prop('disabled', true);
-				}\n";
-			}
-		$htm .= "});\n";
-	}
-	echo $htm;
-	/
-	/* specimen date picker */
-	/*
-	foreach ($data['patient_specimen'] as $key => $val) {
-		echo "
-		$('#specimenDate".$val['rs_id']."').datepicker({
-			format: 'dd/mm/yyyy',
-			todayHighlight: true,
-			todayBtn: true,
-			autoclose: true
-		});\n";
-	}*/
-	@endphp
+	//$(function() {
+		$('#specimen_table').bootstrapTable();
+	//})
 });
 </script>
 @endsection

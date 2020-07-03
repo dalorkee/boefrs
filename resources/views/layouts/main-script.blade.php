@@ -1,8 +1,6 @@
-<!-- ============================================================== -->
-<!-- All Jquery -->
-<!-- ============================================================== -->
+
 <script src="{{ URL::asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
-<!-- Bootstrap tether Core JavaScript -->
+<!-- Bootstrap Core JavaScript -->
 <script src="{{ URL::asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>

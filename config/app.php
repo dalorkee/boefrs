@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'th',
 
     /*
     |--------------------------------------------------------------------------
@@ -184,6 +184,17 @@ return [
 		/* simple-qrcode */
 		SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
+		/* Yajra Datatable */
+		Yajra\DataTables\DataTablesServiceProvider::class,
+		Yajra\DataTables\FractalServiceProvider::class,
+		Yajra\DataTables\ButtonsServiceProvider::class,
+
+		/* Maatwebsite Excel */
+		Maatwebsite\Excel\ExcelServiceProvider::class,
+
+		/* Log viewer */
+		Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+
     ],
 
     /*
@@ -236,6 +247,10 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 		'Captcha' => Mews\Captcha\Facades\Captcha::class,
 		'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+		'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+		'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+		'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+		'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
 
     ],
 

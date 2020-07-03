@@ -255,7 +255,7 @@ class BoeFrsController extends Controller implements BoeFrs
 		}
 		return $string;
 	}
-	protected function convertMySQLDateFormat($date='00-00-0000', $seperator="/") {
+	protected function convertMySQLDateFormat($date='0000-00-00', $seperator="/") {
 		if (!is_null($date) || !empty($date)) {
 			$ep = explode("-", $date);
 			$string = $ep[2].$seperator.$ep[1].$seperator.$ep[0];
@@ -287,5 +287,25 @@ class BoeFrsController extends Controller implements BoeFrs
 			}
 		}
 		return $str;
+	}
+
+	protected function refData() {
+		$ref = collect([
+			'gender' => [
+				'male' => 'ชาย',
+				'female' => 'หญิง'
+			]
+		]);
+		return $ref;
+	}
+
+	protected function getRefData($key=null) {
+		$ref = self::refData();
+		if (!is_null($key)) {
+			$data = $ref->get($key);
+			return $data;
+		} else {
+			return $ref;
+		}
 	}
 }
