@@ -253,6 +253,7 @@ return [
 		'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
 		'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 		'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
+		'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];
