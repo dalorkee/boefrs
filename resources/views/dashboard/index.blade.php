@@ -11,7 +11,7 @@
 	{{ Html::script('dist/js/pages/chart/chart-page-init.js') }}
 	{{ Html::script('assets/extra-libs/chart.js/Chart.min.js') }}
 	{{ Html::script('assets/extra-libs/chart.js/utils.js') }}
-	<script src="https://bot.ddc.moph.go.th/ddc-chatbot/js/canvasjs.min.js"></script>
+	<script src="http://bot.ddc.moph.go.th/ddc-chatbot/js/canvasjs.min.js"></script>
 @endsection
 @section('contents')
 <div class="page-breadcrumb">
