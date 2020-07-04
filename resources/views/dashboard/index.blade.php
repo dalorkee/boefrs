@@ -1,5 +1,6 @@
 @extends('layouts.index')
 @section('top-script')
+	<script src="{{ URL::asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
 <!-- Charts js Files -->
 	{{ Html::script('assets/libs/flot/excanvas.js') }}
 	{{ Html::script('assets/libs/flot/jquery.flot.js') }}
@@ -120,13 +121,7 @@
 @endsection
 @section('bottom-script')
 <script>
-
-
-
-</script>
-<script>
 window.onload = function() {
-
 	/* donough chart pat */
 	var chart = new CanvasJS.Chart("chartContainer", {
 		theme: "light2",
