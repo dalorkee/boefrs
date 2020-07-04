@@ -75,7 +75,7 @@ body{
 <table style="width: 675px;">
 <tbody>
 <tr>
-<td style="width: 253px;" valig="top"><img src="{{ asset('assets/images/dmsLOGO1.png') }}" width="220px" height="140px"></td>
+<td style="width: 253px;" valig="top"><img src="https://brandongaille.com/wp-content/uploads/2013/07/Dell-Company-Logo.jpg" width="220px" height="140px"></td>
 <td style="width: 272px;">&nbsp;</td>
 <td style="width: 149px;" align="right">&nbsp;ลำดับที่ 63-01119</td>
 </tr>
