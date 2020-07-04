@@ -75,7 +75,7 @@ body{
 <table style="width: 675px;">
 <tbody>
 <tr>
-<td style="width: 253px;" valig="top"><img src="{{ url('assets/images/dmsLOGO1.png') }}" width="220px" height="140px"></td>
+<td style="width: 253px;" valig="top"><img src="{{ url('assets/images/dmslogo.png') }}" width="220px" height="140px"></td>
 <td style="width: 272px;">&nbsp;</td>
 <td style="width: 149px;" align="right">&nbsp;ลำดับที่ 63-01119</td>
 </tr>
