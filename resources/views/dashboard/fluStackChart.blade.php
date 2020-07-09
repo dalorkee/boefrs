@@ -1,14 +1,16 @@
 @section('internal-style')
 <style>
 canvas {
+
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+
 }
 </style>
 @endsection
 <div style="width: 90%">
-	<canvas id="canvas1"></canvas>
+	<canvas id="canvas_chart_5l"></canvas>
 </div>
 @section('bottom-script')
 	<script>
@@ -359,7 +361,7 @@ canvas {
 			}]
 		};
 		window.onload = function() {
-			var ctx = document.getElementById('canvas1').getContext('2d');
+			var ctx = document.getElementById('canvas_chart_5l').getContext('2d');
 			window.myBar = new Chart(ctx, {
 				type: 'bar',
 				data: barChartData,
@@ -408,7 +410,7 @@ canvas {
 				}
 			});
 		};
-
+/*
 		document.getElementById('randomizeData').addEventListener('click', function() {
 			barChartData.datasets.forEach(function(dataset) {
 				dataset.data = dataset.data.map(function() {
@@ -417,5 +419,6 @@ canvas {
 			});
 			window.myBar.update();
 		});
+		*/
 	</script>
 @endsection

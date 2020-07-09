@@ -183,8 +183,9 @@ return [
 
 		/* simple-qrcode */
 		SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-    /* DomPDF */
-    Barryvdh\DomPDF\ServiceProvider::class,
+		/* DomPDF */
+		Barryvdh\DomPDF\ServiceProvider::class,
+		Barryvdh\Snappy\ServiceProvider::class,
 
 		/* Yajra Datatable */
 		Yajra\DataTables\DataTablesServiceProvider::class,
@@ -253,7 +254,8 @@ return [
 		'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
 		'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 		'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
-		'PDF' => Barryvdh\DomPDF\Facade::class,
+		'PDFD' => Barryvdh\DomPDF\Facade::class,
+		'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
     ],
 
 ];

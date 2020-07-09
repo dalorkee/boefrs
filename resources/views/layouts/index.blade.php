@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html dir="ltr" lang="th">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<!-- Tell the browser to be responsive to screen width -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Flu Right Size">
 	<meta name="author" content="Talek team">
-	<!-- Favicon icon -->
 	<link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('assets/images/favicon.png') }}">
 	<title>BOE - Flu Right Size</title>
 	@yield('custom-style')
 	@include('layouts.main-style')
+	@include('layouts.main-top-script')
 	@yield('top-script')
 	@yield('internal-style')
 	@yield('meta-token')

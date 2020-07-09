@@ -27,6 +27,9 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::resource('lab', 'LabController');
 });
 
+/* dashboard */
+Route::get('/dashboard/prov/{id}', 'DashboardController@provinceDashboard')->name('prov');
+
 /* log */
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 

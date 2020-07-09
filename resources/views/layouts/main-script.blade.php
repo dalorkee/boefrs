@@ -1,5 +1,5 @@
 
-<script src="{{ URL::asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+<!-- <script src=" URL::asset('assets/libs/jquery/dist/jquery.min.js') "></script> -->
 <!-- Bootstrap Core JavaScript -->
 <script src="{{ URL::asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>

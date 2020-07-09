@@ -77,21 +77,17 @@ class PatientsDataTable extends DataTable
 			->setTableId('patients-table')
 			->columns($this->getColumns())
 			->minifiedAjax()
-			->dom('frtip')
+			->dom('Bfrtip')
 			->orderBy(0)
 			->responsive(true)
-			->parameters(
-				[ 'language'=>[
-						'url' => url('/assets/libs/datatables-1.10.20/i18n/thai.json')
-					]
-				]
-			)
+			->parameters([
+				'language'=>['url' => url('/assets/libs/datatables-1.10.20/i18n/thai.json')],
+				'buttons' => ['excel'],
+			])
 			->lengthMenu([20])
 			->buttons(
-				Button::make('create'),
-				Button::make('export'),
+				//Button::make('export'),
 				Button::make('print'),
-				Button::make('reset'),
 				Button::make('reload')
 			);
 	}
