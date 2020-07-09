@@ -12,7 +12,7 @@
 	{{ Html::script('dist/js/pages/chart/chart-page-init.js') }}
 	{{ Html::script('assets/extra-libs/chart.js/Chart.min.js') }}
 	{{ Html::script('assets/extra-libs/chart.js/utils.js') }}
-	<script src="http://bot.ddc.moph.go.th/ddc-chatbot/js/canvasjs.min.js"></script>
+	{{ Html::script('assets/libs/canvas-js/canvasjs.min.js') }}
 @endsection
 @section('contents')
 <div class="page-breadcrumb">
@@ -130,11 +130,12 @@ window.onload = function() {
 			text: ""
 		},
 		data: [{
-			type: "doughnut",
-			indexLabel: "{symbol} - {y}",
+			type: "pie",
+			indexLabel: "{symbol} - {y}%",
 			//yValueFormatString: "#,##0.0\"%\"",
 			showInLegend: true,
-			legendText: "{label} : {y}",
+			legendText: "{label} : {y}%",
+			toolTipContent: "{y}%",
 			dataPoints: <?php echo json_encode($donut_charts_arr, JSON_NUMERIC_CHECK); ?>
 		}]
 	});

@@ -62,36 +62,14 @@ use Cache;
             $year = $bc_year['0'];
           return $year.'-'.$month.'-'.$day;
         }
-        public static function Status_Icon_ListDetect($status){
-
-            if($status=='0'){
-              $html = '<span class="label label-warning">Pending</span>';
-            }elseif($status=='1'){
-              $html = '<span class="label label-danger">Outbreak</span>';
-            }elseif($status=='2'){
-              $html = '<span class="badge bg-success">Normal</span>';
-            }else{
-              $html = '<span class="badge bg-info">N/A</span>';
-            }
-
-            echo $html;
-        }
 
 
-        public static function List_Amphur(){
-          //$datas = DB::table('c_tumbol')->select('tum_code','tum_name')->get();
+        public static function Cal_percent($sum_val,$sum_total){
+          if(empty($sum_val) || empty($sum_total)) return NULL;
 
-          $datas = Cache::rememberForever('c_tumbol', function()
-          {
-              return DB::table('c_tumbol')->select('tum_code','tum_name')->get();
-          });
+          $percent = ($sum_val*100)/$sum_total;
 
-          //dd($datas);
-
-          foreach($datas as $data){
-            $arr[$data->tum_code] = $data->tum_name;
-          }
-          return $arr;
+          return number_format($percent,2);
         }
 
 }

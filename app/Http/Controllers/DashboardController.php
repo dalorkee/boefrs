@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Permission;
 use App\RapidGraph;
 use App\MonthGraph;
 use DB;
+use App\HelperClass\Helper as CmsHelper;
 
 class DashboardController extends Controller
 {
@@ -87,10 +88,26 @@ class DashboardController extends Controller
 
 		}
 		$case_all = $case_gen_code+$case_hos_send+$case_lab_confirm;
+		// $donut_charts_arr = array(
+		// 	array("label" => "Male" ,"symbol" => "M","y" =>$case_male),
+		// 	array("label" => "Female" ,"symbol" => "F","y" =>$case_female)
+		// );
+
+		//Percent Male/Female
+		$t_male = DB::table('z_rp_sex')->where('year_result','2020')->sum('male');
+		$t_female = DB::table('z_rp_sex')->where('year_result','2020')->sum('female');
+		$t_total = DB::table('z_rp_sex')->where('year_result','2020')->sum('totals');
+		//dd($t_male,$t_female,$t_total);
+		$percent_male = CmsHelper::Cal_percent($t_male,$t_total);
+		$percent_female = CmsHelper::Cal_percent($t_female,$t_total);
+		//dd($percent_male,$percent_female);
 		$donut_charts_arr = array(
-			array("label" => "Male" ,"symbol" => "M","y" =>$case_male),
-			array("label" => "Female" ,"symbol" => "F","y" =>$case_female)
+			array("label" => "Male" ,"symbol" => "Male","y" =>$percent_male),
+			array("label" => "Female" ,"symbol" => "Female","y" =>$percent_female)
 		);
+		//dd($donut_charts_arr);
+
+
 		return view('dashboard.index',
 				compact(
 					'case_gen_code',
