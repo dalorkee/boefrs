@@ -91,4 +91,4 @@ Route::get('/lab/show/{id}', 'LabController@show')->name('viewLab');
 Route::get('/lab/edit/{id}', 'LabController@edit')->name('editLab');
 Route::post('lab-store', 'LabController@store')->name('lab-store');
 /* PDF Generate */
-Route::get('/example/pdf', 'LabPDFController@pdf_index');
+Route::get('/report/labresult/{id}', 'LabPDFController@LabresultPDF')->name('viewprintpdfforlab');

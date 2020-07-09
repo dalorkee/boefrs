@@ -10,18 +10,19 @@
 </style>
 @endsection
 @section('top-script')
-	<script src="http://bot.ddc.moph.go.th/ddc-chatbot/js/canvasjs.min.js"></script>
-	<!-- Charts js Files -->
-	<script src="{{ URL::asset('assets/libs/flot/excanvas.js') }}"></script>
-	<script src="{{ URL::asset('assets/libs/flot/jquery.flot.js') }}"></script>
-	<script src="{{ URL::asset('assets/libs/flot/jquery.flot.pie.js') }}"></script>
-	<script src="{{ URL::asset('assets/libs/flot/jquery.flot.time.js') }}"></script>
-	<script src="{{ URL::asset('assets/libs/flot/jquery.flot.stack.js') }}"></script>
-	<script src="{{ URL::asset('assets/libs/flot/jquery.flot.crosshair.js') }}"></script>
-	<script src="{{ URL::asset('assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js') }}"></script>
-	<script src="{{ URL::asset('dist/js/pages/chart/chart-page-init.js') }}"></script>
-	<script src="{{ URL::asset('assets/extra-libs/chart.js/Chart.min.js') }}"></script>
-	<script src="{{ URL::asset('assets/extra-libs/chart.js/utils.js') }}"></script>
+	<script src="{{ URL::asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+<!-- Charts js Files -->
+	{{ Html::script('assets/libs/flot/excanvas.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.pie.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.time.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.stack.js') }}
+	{{ Html::script('assets/libs/flot/jquery.flot.crosshair.js') }}
+	{{ Html::script('assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js') }}
+	{{ Html::script('dist/js/pages/chart/chart-page-init.js') }}
+	{{ Html::script('assets/extra-libs/chart.js/Chart.min.js') }}
+	{{ Html::script('assets/extra-libs/chart.js/utils.js') }}
+	{{ Html::script('assets/libs/canvas-js/canvasjs.min.js') }}
 @endsection
 @section('contents')
 <div class="page-breadcrumb bg-light pb-2">
@@ -169,13 +170,12 @@ window.onload = function() {
 			text: ""
 		},
 		data: [{
-			type: "doughnut",
-			//indexLabel: "{symbol} - {y}",
-			indexLabel: "{label} - #percent%",
+			type: "pie",
+			indexLabel: "{symbol} - {y}%",
 			//yValueFormatString: "#,##0.0\"%\"",
 			showInLegend: true,
-			legendText: "{label} : {y} (#percent%)",
-			toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+			legendText: "{label} : {y}%",
+			toolTipContent: "{y}%",
 			dataPoints: <?php echo json_encode($donut_charts_arr, JSON_NUMERIC_CHECK); ?>
 		}]
 	});

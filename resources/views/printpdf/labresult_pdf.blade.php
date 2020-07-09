@@ -1,49 +1,40 @@
 <?php
-function DateThai($strDate)
-{
-  $strYear = date("Y",strtotime($strDate))+543;
-  $strMonth= date("n",strtotime($strDate));
-  $strDay= date("j",strtotime($strDate));
-  $strHour= date("H",strtotime($strDate));
-  $strMinute= date("i",strtotime($strDate));
-  $strSeconds= date("s",strtotime($strDate));
-  $strMonthCut = Array("","ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค.");
-  $strMonthThai=$strMonthCut[$strMonth];
-  return "$strDay $strMonthThai $strYear";
-}
+use App\HelperClass\Helper as CmsHelper;
+$current_date = CmsHelper::DateThai(date('Y-m-d'));
+$th_year = date('y')+43;
 
-$current_date = DateThai(date('Y-m-d'));
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>LABResult-</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>LABResult-{{ $data->lab_id }}</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 @font-face{
  font-family:  'THSarabunNew';
  font-style: normal;
  font-weight: normal;
- src: url("{{ asset('fonts/THSarabunNew.ttf') }}") format('truetype');
+ src: url("{{ public_path('fonts/THSarabunNew.ttf') }}") format('truetype');
 }
 @font-face{
  font-family:  'THSarabunNew';
  font-style: normal;
  font-weight: bold;
- src: url("{{ asset('fonts/THSarabunNew Bold.ttf') }}") format('truetype');
+ src: url("{{ public_path('fonts/THSarabunNew Bold.ttf') }}") format('truetype');
 }
 @font-face{
  font-family:  'THSarabunNew';
  font-style: italic;
  font-weight: normal;
- src: url("{{ asset('fonts/THSarabunNew Italic.ttf') }}") format('truetype');
+ src: url("{{ public_path('fonts/THSarabunNew Italic.ttf') }}") format('truetype');
 }
 @font-face{
  font-family:  'THSarabunNew';
  font-style: italic;
  font-weight: bold;
- src: url("{{ asset('fonts/THSarabunNew BoldItalic.ttf') }}") format('truetype');
+ src: url("{{ public_path('fonts/THSarabunNew BoldItalic.ttf') }}") format('truetype');
 }
 body{
  font-family: "THSarabunNew";
@@ -72,12 +63,12 @@ body{
 <tbody>
 <tr>
 <td style="width: 100%; ">
-<table style="width: 675px;">
+<table style="width: 100%;">
 <tbody>
 <tr>
-<td style="width: 253px;" valig="top"><img src="{{ asset('images/dmsLOGO1.png') }}" width="220px" height="140px"></td>
+<td style="width: 253px;" valig="top"><img src="{{ public_path('assets/images/dmslogo.png') }}" width="220px" height="140px"></td>
 <td style="width: 272px;">&nbsp;</td>
-<td style="width: 149px;" align="right">&nbsp;ลำดับที่ 63-01119</td>
+<td style="width: 149px;" align="right">&nbsp;ลำดับที่ <?php echo $th_year."-".str_pad($data->lab_id, 5, '0', STR_PAD_LEFT); ?></td>
 </tr>
 </tbody>
 </table>
@@ -90,30 +81,30 @@ body{
 <tr>
 <td style="width: 100%;">
   <hr size=3 noshadow>
-<table style="width: 677px;">
+<table style="width: 100%;">
 <tbody>
 <tr style="height: 23px;">
-<td style="width: 262px; height: 23px;">เลขที่ใบกำกับ:</td>
+<td style="width: 262px; height: 23px;">เลขที่ใบกำกับ: {{ str_pad($data->lab_id, 5, '0', STR_PAD_LEFT) }}</td>
 <td style="width: 414px; height: 23px;">&nbsp;</td>
 </tr>
 <tr style="height: 23px;">
-<td style="width: 262px; height: 23px;">วันที่รับตัวอย่าง:</td>
+<td style="width: 262px; height: 23px;">วันที่รับตัวอย่าง: {{ CmsHelper::DateThai($data->receive_date) }}</td>
+<td style="width: 414px; height: 23px;">วันที่รายงานผล: {{ CmsHelper::DateThai($data->lab_result_date) }}</td>
+</tr>
+<tr style="height: 23px;">
+<td style="width: 262px; height: 23px;">ผู้ส่งตรวจ: @if($data->hosp_name){{ $data->hosp_name }}@else-@endif</td>
 <td style="width: 414px; height: 23px;">&nbsp;</td>
 </tr>
 <tr style="height: 23px;">
-<td style="width: 262px; height: 23px;">ผู้ตรวจ:</td>
+<td style="width: 262px; height: 23px;">วัตถุประสงค์: ตรวจหาสารพันธุกรรมไวรัสไข้หวัดใหญ่</td>
 <td style="width: 414px; height: 23px;">&nbsp;</td>
 </tr>
 <tr style="height: 23px;">
-<td style="width: 262px; height: 23px;">วัตถุประสงค์:</td>
+<td style="width: 262px; height: 23px;">ชื่อรายการทดสอบ: การตรวจหาสารพันธุกรรมไวรัสไข้หวัดใหญ่ ด้วยเทคนิค Real time RT-PCR</td>
 <td style="width: 414px; height: 23px;">&nbsp;</td>
 </tr>
 <tr style="height: 23px;">
-<td style="width: 262px; height: 23px;">ชื่อรายการทดสอบ:</td>
-<td style="width: 414px; height: 23px;">&nbsp;</td>
-</tr>
-<tr style="height: 23px;">
-<td style="width: 262px; height: 23px;">วิธีการทดสอบ:</td>
+<td style="width: 262px; height: 23px;">วิธีการทดสอบ: Real time RT-PCR</td>
 <td style="width: 414px; height: 23px;">&nbsp;</td>
 </tr>
 <tr style="height: 23px;">
@@ -131,12 +122,12 @@ body{
 <tr >
 <td style="width: 149px; ">&nbsp;หมายเลขวิเคราะห์</td>
 <td style="width: 327px;" align="center">&nbsp;รายละเอียดสิ่งส่งตรวจ</td>
-<td style="width: 200px;" align="center">ผลการตรวจวิเคราะ์</td>
+<td style="width: 200px;" align="center">ผลการตรวจวิเคราะห์</td>
 </tr>
 <tr>
-<td style="width: 149px;">&nbsp;13-63-01462</td>
-<td style="width: 327px;">นางมีนะ เพียวเซกู่<br />อายุ 54 ปี<br />ชนิดตัวอย่าง Throat swab</td>
-<td style="width: 200px;">&nbsp;</td>
+<td style="width: 149px;">{{ $data->analyze_id }}</td>
+<td style="width: 327px;">@if($data->title_name!="อื่นๆ ระบุ"){{ $data->title_name }}@else {{ $data->title_name_other }}@endif {{ $data->patients_first_name }} {{ $data->patients_last_name }}<br />อายุ {{ $data->patients_age_year }} ปี<br />ชนิดตัวอย่าง @if($data->specimen_type_name!="Other"){{ $data->specimen_type_name }}@else{{ $data->specimen_type_name }} ,{{ $data->specimen_other }}@endif</td>
+<td style="width: 200px;">{{ $data->result_patho_name_th }}</td>
 </tr>
 </tbody>
 </table>
