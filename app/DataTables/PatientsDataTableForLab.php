@@ -26,10 +26,10 @@ class PatientsDataTableForLab extends DataTable
 			->editColumn('hosp_status', function($hosp_s) {
 				switch ($hosp_s->hosp_status) {
 					case 'new':
-						return '<span class="badge badge-pill badge-custom-5 font-0875">'.$hosp_s->hosp_status.'</span>';
+						return '<span class="badge badge-pill badge-cyan font-0875">'.ucfirst($hosp_s->hosp_status).'</span>';
 						break;
 					case 'updated':
-						return '<span class="badge badge-pill badge-success font-0875">'.$hosp_s->hosp_status.'</span>';
+						return '<span class="badge badge-pill badge-success font-0875">'.ucfirst($hosp_s->hosp_status).'</span>';
 						break;
 					default:
 						return '-';
@@ -38,10 +38,10 @@ class PatientsDataTableForLab extends DataTable
 			->editColumn('lab_status', function($lab_s) {
 				switch ($lab_s->lab_status) {
 					case 'pending':
-						return '<span class="badge badge-pill badge-custom-5 font-0875">'.$lab_s->lab_status.'</span>';
+						return '<span class="badge badge-pill badge-cyan font-0875">'.ucfirst($lab_s->lab_status).'</span>';
 						break;
 					case 'updated':
-						return '<span class="badge badge-pill badge-success font-0875">'.$lab_s->lab_status.'</span>';
+						return '<span class="badge badge-pill badge-success font-0875">'.ucfirst($lab_s->lab_status).'</span>';
 						break;
 					default:
 						return '-';
@@ -75,28 +75,26 @@ class PatientsDataTableForLab extends DataTable
 			->setTableId('patient-lab-table')
 			->columns($this->getColumns())
 			->minifiedAjax()
-			->dom('frtip')
+			->dom('Bfrtip')
 			->orderBy(0)
 			->responsive(true)
-			->parameters(
-				[ 'language'=>[
-						'url' => url('/assets/libs/datatables-1.10.20/i18n/thai.json')
-					]
-				]
-			)
+			->parameters([
+				'language'=>['url' => url('/assets/libs/datatables-1.10.20/i18n/thai.json')],
+				'buttons' => ['excel'],
+			])
 			->lengthMenu([20])
 			->buttons(
-				Button::make('create'),
-				Button::make('export'),
+				//Button::make('create'),
+				//Button::make('export'),
 				Button::make('print'),
-				Button::make('reset'),
+				//Button::make('reset'),
 				Button::make('reload')
 			);
 	}
 
 	protected function getColumns() {
 		return [
-			Column::make('id')->title('ID'),
+			Column::make('id')->title('ลำดับ'),
 			Column::make('first_name')->title('ชื่อ'),
 			Column::make('last_name')->title('นามสกุล'),
 			Column::make('hn')->title('HN'),
