@@ -98,7 +98,13 @@ $(document).ready(function() {
 					rurl = rurl.replace(':id', id);
 					window.open(rurl, '_self');
 					break;
+				case 'print':
+					let purl = '{{ route('viewprintpdfforlab', ':id') }}';
+					purl = purl.replace(':id', id);
+					window.open(purl, '_self');
+					break;
 				case 'delete':
+					alert('Soon!');
 				//		$('#fid').val(id);
 				//		$('.delete-context').modal('show');
 					break;
@@ -108,7 +114,8 @@ $(document).ready(function() {
 		},
 		items: {
 			"lab": {name: "ลงผลแลป", icon: "fas fa-edit"},
-			"result": {name: "ดูข้อมูลผลแลป", icon: "fas fa-edit"},
+			"result": {name: "ดูข้อมูลผลแลป", icon: "fas fa-vial"},
+			"print": {name: "พิมพ์ผลแลป", icon: "fas fa-print"},
 			"delete": {name: "ลบข้อมูล", icon: "fas fa-trash-alt"},
 			"sep1": "---------",
 			"quit": {name: "ปิด", icon: function($element, key, item){ return 'context-menu-icon context-menu-icon-quit'; }}

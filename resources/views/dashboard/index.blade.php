@@ -41,19 +41,20 @@
 	</div>
 </div>
 <div class="container-fluid">
+	<!--
 	<div class="row mb-3">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 			<div class="form-group">
 				<label for="province">เลือกจังหวัด</label>
 				<select name="provinceInput" class="form-control selectpicker show-tick" data-live-search="true" id="select_province">
 					<option value="0">-- ทุกจังหวัด --</option>
-					@foreach($provinces as $key => $val)
-						<option value="{{ $val['province_id'] }}">{{ $val['province_name'] }}</option>
-					@endforeach
+					foreach($provinces as $key => $val)
+						<option value="{ $val['province_id'] }}">{ $val['province_name'] }}</option>
+					endforeach
 				</select>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	<div id="ajax_response">
 		<div class="row mb-4">
 			<div class="col-lg-12">
