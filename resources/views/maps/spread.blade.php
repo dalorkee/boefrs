@@ -9,10 +9,12 @@
 	background: white !important;
 }
 #map {
+	/*
 	position: absolute;
-	top: 0;
-	bottom: 0;
-	width: 100%;
+	top: 60px;
+	left: 0;
+	*/
+	width: 100vw;
 }
 #key {
 	background-color: rgba(0, 0, 0, 0.8);
@@ -38,28 +40,26 @@
 }
 </style>
 @endsection
-@section('meta-token')
-<meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
 @section('contents')
-	<div class="page-breadcrumb bg-light">
-		<div class="row">
-			<div class="col-12 d-flex no-block align-items-center">
-				<h4 class="page-title"><span style="display:none;">Invest List</span></h4>
-				<div class="ml-auto text-right">
-					<nav aria-label="breadcrumb">
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item"><a href="#">Map</a></li>
-							<li class="breadcrumb-item active" aria-current="page"><a href="#">Spread</a></li>
-						</ol>
-					</nav>
-				</div>
+<div class="page-breadcrumb bg-light pb-2">
+	<div class="row">
+		<div class="col-12 d-flex no-block align-items-center">
+			<h4 class="page-title">Spread map</h4>
+			<div class="ml-auto text-right">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">Map</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Spread map</li>
+					</ol>
+				</nav>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
+</div>
+<div class="container-fluid">
 	<div id="key" style="z-index:9999"></div>
 	<div id="map" style="width: 100%; height: 100vh;"></div>
+</div>
 @endsection
 @section('bottom-script')
 	<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"></script>
@@ -97,7 +97,7 @@
 			zoom: 4.6
 		});
 
-		const colors = ['#B03060','#FF0000','#FFFF00','#FF00FF','#1E90FF', '#ffaa00', '#021aab'];
+		const colors = [' #B71C1C',' #E64A19 ','#E91E63','#FF00FF','#66BB6A', '#FDD835', '#1E90FF'];
 
 		const colorScale = d3.scaleOrdinal()
 			.domain(["Influenza B Virus", "Flu A-H1", "Flu A-H1pdm09", "Flu A-H3", "Negative", "ตัวอย่างไม่มีคุณภาพ", "อื่นๆ"])
