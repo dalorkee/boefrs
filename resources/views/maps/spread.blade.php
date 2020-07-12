@@ -93,8 +93,8 @@
 		var map = new mapboxgl.Map({
 			container: 'map',
 			style: 'mapbox://styles/mapbox/streets-v11',
-			center: [ 100.897475, 9.237541],
-			zoom: 4.6
+			center: [ 100.754505, 10.934387 ],
+			zoom: 5
 		});
 
 		const colors = [' #B71C1C',' #E64A19 ','#E91E63','#FF00FF','#66BB6A', '#FDD835', '#1E90FF'];
