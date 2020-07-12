@@ -28,8 +28,8 @@
 		<div class="page-wrapper">
 			@yield('contents')
 			@include('layouts.footer')
-		</div>
-	</div>
+		</div><!-- page-wrapper -->
+	</div><!-- main-wrapper -->
 	@include('layouts.main-script')
 	@yield('bottom-script')
 	@stack('custom-script')

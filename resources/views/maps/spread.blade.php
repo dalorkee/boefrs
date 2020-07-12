@@ -8,13 +8,17 @@
 .page-wrapper {
 	background: white !important;
 }
+.map-box {
+	margin: 0;
+	padding: 0;
+	position:relative;
+}
 #map {
-	/*
-	position: absolute;
-	top: 60px;
-	left: 0;
-	*/
-	width: 100vw;
+	position:absolute;
+	top:0;
+	bottom:0;
+	width:100vw;
+	height: 100vh;
 }
 #key {
 	background-color: rgba(0, 0, 0, 0.8);
@@ -56,9 +60,11 @@
 		</div>
 	</div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" style="margin:0;padding:0;">
+	<div class="map-box">
 	<div id="key" style="z-index:9999"></div>
-	<div id="map" style="width: 100%; height: 100vh;"></div>
+	<div id="map"></div>
+	</div>
 </div>
 @endsection
 @section('bottom-script')
@@ -93,8 +99,8 @@
 		var map = new mapboxgl.Map({
 			container: 'map',
 			style: 'mapbox://styles/mapbox/streets-v11',
-			center: [ 100.754505, 10.934387 ],
-			zoom: 5
+			center: [ 103.511621, 12.538136 ],
+			zoom: 5.2
 		});
 
 		const colors = [' #B71C1C',' #E64A19 ','#E91E63','#FF00FF','#66BB6A', '#FDD835', '#1E90FF'];
