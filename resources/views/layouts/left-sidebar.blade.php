@@ -32,9 +32,9 @@
 						<li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-note-plus"></i><span class="hide-menu"> report#2</span></a></li>
 					</ul>
 				</li>
-				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-export"></i><span class="hide-menu">ส่งออกข้อมูล</span></a></li>
 				@endrole
 				@role('admin')
+				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('spread') }}" aria-expanded="false"><i class="mdi mdi-google-maps"></i><span class="hide-menu">แผนที่การกระจายของเชื้อ</span></a></li>
 				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('users.index') }}" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Users</span></a></li>
 				@endrole
 			</ul>

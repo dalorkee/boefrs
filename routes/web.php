@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function() {
 
 /* dashboard */
 Route::get('/dashboard/prov/{id}', 'DashboardController@provinceDashboard')->name('prov');
+Route::get('/map/spread', 'MapController@index')->name('spread');
 
 /* log */
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
