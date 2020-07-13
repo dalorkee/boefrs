@@ -101,20 +101,71 @@ class DashboardController extends Controller
 		$percent_male = CmsHelper::Cal_percent($t_male,$t_total);
 		$percent_female = CmsHelper::Cal_percent($t_female,$t_total);
 		//dd($percent_male,$percent_female);
-		$donut_charts_arr = array(
+		$donut_charts_sex_arr = array(
 			array("label" => "Male" ,"symbol" => "Male","y" =>$percent_male),
 			array("label" => "Female" ,"symbol" => "Female","y" =>$percent_female)
 		);
-		//dd($donut_charts_arr);
 
 
+		//Age Group
+		$datas_age['under1y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('under1y');
+		$datas_age['1-4y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('1-4y');
+		$datas_age['5-9y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('5-9y');
+		$datas_age['10-14y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('10-14y');
+		$datas_age['15-19y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('15-19y');
+		$datas_age['20-24y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('20-24y');
+		$datas_age['25-29y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('25-29y');
+		$datas_age['30-34y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('30-34y');
+		$datas_age['35-39y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('35-39y');
+		$datas_age['40-44y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('40-44y');
+		$datas_age['45-49y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('45-49y');
+		$datas_age['50-54y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('50-54y');
+		$datas_age['55-59y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('55-59y');
+		$datas_age['60-64y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('60-64y');
+		$datas_age['65up'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('65up');
+		$datas_age['unknow'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('unknow');
+
+		$sum_age_group = 0;
+
+		foreach($datas_age as $key_age => $val_age){
+			$sum_age_group += $val_age;
+			$line_charts_age_group_arr[] = array("label"=> $key_age, "y"=> $val_age);
+		}
+		//dd($line_charts_age_group_arr);
+
+		//Nation Graph
+		$total_nation = DB::table('z_rp_nation')->where('year_result','2017')->sum('totals');
+
+		$datas_nation['Thai'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('thai');
+		$datas_nation['Burmese'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('burmese');
+		$datas_nation['Lao'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('lao');
+		$datas_nation['Cambodian'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('cambodian');
+		$datas_nation['Other'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('other');
+
+		$sum_nation_group = 0;
+
+//dd($total_nation);
+		foreach($datas_nation as $key_nation => $val_nation){
+			$sum_nation_group += $val_nation;
+
+			$line_charts_nation_group_arr[] = array("label"=> $key_nation, "y"=> CmsHelper::Cal_percent($val_nation,$total_nation));
+		}
+
+
+
+	//	dd($percent_nation);
+
+
+		$datas_nation['nation_totals'] = DB::table('z_rp_nation')->where('year_result','2017')->sum('totals');
 		return view('dashboard.index',
 				compact(
 					'case_gen_code',
 					'case_hos_send',
 					'case_lab_confirm',
 					'case_all',
-					'donut_charts_arr',
+					'donut_charts_sex_arr',
+					'line_charts_age_group_arr',
+					'line_charts_nation_group_arr',
 					'rapidResult',
 					'antiResult'
 				)

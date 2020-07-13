@@ -65,11 +65,21 @@ use Cache;
 
 
         public static function Cal_percent($sum_val,$sum_total){
-          if(empty($sum_val) || empty($sum_total)) return NULL;
-
-          $percent = ($sum_val*100)/$sum_total;
-
+          //if(empty($sum_val) || empty($sum_total)) return NULL;
+          $get_sum_val = (isset($sum_val)) ? $sum_val : 0;
+          $get_sum_total = (isset($sum_total)) ? $sum_total : 0;
+          $percent = ($get_sum_val*100)/$get_sum_total;
           return number_format($percent,2);
         }
+
+        public static function Cal_ratio($sum_val,$sum_total){
+          //if(empty($sum_val) || !isset($sum_total)) return NULL;
+          $sum_val = (isset($sum_val)) ? $sum_val : 0;
+          $sum_total = (isset($sum_total)) ? $sum_total : 0;
+          $percent = ($sum_val/$sum_total)*100;
+          return number_format($percent);
+        }
+
+
 
 }

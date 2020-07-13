@@ -96,17 +96,38 @@
 			<div class="col-md-6">
 				<div class="card border">
 					<div class="card-body">
-						<h5 class="card-title">Total by sex</h5>
-						<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+						<h5 class="card-title">Sex Group</h5>
+						<div id="chartContainer_Sex" style="height: 370px; width: 100%;"></div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-6">
 				<div class="card border">
 					<div class="card-body">
-						<h5 class="card-title">Data/Month</h5>
+						<h5 class="card-title">Age Group</h5>
 						<div style="height: 370px; width: 100%;">
-							<canvas id="canvas"></canvas>
+							<div id="chartContainer_Age_Group" style="height: 370px; width: 100%;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<div class="card border">
+					<div class="card-body">
+						<h5 class="card-title">Nation</h5>
+						<div id="chartContainer_Nation" style="height: 370px; width: 100%;"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card border">
+					<div class="card-body">
+						<h5 class="card-title">Age Group</h5>
+						<div style="height: 370px; width: 100%;">
+							<div id="chartContainer_Age_Group" style="height: 370px; width: 100%;"></div>
 						</div>
 					</div>
 				</div>
@@ -164,85 +185,131 @@ $('#select_province').on('change', function() {
 <script>
 window.onload = function() {
 	/* donough chart pat */
-	var chart = new CanvasJS.Chart("chartContainer", {
+	var chart1 = new CanvasJS.Chart("chartContainer_Sex", {
 		theme: "light2",
 		animationEnabled: true,
+		//exportEnabled: true,
 		title: {
 			text: ""
 		},
 		data: [{
-			type: "pie",
+			type: "doughnut",
 			indexLabel: "{symbol} - {y}%",
 			//yValueFormatString: "#,##0.0\"%\"",
 			showInLegend: true,
 			legendText: "{label} : {y}%",
 			toolTipContent: "{y}%",
-			dataPoints: <?php echo json_encode($donut_charts_arr, JSON_NUMERIC_CHECK); ?>
+			dataPoints: <?php echo json_encode($donut_charts_sex_arr, JSON_NUMERIC_CHECK); ?>
 		}]
 	});
-	chart.render();
+	chart1.render();
+
+
+	var chart2 = new CanvasJS.Chart("chartContainer_Age_Group", {
+			animationEnabled: true,
+			//exportEnabled: true,
+			theme: "light1", // "light1", "light2", "dark1", "dark2"
+			axisX:{
+			  labelAngle: 150,
+		    labelFontSize: 10,
+		    labelWrap: true,
+		    labelAutoFit: true
+  		},
+			legend: {
+     horizontalAlign: "left", // left, center ,right
+     verticalAlign: "center",  // top, center, bottom
+   		},
+			data: [{
+				type: "column", //change type to bar, line, area, pie, etc
+				//indexLabel: "{y}",
+				//indexLabelPlacement: "inside",
+				//indexLabelFontColor: "white",
+				dataPoints: <?php echo json_encode($line_charts_age_group_arr, JSON_NUMERIC_CHECK); ?>
+			}]
+		});
+chart2.render();
+
+	var chart3 = new CanvasJS.Chart("chartContainer_Nation", {
+			animationEnabled: true,
+			//exportEnabled: true,
+			theme: "light1", // "light1", "light2", "dark1", "dark2"
+			axisX:{
+				labelAngle: 150,
+				labelFontSize: 12,
+				labelWrap: true,
+				labelAutoFit: true
+			},
+			data: [{
+				type: "column", //change type to bar, line, area, pie, etc
+				//indexLabel: "{y}",
+				//indexLabelPlacement: "inside",
+				//indexLabelFontColor: "white",
+				dataPoints: <?php echo json_encode($line_charts_nation_group_arr, JSON_NUMERIC_CHECK); ?>
+			}]
+		});
+	chart3.render();
 
 	/* barchart */
-	var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-	var color = Chart.helpers.color;
-	var barChartData = {
-		labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-		datasets: [{
-			label: '2018',
-			backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-			borderColor: window.chartColors.red,
-			borderWidth: 1,
-			data: [
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				0,
-				5,
-				41,
-				24,
-				29,
-			]
-		}, {
-			label: '2019',
-			backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-			borderColor: window.chartColors.blue,
-			borderWidth: 1,
-			data: [
-				65,
-				59,
-				71,
-				43,
-				44,
-				90,
-				29,
-				7,
-				0,
-				0,
-				0,
-				0,
-			]
-		}]
-
-	};
-	var ctx = document.getElementById('canvas').getContext('2d');
-	window.myBar = new Chart(ctx, {
-		type: 'bar',
-		data: barChartData,
-		options: {
-			responsive: true,
-			legend: {
-				position: 'top',
-			},
-			title: {
-				display: false,
-				text: 'Bar Chart'
-			}
-		}
-	});
+	// var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	// var color = Chart.helpers.color;
+	// var barChartData = {
+	// 	labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+	// 	datasets: [{
+	// 		label: '2018',
+	// 		backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+	// 		borderColor: window.chartColors.red,
+	// 		borderWidth: 1,
+	// 		data: [
+	// 			0,
+	// 			0,
+	// 			0,
+	// 			0,
+	// 			0,
+	// 			0,
+	// 			0,
+	// 			0,
+	// 			5,
+	// 			41,
+	// 			24,
+	// 			29,
+	// 		]
+	// 	}, {
+	// 		label: '2019',
+	// 		backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+	// 		borderColor: window.chartColors.blue,
+	// 		borderWidth: 1,
+	// 		data: [
+	// 			65,
+	// 			59,
+	// 			71,
+	// 			43,
+	// 			44,
+	// 			90,
+	// 			29,
+	// 			7,
+	// 			0,
+	// 			0,
+	// 			0,
+	// 			0,
+	// 		]
+	// 	}]
+	//
+	// };
+	// var ctx = document.getElementById('canvas').getContext('2d');
+	// window.myBar = new Chart(ctx, {
+	// 	type: 'bar',
+	// 	data: barChartData,
+	// 	options: {
+	// 		responsive: true,
+	// 		legend: {
+	// 			position: 'top',
+	// 		},
+	// 		title: {
+	// 			display: false,
+	// 			text: 'Bar Chart'
+	// 		}
+	// 	}
+	// });
 
 	/* PolarArea chart */
 	var chartColors = window.chartColors;
