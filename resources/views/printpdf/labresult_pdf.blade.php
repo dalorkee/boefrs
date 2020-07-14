@@ -8,36 +8,14 @@ $th_year = date('y')+43;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>LABResult-{{ $data->lab_id }}</title>
+<title>LABResult-{{ $data->analyze_id }}</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
 <style>
-@font-face{
- font-family:  'THSarabunNew';
- font-style: normal;
- font-weight: normal;
- src: url("{{ public_path('fonts/THSarabunNew.ttf') }}") format('truetype');
-}
-@font-face{
- font-family:  'THSarabunNew';
- font-style: normal;
- font-weight: bold;
- src: url("{{ public_path('fonts/THSarabunNew Bold.ttf') }}") format('truetype');
-}
-@font-face{
- font-family:  'THSarabunNew';
- font-style: italic;
- font-weight: normal;
- src: url("{{ public_path('fonts/THSarabunNew Italic.ttf') }}") format('truetype');
-}
-@font-face{
- font-family:  'THSarabunNew';
- font-style: italic;
- font-weight: bold;
- src: url("{{ public_path('fonts/THSarabunNew BoldItalic.ttf') }}") format('truetype');
-}
+
 body{
- font-family: "THSarabunNew";
+ font-family: 'Sarabun', sans-serif;
  font-size: 16px;
 }
 @page {
@@ -66,7 +44,7 @@ body{
 <table style="width: 100%;">
 <tbody>
 <tr>
-<td style="width: 253px;" valig="top"><img src="{{ public_path('assets/images/dmslogo.png') }}" width="220px" height="140px"></td>
+<td style="width: 253px;" valig="top"><img src="https://apps.doe.moph.go.th/boefrs/assets/images/dmslogo.png" width="220px" height="140px"></td>
 <td style="width: 272px;">&nbsp;</td>
 <td style="width: 149px;" align="right">&nbsp;ลำดับที่ <?php echo $th_year."-".str_pad($data->lab_id, 5, '0', STR_PAD_LEFT); ?></td>
 </tr>
@@ -77,7 +55,9 @@ body{
 <tr>
 <td style="width: 100%;" align="center">รายงานผลการตรวจวิเคราะห์<br />สถาบันวิจัยวิทยาศาสตร์สาธารณสุข กรมวิทยาศาสตร์การแพทย์ กระทรวงสาธารณสุข<br />ถนนติวานนท์ อำเภอเมือง จังหวัดนนทบุรี 11000&nbsp;</td>
 </tr>
-
+<tr>
+<td style="width: 100%;" align="center">&nbsp;</td>
+</tr>
 <tr>
 <td style="width: 100%;">
   <hr size=3 noshadow>
@@ -117,7 +97,7 @@ body{
 </tr>
 <tr>
 <td style="width: 100%;">
-<table style="width: 677px;" border="1" align="center" cellpadding="5" cellspacing="0" bordercolor="#CCCCCC">
+<table style="width: 100%;" border="1" align="center" cellpadding="5" cellspacing="0" bordercolor="#CCCCCC">
 <tbody>
 <tr >
 <td style="width: 149px; ">&nbsp;หมายเลขวิเคราะห์</td>
@@ -135,11 +115,15 @@ body{
 </tr>
 <tr>
 <td style="width: 100%;">
-<table style="width: 700px;">
+<table style="width: 100%">
 <tbody>
 <tr>
-<td style="width: 350px;" align="center">......................................................... ผู้วิเคราะห์<br />(นายภากร ภิรมย์ทอง)<br />นักวิทยาศาสตร์การแพทย์<br /> {{ $current_date }}</td>
-<td style="width: 350px;" align="center">......................................................... ผู้รับรองรายงานผล<br />(นางสาวสิริภาภรณ์ ผุยกัน)<br />นักวิทยาศาสตร์การแพทย์ชำนาญการ<br /> {{ $current_date }}</td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+</tr>
+<tr>
+<td style="width: 50%;" align="center">......................................................... ผู้วิเคราะห์<br />(นายภากร ภิรมย์ทอง)<br />นักวิทยาศาสตร์การแพทย์<br /> {{ $current_date }}</td>
+<td style="width: 50%;" align="center">......................................................... ผู้รับรองรายงานผล<br />(นางสาวสิริภาภรณ์ ผุยกัน)<br />นักวิทยาศาสตร์การแพทย์ชำนาญการ<br /> {{ $current_date }}</td>
 </tr>
 </tbody>
 </table>
