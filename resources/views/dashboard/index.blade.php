@@ -1,3 +1,6 @@
+<?php
+//dd($list_year);
+?>
 @extends('layouts.index')
 @section('custom-style')
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
@@ -26,6 +29,7 @@
 @endsection
 @section('contents')
 <div class="page-breadcrumb bg-light pb-2">
+	<div class="container-fluid">
 	<div class="row">
 		<div class="col-12 d-flex no-block align-items-center">
 			<h4 class="page-title">Dashboard</h4>
@@ -40,21 +44,48 @@
 		</div>
 	</div>
 </div>
-<div class="container-fluid">
-	<!--
-	<div class="row mb-3">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-			<div class="form-group">
-				<label for="province">เลือกจังหวัด</label>
-				<select name="provinceInput" class="form-control selectpicker show-tick" data-live-search="true" id="select_province">
-					<option value="0">-- ทุกจังหวัด --</option>
-					foreach($provinces as $key => $val)
-						<option value="{ $val['province_id'] }}">{ $val['province_name'] }}</option>
-					endforeach
-				</select>
+<form name="query" id="query" method="post" action="{{ route('dashboard.post') }}">
+	<div class="row mb-4">
+		<div class="col-lg-12">
+			<div class="row">
+				<div class="col-3">
+
+					<div class="form-group">
+						<label for="province">เลือกจังหวัด</label>
+						<select name="select_province" class="form-control selectpicker show-tick" data-live-search="true" id="select_province">
+							<option value="0">------ ทุกจังหวัด ------</option>
+							@foreach($provinces as $key => $val)
+								<option value="{{ $val['province_id'] }}">{{ $val['province_name'] }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+				<div class="col-3">
+					<div class="form-group">
+						<label for="year">ปี</label>
+						<select name="select_year" class="form-control selectpicker show-tick" data-live-search="true" id="select_year">
+							<option value="0">------ ทุกปี ------</option>
+							@foreach($list_year as $val_year)
+								<option value="{{ $val_year->year_result }}">{{ $val_year->year_result+543 }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+				<div class="col-3">
+					<div class="form-group">
+						<label for="year"></label>
+						<button type="submit" class="btn btn-success" id="btn_submit">ค้นหา</button>
+					</div>
+
+				</div>
+				<div class="col-3">
+
+				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
+	{{ csrf_field() }}
+</form>
 	<div id="ajax_response">
 		<div class="row mb-4">
 			<div class="col-lg-12">
@@ -116,9 +147,18 @@
 				<div class="card border">
 					<div class="card-body">
 						<h5 class="card-title">Age Group</h5>
-						<div style="height: 370px; width: 100%;">
 							<div id="chartContainer_Age_Group" style="height: 370px; width: 100%;"></div>
-						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card border">
+					<div class="card-body">
+						<h5 class="card-title">Mohth Median</h5>
+							<div id="chartContainer_month_median" style="height: 370px; width: 100%;"></div>
 					</div>
 				</div>
 			</div>
@@ -164,23 +204,25 @@
 @endsection
 @section('bottom-script')
 <script src="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js') }}"></script>
-<script>
+<!-- <script>
 $('#select_province').on('change', function() {
 	let id = $('#select_province').val();
 	let url = '{{ route("prov", ":id") }}';
 	url = url.replace(':id', id);
 	window.open(url, '_blank');
 });
-</script>
+</script> -->
 <script>
 window.onload = function() {
 	/* donough chart pat */
 	var chart1 = new CanvasJS.Chart("chartContainer_Sex", {
-		theme: "light2",
+		theme: "light1",
 		animationEnabled: true,
 		//exportEnabled: true,
 		title: {
-			text: ""
+			text: "แผนภูมิร้อยละผู้ป่วยจำแนกตามเพศ",
+			fontSize: 20,
+			fontFamily: "Prompt",
 		},
 		data: [{
 			type: "doughnut",
@@ -198,22 +240,24 @@ window.onload = function() {
 	var chart2 = new CanvasJS.Chart("chartContainer_Age_Group", {
 			animationEnabled: true,
 			//exportEnabled: true,
+			title: {
+				text: "แผนภูมิอัตราป่วยแยกตามกลุ่มอายุ",
+				fontSize: 20,
+				fontFamily: "Prompt",
+			},
 			theme: "light1", // "light1", "light2", "dark1", "dark2"
 			axisX:{
 			  labelAngle: 150,
 		    labelFontSize: 10,
 		    labelWrap: true,
-		    labelAutoFit: true
+		    labelAutoFit: true,
+				interval:1,
   		},
-			legend: {
-     horizontalAlign: "left", // left, center ,right
-     verticalAlign: "center",  // top, center, bottom
-   		},
 			data: [{
 				type: "column", //change type to bar, line, area, pie, etc
-				//indexLabel: "{y}",
-				//indexLabelPlacement: "inside",
-				//indexLabelFontColor: "white",
+				indexLabelPlacement: "auto",
+				//indexLabelFontColor: "black",
+				indexLabel: "{y}",
 				dataPoints: <?php echo json_encode($line_charts_age_group_arr, JSON_NUMERIC_CHECK); ?>
 			}]
 		});
@@ -222,22 +266,99 @@ chart2.render();
 	var chart3 = new CanvasJS.Chart("chartContainer_Nation", {
 			animationEnabled: true,
 			//exportEnabled: true,
+			title: {
+				text: "แผนภูมิร้อยละผู้ป่วยแยกตามสัญชาติ",
+				fontSize: 20,
+				fontFamily: "Prompt",
+			},
 			theme: "light1", // "light1", "light2", "dark1", "dark2"
 			axisX:{
+				interval:1,
 				labelAngle: 150,
 				labelFontSize: 12,
 				labelWrap: true,
 				labelAutoFit: true
 			},
+			axisY: {
+				suffix: "%",
+			},
 			data: [{
 				type: "column", //change type to bar, line, area, pie, etc
-				//indexLabel: "{y}",
-				//indexLabelPlacement: "inside",
-				//indexLabelFontColor: "white",
+				indexLabelPlacement: "auto",
+				indexLabelFontColor: "black",
+				indexLabel: "{symbol} {y}",
+				yValueFormatString: "#0.00'%'",
 				dataPoints: <?php echo json_encode($line_charts_nation_group_arr, JSON_NUMERIC_CHECK); ?>
 			}]
 		});
 	chart3.render();
+
+
+	var chart4 = new CanvasJS.Chart("chartContainer_month_median", {
+	animationEnabled: true,
+	theme: "light1", // "light1", "light2", "dark1", "dark2"
+	title:{
+		text: "กราฟแสดงจำนวนผู้ป่วยรายเดือนเทียบกับค่ามัธยฐาน",
+		fontSize: 20,
+		fontFamily: "Prompt",
+	},
+	legend:{
+		cursor: "pointer",
+		fontSize: 16,
+		itemclick: toggleDataSeries
+	},
+	toolTip:{
+		shared: true
+	},
+	axisX:{
+		labelAngle: 150,
+		labelFontSize: 12,
+		interval:1,
+	},
+	data: [{
+		name: "มัธยฐาน 3 ปีย้อนหลัง",
+		type: "line",
+    connectNullData : true,
+  	showInLegend: true,
+    color: '#F26B70',
+    lineColor:"#F26B70",
+    markerType: "circle",
+    markerColor: "#F26B70",
+    lineDashType: "dash",
+    lineThickness: 3,
+    markerSize: 10,
+		showInLegend: true,
+    legendMarkerColor: "#F26B70",
+		dataPoints: <?php echo json_encode($data_three_year_median, JSON_NUMERIC_CHECK); ?>
+	},
+	{
+		name: "ปี {{ date('Y')+543 }} ",
+		type: "line",
+    connectNullData : true,
+		showInLegend: true,
+    color: '#6A6C68',
+    lineColor:"#6A6C68",
+    markerType: "square",
+    markerColor: "#6A6C68",
+    lineDashType: "solid",
+    lineThickness: 3,
+    markerSize: 10,
+    indexLabelMaxWidth: 50,
+		showInLegend: true,
+		dataPoints: <?php echo json_encode($data_now_median, JSON_NUMERIC_CHECK); ?>
+	}]
+});
+chart4.render();
+
+function toggleDataSeries(e){
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	}
+	else{
+		e.dataSeries.visible = true;
+	}
+	chart4.render();
+}
 
 	/* barchart */
 	// var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

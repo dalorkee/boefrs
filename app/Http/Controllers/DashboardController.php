@@ -9,7 +9,9 @@ use Spatie\Permission\Models\Permission;
 use App\RapidGraph;
 use App\MonthGraph;
 use DB;
+use App\Provinces;
 use App\HelperClass\Helper as CmsHelper;
+use App\MonthMedian;
 
 class DashboardController extends Controller
 {
@@ -29,6 +31,9 @@ class DashboardController extends Controller
 		}
 		$roleArr = auth()->user()->roles->pluck('name');
 		$userRole = isset($roleArr[0]) ? $roleArr[0] : "";
+		$provinces = Provinces::all()->sortBy('province_name')->keyBy('province_id')->toArray();
+		$list_year = CmsHelper::List_year();
+
 
 		if ($userRole == 'admin') {
 			$case_gen_code = DB::table('first_dash')->sum('case_gen_code');
@@ -93,10 +98,13 @@ class DashboardController extends Controller
 		// 	array("label" => "Female" ,"symbol" => "F","y" =>$case_female)
 		// );
 
+
+
+
 		//Percent Male/Female
-		$t_male = DB::table('z_rp_sex')->where('year_result','2020')->sum('male');
-		$t_female = DB::table('z_rp_sex')->where('year_result','2020')->sum('female');
-		$t_total = DB::table('z_rp_sex')->where('year_result','2020')->sum('totals');
+		$t_male = DB::table('z_rp_sex')->sum('male');
+		$t_female = DB::table('z_rp_sex')->sum('female');
+		$t_total = DB::table('z_rp_sex')->sum('totals');
 		//dd($t_male,$t_female,$t_total);
 		$percent_male = CmsHelper::Cal_percent($t_male,$t_total);
 		$percent_female = CmsHelper::Cal_percent($t_female,$t_total);
@@ -108,22 +116,23 @@ class DashboardController extends Controller
 
 
 		//Age Group
-		$datas_age['under1y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('under1y');
-		$datas_age['1-4y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('1-4y');
-		$datas_age['5-9y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('5-9y');
-		$datas_age['10-14y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('10-14y');
-		$datas_age['15-19y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('15-19y');
-		$datas_age['20-24y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('20-24y');
-		$datas_age['25-29y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('25-29y');
-		$datas_age['30-34y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('30-34y');
-		$datas_age['35-39y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('35-39y');
-		$datas_age['40-44y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('40-44y');
-		$datas_age['45-49y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('45-49y');
-		$datas_age['50-54y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('50-54y');
-		$datas_age['55-59y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('55-59y');
-		$datas_age['60-64y'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('60-64y');
-		$datas_age['65up'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('65up');
-		$datas_age['unknow'] = DB::table('z_rp_age_group')->where('year_result','2017')->sum('unknow');
+		$datas_age1 = DB::table('z_rp_age_group')->sum('under1y');
+		$datas_age2 = DB::table('z_rp_age_group')->sum('1-4y');
+		$datas_age['0-4y'] = $datas_age1+$datas_age2;
+		$datas_age['5-9y'] = DB::table('z_rp_age_group')->sum('5-9y');
+		$datas_age['10-14y'] = DB::table('z_rp_age_group')->sum('10-14y');
+		$datas_age['15-19y'] = DB::table('z_rp_age_group')->sum('15-19y');
+		$datas_age['20-24y'] = DB::table('z_rp_age_group')->sum('20-24y');
+		$datas_age['25-29y'] = DB::table('z_rp_age_group')->sum('25-29y');
+		$datas_age['30-34y'] = DB::table('z_rp_age_group')->sum('30-34y');
+		$datas_age['35-39y'] = DB::table('z_rp_age_group')->sum('35-39y');
+		$datas_age['40-44y'] = DB::table('z_rp_age_group')->sum('40-44y');
+		$datas_age['45-49y'] = DB::table('z_rp_age_group')->sum('45-49y');
+		$datas_age['50-54y'] = DB::table('z_rp_age_group')->sum('50-54y');
+		$datas_age['55-59y'] = DB::table('z_rp_age_group')->sum('55-59y');
+		$datas_age['60-64y'] = DB::table('z_rp_age_group')->sum('60-64y');
+		$datas_age['65up'] = DB::table('z_rp_age_group')->sum('65up');
+		$datas_age['unknow'] = DB::table('z_rp_age_group')->sum('unknow');
 
 		$sum_age_group = 0;
 
@@ -134,13 +143,13 @@ class DashboardController extends Controller
 		//dd($line_charts_age_group_arr);
 
 		//Nation Graph
-		$total_nation = DB::table('z_rp_nation')->where('year_result','2017')->sum('totals');
+		$total_nation = DB::table('z_rp_nation')->sum('totals');
 
-		$datas_nation['Thai'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('thai');
-		$datas_nation['Burmese'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('burmese');
-		$datas_nation['Lao'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('lao');
-		$datas_nation['Cambodian'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('cambodian');
-		$datas_nation['Other'] = DB::table('z_rp_nation')->where('year_result','2020')->sum('other');
+		$datas_nation['Thai'] = DB::table('z_rp_nation')->sum('thai');
+		$datas_nation['Burmese'] = DB::table('z_rp_nation')->sum('burmese');
+		$datas_nation['Lao'] = DB::table('z_rp_nation')->sum('lao');
+		$datas_nation['Cambodian'] = DB::table('z_rp_nation')->sum('cambodian');
+		$datas_nation['Other'] = DB::table('z_rp_nation')->sum('other');
 
 		$sum_nation_group = 0;
 
@@ -149,8 +158,65 @@ class DashboardController extends Controller
 
 			$line_charts_nation_group_arr[] = array("label"=> $key_nation, "y"=> CmsHelper::Cal_percent($val_nation,$total_nation));
 		}
-		$datas_nation['nation_totals'] = DB::table('z_rp_nation')->where('year_result','2017')->sum('totals');
+		$datas_nation['nation_totals'] = DB::table('z_rp_nation')->sum('totals');
 
+		/** Median **/
+		$year_now = date('Y');
+
+
+    $year_now = date('Y');
+		$year_last_med = $year_now-1;
+		$year_back_3 = $year_now-3;
+
+		$arr_month = array("01" => "Jan" , "02" => "Feb", "03" => "Mar", "04" => "Apr",
+											 "05" => "May", "06" => "Jun", "07" => "Jul", "08" => "Aug",
+											 "09" => "Sep", "10" => "Oct", "11" => "Nov", "12" => "Dec");
+
+		for($i=1; $i<=12; $i++){
+			$result1 = MonthMedian::selectRaw('year_result,month_result,sum(totals) AS totals')
+			->whereBetween('year_result',[$year_back_3,$year_last_med])
+			->where('month_result',str_pad($i,2,"0",STR_PAD_LEFT))
+			->groupBy('year_result','month_result')
+			->orderBy('totals','ASC')
+			->limit(1,1)
+			->first();
+
+			$data_three_year_median[] = array("label" => $arr_month[str_pad($i,2,"0",STR_PAD_LEFT)],"y" => $result1['totals']);
+
+		}
+
+		for($i=1; $i<=12; $i++){
+			$result2 = MonthMedian::selectRaw('year_result,month_result,sum(totals) AS totals')
+			->where('year_result',$year_now)
+			->where('month_result',$i)
+			->groupBy('year_result','month_result')
+			->orderBy('totals','ASC')
+			->first();
+
+		 $arr_now_year_median[] = $result2;
+		}
+
+		//dd($arr_now_year_median);
+
+		foreach($arr_now_year_median as $val){
+			$pt_data[$val['month_result'] ?? ''] = $val['totals'] ?? '';
+		}
+		//
+		// dd($pt_data);
+
+		foreach ($arr_month as $key => $value) {
+			if (array_key_exists($key, $pt_data)) {
+				$data_now_year_median[$arr_month[$key]] = $pt_data[$key];
+			}else{
+				$data_now_year_median[$arr_month[$key]] = 0;
+			}
+		}
+		/**** Collation Data Now Median Graph ****/
+		foreach ($data_now_year_median as $key1 => $val1){
+			$data_now_median[] = array("label" => $key1 , "y" => $val1);
+		}
+			//dd($data_now_median);
+		/** Median **/
 
 
 
@@ -164,11 +230,20 @@ class DashboardController extends Controller
 					'line_charts_age_group_arr',
 					'line_charts_nation_group_arr',
 					'rapidResult',
-					'antiResult'
+					'antiResult',
+					'provinces',
+					'list_year',
+					'data_three_year_median',
+					'data_now_median'
 				)
 		);
 	}
 
+
+	public function index_post(Request $request)
+	{
+		dd($request);
+	}
 	/**
 	* Show the form for creating a new resource.
 	*

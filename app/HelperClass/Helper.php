@@ -80,6 +80,16 @@ use Cache;
           return number_format($percent);
         }
 
+        public static function List_year(){
+
+          $value = Cache::remember('list_year', 60, function()
+          {
+              return DB::table('z_rp_sex')->select('year_result')->groupBy('year_result')->get()->toArray();
+          });
+
+          return $value;
+        }
+
 
 
 }
