@@ -18,29 +18,40 @@ class CounterController extends Controller
 
 	public function index() {
 		$last_created = $this->getIpAddrPeriodTime($_SERVER['REMOTE_ADDR']);
-		$last_create_date = strtotime($last_created[0]['created_at']);
-		$expire_date = (int)$last_create_date+(60*5);
-		$currentDate = strtotime(date('Y-m-d H:i:s'));
-
-		if ($expire_date < $currentDate) {
-			if (!$this->checkRepeatDate()) {
-				$data = $this->getYesterdayData();
-				$this->addYesterdayDataToTaDb($data[0]['intYesterday']);
-				$this->deleteYesterdayData();
-			}
+		if (count($last_created) <= 0) {
 			$this->addTodayToDb();
-		}
-		$cnt_today = $this->getTodayCnt();
-		$cnt_yesterday = $this->getYesterdayCnt();
-		$cnt_this_month = $this->getThisMonthCnt();
-		$cnt_this_year = $this->getThisYearCnt();
+			$counter = array(
+				'cntToday' => 0,
+				'cntYesterday' => 0,
+				'cntThisMonth' => 0,
+				'cntThisYear' => 0
+			);
+		} else {
+			$last_create_date = strtotime($last_created[0]['created_at']);
+			$expire_date = (int)$last_create_date+(60*5);
+			$currentDate = strtotime(date('Y-m-d H:i:s'));
 
-		$counter = array(
-			'cntToday' => $cnt_today[0]['cntToday'],
-			'cntYesterday' => $cnt_yesterday[0]->daily_num,
-			'cntThisMonth' => $cnt_this_month[0]->cntMonth,
-			'cntThisYear' => $cnt_this_year[0]->cntYear
-		);
+			if ($expire_date < $currentDate) {
+				if (!$this->checkRepeatDate()) {
+					$data = $this->getYesterdayData();
+					$this->addYesterdayDataToTaDb($data[0]['intYesterday']);
+					$this->deleteYesterdayData();
+				}
+				$this->addTodayToDb();
+			}
+			$cnt_today = $this->getTodayCnt();
+			$cnt_yesterday = $this->getYesterdayCnt();
+			$cnt_this_month = $this->getThisMonthCnt();
+			$cnt_this_year = $this->getThisYearCnt();
+
+			$counter = array(
+				'cntToday' => $cnt_today[0]['cntToday'],
+				'cntYesterday' => $cnt_yesterday[0]->daily_num,
+				'cntThisMonth' => $cnt_this_month[0]->cntMonth,
+				'cntThisYear' => $cnt_this_year[0]->cntYear
+			);
+		}
+
 		return view('statistics.counter', ['counter' => $counter]);
 	}
 
