@@ -29,8 +29,7 @@ class HomeController extends BoeFrsController
 	*
 	* @return \Illuminate\Contracts\Support\Renderable
 	*/
-	public function index(Request $request)
-	{
+	public function index(Request $request) {
 		/* set thai province to session */
 		/*
 		if (!Session::has('provinces')) {
@@ -66,5 +65,4 @@ class HomeController extends BoeFrsController
 			return redirect()->route('logout');
 		}
 	}
-
 }

@@ -198,6 +198,7 @@ return [
 		/* Log viewer */
 		Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
+
     ],
 
     /*
@@ -256,6 +257,6 @@ return [
 		'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
 		'PDFD' => Barryvdh\DomPDF\Facade::class,
 		'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
-    ],
+	],
 
 ];
