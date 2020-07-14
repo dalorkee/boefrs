@@ -29,6 +29,7 @@ class LabPDFController extends Controller
               ->first();
       $pdf = PDF::loadView('printpdf.labresult_pdf',compact('data'));
       return $pdf->stream($data->analyze_id.'.pdf'); //แบบนี้จะ stream มา preview
+      //dd($pdf->output());
       //return $pdf->download('test.pdf'); //แบบนี้จะดาวโหลดเลย
     }
 }

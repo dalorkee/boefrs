@@ -104,25 +104,15 @@
 			<div class="col-md-6">
 				<div class="card border">
 					<div class="card-body">
-						<h5 class="card-title">Age Group</h5>
-						<div style="height: 370px; width: 100%;">
-							<div id="chartContainer_Age_Group" style="height: 370px; width: 100%;"></div>
-						</div>
+						<h5 class="card-title">Nation</h5>
+						<div id="chartContainer_Nation" style="height: 370px; width: 100%;"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="col-md-6">
-				<div class="card border">
-					<div class="card-body">
-						<h5 class="card-title">Nation</h5>
-						<div id="chartContainer_Nation" style="height: 370px; width: 100%;"></div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<div class="card border">
 					<div class="card-body">
 						<h5 class="card-title">Age Group</h5>

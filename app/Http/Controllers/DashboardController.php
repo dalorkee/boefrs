@@ -144,19 +144,16 @@ class DashboardController extends Controller
 
 		$sum_nation_group = 0;
 
-//dd($total_nation);
 		foreach($datas_nation as $key_nation => $val_nation){
 			$sum_nation_group += $val_nation;
 
 			$line_charts_nation_group_arr[] = array("label"=> $key_nation, "y"=> CmsHelper::Cal_percent($val_nation,$total_nation));
 		}
-
-
-
-	//	dd($percent_nation);
-
-
 		$datas_nation['nation_totals'] = DB::table('z_rp_nation')->where('year_result','2017')->sum('totals');
+
+
+
+
 		return view('dashboard.index',
 				compact(
 					'case_gen_code',
