@@ -18,7 +18,7 @@ class CounterController extends Controller
 
 	public function index() {
 		$last_created = $this->getIpAddrPeriodTime($_SERVER['REMOTE_ADDR']);
-		$last_create_date = strtotime($last_created[0]['created_at'])."<br>";
+		$last_create_date = strtotime($last_created[0]['created_at']);
 		$expire_date = (int)$last_create_date+(60*5);
 		$currentDate = strtotime(date('Y-m-d H:i:s'));
 
