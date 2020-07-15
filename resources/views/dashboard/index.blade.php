@@ -374,12 +374,8 @@ function toggleDataSeries(e){
 				type: 'line'
 		}, {
 			label: 'A/H1',
-			backgroundColor: window.chartColors.purple,
-			data: <?php echo json_encode($result_sum_flu_a_h1_data_now_week, JSON_NUMERIC_CHECK);?>,
-		}, {
-			label: 'A/H1 2009',
 			backgroundColor: window.chartColors.yellow,
-			data: <?php echo json_encode($result_sum_flu_a_h12009_data_now_week, JSON_NUMERIC_CHECK);?>,
+			data: <?php echo json_encode($result_sum_flu_a_data_now_week, JSON_NUMERIC_CHECK);?>,
 		}, {
 			label: 'A/H3',
 			backgroundColor: window.chartColors.red,

@@ -281,10 +281,11 @@ class DashboardController extends Controller
 		//Sum Flu_A_H3
 		for($i=1; $i<=52; $i++){
 
-			$query_flu_a_h3 = WeekSeparate::selectRaw('Flu_A_H3,week_result,year_result')
+			$query_flu_a_h3 = WeekSeparate::selectRaw('sum(Flu_A_H3) as Flu_A_H3,week_result,year_result')
 														->where('year_result',$year_now)
 														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
-														->orderBy('totals','ASC')
+														->groupBy('week_result','year_result')
+														//->orderBy('totals','ASC')
 														->first();
 		$sum_flu_a_h3[] = $query_flu_a_h3;
 		}
@@ -307,17 +308,17 @@ class DashboardController extends Controller
 		//Sum Flu_A_H1pdm09
 		for($i=1; $i<=52; $i++){
 
-			$query_flu_a_h12009 = WeekSeparate::selectRaw('Flu_A_H1pdm09,week_result,year_result')
+			$query_flu_a_h12009 = WeekSeparate::selectRaw('sum(Flu_A_H1pdm09)+sum(Flu_A_H1) as h1_totals,week_result,year_result')
 														->where('year_result',$year_now)
 														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
-
-														->orderBy('totals','ASC')
+														->groupBy('week_result','year_result')
+														//->orderBy('totals','ASC')
 														->first();
 		$sum_flu_a_h12009[] = $query_flu_a_h12009;
 		}
 
 		foreach($sum_flu_a_h12009 as $val2){
-			$pt_data[$val2['week_result'] ?? ''] = $val2['Flu_A_H1pdm09'] ?? '';
+			$pt_data[$val2['week_result'] ?? ''] = $val2['h1_totals'] ?? '';
 		}
 
 		foreach ($arr_week as $key => $value) {
@@ -329,45 +330,45 @@ class DashboardController extends Controller
 		}
 		/**** Collation Data Now flu_a_h12009 Week Graph ****/
 		foreach ($sum_flu_a_h12009_data_now_week as $key1 => $val1){
-			$result_sum_flu_a_h12009_data_now_week[] = $val1;
+			$result_sum_flu_a_data_now_week[] = $val1;
 		}
-
+		//dd($result_sum_flu_a_h12009_data_now_week);
 		//Sum Flu_A_H1
-		for($i=1; $i<=52; $i++){
-
-			$query_flu_a_h1 = WeekSeparate::selectRaw('Flu_A_H1,week_result,year_result')
-														->where('year_result',$year_now)
-														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
-
-														->orderBy('totals','ASC')
-														->first();
-		$sum_flu_a_h1[] = $query_flu_a_h1;
-		}
-
-		foreach($sum_flu_a_h1 as $val2){
-			$pt_data[$val2['week_result'] ?? ''] = $val2['Flu_A_H1'] ?? '';
-		}
-
-		foreach ($arr_week as $key => $value) {
-			if (array_key_exists($key, $pt_data)) {
-				$sum_flu_a_h1_data_now_week[$arr_week[$key]] = $pt_data[$key];
-			}else{
-				$sum_flu_a_h1_data_now_week[$arr_week[$key]] = 0;
-			}
-		}
-		/**** Collation Data Now flu_a_h12009 Week Graph ****/
-		foreach ($sum_flu_a_h1_data_now_week as $key1 => $val1){
-			$result_sum_flu_a_h1_data_now_week[] = $val1;
-		}
+		// for($i=1; $i<=52; $i++){
+		//
+		// 	$query_flu_a_h1 = WeekSeparate::selectRaw('sum(Flu_A_H1) as Flu_A_H1,week_result,year_result')
+		// 												->where('year_result',$year_now)
+		// 												->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+		// 												->groupBy('week_result','year_result')
+		// 												//->orderBy('totals','ASC')
+		// 												->first();
+		// $sum_flu_a_h1[] = $query_flu_a_h1;
+		// }
+		//
+		// foreach($sum_flu_a_h1 as $val2){
+		// 	$pt_data[$val2['week_result'] ?? ''] = $val2['Flu_A_H1'] ?? '';
+		// }
+		//
+		// foreach ($arr_week as $key => $value) {
+		// 	if (array_key_exists($key, $pt_data)) {
+		// 		$sum_flu_a_h1_data_now_week[$arr_week[$key]] = $pt_data[$key];
+		// 	}else{
+		// 		$sum_flu_a_h1_data_now_week[$arr_week[$key]] = 0;
+		// 	}
+		// }
+		// /**** Collation Data Now flu_a_h12009 Week Graph ****/
+		// foreach ($sum_flu_a_h1_data_now_week as $key1 => $val1){
+		// 	$result_sum_flu_a_h1_data_now_week[] = $val1;
+		// }
 
 		//Sum Flu B
 		for($i=1; $i<=52; $i++){
 
-			$query_flu_b = WeekSeparate::selectRaw('Influenza_B,week_result,year_result')
+			$query_flu_b = WeekSeparate::selectRaw('sum(Influenza_B) as Influenza_B,week_result,year_result')
 														->where('year_result',$year_now)
 														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
-
-														->orderBy('totals','ASC')
+														->groupBy('week_result','year_result')
+														//->orderBy('totals','ASC')
 														->first();
 		$sum_flu_b[] = $query_flu_b;
 		}
@@ -391,11 +392,11 @@ class DashboardController extends Controller
 		//Sum Negative
 		for($i=1; $i<=52; $i++){
 
-			$query_negative = WeekSeparate::selectRaw('Negative,week_result,year_result')
+			$query_negative = WeekSeparate::selectRaw('sum(Negative) as Negative,week_result,year_result')
 														->where('year_result',$year_now)
 														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
-														//->groupBy('year_result','week_result','Influenza_B')
-														->orderBy('totals','ASC')
+														->groupBy('year_result','week_result')
+														//->orderBy('totals','ASC')
 														->first();
 		$sum_negative[] = $query_negative;
 		}
@@ -439,8 +440,7 @@ class DashboardController extends Controller
 					'result_sum_flu_b_data_now_week',
 					'result_sum_negative_data_now_week',
 					'result_sum_flu_a_h3_data_now_week',
-					'result_sum_flu_a_h12009_data_now_week',
-					'result_sum_flu_a_h1_data_now_week',
+					'result_sum_flu_a_data_now_week',
 					'result_sum_flu_positive_data_now_week'
 				)
 		);
