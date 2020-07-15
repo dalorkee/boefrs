@@ -9,9 +9,14 @@ use Spatie\Permission\Models\Permission;
 use App\RapidGraph;
 use App\MonthGraph;
 use DB;
-use App\Provinces;
 use App\HelperClass\Helper as CmsHelper;
+use App\Provinces;
 use App\MonthMedian;
+use App\WeekMedian;
+use App\SexGroup;
+use App\AgeGroup;
+use App\NationGroup;
+use App\WeekSeparate;
 
 class DashboardController extends Controller
 {
@@ -93,18 +98,11 @@ class DashboardController extends Controller
 
 		}
 		$case_all = $case_gen_code+$case_hos_send+$case_lab_confirm;
-		// $donut_charts_arr = array(
-		// 	array("label" => "Male" ,"symbol" => "M","y" =>$case_male),
-		// 	array("label" => "Female" ,"symbol" => "F","y" =>$case_female)
-		// );
-
-
-
 
 		//Percent Male/Female
-		$t_male = DB::table('z_rp_sex')->sum('male');
-		$t_female = DB::table('z_rp_sex')->sum('female');
-		$t_total = DB::table('z_rp_sex')->sum('totals');
+		$t_male = SexGroup::sum('male');
+		$t_female = SexGroup::sum('female');
+		$t_total = SexGroup::sum('totals');
 		//dd($t_male,$t_female,$t_total);
 		$percent_male = CmsHelper::Cal_percent($t_male,$t_total);
 		$percent_female = CmsHelper::Cal_percent($t_female,$t_total);
@@ -113,26 +111,24 @@ class DashboardController extends Controller
 			array("label" => "Male" ,"symbol" => "Male","y" =>$percent_male),
 			array("label" => "Female" ,"symbol" => "Female","y" =>$percent_female)
 		);
-
-
 		//Age Group
-		$datas_age1 = DB::table('z_rp_age_group')->sum('under1y');
-		$datas_age2 = DB::table('z_rp_age_group')->sum('1-4y');
+		$datas_age1 = AgeGroup::sum('under1y');
+		$datas_age2 = AgeGroup::sum('1-4y');
 		$datas_age['0-4y'] = $datas_age1+$datas_age2;
-		$datas_age['5-9y'] = DB::table('z_rp_age_group')->sum('5-9y');
-		$datas_age['10-14y'] = DB::table('z_rp_age_group')->sum('10-14y');
-		$datas_age['15-19y'] = DB::table('z_rp_age_group')->sum('15-19y');
-		$datas_age['20-24y'] = DB::table('z_rp_age_group')->sum('20-24y');
-		$datas_age['25-29y'] = DB::table('z_rp_age_group')->sum('25-29y');
-		$datas_age['30-34y'] = DB::table('z_rp_age_group')->sum('30-34y');
-		$datas_age['35-39y'] = DB::table('z_rp_age_group')->sum('35-39y');
-		$datas_age['40-44y'] = DB::table('z_rp_age_group')->sum('40-44y');
-		$datas_age['45-49y'] = DB::table('z_rp_age_group')->sum('45-49y');
-		$datas_age['50-54y'] = DB::table('z_rp_age_group')->sum('50-54y');
-		$datas_age['55-59y'] = DB::table('z_rp_age_group')->sum('55-59y');
-		$datas_age['60-64y'] = DB::table('z_rp_age_group')->sum('60-64y');
-		$datas_age['65up'] = DB::table('z_rp_age_group')->sum('65up');
-		$datas_age['unknow'] = DB::table('z_rp_age_group')->sum('unknow');
+		$datas_age['5-9y'] = AgeGroup::sum('5-9y');
+		$datas_age['10-14y'] = AgeGroup::sum('10-14y');
+		$datas_age['15-19y'] = AgeGroup::sum('15-19y');
+		$datas_age['20-24y'] = AgeGroup::sum('20-24y');
+		$datas_age['25-29y'] = AgeGroup::sum('25-29y');
+		$datas_age['30-34y'] = AgeGroup::sum('30-34y');
+		$datas_age['35-39y'] = AgeGroup::sum('35-39y');
+		$datas_age['40-44y'] = AgeGroup::sum('40-44y');
+		$datas_age['45-49y'] = AgeGroup::sum('45-49y');
+		$datas_age['50-54y'] = AgeGroup::sum('50-54y');
+		$datas_age['55-59y'] = AgeGroup::sum('55-59y');
+		$datas_age['60-64y'] = AgeGroup::sum('60-64y');
+		$datas_age['65up'] = AgeGroup::sum('65up');
+		$datas_age['unknow'] = AgeGroup::sum('unknow');
 
 		$sum_age_group = 0;
 
@@ -143,13 +139,12 @@ class DashboardController extends Controller
 		//dd($line_charts_age_group_arr);
 
 		//Nation Graph
-		$total_nation = DB::table('z_rp_nation')->sum('totals');
-
-		$datas_nation['Thai'] = DB::table('z_rp_nation')->sum('thai');
-		$datas_nation['Burmese'] = DB::table('z_rp_nation')->sum('burmese');
-		$datas_nation['Lao'] = DB::table('z_rp_nation')->sum('lao');
-		$datas_nation['Cambodian'] = DB::table('z_rp_nation')->sum('cambodian');
-		$datas_nation['Other'] = DB::table('z_rp_nation')->sum('other');
+		$total_nation = NationGroup::sum('totals');
+		$datas_nation['Thai'] = NationGroup::sum('thai');
+		$datas_nation['Burmese'] = NationGroup::sum('burmese');
+		$datas_nation['Lao'] = NationGroup::sum('lao');
+		$datas_nation['Cambodian'] = NationGroup::sum('cambodian');
+		$datas_nation['Other'] = NationGroup::sum('other');
 
 		$sum_nation_group = 0;
 
@@ -158,12 +153,9 @@ class DashboardController extends Controller
 
 			$line_charts_nation_group_arr[] = array("label"=> $key_nation, "y"=> CmsHelper::Cal_percent($val_nation,$total_nation));
 		}
-		$datas_nation['nation_totals'] = DB::table('z_rp_nation')->sum('totals');
+		$datas_nation['nation_totals'] = NationGroup::sum('totals');
 
 		/** Median **/
-		$year_now = date('Y');
-
-
     $year_now = date('Y');
 		$year_last_med = $year_now-1;
 		$year_back_3 = $year_now-3;
@@ -201,8 +193,6 @@ class DashboardController extends Controller
 		foreach($arr_now_year_median as $val){
 			$pt_data[$val['month_result'] ?? ''] = $val['totals'] ?? '';
 		}
-		//
-		// dd($pt_data);
 
 		foreach ($arr_month as $key => $value) {
 			if (array_key_exists($key, $pt_data)) {
@@ -211,14 +201,222 @@ class DashboardController extends Controller
 				$data_now_year_median[$arr_month[$key]] = 0;
 			}
 		}
-		/**** Collation Data Now Median Graph ****/
+		/**** Collation Data Now Median Year Graph ****/
 		foreach ($data_now_year_median as $key1 => $val1){
-			$data_now_median[] = array("label" => $key1 , "y" => $val1);
+			$result_data_now_year_median[] = array("label" => $key1 , "y" => $val1);
 		}
 			//dd($data_now_median);
+		$arr_week = array("01" => "wk01","02" => "wk02","03" => "wk03","04" => "wk04","05" => "wk05",
+											"06" => "wk06","07" => "wk07","08" => "wk08","09" => "wk09","10" => "wk10",
+											"11" => "wk11","12" => "wk12","13" => "wk13","14" => "wk14","15" => "wk15",
+											"16" => "wk16","17" => "wk17","18" => "wk18","19" => "wk19","20" => "wk20",
+											"21" => "wk21","22" => "wk22","23" => "wk23","24" => "wk24","25" => "wk25",
+											"26" => "wk26","27" => "wk27","28" => "wk28","29" => "wk29","30" => "wk30",
+											"31" => "wk31","32" => "wk32","33" => "wk33","34" => "wk34","35" => "wk35",
+											"36" => "wk36","37" => "wk37","38" => "wk38","39" => "wk39","40" => "wk40",
+											"41" => "wk41","42" => "wk42","43" => "wk43","44" => "wk44","45" => "wk45",
+											"46" => "wk46","47" => "wk47","48" => "wk48","49" => "wk49","50" => "wk50",
+											"51" => "wk51","52" => "wk52"
+											);
+		for($i=1; $i<=52; $i++){
+			$result3 = WeekMedian::selectRaw('week_result,year_result,sum(totals) AS totals')
+			->whereBetween('year_result',[$year_back_3,$year_last_med])
+			->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+			->groupBy('year_result','week_result')
+			->orderBy('totals','ASC')
+			->limit(1,1)
+			->first();
+
+			$data_week_median[] = array("label" => $arr_week[str_pad($i,2,"0",STR_PAD_LEFT)],"y" => $result3['totals']);
+		}
+		//dd($data_week_median);
+		for($i=1; $i<=52; $i++){
+			$result4 = WeekMedian::selectRaw('week_result,year_result,sum(totals) AS totals')
+			->where('year_result',$year_now)
+			->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+			->groupBy('year_result','week_result')
+			->orderBy('totals','ASC')
+			->first();
+
+			$arr_now_week_median[] = $result4;
+		}
+		//dd($arr_now_week_median);
+		foreach($arr_now_week_median as $val){
+			$pt_data[$val['week_result'] ?? ''] = $val['totals'] ?? '';
+		}
+
+		foreach ($arr_week as $key => $value) {
+			if (array_key_exists($key, $pt_data)) {
+				$data_now_week_median[$arr_week[$key]] = $pt_data[$key];
+			}else{
+				$data_now_week_median[$arr_week[$key]] = 0;
+			}
+		}
+		/**** Collation Data Now Median Week Graph ****/
+		foreach ($data_now_week_median as $key1 => $val1){
+			$result_data_now_week_median[] = array("label" => $key1 , "y" => $val1);
+		}
 		/** Median **/
 
+		//RP_Separate
+		for($i=1; $i<=52; $i++){
+		$rp_week_length[] = "wk".$i;
+		}
+		//Total
 
+		//Sum Flu Positive
+		for($i=1; $i<=52; $i++){
+			$query_flu_positive = WeekSeparate::selectRaw('(sum(Flu_A_H1)+sum(Flu_A_H1pdm09)+sum(Flu_A_H3)+sum(Influenza_B)) * 100 / sum(totals) AS percent')
+														->where('year_result',$year_now)
+														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+														->orderBy('percent','ASC')
+														->first();
+				$sum_flu_positive[] = 	$query_flu_positive;
+		}
+
+		foreach($sum_flu_positive as $key => $val2){
+			$result_sum_flu_positive_data_now_week[] = $val2->percent;
+		}
+		//dd($result_sum_flu_positive_data_now_week);
+		//Sum Flu_A_H3
+		for($i=1; $i<=52; $i++){
+
+			$query_flu_a_h3 = WeekSeparate::selectRaw('Flu_A_H3,week_result,year_result')
+														->where('year_result',$year_now)
+														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+														->orderBy('totals','ASC')
+														->first();
+		$sum_flu_a_h3[] = $query_flu_a_h3;
+		}
+
+		foreach($sum_flu_a_h3 as $val2){
+			$pt_data[$val2['week_result'] ?? ''] = $val2['Flu_A_H3'] ?? '';
+		}
+
+		foreach ($arr_week as $key => $value) {
+			if (array_key_exists($key, $pt_data)) {
+				$sum_flu_a_h3_data_now_week[$arr_week[$key]] = $pt_data[$key];
+			}else{
+				$sum_flu_a_h3_data_now_week[$arr_week[$key]] = 0;
+			}
+		}
+		/**** Collation Data Now Flu_A_H3 Week Graph ****/
+		foreach ($sum_flu_a_h3_data_now_week as $key1 => $val1){
+			$result_sum_flu_a_h3_data_now_week[] = $val1;
+		}
+		//Sum Flu_A_H1pdm09
+		for($i=1; $i<=52; $i++){
+
+			$query_flu_a_h12009 = WeekSeparate::selectRaw('Flu_A_H1pdm09,week_result,year_result')
+														->where('year_result',$year_now)
+														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+
+														->orderBy('totals','ASC')
+														->first();
+		$sum_flu_a_h12009[] = $query_flu_a_h12009;
+		}
+
+		foreach($sum_flu_a_h12009 as $val2){
+			$pt_data[$val2['week_result'] ?? ''] = $val2['Flu_A_H1pdm09'] ?? '';
+		}
+
+		foreach ($arr_week as $key => $value) {
+			if (array_key_exists($key, $pt_data)) {
+				$sum_flu_a_h12009_data_now_week[$arr_week[$key]] = $pt_data[$key];
+			}else{
+				$sum_flu_a_h12009_data_now_week[$arr_week[$key]] = 0;
+			}
+		}
+		/**** Collation Data Now flu_a_h12009 Week Graph ****/
+		foreach ($sum_flu_a_h12009_data_now_week as $key1 => $val1){
+			$result_sum_flu_a_h12009_data_now_week[] = $val1;
+		}
+
+		//Sum Flu_A_H1
+		for($i=1; $i<=52; $i++){
+
+			$query_flu_a_h1 = WeekSeparate::selectRaw('Flu_A_H1,week_result,year_result')
+														->where('year_result',$year_now)
+														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+
+														->orderBy('totals','ASC')
+														->first();
+		$sum_flu_a_h1[] = $query_flu_a_h1;
+		}
+
+		foreach($sum_flu_a_h1 as $val2){
+			$pt_data[$val2['week_result'] ?? ''] = $val2['Flu_A_H1'] ?? '';
+		}
+
+		foreach ($arr_week as $key => $value) {
+			if (array_key_exists($key, $pt_data)) {
+				$sum_flu_a_h1_data_now_week[$arr_week[$key]] = $pt_data[$key];
+			}else{
+				$sum_flu_a_h1_data_now_week[$arr_week[$key]] = 0;
+			}
+		}
+		/**** Collation Data Now flu_a_h12009 Week Graph ****/
+		foreach ($sum_flu_a_h1_data_now_week as $key1 => $val1){
+			$result_sum_flu_a_h1_data_now_week[] = $val1;
+		}
+
+		//Sum Flu B
+		for($i=1; $i<=52; $i++){
+
+			$query_flu_b = WeekSeparate::selectRaw('Influenza_B,week_result,year_result')
+														->where('year_result',$year_now)
+														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+
+														->orderBy('totals','ASC')
+														->first();
+		$sum_flu_b[] = $query_flu_b;
+		}
+
+		foreach($sum_flu_b as $val2){
+			$pt_data[$val2['week_result'] ?? ''] = $val2['Influenza_B'] ?? '';
+		}
+
+		foreach ($arr_week as $key => $value) {
+			if (array_key_exists($key, $pt_data)) {
+				$sum_flu_b_data_now_week[$arr_week[$key]] = $pt_data[$key];
+			}else{
+				$sum_flu_b_data_now_week[$arr_week[$key]] = 0;
+			}
+		}
+		/**** Collation Data Now flu_b Week Graph ****/
+		foreach ($sum_flu_b_data_now_week as $key1 => $val1){
+			$result_sum_flu_b_data_now_week[] = $val1;
+		}
+
+		//Sum Negative
+		for($i=1; $i<=52; $i++){
+
+			$query_negative = WeekSeparate::selectRaw('Negative,week_result,year_result')
+														->where('year_result',$year_now)
+														->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
+														//->groupBy('year_result','week_result','Influenza_B')
+														->orderBy('totals','ASC')
+														->first();
+		$sum_negative[] = $query_negative;
+		}
+
+		foreach($sum_negative as $val2){
+			$pt_data[$val2['week_result'] ?? ''] = $val2['Negative'] ?? '';
+		}
+
+		foreach ($arr_week as $key => $value) {
+			if (array_key_exists($key, $pt_data)) {
+				$sum_negative_data_now_week[$arr_week[$key]] = $pt_data[$key];
+			}else{
+				$sum_negative_data_now_week[$arr_week[$key]] = 0;
+			}
+		}
+		/**** Collation Data Now negative  Week Graph ****/
+		foreach ($sum_negative_data_now_week as $key1 => $val1){
+			$result_sum_negative_data_now_week[] = $val1;
+		}
+		//dd($result_sum_flu_b_data_now_week);
+		//dd($rp_week_length);
 
 		return view('dashboard.index',
 				compact(
@@ -234,7 +432,16 @@ class DashboardController extends Controller
 					'provinces',
 					'list_year',
 					'data_three_year_median',
-					'data_now_median'
+					'result_data_now_year_median',
+					'data_week_median',
+					'result_data_now_week_median',
+					'rp_week_length',
+					'result_sum_flu_b_data_now_week',
+					'result_sum_negative_data_now_week',
+					'result_sum_flu_a_h3_data_now_week',
+					'result_sum_flu_a_h12009_data_now_week',
+					'result_sum_flu_a_h1_data_now_week',
+					'result_sum_flu_positive_data_now_week'
 				)
 		);
 	}
@@ -242,7 +449,38 @@ class DashboardController extends Controller
 
 	public function index_post(Request $request)
 	{
-		dd($request);
+		//dd($request);
+		$select_province = (!empty($request->select_province)) ? trim($request->select_province)  : 0;
+		$select_year = (!empty($request->select_year)) ? trim($request->select_year)  : 0;
+		//Percent Male/Female
+		$result = SexGroup::query();
+		$t_male = $result->sum('male');
+		$t_female = $result->sum('female');
+		$t_total = $result->sum('totals');
+
+		if (isset($select_province) || $select_year) {
+			if($select_province==0 || $select_year==0){
+
+			}
+				$t_male = $result->where('hos_prov2', $select_province)->orwhere('year_result',$select_year);
+				$t_female = $result->where('hos_prov', $select_province)->orwhere('year_result',$select_year);
+				$t_total = $result->where('hos_prov', $select_province)->orwhere('year_result',$select_year);
+		}
+
+		$t_male = $t_male->get();
+
+		dd($result);
+		//dd($t_male,$t_female,$t_total);
+		$percent_male = CmsHelper::Cal_percent($t_male,$t_total);
+		$percent_female = CmsHelper::Cal_percent($t_female,$t_total);
+		//dd($percent_male,$percent_female);
+		$donut_charts_sex_arr = array(
+			array("label" => "Male" ,"symbol" => "Male","y" =>$percent_male),
+			array("label" => "Female" ,"symbol" => "Female","y" =>$percent_female)
+		);
+
+
+
 	}
 	/**
 	* Show the form for creating a new resource.
