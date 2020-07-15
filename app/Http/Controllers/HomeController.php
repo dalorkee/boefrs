@@ -7,54 +7,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Session;
+use App\Counter;
+use DB;
 
 class HomeController extends BoeFrsController
 {
-	/**
-	* Create a new controller instance.
-	*
-	* @return void
-	*/
-	public function __construct()
-	{
+	public function __construct(){
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
 		//$this->middleware(['permission:manageuser']);
 		$this->middleware('page_session');
 
 	}
-
-	/**
-	* Show the application dashboard.
-	*
-	* @return \Illuminate\Contracts\Support\Renderable
-	*/
 	public function index(Request $request) {
-		/* set thai province to session */
-		/*
-		if (!Session::has('provinces')) {
-			$provinces = BoeFrsController::provinceList();
-			Session::put('provinces', $provinces);
+		/* set counter */
+		$last_created = $this->getIpAddrPeriodTime($_SERVER['REMOTE_ADDR']);
+		if (count($last_created) <= 0) {
+			$this->addTodayToDb();
+		} else {
+			$last_create_date = strtotime($last_created[0]['created_at']);
+			$expire_date = (int)$last_create_date+(60*5);
+			$currentDate = strtotime(date('Y-m-d H:i:s'));
+			if ($expire_date < $currentDate) {
+				$this->addTodayToDb();
+			}
 		}
-		*/
-		/* set role name to session */
-		/*
-		if (!Session::has('user_role_name')) {
-			$roleArr = auth()->user()->roles->pluck('name');
-			$userRole = $roleArr[0];
-			Session::put('user_role_name', $userRole);
-		}
-		*/
-		/* set user hospital to session */
-		/*
-		if (!Session::has('user_hospital_name')) {
-			$user_hosp = parent::hospitalByCode(auth()->user()->hospcode);
-			$user_hosp = $user_hosp->pluck('hosp_name')->all();
-			$user_hosp_name = $user_hosp[0];
-			Session::put('user_hospital_name', $user_hosp_name);
-		}
-		*/
-		/* router by permission */
+
+		/* check permission and redirect */
 		$roleArr = auth()->user()->roles->pluck('name');
 		$userRole = $roleArr[0];
 		if ($userRole == 'admin') {
@@ -64,5 +43,22 @@ class HomeController extends BoeFrsController
 		} else {
 			return redirect()->route('logout');
 		}
+	}
+
+	private function addTodayToDb() {
+		$cnt = new Counter;
+		$cnt->cnt_date = date('Y-m-d');
+		$cnt->cnt_ip = $_SERVER['REMOTE_ADDR'];
+		$save = $cnt->save();
+		return $save;
+	}
+
+	private function getIpAddrPeriodTime($ip_addr) {
+		return Counter::select('created_at')
+			->where('cnt_ip', '=', $ip_addr)
+			->orderBy('created_at', 'DESC')
+			->limit(1)
+			->get()
+			->toArray();
 	}
 }
