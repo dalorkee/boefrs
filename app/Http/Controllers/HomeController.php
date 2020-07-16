@@ -17,6 +17,9 @@ class HomeController extends BoeFrsController
 		$this->middleware(['role:admin|hospital|lab']);
 		$this->middleware('page_session');
 
+		$this->yesterday = date('Y-m-d', strtotime("-1 day"));
+		$this->today = date('Y-m-d');
+
 	}
 
 	public function index(Request $request) {
