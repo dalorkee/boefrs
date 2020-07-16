@@ -18,6 +18,10 @@ canvas {
 <script src="{{ URL::asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
 <script src="{{ URL::asset('assets/extra-libs/chart.js/Chart.min.js') }}"></script>
 <script src="{{ URL::asset('assets/extra-libs/chart.js/utils.js') }}"></script>
+@endsection
+@section('meta-token')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('contents')
 <div class="page-breadcrumb bg-light pb-2">
 	<div class="row">
