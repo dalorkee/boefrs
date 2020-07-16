@@ -15,10 +15,10 @@ class HomeController extends BoeFrsController
 	public function __construct(){
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab']);
-		//$this->middleware(['permission:manageuser']);
 		$this->middleware('page_session');
 
 	}
+
 	public function index(Request $request) {
 		/* set counter */
 		$last_created = $this->getIpAddrPeriodTime($_SERVER['REMOTE_ADDR']);
@@ -29,6 +29,11 @@ class HomeController extends BoeFrsController
 			$expire_date = (int)$last_create_date+(60*5);
 			$currentDate = strtotime(date('Y-m-d H:i:s'));
 			if ($expire_date < $currentDate) {
+				if (!$this->checkRepeatDate()) {
+					$data = $this->getYesterdayData();
+					$this->addYesterdayDataToTaDb($data[0]['intYesterday']);
+					$this->deleteYesterdayData();
+				}
 				$this->addTodayToDb();
 			}
 		}
@@ -60,5 +65,31 @@ class HomeController extends BoeFrsController
 			->limit(1)
 			->get()
 			->toArray();
+	}
+
+	private function checkRepeatDate() {
+		$result = DB::table('daily')->select('daily_date')->where('daily_date', '=', $this->yesterday)->get()->toArray();
+		if (count($result) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private function getYesterdayData() {
+		return Counter::select(DB::raw('COUNT(*) AS intYesterday'))
+			->where('cnt_date', '=', $this->yesterday)
+			->get()
+			->toArray();
+	}
+
+	private function addYesterdayDataToTaDb($cnt=0) {
+		return DB::table('daily')->insert(
+			['daily_date' => $this->yesterday, 'daily_num' => $cnt]
+		);
+	}
+
+	private function deleteYesterdayData() {
+		return Counter::where('cnt_date', '!=', $this->today)->delete();
 	}
 }
