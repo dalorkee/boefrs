@@ -51,8 +51,11 @@ class CounterController extends Controller
 				'cntThisYear' => $cnt_this_year[0]->cntYear
 			);
 		}
-
-		return view('statistics.counter', ['counter' => $counter]);
+		$monthChart = $this->getMonthChart();
+		return view('statistics.counter', [
+			'counter' => $counter,
+			'monthChart' => $monthChart
+		]);
 	}
 
 	protected function getYesterdayData() {
@@ -114,6 +117,23 @@ class CounterController extends Controller
 	protected function getThisYearCnt() {
 		$this_year = date('Y');
 		return DB::table('daily')->select(DB::raw('SUM(daily_num) AS cntYear'))->where(DB::raw('DATE_FORMAT(daily_date, "%Y")'), '=', $this_year)->get()->toArray();
+	}
+
+	protected function getMonthChart($year=null) {
+		if (is_null($year)) {
+			$year = date('Y');
+		}
+		for ($i=1; $i<=12; $i++) {
+			$x = str_pad($i, 2, "0", STR_PAD_LEFT);
+			$cond = $year.'-'.$x;
+			$rs = DB::table('daily')->select(DB::raw('SUM(daily_num) AS sumMonth'))->where(DB::raw('DATE_FORMAT(daily_date, "%Y-%m")'), '=', $cond)->groupBy(DB::raw('DATE_FORMAT(daily_date, "%Y-%m")'))->get()->toArray();
+			if (count($rs) <= 0) {
+				$monthChart[$i] = 0;
+			} else {
+				$monthChart[$i] = (int)$rs[0]->sumMonth;
+			}
+		}
+		return $monthChart;
 	}
 
 }
