@@ -52,8 +52,8 @@
 			<div class="ml-auto text-right">
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Map</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Spread map</li>
+						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Cluster Map</li>
 					</ol>
 				</nav>
 			</div>
@@ -102,6 +102,8 @@
 			center: [ 103.511621, 12.538136 ],
 			zoom: 5.2
 		});
+
+		//map.addControl(new mapboxgl.NavigationControl());
 
 		const colors = [' #B71C1C',' #E64A19 ','#E91E63','#FF00FF','#66BB6A', '#FDD835', '#1E90FF'];
 

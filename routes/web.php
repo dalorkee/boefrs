@@ -29,8 +29,8 @@ Route::group(['middleware' => ['auth']], function() {
 
 /* dashboard */
 Route::get('/dashboard/prov/{id}', 'DashboardController@provinceDashboard')->name('prov');
-Route::get('/map/spread', 'MapController@index')->name('spread');
 Route::post('/dashboard', 'DashboardController@index_post')->name('dashboard.post');
+
 /* log */
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
@@ -72,7 +72,6 @@ Route::get('/code/delete/{id}','CodeController@destroy')->name('codeSoftDelete')
 Route::post('province/district', 'PatientsController@districtFetch')->name('districtFetch');
 Route::post('province/district/sub-district', 'PatientsController@subDistrictFetch')->name('subDistrictFetch');
 
-
 /* patient */
 Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
 Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
@@ -91,9 +90,14 @@ Route::get('/lab/create/{id}', 'LabController@create')->name('createLab');
 Route::get('/lab/show/{id}', 'LabController@show')->name('viewLab');
 Route::get('/lab/edit/{id}', 'LabController@edit')->name('editLab');
 Route::post('lab-store', 'LabController@store')->name('lab-store');
+
 /* PDF Generate */
 Route::get('/lab/show-pre-print/{id}', 'LabController@show_preprint')->name('previewprintLab');
 Route::get('/report/labresult/{id}', 'LabPDFController@LabresultPDF')->name('viewprintpdfforlab');
 
 /* Counter */
 Route::get('/counter', 'CounterController@index')->name('counter');
+
+/* map */
+Route::get('/map/spread', 'MapController@index')->name('spread');
+Route::get('/map/marker', 'MapController@marker')->name('marker');
