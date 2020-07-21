@@ -100,4 +100,6 @@ Route::get('/counter', 'CounterController@index')->name('counter');
 
 /* map */
 Route::get('/map/spread', 'MapController@index')->name('spread');
+Route::get('/map/dot', 'MapController@dot')->name('dot');
 Route::get('/map/marker', 'MapController@marker')->name('marker');
+Route::get('/map/chart', 'MapController@chart')->name('chart');

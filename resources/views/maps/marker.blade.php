@@ -2,7 +2,7 @@
 @section('custom-style')
 <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-assembly/v0.23.2/assembly.min.css" rel="stylesheet">
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet'>
 @endsection
 @section('internal-style')
 <style>
@@ -14,14 +14,45 @@
 	max-width: 400px;
 	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
-.marker {
-	background-image: url("{{ URL::asset('assets/images/mapbox-icon.png') }}");
-	background-size: cover;
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	cursor: pointer;
+.marker {width:0; height:0;}
+.marker  span {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-sizing:border-box;
+  width: 30px;
+  height: 30px;
+  color:#fff;
+  background: #693;
+  border:solid 2px;
+  border-radius: 0 70% 70%;
+  box-shadow:0 0 2px #000;
+  cursor: pointer;
+  transform-origin:0 0;
+  transform: rotateZ(-135deg);
 }
+.marker b {transform: rotateZ(135deg)}
+
+.marker1 {width:0; height:0;}
+.marker1  span {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  box-sizing:border-box;
+  width: 30px;
+  height: 30px;
+  color:#fff;
+  background: #ff00ff;
+  border:solid 2px;
+  border-radius: 0 70% 70%;
+  box-shadow:0 0 2px #000;
+  cursor: pointer;
+  transform-origin:0 0;
+  transform: rotateZ(-135deg);
+}
+.marker1 b {transform: rotateZ(135deg)}
+
+
 .mapboxgl-popup-content {
 	min-width: 250px;
 }
@@ -51,132 +82,64 @@
 </div>
 @endsection
 @section('bottom-script')
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
 <script>
-	mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkNDQ0MzI5cCJ9.C2REqhILLm2HKIQSn9Wc0A';
+mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkNDQ0MzI5cCJ9.C2REqhILLm2HKIQSn9Wc0A';
 	var map = new mapboxgl.Map({
-		container: 'map',
-		style: 'mapbox://styles/mapbox/streets-v11',
-		center: [ 103.511621, 12.538136 ],
-		zoom: 5.2
-	});
+	container: 'map',
+	style: 'mapbox://styles/mapbox/streets-v11',
+	center: [ 103.511621, 12.538136 ],
+	zoom: 5.2
+});
+map.on('load', function() {
+	var geojson = {
+	  "type": "FeatureCollection",
+	  "features": [{
+	      "type": "Feature",
+	      "geometry": {
+	        "type": "Point",
+	        "coordinates": [100.5217518, 13.85299353]
+	      },
+	      "properties": {
+	        "title": "Mapbox",
+	        "description": "Washington, D.C."
+	      }
+	    },
+	    {
+	      "type": "Feature",
+	      "geometry": {
+	        "type": "Point",
+	        "coordinates": [102.1022606, 12.60435331]
+	      },
+	      "properties": {
+	        "title": "Mapbox",
+	        "description": "San Francisco, California"
+	      }
+	    }
+	  ]
+	};
 
-	map.on('load', function() {
-		// Add an image to use as a custom marker
-		map.loadImage('{{ URL::asset("assets/images/custom-marker.png") }}', function(error, image) {
-			if (error) throw error;
-			map.addImage('custom-marker', image);
-			map.addSource('places', {
-				'type': 'geojson',
-				'data': {
-					'type': 'FeatureCollection',
-					'features': [
-						@foreach ($marker_map as $key => $value)
-							@php
-								$pc_b = (($value->b/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
-								$pc_flu_a = (($value->flu_a/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
-								$pc_flu_h = (($value->flu_h/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
-								$pc_neg = (($value->neg/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
+	// add markers to map
+geojson.features.forEach(function(marker, i) {
 
-								$desc = "<div class=\"card\">";
-									$desc .= "<div class=\"card-body\">";
-										$desc .= "<h4 class=\"card-title m-b-0 border-bottom\"><i class=\"mdi mdi-hospital-marker\"></i> ".$hosp_name[$value->hoscode]."</h4>";
-										$desc .= "<div class=\"m-t-20\">";
-											$desc .= "<div class=\"d-flex no-block align-items-center\">";
-												$desc .= "<span>B, ".number_format($pc_b, 2)."% </span>";
-												$desc .= "<div class=\"ml-auto\"><span>".number_format($value->b)."</span></div>";
-											$desc .= "</div>";
-											$desc .= "<div class=\"progress\">";
-												$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$pc_b."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
-											$desc .= "</div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
-											$desc .= "<span>Flu A, ".number_format($pc_flu_a, 2)."%</span>";
-											$desc .= "<div class=\"ml-auto\"><span>".number_format($value->flu_a)."</span></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"progress\">";
-											$desc .= "<div class=\"progress-bar progress-bar-striped bg-danger\" role=\"progressbar\" style=\"width:".$pc_flu_a."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
-											$desc .= "<span>Flu H, ".number_format($pc_flu_h, 2)."%</span>";
-											$desc .= "<div class=\"ml-auto\"><span>".number_format($value->flu_h)."</span></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"progress\">";
-											$desc .= "<div class=\"progress-bar progress-bar-striped bg-info\" role=\"progressbar\" style=\"width:".$pc_flu_h."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
-											$desc .= "<span>Nagative, ".number_format($pc_neg, 2)."%</span>";
-											$desc .= "<div class=\"ml-auto\"><span>".number_format($value->neg)."</span></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"progress\">";
-											$desc .= "<div class=\"progress-bar progress-bar-striped bg-success\" role=\"progressbar\" style=\"width:".$pc_neg."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
-										$desc .= "</div>";
-									$desc .= "</div>";
-								$desc .= "</div>";
-							@endphp
-						{
-							'type': 'Feature',
-							'properties': {
-								'description': '{!!$desc!!}',
+// create a HTML element for each feature
+var el = document.createElement('div');
+if (i == 1) {
+	el.className = 'marker';
+} else {
+	el.className = 'marker1';
+}
+el.innerHTML = '<span><b>' + (i + 1) + '</b></span>'
+// make a marker for each feature and add it to the map
+new mapboxgl.Marker(el)
+	.setLngLat(marker.geometry.coordinates)
+	.setPopup(new mapboxgl.Popup({
+		offset: 25
+	}) // add popups
+	.setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+.addTo(map);
+});
 
-								'icon': 'theatre'
-							},
-							'geometry': {
-								'type': 'Point',
-								'coordinates': [{{ $value->lon }} , {{ $value->lat }}]
-							}
-						},
-						@endforeach
-					]
-				}
-			});
-
-
-		// Add a layer showing the places.
-		map.addLayer({
-			'id': 'places',
-			'type': 'symbol',
-			'source': 'places',
-			'layout': {
-				'icon-image': 'custom-marker',
-				//'icon-image': '{icon}-15',
-				'icon-allow-overlap': true
-			}
-		});
-
-
-		// Add zoom and rotation controls to the map.
-		map.addControl(new mapboxgl.NavigationControl());
-
-		// When a click event occurs on a feature in the places layer, open a popup at the
-		// location of the feature, with description HTML from its properties.
-		map.on('click', 'places', function(e) {
-			var coordinates = e.features[0].geometry.coordinates.slice();
-			var description = e.features[0].properties.description;
-
-			// Ensure that if the map is zoomed out such that multiple
-			// copies of the feature are visible, the popup appears
-			// over the copy being pointed to.
-			while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-			coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-		}
-
-		new mapboxgl.Popup()
-			.setLngLat(coordinates)
-			.setHTML(description)
-			.addTo(map);
-		});
-
-		// Change the cursor to a pointer when the mouse is over the places layer.
-		map.on('mouseenter', 'places', function() {
-			map.getCanvas().style.cursor = 'pointer';
-		});
-
-		// Change it back to a pointer when it leaves.
-		map.on('mouseleave', 'places', function() {
-			map.getCanvas().style.cursor = '';
-		});
-	});
 });
 </script>
 @endsection

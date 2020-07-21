@@ -29,7 +29,8 @@
 				<li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-google-maps"></i><span class="hide-menu">แผนที่ </span></a>
 					<ul aria-expanded="false" class="collapse first-level">
 						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('spread') }}" aria-expanded="false"><i class="mdi mdi-plus"></i><span class="hide-menu">Cluster Map</span></a></li>
-						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('marker') }}" aria-expanded="false"><i class="mdi mdi-plus"></i><span class="hide-menu">Dot Map</span></a></li>
+						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('chart') }}" aria-expanded="false"><i class="mdi mdi-plus"></i><span class="hide-menu">Dot Map</span></a></li>
+						<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('marker') }}" aria-expanded="false"><i class="mdi mdi-plus"></i><span class="hide-menu">Marker Map</span></a></li>
 					</ul>
 				</li>
 				@endrole
