@@ -21,7 +21,7 @@ class MapController extends Controller
 		);
 	}
 
-	public function dot() {
+	public function pin() {
 		$hospName = self::getFrsHospName();
 		if (!is_null($hospName)) {
 			$marker_map = DB::table('z_rp_map_marker')->select(
@@ -36,7 +36,7 @@ class MapController extends Controller
 		} else {
 			$marker_map = null;
 		}
-		return view('maps.dot', [
+		return view('maps.pin', [
 			'hosp_name' => $hospName,
 			'marker_map' => $marker_map
 		]);
