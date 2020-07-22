@@ -80,7 +80,7 @@
 </div>
 @endsection
 @section('bottom-script')
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<script src="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.js') }}"></script>
 <script src="{{ URL::asset('assets/extra-libs/chart.js/Chart.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/mapbox-plugins/bundle.js') }}"></script>
 <script>
@@ -186,7 +186,7 @@ map.on('load', function() {
 				'class': 'bounceIn',
 				'data': {
 					'datasets': [{
-						'data': [{{$pc_b}}, {{$pc_flu_a}}, {{$pc_flu_h}}, {{$pc_neg}}],
+						'data': [{{number_format($pc_b, 2)}}, {{number_format($pc_flu_a,2)}}, {{number_format($pc_flu_h,2)}}, {{number_format($pc_neg,2)}}],
 						'backgroundColor': ['#ff6384', '#FFB447', '#36a2eb', '#77DD77']
 					}],
 					'labels': ['B', 'Flu A', 'Flu H', 'Neg']

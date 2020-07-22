@@ -1,8 +1,8 @@
 @extends('layouts.index')
 @section('custom-style')
-<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css" rel="stylesheet">
-<link href="https://api.mapbox.com/mapbox-assembly/v0.23.2/assembly.min.css" rel="stylesheet">
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet'>
+<!--<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css" rel="stylesheet">-->
+<link href="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/assembly/assembly-v0.23.2.min.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('asset(libs/mapbox/plugins/mapbox-gl-js/v1.11.1/mapbox-gl.css') }}" rel='stylesheet'>
 @endsection
 @section('internal-style')
 <style>
@@ -82,7 +82,7 @@
 </div>
 @endsection
 @section('bottom-script')
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<script src="{{ URL::asset('assets/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.js') }}"></script>
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkNDQ0MzI5cCJ9.C2REqhILLm2HKIQSn9Wc0A';
 	var map = new mapboxgl.Map({
