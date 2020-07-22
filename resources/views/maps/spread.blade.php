@@ -5,6 +5,12 @@
 @endsection
 @section('internal-style')
 <style>
+.topbar {
+	z-index: 10001 !important;
+}
+.left-sidebar {
+	z-index: 10000 !important;
+}
 .page-wrapper {
 	background: white !important;
 }
@@ -15,10 +21,35 @@
 }
 #map {
 	position:absolute;
-	top:0;
-	bottom:0;
-	width:100vw;
+	top: 0;
+	right: 0;
+	width:  100vw;
 	height: 100vh;
+}
+.legend {
+	position: absolute;
+	top: 68vh;
+	left: 10px;
+	min-width: 150px;
+	background-color: #fff;
+	border-radius: 3px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	padding: 10px;
+	z-index: 1;
+}
+.legend h4 {
+	font-size: 1em;
+	margin: 0 0 10px;
+	line-height: 1.475em;
+	border-bottom: 1px solid #eeeeee;
+}
+.legend div span {
+	border-radius: 50%;
+	display: inline-block;
+	height: 10px;
+	margin-right: 5px;
+	width: 10px;
 }
 #key {
 	background-color: rgba(0, 0, 0, 0.8);
@@ -45,25 +76,21 @@
 </style>
 @endsection
 @section('contents')
-<div class="page-breadcrumb bg-light pb-2">
-	<div class="row">
-		<div class="col-12 d-flex no-block align-items-center">
-			<h4 class="page-title">Spread map</h4>
-			<div class="ml-auto text-right">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Cluster Map</li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container-fluid" style="margin:0;padding:0;">
+<div style="margin:0;padding:0;height:100vh;">
 	<div class="map-box">
-	<div id="key" style="z-index:9999"></div>
-	<div id="map"></div>
+		<div id="key" style="z-index:9999"></div>
+		<div id="map"></div>
+		<div id="state-legend" class="legend">
+			<h4>Lab code</h4>
+			<div><span style="background-color: #ff6384"></span>Influenza B Virus</div>
+			<div><span style="background-color: #FFB447"></span>Flu A-H1</div>
+			<div><span style="background-color: #36a2eb"></span>Flu A-H1pdm09</div>
+			<div><span style="background-color: #FF00FF"></span>Flu A-H3</div>
+			<div><span style="background-color: #77DD77"></span>Nagative</div>
+			<div><span style="background-color: #0000FF"></span>ตัวอย่างไม่มีคุณภาพ</div>
+			<div><span style="background-color: #581845"></span>อื่นๆ</div>
+
+		</div>
 	</div>
 </div>
 @endsection
@@ -99,10 +126,11 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkN
 var map = new mapboxgl.Map({
 	container: 'map',
 	style: 'mapbox://styles/mapbox/streets-v11',
-	center: [ 103.511621, 12.538136 ],
+	center: [ 100.503435, 13.7504999 ],
 	zoom: 5.2
 });
-const colors = [' #B71C1C',' #E64A19 ','#E91E63','#FF00FF','#66BB6A', '#FDD835', '#1E90FF'];
+map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+const colors = [' #ff6384',' #FFB447 ','#36a2eb','#FF00FF','#77DD77', '#0000FF', '#581845'];
 const colorScale = d3.scaleOrdinal()
 	.domain(["Influenza B Virus", "Flu A-H1", "Flu A-H1pdm09", "Flu A-H3", "Negative", "ตัวอย่างไม่มีคุณภาพ", "อื่นๆ"])
 	.range(colors)

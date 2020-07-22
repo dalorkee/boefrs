@@ -1,19 +1,62 @@
 @extends('layouts.index')
 @section('custom-style')
-	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet'>
-	<link href="https://api.mapbox.com/mapbox-assembly/v0.23.2/assembly.min.css" rel="stylesheet">
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+<link href="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.css') }}" rel='stylesheet'>
+<link href="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/assembly/assembly-v0.23.2.min.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/libs/mapbox-plugins/animate.min.css') }}" rel="stylesheet">
 @endsection
 @section('internal-style')
 <style>
+.topbar {
+	z-index: 10001 !important;
+}
+.left-sidebar {
+	z-index: 10000 !important;
+}
 .page-wrapper {
 	background: white !important;
 }
-#map {position: absolute; top:0; bottom: 0; width: 100%; }
+.map-box {
+	margin: 0;
+	padding: 0;
+	position:relative;
+}
+/* #map {position: absolute; top:0; bottom:0; width: 100%;} */
+#map {
+	position:absolute;
+	top: 0;
+	right: 0;
+	width:  100vw;
+	height: 100vh;
+}
+.legend {
+	position: absolute;
+	top: 76vh;
+	left: 10px;
+	min-width: 150px;
+	background-color: #fff;
+	border-radius: 3px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	padding: 10px;
+	z-index: 1;
+}
+.legend h4 {
+	font-size: 1em;
+	margin: 0 0 10px;
+	line-height: 1.475em;
+	border-bottom: 1px solid #eeeeee;
+}
+.legend div span {
+	border-radius: 50%;
+	display: inline-block;
+	height: 10px;
+	margin-right: 5px;
+	width: 10px;
+}
 .mapboxgl-popup {
 	min-width: 400px;
 	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-	z-index: 99999;
+	z-index: 9999;
 }
 .mapboxgl-popup-content-wrapper {
 	padding: 1%;
@@ -25,7 +68,7 @@
 	border-radius: 50%;
 	display: inline-block;
 	cursor: pointer;
-	z-index: 9999;
+	z-index: 2;
 }
 .marker b {transform: rotateZ(135deg)}
 .dom-popup {
@@ -41,7 +84,7 @@
 	to {transform: scale(1);}
 }
 .dom-ele:hover, .dom-popup:hover {
-	/*box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.8);*/
+	box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.8);
 }
 .dom-ele {
 	background-color: #CB98FF;
@@ -58,24 +101,16 @@
 </style>
 @endsection
 @section('contents')
-<div class="page-breadcrumb bg-light pb-2">
-	<div class="row">
-		<div class="col-12 d-flex no-block align-items-center">
-			<h4 class="page-title">Map</h4>
-			<div class="ml-auto text-right">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Map</li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container-fluid" style="margin:0;padding:0;">
+<div style="margin:0;padding:0;height:100vh;">
 	<div class="map-box">
 		<div id="map"></div>
+		<div id="state-legend" class="legend">
+			<h4>Pathogen</h4>
+			<div><span style="background-color: #ff6384"></span>B</div>
+			<div><span style="background-color: #FFB447"></span>Flu A</div>
+			<div><span style="background-color: #36a2eb"></span>Flu H</div>
+			<div><span style="background-color: #77DD77"></span>Nagative</div>
+		</div>
 	</div>
 </div>
 @endsection
@@ -92,7 +127,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkN
 	zoom: 5
 });
 
-map.addControl(new mapboxgl.NavigationControl());
+map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
 var domLayer = null;
 map.on('load', function() {

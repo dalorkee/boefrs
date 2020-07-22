@@ -6,10 +6,53 @@
 @endsection
 @section('internal-style')
 <style>
+.topbar {
+	z-index: 10001 !important;
+}
+.left-sidebar {
+	z-index: 10000 !important;
+}
 .page-wrapper {
 	background: white !important;
 }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+.map-box {
+	margin: 0;
+	padding: 0;
+	position:relative;
+}
+/*#map { position: absolute; top: 0; bottom: 0; width: 100%; }*/
+#map {
+	position:absolute;
+	top: 0;
+	right: 0;
+	width:  100vw;
+	height: 100vh;
+}
+.legend {
+	position: absolute;
+	top: 76vh;
+	left: 10px;
+	min-width: 150px;
+	background-color: #fff;
+	border-radius: 3px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	padding: 10px;
+	z-index: 1;
+}
+.legend h4 {
+	font-size: 1em;
+	margin: 0 0 10px;
+	line-height: 1.475em;
+	border-bottom: 1px solid #eeeeee;
+}
+.legend div span {
+	border-radius: 50%;
+	display: inline-block;
+	height: 10px;
+	margin-right: 5px;
+	width: 10px;
+}
 .mapboxgl-popup {
 	max-width: 400px;
 	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -31,27 +74,16 @@
 </style>
 @endsection
 @section('contents')
-<div class="page-breadcrumb bg-light pb-2">
-	<div class="row">
-		<div class="col-12 d-flex no-block align-items-center">
-			<h4 class="page-title">Map</h4>
-			<div class="ml-auto text-right">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Dot Map</li>
-					</ol>
-				</nav>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container-fluid" style="margin:0;padding:0;">
+<div style="margin:0;padding:0;height:100vh;">
 	<div id="map"></div>
+	<div id="state-legend" class="legend">
+		<h4>ตำแหน่ง</h4>
+		<div><span style="background-color: #ff6384"></span>โรงพยาบาล</div>
+	</div>
 </div>
 @endsection
 @section('bottom-script')
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkNDQ0MzI5cCJ9.C2REqhILLm2HKIQSn9Wc0A';
 	var map = new mapboxgl.Map({
