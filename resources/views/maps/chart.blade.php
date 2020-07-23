@@ -124,10 +124,13 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkN
 	container: 'map',
 	style: 'mapbox://styles/mapbox/streets-v11',
 	center: [ 100.503435, 13.7504999 ],
-	zoom: 5
+	zoom: 5,
+	preserveDrawingBuffer: true
 });
 
 map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+map.addControl(new mapboxgl.ScaleControl({position: 'bottom-right'}));
 
 var domLayer = null;
 map.on('load', function() {

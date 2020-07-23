@@ -1,8 +1,7 @@
 @extends('layouts.index')
 @section('custom-style')
-<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css" rel="stylesheet">
-<link href="https://api.mapbox.com/mapbox-assembly/v0.23.2/assembly.min.css" rel="stylesheet">
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+<link href="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/assembly/assembly-v0.23.2.min.css') }}" rel="stylesheet">
 @endsection
 @section('internal-style')
 <style>
@@ -76,6 +75,7 @@
 @section('contents')
 <div style="margin:0;padding:0;height:100vh;">
 	<div id="map"></div>
+	<div id="image"></div>
 	<div id="state-legend" class="legend">
 		<h4>ตำแหน่ง</h4>
 		<div><span style="background-color: #ff6384"></span>โรงพยาบาล</div>
@@ -83,69 +83,68 @@
 </div>
 @endsection
 @section('bottom-script')
-<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<script src="{{ asset('assets/libs/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.js') }}"></script>
 <script>
-	mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkNDQ0MzI5cCJ9.C2REqhILLm2HKIQSn9Wc0A';
-	var map = new mapboxgl.Map({
-		container: 'map',
-		style: 'mapbox://styles/mapbox/streets-v11',
-		center: [ 103.511621, 12.538136 ],
-		zoom: 5.2
-	});
+mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkNDQ0MzI5cCJ9.C2REqhILLm2HKIQSn9Wc0A';
+var map = new mapboxgl.Map({
+	container: 'map',
+	style: 'mapbox://styles/mapbox/streets-v11',
+	center: [ 103.511621, 12.538136 ],
+	zoom: 5.2,
+	preserveDrawingBuffer: true
+});
 
-	map.on('load', function() {
-		// Add an image to use as a custom marker
-		map.loadImage('{{ URL::asset("assets/images/custom-marker.png") }}', function(error, image) {
-			if (error) throw error;
-			map.addImage('custom-marker', image);
-			map.addSource('places', {
-				'type': 'geojson',
-				'data': {
-					'type': 'FeatureCollection',
-					'features': [
-						@foreach ($marker_map as $key => $value)
-							@php
-								$pc_b = (($value->b/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
-								$pc_flu_a = (($value->flu_a/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
-								$pc_flu_h = (($value->flu_h/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
-								$pc_neg = (($value->neg/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
-
-								$desc = "<div class=\"card\">";
-									$desc .= "<div class=\"card-body\">";
-										$desc .= "<h4 class=\"card-title m-b-0 border-bottom\"><i class=\"mdi mdi-hospital-marker\"></i> ".$hosp_name[$value->hoscode]."</h4>";
-										$desc .= "<div class=\"m-t-20\">";
-											$desc .= "<div class=\"d-flex no-block align-items-center\">";
-												$desc .= "<span>B, ".number_format($pc_b, 2)."% </span>";
-												$desc .= "<div class=\"ml-auto\"><span>".number_format($value->b)."</span></div>";
-											$desc .= "</div>";
-											$desc .= "<div class=\"progress\">";
-												$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$pc_b."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
-											$desc .= "</div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
-											$desc .= "<span>Flu A, ".number_format($pc_flu_a, 2)."%</span>";
-											$desc .= "<div class=\"ml-auto\"><span>".number_format($value->flu_a)."</span></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"progress\">";
-											$desc .= "<div class=\"progress-bar progress-bar-striped bg-danger\" role=\"progressbar\" style=\"width:".$pc_flu_a."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
-											$desc .= "<span>Flu H, ".number_format($pc_flu_h, 2)."%</span>";
-											$desc .= "<div class=\"ml-auto\"><span>".number_format($value->flu_h)."</span></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"progress\">";
-											$desc .= "<div class=\"progress-bar progress-bar-striped bg-info\" role=\"progressbar\" style=\"width:".$pc_flu_h."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
-											$desc .= "<span>Nagative, ".number_format($pc_neg, 2)."%</span>";
-											$desc .= "<div class=\"ml-auto\"><span>".number_format($value->neg)."</span></div>";
-										$desc .= "</div>";
-										$desc .= "<div class=\"progress\">";
-											$desc .= "<div class=\"progress-bar progress-bar-striped bg-success\" role=\"progressbar\" style=\"width:".$pc_neg."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
-										$desc .= "</div>";
+map.on('load', function() {
+	map.loadImage('{{ URL::asset("assets/images/custom-marker.png") }}', function(error, image) {
+		if (error) throw error;
+		map.addImage('custom-marker', image);
+		map.addSource('places', {
+			'type': 'geojson',
+			'data': {
+				'type': 'FeatureCollection',
+				'features': [
+					@foreach ($marker_map as $key => $value)
+						@php
+							$pc_b = (($value->b/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
+							$pc_flu_a = (($value->flu_a/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
+							$pc_flu_h = (($value->flu_h/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
+							$pc_neg = (($value->neg/($value->b+$value->flu_a+$value->flu_h+$value->neg))*100);
+							$desc = "<div class=\"card\">";
+								$desc .= "<div class=\"card-body\">";
+									$desc .= "<h4 class=\"card-title m-b-0 border-bottom\"><i class=\"mdi mdi-hospital-marker\"></i> ".$hosp_name[$value->hoscode]."</h4>";
+									$desc .= "<div class=\"m-t-20\">";
+										$desc .= "<div class=\"d-flex no-block align-items-center\">";
+											$desc .= "<span>B, ".number_format($pc_b, 2)."% </span>";
+										$desc .= "<div class=\"ml-auto\"><span>".number_format($value->b)."</span></div>";
+									$desc .= "</div>";
+									$desc .= "<div class=\"progress\">";
+										$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$pc_b."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
 									$desc .= "</div>";
 								$desc .= "</div>";
-							@endphp
+								$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+									$desc .= "<span>Flu A, ".number_format($pc_flu_a, 2)."%</span>";
+									$desc .= "<div class=\"ml-auto\"><span>".number_format($value->flu_a)."</span></div>";
+								$desc .= "</div>";
+								$desc .= "<div class=\"progress\">";
+									$desc .= "<div class=\"progress-bar progress-bar-striped bg-danger\" role=\"progressbar\" style=\"width:".$pc_flu_a."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+								$desc .= "</div>";
+								$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+									$desc .= "<span>Flu H, ".number_format($pc_flu_h, 2)."%</span>";
+									$desc .= "<div class=\"ml-auto\"><span>".number_format($value->flu_h)."</span></div>";
+								$desc .= "</div>";
+								$desc .= "<div class=\"progress\">";
+									$desc .= "<div class=\"progress-bar progress-bar-striped bg-info\" role=\"progressbar\" style=\"width:".$pc_flu_h."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+								$desc .= "</div>";
+								$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+									$desc .= "<span>Nagative, ".number_format($pc_neg, 2)."%</span>";
+									$desc .= "<div class=\"ml-auto\"><span>".number_format($value->neg)."</span></div>";
+									$desc .= "</div>";
+									$desc .= "<div class=\"progress\">";
+										$desc .= "<div class=\"progress-bar progress-bar-striped bg-success\" role=\"progressbar\" style=\"width:".$pc_neg."%\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+									$desc .= "</div>";
+								$desc .= "</div>";
+							$desc .= "</div>";
+						@endphp
 						{
 							'type': 'Feature',
 							'properties': {
@@ -162,8 +161,6 @@
 				}
 			});
 
-
-		// Add a layer showing the places.
 		map.addLayer({
 			'id': 'places',
 			'type': 'symbol',
@@ -208,6 +205,11 @@
 			map.getCanvas().style.cursor = '';
 		});
 	});
+
+	$('#downloadLink').click(function() {
+	var img = map.getCanvas().toDataURL('image/png')
+	this.href = img
+})
 });
 </script>
 @endsection

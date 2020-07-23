@@ -12,9 +12,9 @@
     "devDependencies": {
         "axios": "^0.19",
         "bootstrap": "^4.1.0",
-        "jquery": "^3.2",
+        "jquery": "^3.5.1",
         "laravel-mix": "^4.0.7",
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.19",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
@@ -23,6 +23,10 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "bootstrap-datepicker": "^1.9.0"
+        "@tilecloud/mbgl-export-control": "^0.4.2",
+        "bootstrap-datepicker": "^1.9.0",
+        "file-saver": "^2.0.2",
+        "html2canvas": "^1.0.0-rc.5",
+        "mapbox-print-pdf": "^0.4.3"
     }
 }
