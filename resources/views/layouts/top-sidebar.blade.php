@@ -27,7 +27,7 @@
 					</form>
 				</li>
 			</ul>
-			<div><a id="downloadLink" href="" download="map.png">Download ↓</a></div>
+			<!--<div><a id="downloadLink" href="" download="map.png">Download ↓</a></div>-->
 			<!-- ============================================================== -->
 			<!-- Right side toggle and nav items -->
 			<!-- ============================================================== -->
