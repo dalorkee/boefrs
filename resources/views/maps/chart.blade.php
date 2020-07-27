@@ -122,7 +122,7 @@
 @endsection
 @section('top-script')
 <script src="{{ URL::asset('assets/libs/html2canvas.min.js') }}"></script>
-<script src="{{ URL::asset('assets/libs/Canvas2image.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/canvas2image.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/dom-to-image.min.js') }}"></script>
 <script src="{{ URL::asset('assets/libs/FileSaver.min.js') }}"></script>
 @endsection
