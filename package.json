@@ -25,6 +25,7 @@
     "dependencies": {
         "@tilecloud/mbgl-export-control": "^0.4.2",
         "bootstrap-datepicker": "^1.9.0",
+        "dom-to-image": "^2.6.0",
         "file-saver": "^2.0.2",
         "html2canvas": "^1.0.0-rc.5",
         "mapbox-print-pdf": "^0.4.3"

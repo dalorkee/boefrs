@@ -28,6 +28,11 @@
 	width:  100vw;
 	height: 100vh;
 }
+#map:after {
+	content: '';
+	display: block;
+	clear: both;
+}
 .legend {
 	position: absolute;
 	top: 76vh;
@@ -56,7 +61,7 @@
 .mapboxgl-popup {
 	min-width: 400px;
 	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-	z-index: 9999;
+	z-index: 99999;
 }
 .mapboxgl-popup-content-wrapper {
 	padding: 1%;
@@ -73,35 +78,56 @@
 .marker b {transform: rotateZ(135deg)}
 .dom-popup {
 	border-radius: 4px;
-	animation: gen .8s ease-in-out;
+	/*animation: gen .8s ease-in-out;*/
 	border: 1px solid rgba(197, 197, 197, 0.44);
 }
 .dom-popup-gen {
 	animation: gen .8s forwards;
 }
+/*
 @keyframes gen {
 	from {transform: scale(0);}
 	to {transform: scale(1);}
 }
+*/
 .dom-ele:hover, .dom-popup:hover {
 	box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.8);
 }
 .dom-ele {
 	background-color: #CB98FF;
-	animation: expandLine 1.2s ease-in-out;
+	/*animation: expandLine 1.2s ease-in-out;*/
 }
-@keyframes expand {
+/*@keyframes expand {
 	0% {width: 0; height: 0;}
 	100% {width: 100%; height: 50px;}
 }
 @keyframes expandLine {
 	from {height: 0;}
 	to {height: 100%;}
+}*/
+.mapboxgl-ctrl-pitchtoggle-3d {
+	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCI+ICAgIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkeT0iLjM1ZW0iIHN0eWxlPSJmb250LXNpemU6IDE0cHg7IGZvbnQtZmFtaWx5OiAnSGVsdmV0aWNhIE5ldWUnLEFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmOyBmb250LXdlaWdodDogYm9sZDsgdGV4dC1hbmNob3I6IG1pZGRsZTsiPjNEPC90ZXh0Pjwvc3ZnPg==);
+}
+.mapboxgl-ctrl-pitchtoggle-2d {
+	background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCI+ICAgIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkeT0iLjM1ZW0iIHN0eWxlPSJmb250LXNpemU6IDE0cHg7IGZvbnQtZmFtaWx5OiAnSGVsdmV0aWNhIE5ldWUnLEFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmOyBmb250LXdlaWdodDogYm9sZDsgdGV4dC1hbmNob3I6IG1pZGRsZTsiPjJEPC90ZXh0Pjwvc3ZnPg==);
+}
+.mapbox-gl-draw_point {
+	background-repeat: no-repeat;
+	background-position: center;
+	pointer-events: auto;
+	background-size: 16px, 16px;
+	background-image: url("{{ URL::asset('assets/images/download.png') }}");
 }
 </style>
 @endsection
+@section('top-script')
+<script src="{{ URL::asset('assets/libs/html2canvas.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/Canvas2image.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/dom-to-image.min.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/FileSaver.min.js') }}"></script>
+@endsection
 @section('contents')
-<div style="margin:0;padding:0;height:100vh;">
+<div style="margin:0;padding:0;height:100vh;" id="wp">
 	<div class="map-box">
 		<div id="map"></div>
 		<div id="state-legend" class="legend">
@@ -113,6 +139,8 @@
 		</div>
 	</div>
 </div>
+<div id="ccv"></div>
+<div id="img"></div>
 @endsection
 @section('bottom-script')
 <script src="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.js') }}"></script>
@@ -128,9 +156,94 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGFsb3JrZWUiLCJhIjoiY2pnbmJrajh4MDZ6aTM0cXZkN
 	preserveDrawingBuffer: true
 });
 
-map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+class PitchToggle {
+	constructor({ bearing = -20, pitch = 70, minpitchzoom = null }) {
+		this._bearing = bearing;
+		this._pitch = pitch;
+		this._minpitchzoom = minpitchzoom;
+	}
 
-map.addControl(new mapboxgl.ScaleControl({position: 'bottom-right'}));
+	onAdd(map) {
+		this._map = map;
+		let _this = this;
+
+		this._btn = document.createElement("button");
+		this._btn.className = "mapboxgl-ctrl-icon mapboxgl-ctrl-pitchtoggle-3d";
+		this._btn.type = "button";
+		this._btn["aria-label"] = "Toggle Pitch";
+		this._btn.onclick = function() {
+			if (map.getPitch() === 0) {
+				let options = { pitch: _this._pitch, bearing: _this._bearing };
+				if (_this._minpitchzoom && map.getZoom() > _this._minpitchzoom) {
+					options.zoom = _this._minpitchzoom;
+				}
+				map.easeTo(options);
+				_this._btn.className = "mapboxgl-ctrl-icon mapboxgl-ctrl-pitchtoggle-2d";
+			} else {
+				map.easeTo({ pitch: 0, bearing: 0 });
+				_this._btn.className = "mapboxgl-ctrl-icon mapboxgl-ctrl-pitchtoggle-3d";
+			}
+		};
+
+		this._container = document.createElement("div");
+		this._container.className = "mapboxgl-ctrl-group mapboxgl-ctrl";
+		this._container.appendChild(this._btn);
+
+		return this._container;
+	}
+
+	onRemove() {
+		this._container.parentNode.removeChild(this._container);
+		this._map = undefined;
+	}
+}
+
+class MapboxGLButtonControl {
+	constructor({
+		className = "",
+		title = "",
+		eventHandler = evtHndlr
+	}) {
+		this._className = className;
+		this._title = title;
+		this._eventHandler = eventHandler;
+	}
+
+	onAdd(map) {
+		this._btn = document.createElement("button");
+		this._btn.className = "mapboxgl-ctrl-icon" + " " + this._className;
+		this._btn.type = "button";
+		this._btn.title = this._title;
+		this._btn.onclick = this._eventHandler;
+
+		this._container = document.createElement("div");
+		this._container.className = "mapboxgl-ctrl-group mapboxgl-ctrl";
+		this._container.appendChild(this._btn);
+
+		return this._container;
+	}
+
+	onRemove() {
+		this._container.parentNode.removeChild(this._container);
+		this._map = undefined;
+	}
+}
+
+/* Event Handlers */
+function one(event) {
+	exportToImage();
+}
+
+/* Instantiate new controls with custom event handlers */
+const ctrlPoint = new MapboxGLButtonControl({
+	className: "mapbox-gl-draw_point",
+	title: "Export to image",
+	eventHandler: one
+});
+
+map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+map.addControl(new PitchToggle({ minpitchzoom: 11 }), "top-right");
+map.addControl(ctrlPoint, "top-right");
 
 var domLayer = null;
 map.on('load', function() {
@@ -230,11 +343,31 @@ map.on('load', function() {
 					'labels': ['B', 'Flu A', 'Flu H', 'Neg']
 				},
 				'lon': {{$value->lon}},
-				'lat': {{$value->lat}}
+				'lat': {{$value->lat}},
+				'options': {
+					'bezierCurve': false,
+					'animation': false
+				}
 			},
 		@endforeach
 		]
 	});
 });
+</script>
+<script>
+function setCanvas() {
+	html2canvas(document.getElementById('wp')).then(function(canvas) {
+		canvas.id = "jet";
+		canvas.style.display="none";
+		document.body.appendChild(canvas);
+	});
+}
+function exportToImage() {
+	html2canvas(document.getElementById('wp')).then(function(canvas) {
+		canvas.style.display="none";
+		document.getElementById("img").src = canvas.toDataURL('image/png');
+		Canvas2Image.saveAsPNG(canvas);
+	});
+}
 </script>
 @endsection
