@@ -118,6 +118,33 @@
 	background-size: 16px, 16px;
 	background-image: url("{{ URL::asset('assets/images/download.png') }}");
 }
+#remover {
+	margin: 0 auto;
+	/*background-color: #fb5b3f;
+	color: #fff;
+	font-weight: bold;*/
+	padding: 0.5em;
+	border: 2px solid #fff;
+	border-radius: 0.5em;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+	cursor: pointer;
+	position: absolute;
+	left: 0.7em;
+	top: 0.7em;
+
+	width: 32px;
+	height: 32px;
+	background-repeat: no-repeat;
+	background-position: center;
+	pointer-events: auto;
+	background-size: 24px, 24px;
+	background-image: url("{{ URL::asset('assets/images/world.png') }}");
+}
+#remover:hover {
+	/*background-color: salmon;*/
+}
+
+
 </style>
 @endsection
 @section('top-script')
@@ -137,10 +164,12 @@
 			<div><span style="background-color: #36a2eb"></span>Flu H</div>
 			<div><span style="background-color: #77DD77"></span>Nagative</div>
 		</div>
+		<div id='remover'></div>
 	</div>
 </div>
 <div id="ccv"></div>
 <div id="img"></div>
+
 @endsection
 @section('bottom-script')
 <script src="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.js') }}"></script>
@@ -240,10 +269,6 @@ const ctrlPoint = new MapboxGLButtonControl({
 	title: "Export to image",
 	eventHandler: one
 });
-
-map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-map.addControl(new PitchToggle({ minpitchzoom: 11 }), "top-right");
-map.addControl(ctrlPoint, "top-right");
 
 var domLayer = null;
 map.on('load', function() {
@@ -352,7 +377,33 @@ map.on('load', function() {
 		@endforeach
 		]
 	});
+
+	/* sattlelight */
+	map.addLayer({
+		id: 'satellite',
+		source: {"type": "raster",  "url": "mapbox://mapbox.satellite", "tileSize": 256},
+		type: "raster",
+		layout: {"visibility":"none"}
+	});
+	var switchy = document.getElementById('remover');
+	switchy.addEventListener("click", function(){
+		switchy = document.getElementById('remover');
+		if (switchy.className === 'on') {
+			switchy.setAttribute('class', 'off');
+			map.setLayoutProperty('satellite', 'visibility', 'none');
+			//switchy.innerHTML = 'Add satellite';
+		} else {
+			switchy.setAttribute('class', 'on');
+			map.setLayoutProperty('satellite', 'visibility', 'visible');
+			//switchy.innerHTML = 'Remove satellite';
+		}
+	});
+
 });
+map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+map.addControl(new PitchToggle({ minpitchzoom: 11 }), 'top-right');
+map.addControl(ctrlPoint, 'top-right');
+map.addControl(new mapboxgl.Directions());
 </script>
 <script>
 function setCanvas() {
