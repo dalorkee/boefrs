@@ -138,12 +138,15 @@
 	background-position: center;
 	pointer-events: auto;
 	background-size: 24px, 24px;
-	background-image: url("{{ URL::asset('assets/images/world.png') }}");
+	background-image: url("{{ URL::asset('assets/images/satellite.png') }}");
 }
 #remover:hover {
 	/*background-color: salmon;*/
+	background-color: #8DD394;
 }
-
+.on {
+	background-color: #B8E3AE;
+}
 
 </style>
 @endsection
@@ -386,7 +389,7 @@ map.on('load', function() {
 		layout: {"visibility":"none"}
 	});
 	var switchy = document.getElementById('remover');
-	switchy.addEventListener("click", function(){
+	switchy.addEventListener("click", function() {
 		switchy = document.getElementById('remover');
 		if (switchy.className === 'on') {
 			switchy.setAttribute('class', 'off');
