@@ -28,8 +28,7 @@ class MapController extends Controller
 			\DB::raw('SUM(IF(lab_code = "7", 1, 0)) AS "flu_a_h3"'),
 			\DB::raw('SUM(IF(lab_code = "86", 1, 0)) AS "neg"'),
 			\DB::raw('SUM(IF(lab_code = "97", 1, 0)) AS "bad_exam"'),
-			\DB::raw('SUM(IF(lab_code = "99", 1, 0)) AS "other"'),
-		)->groupBy('hos_prov', 'lon', 'lat')->get()->keyBy('hos_prov');
+			\DB::raw('SUM(IF(lab_code = "99", 1, 0)) AS "other"'))->groupBy('hos_prov', 'lon', 'lat')->get()->keyBy('hos_prov');
 
 		$marker_coll = collect();
 		foreach ($marker_data as $key => $value) {
