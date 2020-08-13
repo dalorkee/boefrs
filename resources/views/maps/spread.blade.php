@@ -1,7 +1,7 @@
 @extends('layouts.index')
 @section('custom-style')
-<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css" rel="stylesheet">
-<link href="https://api.mapbox.com/mapbox-assembly/v0.23.2/assembly.min.css" rel="stylesheet">
+<link href="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.css') }}" rel='stylesheet'>
+<link href="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/assembly/assembly-v0.23.2.min.css') }}" rel="stylesheet">
 @endsection
 @section('internal-style')
 <style>
@@ -73,6 +73,14 @@
 .pie {
 	cursor: pointer;
 }
+.mapboxgl-popup {
+	min-width: 400px;
+	font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	z-index: 99999;
+}
+.mapboxgl-popup-content-wrapper {
+	padding: 1%;
+}
 </style>
 @endsection
 @section('contents')
@@ -89,23 +97,80 @@
 			<div><span style="background-color: #77DD77"></span>Nagative</div>
 			<div><span style="background-color: #0000FF"></span>ตัวอย่างไม่มีคุณภาพ</div>
 			<div><span style="background-color: #581845"></span>อื่นๆ</div>
-
 		</div>
 	</div>
 </div>
 @endsection
 @section('bottom-script')
-<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"></script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="{{ URL::asset('assets/libs/mapbox-plugins/mapbox-gl-js/v1.11.1/mapbox-gl.js') }}"></script>
+<script src="{{ URL::asset('assets/libs/mapbox-plugins/d3.v4.min.js') }}"></script>
 <script>
 const powerplants = {
 	"type": "FeatureCollection",
 	"features": [
 		@foreach ($rp_map as $key => $value)
+			@php
+			$desc = "<div class=\"card\">";
+				$desc .= "<div class=\"card-body\">";
+					$desc .= "<h4 class=\"card-title m-b-0 border-bottom\"><i class=\"mdi mdi-hospital-marker\"></i> ".$provinces[$value->province_id]['province_name']."</h4>";
+					$desc .= "<div class=\"m-t-20\">";
+					$desc .= "<div class=\"d-flex no-block align-items-center\">";
+						$desc .= "<span>Influenza B Virus, ".number_format($marker_coll[$value->province_id]['pc_b'], 2)."% </span>";
+						$desc .= "<div class=\"ml-auto\"><span>".number_format($marker_coll[$value->province_id]['b'])."</span></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"progress\">";
+						$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$marker_coll[$value->province_id]['pc_b']."%;background-color:#ff6384;\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+					$desc .= "</div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+						$desc .= "<span>Flu A-H1, ".number_format($marker_coll[$value->province_id]['pc_flu_a_h1'], 2)."%</span>";
+						$desc .= "<div class=\"ml-auto\"><span>".number_format($marker_coll[$value->province_id]['flu_a_h1'])."</span></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"progress\">";
+						$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$marker_coll[$value->province_id]['pc_flu_a_h1']."%;background-color:#FFB447;\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+						$desc .= "<span>Flu A-H1pdm09, ".number_format($marker_coll[$value->province_id]['pc_flu_a_h1p'], 2)."%</span>";
+						$desc .= "<div class=\"ml-auto\"><span>".number_format($marker_coll[$value->province_id]['flu_a_h1p'])."</span></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"progress\">";
+						$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$marker_coll[$value->province_id]['pc_flu_a_h1p']."%;background-color:#36a2eb;\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+						$desc .= "<span>Flu A-H3, ".number_format($marker_coll[$value->province_id]['pc_flu_a_h3'], 2)."%</span>";
+						$desc .= "<div class=\"ml-auto\"><span>".number_format($marker_coll[$value->province_id]['flu_a_h3'])."</span></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"progress\">";
+						$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$marker_coll[$value->province_id]['pc_flu_a_h3']."%;background-color:#FF00FF;\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+						$desc .= "<span>Nagative, ".number_format($marker_coll[$value->province_id]['pc_neg'], 2)."%</span>";
+						$desc .= "<div class=\"ml-auto\"><span>".number_format($marker_coll[$value->province_id]['neg'])."</span></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"progress\">";
+						$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$marker_coll[$value->province_id]['pc_neg']."%;background-color:#77DD77;\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+						$desc .= "<span>ตัวอย่างไม่มีคุณภาพ, ".number_format($marker_coll[$value->province_id]['pc_bad_exam'], 2)."%</span>";
+						$desc .= "<div class=\"ml-auto\"><span>".number_format($marker_coll[$value->province_id]['bad_exam'])."</span></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"progress\">";
+						$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$marker_coll[$value->province_id]['pc_bad_exam']."%;background-color:#0000FF;\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"d-flex no-block align-items-center m-t-15\">";
+						$desc .= "<span>อื่นๆ, ".number_format($marker_coll[$value->province_id]['pc_other'], 2)."%</span>";
+						$desc .= "<div class=\"ml-auto\"><span>".number_format($marker_coll[$value->province_id]['other'])."</span></div>";
+					$desc .= "</div>";
+					$desc .= "<div class=\"progress\">";
+						$desc .= "<div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width:".$marker_coll[$value->province_id]['pc_other']."%;background-color:#581845;\" aria-valuenow=\"10\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>";
+					$desc .= "</div>";
+				$desc .= "</div>";
+			$desc .= "</div>";
+			@endphp
 		{
 			"type": "Feature",
 			"properties": {
-				"description": "<ul class='evb-popup'><li><span>Lab Code</span><span>{{ $value->lab_code }}</span></li><li><span>จังหวัด</span><span> {{ $value->province_id }}</span></li></ul>",
+				'description': '{!!$desc!!}',
 				"country_long": "Thailand",
 				"cluster": "cluster{{ $value->lab_code }}"
 			},
@@ -143,13 +208,12 @@ const cluster97 = ['==', ['get', 'cluster'], 'cluster97'];
 const cluster99 = ['==', ['get', 'cluster'], 'cluster99'];
 
 map.on('load', () => {
-// add a clustered GeoJSON source for powerplant
 map.addSource('powerplants', {
 	'type': 'geojson',
 	'data': powerplants,
 	'cluster': true,
 	'clusterRadius': 100,
-	'clusterProperties': { // keep separate counts for each fuel category in a cluster
+	'clusterProperties': { // keep separate counts for each category in a cluster
 		'cluster2': ['+', ['case', cluster2, 1, 0]],
 		'cluster5': ['+', ['case', cluster5, 1, 0]],
 		'cluster6': ['+', ['case', cluster6, 1, 0]],
@@ -368,10 +432,13 @@ map.on('click', 'powerplant_individual', function (e) {
 		coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
 	}
 
+
 	new mapboxgl.Popup()
 		.setLngLat(coordinates)
-		.setHTML(desc)
+		.setHTML('<div>'+ desc + '</div>')
 		.addTo(map);
+
+
 	});
 });
 </script>
