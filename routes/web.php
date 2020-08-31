@@ -103,3 +103,6 @@ Route::get('/map/spread', 'MapController@index')->name('spread');
 Route::get('/map/pin', 'MapController@pin')->name('pin');
 Route::get('/map/marker', 'MapController@marker')->name('marker');
 Route::get('/map/chart', 'MapController@chart')->name('chart');
+
+/* export */
+Route::get('/export/csv', 'ExportsController@index')->name('export-csv');
