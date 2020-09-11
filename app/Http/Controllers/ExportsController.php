@@ -33,7 +33,7 @@ class ExportsController extends BoeFrsController
 	}
 
 	public function index() {
-		return view('Exports.csv');
+		return view('exports.csv');
 	}
 
 	private function setExportFileName($extension='csv') {
