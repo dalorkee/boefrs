@@ -33,11 +33,9 @@
 					</ul>
 				</li>
 				@endrole
-				@role('admin|hospital|lab')
+				@role('admin')
 				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('export-csv') }}" aria-expanded="false"><i class="mdi mdi-export"></i><span class="hide-menu">ส่งออกข้อมูล</span></a></li>
 				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('counter') }}" aria-expanded="false"><i class="fas fa-chart-line"></i><span class="hide-menu">สถิติการใช้งานเว็บไซต์</span></a></li>
-				@endrole
-				@role('admin')
 				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('users.index') }}" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">จัดการผู้ใช้</span></a></li>
 				@endrole
 			</ul>

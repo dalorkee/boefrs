@@ -74,15 +74,15 @@
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
-			<article class="card" style="border:2px dashed #eee">
+			<article class="card" style="border:2px solid #eee">
 				<section class="card-body">
 					<form action="#" method="POST" enctype="multipart/form-data" class="form-horizontal">
-					<!--<form action="export.search" method="POST" enctype="multipart/form-data" class="form-horizontal">-->
+					<!--<form action="{ route('export.search') }}" method="POST" enctype="multipart/form-data" class="form-horizontal"> -->
 						{{ csrf_field() }}
 						<div class="form-row">
 							<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
 								<div class="form-group">
-									<label for="date">เลือกช่วงเวลาที่ต้องการส่งออกข้อมูล (ไม่ควรเกิน 7 วัน/ครั้ง)</label>
+									<label for="date">เลือกช่วงเวลาที่ต้องการส่งออกข้อมูล <span class="text-danger">(ไม่ควรเกิน 1 เดือน/ครั้ง)</span></label>
 									<div class="input-group date" data-provide="datepicker" id="breathing_tube_date">
 										<div class="input-group-append">
 											<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -90,6 +90,7 @@
 										<input type="text" name="date_range" id="export_date" class="form-control" style="cursor: pointer;" readonly>
 										<div class="input-group-append">
 											<button type="button" class="btn btn-outline btn-primary" id="export_btn">ค้นหา</button>
+											<!--<button type="submit">isad</button> -->
 										</div>
 									</div>
 								</div>
@@ -97,12 +98,6 @@
 						</div>
 					</form>
 					<div class="form-row">
-
-						<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
-							<!--<div id="progress"></div>
-							<div id="message"></div>-->
-						</div>
-
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 							<div class="card">
 								<div class="card-body">
@@ -126,8 +121,6 @@
 					</div>
 				</section>
 			</article>
-
-
 
 		</div>
 	</div>
@@ -167,6 +160,36 @@ $(document).ready(function() {
 	}, function(start, end, label) {
 		console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
 	});
+
+	$('.dl-section').hide();
+	$('#warning_msg').modal('show');
+
+	$('#export_btn').click(function(e) {
+		try {
+			e.preventDefault();
+			$('.loader').show();
+			$('.dl-section').hide();
+			var date_range = $('#export_date').val();
+			var pt_status = $('#pt_status').val();
+			$.ajax({
+				method: 'POST',
+				url: "{{ route('export.search') }}",
+				data: {date_range:date_range, pt_status:pt_status},
+				dataType: "HTML",
+				success: function(response) {
+					$('.loader').hide();
+					$('.dl-section').show();
+					$('#dl-detail').html(response);
+				},
+				error: function(xhr) {
+					alert(xhr.errorMessage + xhr.status);
+				}
+			});
+		} catch(err) {
+			alert(err.message);
+		}
+	});
+
 });
 </script>
 @endsection

@@ -106,3 +106,6 @@ Route::get('/map/chart', 'MapController@chart')->name('chart');
 
 /* export */
 Route::get('/export/csv', 'ExportsController@index')->name('export-csv');
+Route::post('export', 'ExportsController@exportFastExcel')->name('export.search');
+
+Route::get('/getFile/{file}', 'ExportsController@downloadFile');
