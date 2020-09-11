@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/qrcode
+/public/exports
 /storage/*.key
 /vendor
 /public/.htaccess
