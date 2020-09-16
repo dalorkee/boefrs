@@ -294,7 +294,7 @@ class ExportsController extends BoeFrsController
 						'ภูมิคุ้มกันบกพร่อง' => $x->immune,
 						'ภูมิคุ้มกันบกพร่อง ระบุ' => $x->immune_specify,
 						'คลอดก่อนกำหนด' => $x->early_birth,
-						'อายุครรภ์' => $x->early_birth_wk,
+						'อายุครรภ์คลอดก่อนกำหนด' => $x->early_birth_wk,
 						'ภาวะทุพโภชนาการ' => $x->malnutrition,
 						'โรคปอดเรื้อรัง' => $x->copd,
 						'หอบหืด' => $x->asthma,
