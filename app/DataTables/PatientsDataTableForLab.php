@@ -64,6 +64,9 @@ class PatientsDataTableForLab extends DataTable
 			case 'lab':
 				return $model->newQuery()->where('ref_user_hospcode', '=', $hospcode)->orderBy('id', 'DESC');
 				break;
+			case 'dmsc':
+				return $model->newQuery()->orderBy('id', 'DESC');;
+				break;
 			default:
 				return redirect()->route('logout');
 		}

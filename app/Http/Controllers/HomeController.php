@@ -14,12 +14,11 @@ class HomeController extends BoeFrsController
 {
 	public function __construct(){
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware(['role:admin|hospital|lab|dmsc']);
 		$this->middleware('page_session');
 
 		$this->yesterday = date('Y-m-d', strtotime("-1 day"));
 		$this->today = date('Y-m-d');
-
 	}
 
 	public function index(Request $request) {
@@ -46,7 +45,7 @@ class HomeController extends BoeFrsController
 		$userRole = $roleArr[0];
 		if ($userRole == 'admin') {
 			return redirect()->route('dashboard.index');
-		} elseif ($userRole == 'hospital' || $userRole == 'lab') {
+		} elseif ($userRole == 'hospital' || $userRole == 'lab' || $userRole == 'dmsc') {
 			return redirect()->route('dashboard.index');
 		} else {
 			return redirect()->route('logout');

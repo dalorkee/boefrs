@@ -83,7 +83,7 @@
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
 									<div class="form-group">
 										<label for="otherTitleNameInput">อื่นๆ ระบุ</label>
-										<input type="text" name="otname" class="form-control other-title-name" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
+										<input type="text" name="title_name_other" class="form-control other-title-name" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
 									</div>
 								</div>
 							</div>

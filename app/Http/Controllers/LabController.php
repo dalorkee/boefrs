@@ -19,7 +19,7 @@ class LabController extends BoeFrsController
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware(['role:admin|hospital|lab|dmsc']);
 		$this->middleware('page_session');
 	}
 
@@ -37,6 +37,9 @@ class LabController extends BoeFrsController
 				$hospcode = auth()->user()->hospcode;
 				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->toSql();
 				dd($patients);
+				break;
+			case 'dmsc':
+				$patients = Patients::whereNull('deleted_at')->get();
 				break;
 			default:
 				return redirect()->route('logout');
@@ -80,12 +83,6 @@ class LabController extends BoeFrsController
 
 	}
 
-	/**
-	* Store a newly created resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @return \Illuminate\Http\Response
-	*/
 	public function store(Request $request)
 	{
 		$data = $request->all();
@@ -163,8 +160,7 @@ class LabController extends BoeFrsController
 		}
 	}
 
-	public function show($id)
-	{
+	public function show($id) {
 		/* prepare data */
 		$titleName = parent::titleName();
 		$title_name = $titleName->keyBy('id');
@@ -239,10 +235,14 @@ class LabController extends BoeFrsController
 		/* *** set data to array *** */
 		/* user full name */
 		$utn_key = auth()->user()->title_name;
-		if ($utn_key == 6) {
-			$utn = auth()->user()->title_name_other;
+		if (empty($utn_key) || is_null($utn_key) || $utn_key == '') {
+			$utn = null;
 		} else {
-			$utn = $titleName[$utn_key]->title_name;
+			if ($utn_key == 6) {
+				$utn = auth()->user()->title_name_other;
+			} else {
+				$utn = $title_name[$utn_key]->title_name;
+			}
 		}
 		$uFullName = $utn.auth()->user()->name." ".auth()->user()->lastname;
 		$data['user_fullname'] = $uFullName;
@@ -267,7 +267,7 @@ class LabController extends BoeFrsController
 		if ($patient[0]->title_name == 6) {
 			$ptn = $patient[0]->title_name_other;
 		} else {
-			$ptn = $titleName[$patient[0]->title_name]->title_name;
+			$ptn = $title_name[$patient[0]->title_name]->title_name;
 		}
 		$pFullName = $ptn.$patient[0]->first_name." ".$patient[0]->last_name;
 		$data['patient_fullname'] = $pFullName;
@@ -379,8 +379,7 @@ class LabController extends BoeFrsController
 		);
 	}
 
-	public function show_old_1($id)
-	{
+	public function show_old_1($id) {
 		/* prepare data */
 		$titleName = parent::titleName();
 		$title_name = $titleName->keyBy('id');

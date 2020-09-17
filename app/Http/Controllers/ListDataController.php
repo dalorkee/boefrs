@@ -15,7 +15,7 @@ class ListDataController extends BoeFrsController
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware(['role:admin|hospital|lab|dmsc']);
 		$this->middleware('page_session');
 	}
 
@@ -31,12 +31,16 @@ class ListDataController extends BoeFrsController
 				$patients = Patients::whereNull('deleted_at')->get();
 				break;
 			case 'hospital':
-				$hospcode = auth()->user()->hospcode;
-				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->toSql();
+				echo 'undefine';
+				//$hospcode = auth()->user()->hospcode;
+				//$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->toSql();
 				break;
 			case 'lab':
 				$hospcode = auth()->user()->hospcode;
 				$patients = Patients::where('ref_user_hospcode', '=', $hospcode)->whereNull('deleted_at')->get();
+				break;
+			case 'dmsc':
+				$patients = Patients::whereNull('deleted_at')->get();
 				break;
 			default:
 				return redirect()->route('logout');

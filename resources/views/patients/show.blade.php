@@ -471,6 +471,7 @@ input:read-only {
 									<div class="form-row">
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
 											<label for="specimenInput" style="display:none;">ชนิดของตัวอย่างที่ส่งตรวจ</label>
+											<!--
 											<div>
 												<table class="table1">
 													<thead>
@@ -489,6 +490,7 @@ input:read-only {
 													</tbody>
 												</table>
 											</div>
+											-->
 											<div class="table-responsive">
 												<table class="table" data-show-columns="true" data-search="true" data-mobile-responsive="true" data-check-on-init="true" id="specimen_table">
 													<thead class="bg-custom-2 text-light">

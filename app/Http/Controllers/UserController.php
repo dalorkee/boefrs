@@ -19,38 +19,19 @@ class UserController extends BoeFrsController
 		$this->middleware('permission:manageuser|list|create|edit|delete', ['only' => ['index','store']]);
 	}
 
-	/**
-	* Display a listing of the resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-	public function index(Request $request)
-	{
+	public function index(Request $request) {
 		$data = User::orderBy('id', 'DESC')->paginate(5);
 		return view('users.index', compact('data'))
 				->with('i', ($request->input('page', 1) - 1) * 5);
 	}
 
-	/**
-	* Show the form for creating a new resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-	public function create()
-	{
+	public function create() {
 		$roles = Role::pluck('name', 'name')->all();
 		return view('users.create', compact('roles'))
 				->with('titleName', $this->title_name);
 	}
 
-	/**
-	* Store a newly created resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @return \Illuminate\Http\Response
-	*/
-	public function store(Request $request)
-	{
+	public function store(Request $request) {
 		$this->validate($request, [
 			'province' => 'required',
 			'hospcode' => 'required',
@@ -59,17 +40,16 @@ class UserController extends BoeFrsController
 			'password' => 'required|same:confirm-password',
 			'roles' => 'required'
 		]);
-
 		$input = $request->all();
-
-		if ($input['title_name'] != 0 && $input['title_name'] != 6) {
-			$title_name_coll = $this->title_name[$input['title_name']];
-			$title_name = $title_name_coll->title_name;
-			$input['title_name'] = $title_name;
-		} elseif (isset($input['title_name_other']) && $input['title_name'] == 6) {
-			$input['title_name'] = $input['title_name_other'];
-		} else {
+		if (empty($input['title_name']) || is_null($input['title_name'])) {
 			$input['title_name'] = null;
+			$input['title_name_other'] = null;
+		} elseif ($input['title_name'] == 6) {
+			$input['title_name'] = $input['title_name'];
+			$input['title_name_other'] = $input['title_name_other'];
+		} else {
+			$input['title_name'] = $input['title_name'];
+			$input['title_name_other'] = null;
 		}
 
 		$input['password'] = Hash::make($input['password']);
@@ -78,26 +58,12 @@ class UserController extends BoeFrsController
 		return redirect()->route('users.index')->with('success', 'User created successfully');
 	}
 
-	/**
-	* Display the specified resource.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function show($id)
-	{
+	public function show($id) {
 		$user = User::find($id);
 		return view('users.show', compact('user'));
 	}
 
-	/**
-	* Show the form for editing the specified resource.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function edit($id)
-	{
+	public function edit($id) {
 		$user = User::find($id);
 		$roles = Role::pluck('name', 'name')->all();
 		$userRole = $user->roles->pluck('name', 'name')->all();
@@ -105,15 +71,7 @@ class UserController extends BoeFrsController
 		return view('users.edit', compact('user', 'roles', 'userRole'));
 	}
 
-	/**
-	* Update the specified resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function update(Request $request, $id)
-	{
+	public function update(Request $request, $id) {
 		$this->validate($request, [
 			//'province' => 'required',
 			//'hospcode' => 'required',
@@ -139,20 +97,12 @@ class UserController extends BoeFrsController
 		return redirect()->route('users.index')->with('success', 'User updated successfully');
 	}
 
-	/**
-	* Remove the specified resource from storage.
-	*
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function destroy($id)
-	{
+	public function destroy($id) {
 		User::find($id)->delete();
 		return redirect()->route('users.index')->with('success', 'User deleted successfully');
 	}
 
-	public function ajaxGetHospByProv(Request $request)
-	{
+	public function ajaxGetHospByProv(Request $request) {
 		$this->result = parent::hospitalByProv($request->prov_id);
 		$htm = "<option value=\"0\">-- โปรดเลือก --</option>\n";
 		foreach($this->result as $key=>$value) {
@@ -160,8 +110,4 @@ class UserController extends BoeFrsController
 		}
 		return $htm;
 	}
-
-
-
-
 }

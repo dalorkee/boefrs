@@ -22,7 +22,7 @@ class DashboardController extends Controller
 {
 	public function __construct() {
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware(['role:admin|hospital|lab|dmsc']);
 		$this->middleware('page_session');
 		$this->middleware(function ($request, $next) {
 			$this->user = Auth::user();
@@ -70,7 +70,7 @@ class DashboardController extends Controller
 				$antiResult['anti_unknown'] += $value['anti_unknow'];
 			}
 
-		} elseif ($userRole=='hospital' || $userRole=='lab') {
+		} elseif ($userRole=='hospital' || $userRole=='lab' || $userRole == 'dmsc') {
 			$case_gen_code = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_gen_code');
 			$case_hos_send = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_hos_send');
 			$case_lab_confirm = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_lab_confirm');

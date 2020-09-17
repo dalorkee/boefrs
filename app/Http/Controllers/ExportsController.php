@@ -28,7 +28,7 @@ class ExportsController extends BoeFrsController
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital']);
+		$this->middleware(['role:admin|hospital|lab|dmsc']);
 		$this->middleware('page_session');
 	}
 
@@ -119,6 +119,15 @@ class ExportsController extends BoeFrsController
 						->where('hospital', '=', $user_hosp)
 						->orWhere('ref_user_hospcode', '=', $user_hosp)
 						->count();
+					break;
+				case 'lab':
+					$total = Patients::whereRaw("(DATE(created_at) BETWEEN '".$start_date."' AND '".$end_date."')")
+						->where('hospital', '=', $user_hosp)
+						->orWhere('ref_user_hospcode', '=', $user_hosp)
+						->count();
+					break;
+				case 'dmsc':
+					$total = Patients::whereRaw("(DATE(created_at) BETWEEN '".$start_date."' AND '".$end_date."')")->count();
 					break;
 				default:
 					return redirect()->route('logout');
@@ -502,10 +511,32 @@ class ExportsController extends BoeFrsController
 					}
 					break;
 				case 'hospital':
-				foreach (Patients::select($fields)
+					foreach (Patients::select($fields)
 						->whereRaw("(DATE(patients.created_at) BETWEEN '".$start_date."' AND '".$end_date."')")
 						->where('patients.ref_user_hospcode', '=', $user_hosp)
 						->orWhere('patients.hospital', '=', $user_hosp)
+						->leftJoin('hospitals', 'patients.hospital', '=', 'hospitals.hospcode')
+						->leftJoin('clinical', 'patients.id', '=', 'clinical.ref_pt_id')
+						->leftJoin('specimen', 'patients.id', '=', 'specimen.ref_pt_id')
+						->cursor() as $data) {
+							yield $data;
+					}
+					break;
+				case 'lab':
+					foreach (Patients::select($fields)
+						->whereRaw("(DATE(patients.created_at) BETWEEN '".$start_date."' AND '".$end_date."')")
+						->where('patients.ref_user_hospcode', '=', $user_hosp)
+						->orWhere('patients.hospital', '=', $user_hosp)
+						->leftJoin('hospitals', 'patients.hospital', '=', 'hospitals.hospcode')
+						->leftJoin('clinical', 'patients.id', '=', 'clinical.ref_pt_id')
+						->leftJoin('specimen', 'patients.id', '=', 'specimen.ref_pt_id')
+						->cursor() as $data) {
+							yield $data;
+					}
+					break;
+				case 'dmsc':
+					foreach (Patients::select($fields)
+						->whereRaw("(DATE(patients.created_at) BETWEEN '".$start_date."' AND '".$end_date."')")
 						->leftJoin('hospitals', 'patients.hospital', '=', 'hospitals.hospcode')
 						->leftJoin('clinical', 'patients.id', '=', 'clinical.ref_pt_id')
 						->leftJoin('specimen', 'patients.id', '=', 'specimen.ref_pt_id')
@@ -521,6 +552,4 @@ class ExportsController extends BoeFrsController
 			Log::error(sprintf("%s - line %d - ", __FILE__, __LINE__).$e->getMessage());
 		}
 	}
-
-
 }
