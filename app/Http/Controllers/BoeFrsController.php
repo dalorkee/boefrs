@@ -190,7 +190,7 @@ class BoeFrsController extends Controller implements BoeFrs
 		return DB::connection('mysql')
 			->table('hospitals')
 			->where('prov_code', '=', $prov_code)
-			->whereIn('hosp_type_code', ['05', '06', '07', '11'])
+			->whereIn('hosp_type_code', ['05', '06', '07', '10', '11'])
 			->orderBy('id', 'asc')
 			->get();
 	}
