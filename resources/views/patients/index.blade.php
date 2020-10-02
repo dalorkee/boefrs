@@ -174,6 +174,7 @@ $(document).ready(function() {
 		$('#age_month_input').val("0");
 		$('#age_day_input').val("0");
 	});
+
 	$('#date_of_birth').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
@@ -287,6 +288,25 @@ $(document).ready(function() {
 			$('#age_month_input').val(Math.floor(months));
 			$('#age_day_input').val(Math.floor(days));
 	});
+
+	/* calc new date of birth */
+	/*
+	$("#calc_new_age").on('click', function(e) {
+		e.preventDefault();
+		var inputYear = $('#age_year_input').val();
+		var input_month = $('#age_month_input').val();
+		var input_day = $('#age_day_input').val();
+
+		var today = new Date();
+		var curYear = (today.getFullYear()-1);
+		var bornYear = (curYear-inputYear);
+
+		var date = bornYear + '-' + input_month + '-' + input_day;
+		var date = new Date(bornYear + '-' + input_month + '-' + input_day);
+		var now = ((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000);
+		$("#date_of_birth").datepicker().datepicker("setDate", new Date(new_year, input_month, input_day));
+	});
+	*/
 
 	/* nationallity */
 	$('#select_nationality').change(function() {

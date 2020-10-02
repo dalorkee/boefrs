@@ -29,7 +29,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-9 col-xl-9 mb-3">
 				<div class="form-group">
 					<label for="otherTitleName">คำนำหน้าชื่ออื่นๆ ระบุ</label>
 					@php
@@ -87,6 +87,28 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 				<div class="form-group">
+					<label for="nationality">สัญชาติ</label>
+					<select name="nationalityInput" class="form-control selectpicker show-tick" id="select_nationality">
+						@if ((!empty(old('nationalityInput')) || !is_null($patient[0]->nationality)) && !empty($patient[0]->nationality) && $patient[0]->nationality != '0'))
+							<option value="{{ old('nationalityInput') ?? $patient[0]->nationality }}" selected="selected">{{ $nationality[old('nationalityInput')]->name_th ?? $nationality[$patient[0]->nationality]->name_th }}</option>
+						@endif
+						<option value="0">-- โปรดเลือก --</option>
+						@foreach ($nationality as $key => $value)
+							<option value="{{ $value->id }}" @if (old('nationalityInput') == $value->id) selected="selected" @endif>{{ $value->name_th }}</option>
+							@endforeach
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+				<div class="form-group">
+					<label for="otherNationality">สัญชาติ อื่นๆ ระบุ</label>
+					<input type="text" name="otherNationalityInput" value="{{ old('otherNationalityInput') ?? $patient[0]->nationality_other }}" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" @if (empty(old('otherNationalityInput')) && empty($patient[0]->nationality_other)) disabled @else "" @endif>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+				<div class="form-group">
 					<label for="birthDate">ว/ด/ป เกิด</label>
 					<div class="input-group date">
 						<div class="input-group">
@@ -101,46 +123,34 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-				<div class="form-group">
-					<label for="ageYear">อายุ/ปี</label>
-					<input type="text" name="ageYearInput" value="{{ old('ageYearInput') ?? $patient[0]->age_year }}" class="form-control" id="age_year_input" required readonly>
-				</div>
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-				<div class="form-group">
-					<label for="ageMonth">อายุ/เดือน</label>
-					<input type="text" name="ageMonthInput" value="{{ old('ageMonthInput') ?? $patient[0]->age_month }}" class="form-control" id="age_month_input" required readonly>
-				</div>
-			</div>
-			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-2 col-xl-2 mb-3">
-				<div class="form-group">
-					<label for="ageMonth">อายุ/วัน</label>
-					<input type="text" name="ageDayInput" value="{{ old('ageDayInput') ?? $patient[0]->age_day }}" class="form-control" id="age_day_input" required readonly>
-				</div>
-			</div>
 		</div>
 		<div class="form-row">
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
 				<div class="form-group">
-					<label for="nationality">สัญชาติ</label>
-					<select name="nationalityInput" class="form-control selectpicker show-tick" id="select_nationality">
-						@if ((!empty(old('nationalityInput')) || !is_null($patient[0]->nationality)) && !empty($patient[0]->nationality) && $patient[0]->nationality != '0'))
-							<option value="{{ old('nationalityInput') ?? $patient[0]->nationality }}" selected="selected">{{ $nationality[old('nationalityInput')]->name_th ?? $nationality[$patient[0]->nationality]->name_th }}</option>
-						@endif
-						<option value="0">-- โปรดเลือก --</option>
-						@foreach ($nationality as $key => $value)
-							<option value="{{ $value->id }}" @if (old('nationalityInput') == $value->id) selected="selected" @endif>{{ $value->name_th }}</option>
-							@endforeach
-					</select>
+					<label for="ageYear">อายุ/ปี</label>
+					<input type="text" name="ageYearInput" value="{{ old('ageYearInput') ?? $patient[0]->age_year }}" class="form-control" id="age_year_input" size="3" maxlength="3" min="0" max="110">
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
 				<div class="form-group">
-					<label for="otherNationality">สัญชาติ อื่นๆ ระบุ</label>
-					<input type="text" name="otherNationalityInput" value="{{ old('otherNationalityInput') ?? $patient[0]->nationality_other }}" class="form-control" id="other_nationality_input" placeholder="สัญชาติอื่นๆ" @if (empty(old('otherNationalityInput')) && empty($patient[0]->nationality_other)) disabled @else "" @endif>
+					<label for="ageMonth">อายุ/เดือน</label>
+					<input type="text" name="ageMonthInput" value="{{ old('ageMonthInput') ?? $patient[0]->age_month }}" class="form-control" id="age_month_input" size="2" maxlength="2" min="0" max="12">
 				</div>
 			</div>
+			<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
+				<div class="form-group">
+					<label for="ageMonth">อายุ/วัน</label>
+					<input type="text" name="ageDayInput" value="{{ old('ageDayInput') ?? $patient[0]->age_day }}" class="form-control" id="age_day_input" size="2" maxlength="2" min="0" max="31">
+				</div>
+			</div>
+			<!--
+			<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-3">
+				<div class="form-group">
+					<label for="calc_age">อายุ/วัน</label>
+					<button class="btn btn-danger" id="calc_new_age">คำนวณอายุใหม่</button>
+				</div>
+			</div>
+			-->
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
