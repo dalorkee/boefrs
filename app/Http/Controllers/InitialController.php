@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use App\RapidGraph;
 use App\MonthGraph;
 use DB;
@@ -18,84 +15,40 @@ use App\AgeGroup;
 use App\NationGroup;
 use App\WeekSeparate;
 
-class DashboardController extends Controller
+class InitialController extends Controller
 {
-	public function __construct() {
-		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab|dmsc']);
-		$this->middleware('page_session');
-		$this->middleware(function ($request, $next) {
-			$this->user = Auth::user();
-			return $next($request);
-		});
-	}
 
 	public function index() {
-		if (Auth::check()) {
-			$hospcode = Auth::user()->hospcode;
-		}
-		$roleArr = auth()->user()->roles->pluck('name');
-		$userRole = isset($roleArr[0]) ? $roleArr[0] : "";
 		$provinces = Provinces::all()->sortBy('province_name')->keyBy('province_id')->toArray();
 		$list_year = CmsHelper::List_year();
 
+		$case_gen_code = DB::table('first_dash')->sum('case_gen_code');
+		$case_hos_send = DB::table('first_dash')->sum('case_hos_send');
+		$case_lab_confirm = DB::table('first_dash')->sum('case_lab_confirm');
+		$case_male = DB::table('first_dash')->sum('case_male');
+		$case_female = DB::table('first_dash')->sum('case_female');
 
-		if ($userRole == 'admin') {
-			$case_gen_code = DB::table('first_dash')->sum('case_gen_code');
-			$case_hos_send = DB::table('first_dash')->sum('case_hos_send');
-			$case_lab_confirm = DB::table('first_dash')->sum('case_lab_confirm');
-			$case_male = DB::table('first_dash')->sum('case_male');
-			$case_female = DB::table('first_dash')->sum('case_female');
+		/* month graph */
+		$month_graph = MonthGraph::all();
+		$month_graph = $month_graph->keyBy('hospital')->toArray();
 
-			/* month graph */
-			$month_graph = MonthGraph::all();
-			$month_graph = $month_graph->keyBy('hospital')->toArray();
+		/* rapid test data for graph */
+		$rapid = RapidGraph::all();
+		$rapid = $rapid->keyBy('hospital')->toArray();
+		$rapidResult = array('flua'=>0, 'flub'=>0, 'nagative'=>0, 'unknown'=>0);
+		foreach ($rapid as $key => $value) {
+			$rapidResult['flua'] += $value['rapid_flua'];
+			$rapidResult['flub'] += $value['rapid_flub'];
+			$rapidResult['nagative'] += $value['rapid_nagative'];
+			$rapidResult['unknown'] += $value['rapid_unknow'];
+		}
 
-			/* rapid test data for graph */
-			$rapid = RapidGraph::all();
-			$rapid = $rapid->keyBy('hospital')->toArray();
-			$rapidResult = array('flua'=>0, 'flub'=>0, 'nagative'=>0, 'unknown'=>0);
-			foreach ($rapid as $key => $value) {
-				$rapidResult['flua'] += $value['rapid_flua'];
-				$rapidResult['flub'] += $value['rapid_flub'];
-				$rapidResult['nagative'] += $value['rapid_nagative'];
-				$rapidResult['unknown'] += $value['rapid_unknow'];
-			}
-
-			$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
-			foreach ($rapid as $key => $value) {
-				$antiResult['anti_arv'] += $value['anti_arv'];
-				$antiResult['anti_osel'] += $value['anti_osel'];
-				$antiResult['anti_tamiflu'] += $value['anti_tamiflu'];
-				$antiResult['anti_unknown'] += $value['anti_unknow'];
-			}
-
-		} elseif ($userRole=='hospital' || $userRole=='lab' || $userRole == 'dmsc') {
-			$case_gen_code = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_gen_code');
-			$case_hos_send = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_hos_send');
-			$case_lab_confirm = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_lab_confirm');
-			$case_male = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_male');
-			$case_female = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_female');
-
-			/* rapid test data for graph */
-			$rapid = RapidGraph::where('hospital', '=', $hospcode)->get();
-			if (count($rapid) > 0) {
-				$rapid = $rapid->keyBy('hospital')->toArray();
-				$rapidResult['flua'] = $rapid[$hospcode]['rapid_flua'];
-				$rapidResult['flub'] = $rapid[$hospcode]['rapid_flub'];
-				$rapidResult['nagative'] = $rapid[$hospcode]['rapid_nagative'];
-				$rapidResult['unknown'] = $rapid[$hospcode]['rapid_unknow'];
-
-				/* anti */
-				$antiResult['anti_arv'] = $rapid[$hospcode]['anti_arv'];
-				$antiResult['anti_osel'] = $rapid[$hospcode]['anti_osel'];
-				$antiResult['anti_tamiflu'] = $rapid[$hospcode]['anti_tamiflu'];
-				$antiResult['anti_unknown'] = $rapid[$hospcode]['anti_unknow'];
-			} else {
-				$rapidResult = array('flua' => 0, 'flub' => 0, 'nagative' => 0, 'unknown' => 0);
-				$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
-			}
-
+		$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
+		foreach ($rapid as $key => $value) {
+			$antiResult['anti_arv'] += $value['anti_arv'];
+			$antiResult['anti_osel'] += $value['anti_osel'];
+			$antiResult['anti_tamiflu'] += $value['anti_tamiflu'];
+			$antiResult['anti_unknown'] += $value['anti_unknow'];
 		}
 
 		$case_all = $case_gen_code+$case_hos_send+$case_lab_confirm;
@@ -138,6 +91,7 @@ class DashboardController extends Controller
 			$sum_age_group += $val_age;
 			$line_charts_age_group_arr[] = array("label"=> $key_age, "y"=> $val_age);
 		}
+		//dd($line_charts_age_group_arr);
 
 		// Nation Graph
 		$total_nation = NationGroup::sum('totals');
@@ -176,7 +130,7 @@ class DashboardController extends Controller
 			"12" => "Dec"
 		);
 
-		for ($i=1; $i<=12; $i++) {
+		for($i=1; $i<=12; $i++){
 			$result1 = MonthMedian::selectRaw('year_result,month_result,sum(totals) AS totals')
 			->whereBetween('year_result',[$year_back_3,$year_last_med])
 			->where('month_result',str_pad($i,2,"0",STR_PAD_LEFT))
@@ -194,6 +148,7 @@ class DashboardController extends Controller
 			->groupBy('year_result','month_result')
 			->orderBy('totals','ASC')
 			->first();
+
 			$arr_now_year_median[] = $result2;
 		}
 
@@ -280,6 +235,7 @@ class DashboardController extends Controller
 
 			$data_week_median[] = array("label" => $arr_week[str_pad($i,2,"0",STR_PAD_LEFT)],"y" => $result3['totals']);
 		}
+
 
 		for($i=1; $i<=52; $i++){
 			$result4 = WeekMedian::selectRaw('week_result,year_result,sum(totals) AS totals')
@@ -407,7 +363,6 @@ class DashboardController extends Controller
 				$sum_flu_b_data_now_week[$arr_week[$key]] = 0;
 			}
 		}
-
 		/* Collation Data Now flu_b Week Graph */
 		foreach ($sum_flu_b_data_now_week as $key1 => $val1){
 			$result_sum_flu_b_data_now_week[] = $val1;
@@ -441,7 +396,7 @@ class DashboardController extends Controller
 			$result_sum_negative_data_now_week[] = $val1;
 		}
 
-		return view('dashboard.index',
+		return view('initial.index',
 				compact(
 					'case_gen_code',
 					'case_hos_send',
@@ -468,110 +423,27 @@ class DashboardController extends Controller
 		);
 	}
 
-
-	public function index_post(Request $request)
-	{
-		//dd($request);
-		$select_province = (!empty($request->select_province)) ? trim($request->select_province)  : 0;
-		$select_year = (!empty($request->select_year)) ? trim($request->select_year)  : 0;
-		//Percent Male/Female
-		$result = SexGroup::query();
-		$t_male = $result->sum('male');
-		$t_female = $result->sum('female');
-		$t_total = $result->sum('totals');
-
-		if (isset($select_province) || $select_year) {
-			if($select_province==0 || $select_year==0){
-
-			}
-				$t_male = $result->where('hos_prov2', $select_province)->orwhere('year_result',$select_year);
-				$t_female = $result->where('hos_prov', $select_province)->orwhere('year_result',$select_year);
-				$t_total = $result->where('hos_prov', $select_province)->orwhere('year_result',$select_year);
-		}
-
-		$t_male = $t_male->get();
-
-		dd($result);
-		//dd($t_male,$t_female,$t_total);
-		$percent_male = CmsHelper::Cal_percent($t_male,$t_total);
-		$percent_female = CmsHelper::Cal_percent($t_female,$t_total);
-		//dd($percent_male,$percent_female);
-		$donut_charts_sex_arr = array(
-			array("label" => "Male" ,"symbol" => "Male","y" =>$percent_male),
-			array("label" => "Female" ,"symbol" => "Female","y" =>$percent_female)
-		);
-
-
-
-	}
-	/**
-	* Show the form for creating a new resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-	public function create()
-	{
-
+	public function create() {
+		//
 	}
 
+	public function store(Request $request) {
+		//
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+	public function show($id) {
+		//
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+	public function edit($id) {
+		//
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+	public function update(Request $request, $id) {
+		//
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-		public function Dashboard_Card(){
-
-		}
+	public function destroy($id) {
+		//
+	}
 }

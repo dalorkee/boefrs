@@ -1,5 +1,9 @@
 @php
-	$provinces = Session::get('provinces');
+	if (Session::has('provinces')) {
+		$provinces = Session::get('provinces');
+	} else {
+		$provinces = null;
+	}
 @endphp
 <!-- ============================================================== -->
 <!-- Topbar header - style you can find in pages.scss -->
@@ -32,6 +36,7 @@
 			<!-- Right side toggle and nav items -->
 			<!-- ============================================================== -->
 			<ul class="navbar-nav float-right">
+				@if (Auth::check())
 				<li class="nav-item"><a class="nav-link">{{ auth()->user()->name }}&nbsp;[{{ Session::get('user_role_name') }}]</a></li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -75,6 +80,11 @@
 						</ul>
 					</div>
 				</li>
+				@else
+				<li class="nav-item"><a class="nav-link">Anonymous&nbsp;[Guest]</a></li>
+				<li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="fas fa-lock m-r-10"></i>{{ __('Login') }}</a></li>
+				<li class="nav-item"><a href="{{ route('register') }}" class="nav-link"><i class="fas fa-user-plus m-r-10"></i>{{ __('Register') }}</a></li>
+				@endif
 			</ul>
 		</div>
 	</nav>
