@@ -40,7 +40,7 @@ use App\HelperClass\Helper as CmsHelper;
 				<h4 class="page-title d-none">Dashboard</h4>
 				<div class="ml-auto text-right">
 					<nav aria-label="breadcrumb">
-						<ol class="breadcrumb">
+						<ol class="breadcrumb d-none">
 							<li class="breadcrumb-item"><a href="{{ route('init') }}">Home</a></li>
 							<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
 						</ol>
