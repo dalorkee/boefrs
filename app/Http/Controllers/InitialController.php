@@ -35,7 +35,7 @@ class InitialController extends Controller
 		/* rapid test data for graph */
 		$rapid = RapidGraph::all();
 		$rapid = $rapid->keyBy('hospital')->toArray();
-		$rapidResult = array('flua'=>0, 'flub'=>0, 'nagative'=>0, 'unknown'=>0);
+		$rapidResult = array('flua'=> 0, 'flub' => 0, 'nagative' => 0, 'unknown' => 0);
 		foreach ($rapid as $key => $value) {
 			$rapidResult['flua'] += $value['rapid_flua'];
 			$rapidResult['flub'] += $value['rapid_flub'];
@@ -43,7 +43,7 @@ class InitialController extends Controller
 			$rapidResult['unknown'] += $value['rapid_unknow'];
 		}
 
-		$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
+		$antiResult = array('anti_arv' => 0, 'anti_osel' => 0, 'anti_tamiflu' => 0, 'anti_unknown' => 0);
 		foreach ($rapid as $key => $value) {
 			$antiResult['anti_arv'] += $value['anti_arv'];
 			$antiResult['anti_osel'] += $value['anti_osel'];

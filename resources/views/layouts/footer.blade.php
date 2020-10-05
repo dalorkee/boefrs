@@ -4,7 +4,7 @@
 <footer class="footer text-center">
 	<div>โครงการเฝ้าระวังเชื้อไวรัสไข้หวัดใหญ่ทางห้องปฏิบัติการ กลุ่มพัฒนาระบบเฝ้าระวังทางระบาดวิทยาพิเศษ</div>
 	<div>สำนักระบาดวิทยา ติดต่อ โทรศัพท์ 0-2590-1775 โทรสาร 0-2590-1784</div>
-	<div>All Rights Reserved. <a href="https://talekteam.io">Talek team</a></div>
+	<div>Powered by <a href="#">Talek team</a></div>
 </footer>
 <!-- ============================================================== -->
 <!-- End footer -->

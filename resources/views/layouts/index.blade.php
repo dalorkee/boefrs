@@ -22,7 +22,7 @@
 			<div class="lds-pos"></div>
 		</div>
 	</div>
-	<div id="main-wrapper">
+	<div id="main-wrapper" class="mini-sidebar">
 		@include('layouts.top-sidebar')
 		@include('layouts.left-sidebar')
 		<div class="page-wrapper">

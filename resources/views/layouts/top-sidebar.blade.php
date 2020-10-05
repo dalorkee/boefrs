@@ -12,7 +12,7 @@
 	<nav class="navbar top-navbar navbar-expand-md navbar-dark">
 		<div class="navbar-header" data-logobg="skin5">
 			<a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="{{ route('init') }}">
 				<!-- Logo icon -->
 				<b class="logo-icon p-l-10">
 					<img src="{{ URL::asset('assets/images/small-moph-logo.png') }}" alt="logo" class="light-logo" style="width:95%;">
@@ -81,9 +81,9 @@
 					</div>
 				</li>
 				@else
-				<li class="nav-item"><a class="nav-link">Anonymous&nbsp;[Guest]</a></li>
-				<li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="fas fa-lock m-r-10"></i>{{ __('Login') }}</a></li>
+				<li class="nav-item"><a class="nav-link"><i class="fas fa-user m-r-10"></i>Anonymous&nbsp;[Guest]</a></li>
 				<li class="nav-item"><a href="{{ route('register') }}" class="nav-link"><i class="fas fa-user-plus m-r-10"></i>{{ __('Register') }}</a></li>
+				<li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="fas fa-lock m-r-10"></i>{{ __('Login') }}</a></li>
 				@endif
 			</ul>
 		</div>

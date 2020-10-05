@@ -44,7 +44,7 @@
 				<a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<i class="ti-menu ti-close"></i>
 				</a>
-				<a class="navbar-brand" href="#">
+				<a class="navbar-brand" href="{{ route('init') }}">
 					<b class="logo-icon p-l-10">
 						<img src="{{ URL::asset('assets/images/small-moph-logo.png') }}" alt="BOE" class="light-logo">
 					</b>
@@ -67,8 +67,8 @@
 				</ul>
 				<!-- Right side toggle and nav items -->
 				<ul class="navbar-nav float-right">
-					<li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="fas fa-lock m-r-10"></i>{{ __('Login') }}</a></li>
 					<li class="nav-item"><a href="{{ route('register') }}" class="nav-link"><i class="fas fa-user-plus m-r-10"></i>{{ __('Register') }}</a></li>
+					<li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="fas fa-lock m-r-10"></i>{{ __('Login') }}</a></li>
 				</ul>
 			</div>
 		</nav>

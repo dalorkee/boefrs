@@ -10,6 +10,14 @@ use App\HelperClass\Helper as CmsHelper;
 .page-wrapper {
 	background: #fff !important;
 }
+#chartContainer_Sex canvas,
+#chartContainer_Nation canvas,
+#chartContainer_Age_Group canvas,
+#chartContainer_month_median canvas,
+#chartContainer_month_median canvas,
+#chartContainer_week_median canvas {
+	width: 100% !important;
+}
 </style>
 @endsection
 @section('top-script')
@@ -30,62 +38,62 @@ use App\HelperClass\Helper as CmsHelper;
 @section('contents')
 <div class="page-breadcrumb bg-light pb-2">
 	<div class="container-fluid">
-	<div class="row">
-		<div class="col-12 d-flex no-block align-items-center">
-			<h4 class="page-title">Dashboard</h4>
-			<div class="ml-auto text-right">
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
-						<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-					</ol>
-				</nav>
+		<div class="row">
+			<div class="col-12 d-flex no-block align-items-center">
+				<h4 class="page-title">Dashboard</h4>
+				<div class="ml-auto text-right">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+						</ol>
+					</nav>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+<div class="container-fluid">
 	<div id="ajax_response">
 		<div class="row mb-4">
 			<div class="col-lg-12">
-				<div class="row">
+				<div class="row" style="font-family:sukhumvit;">
 					<div class="col-3">
 						<div class="bg-info p-10 text-white text-center">
-							<i class="fas fa-flask m-b-5 font-24"></i>
-							<h3 class="m-b-0 m-t-5">{{ $case_all }}</h3>
-							<h5 class="font-light">Total Case</h5>
+							<h2 class="font-light">ข้อมูลทั้งหมด</h2>
+							<h3 class="m-b-0 m-t-5">{{ number_format($case_all) }}</h3>
+							<!--<i class="fas fa-flask m-b-5 font-24"></i>-->
 						</div>
 					</div>
 					<div class="col-3">
 						<div class="bg-cyan p-10 text-white text-center">
-							<i class="fab fa-odnoklassniki m-b-5 font-24"></i>
-							<h3 class="m-b-0 m-t-5">{{ $case_gen_code }}</h3>
-							<h5 class="font-light">New Case</h5>
+							<h2 class="font-light">ข้อมูลใหม่</h2>
+							<h3 class="m-b-0 m-t-5">{{ number_format($case_gen_code) }}</h3>
+							<!--<i class="fab fa-odnoklassniki m-b-5 font-24"></i>-->
 						</div>
 					</div>
 					<div class="col-3">
 						<div class="bg-danger p-10 text-white text-center">
-							<i class="fab fa-odnoklassniki m-b-5 font-24"></i>
-							<h3 class="m-b-0 m-t-5">{{ $case_hos_send }}</h3>
-							<h5 class="font-light">Await lab</h5>
+							<h2 class="font-light">รอผลแลป</h2>
+							<h3 class="m-b-0 m-t-5">{{ number_format($case_hos_send) }}</h3>
+							<!--<i class="fab fa-odnoklassniki m-b-5 font-24"></i>-->
 						</div>
 					</div>
 					<div class="col-3">
 						<div class="bg-success p-10 text-white text-center">
-							<i class="fab fa-odnoklassniki m-b-5 font-24"></i>
-							<h3 class="m-b-0 m-t-5">{{ $case_lab_confirm }}</h3>
-							<h5 class="font-light">Complete</h5>
+							<h2 class="font-light">เสร็จสิ้น</h2>
+							<h3 class="m-b-0 m-t-5">{{ number_format($case_lab_confirm) }}</h3>
+							<!--<i class="far fa-check-circle m-b-5 font-24"></i>-->
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-
-		<div class="row">
+		<div class="row mb-4">
 			<div class="col-md-6">
 				<div class="card border">
 					<div class="card-body">
-						<h5 class="card-title">Sex Group</h5>
+						<h5 class="card-title d-none">Sex Group</h5>
 						<div id="chartContainer_Sex" style="height: 370px; width: 100%;"></div>
 					</div>
 				</div>
@@ -93,47 +101,43 @@ use App\HelperClass\Helper as CmsHelper;
 			<div class="col-md-6">
 				<div class="card border">
 					<div class="card-body">
-						<h5 class="card-title">Nation</h5>
+						<h5 class="card-title d-none">Nation</h5>
 						<div id="chartContainer_Nation" style="height: 370px; width: 100%;"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="row">
+		<div class="row mb-4">
 			<div class="col-md-12">
 				<div class="card border">
 					<div class="card-body">
-						<h5 class="card-title">Age Group</h5>
-							<div id="chartContainer_Age_Group" style="height: 370px; width: 100%;"></div>
+						<h5 class="card-title d-none">Age Group</h5>
+						<div id="chartContainer_Age_Group" style="height: 370px; width: 100%;"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="row">
+		<div class="row mb-4">
 			<div class="col-md-12">
 				<div class="card border">
 					<div class="card-body">
-						<h5 class="card-title">Mohth Median</h5>
-							<div id="chartContainer_month_median" style="height: 370px; width: 100%;"></div>
+						<h5 class="card-title d-none">Mohth Median</h5>
+						<div id="chartContainer_month_median" style="height: 370px; width: 100%;"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="row">
+		<div class="row mb-4">
 			<div class="col-md-12">
 				<div class="card border">
 					<div class="card-body">
-						<h5 class="card-title">Week Median</h5>
-							<div id="chartContainer_week_median" style="height: 370px; width: 100%;"></div>
+						<h5 class="card-title d-none">Week Median</h5>
+						<div id="chartContainer_week_median" style="height: 370px; width: 100% !important;"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="row">
+		<div class="row mb-4">
 			<div class="col-md-12">
 				<div class="card border">
 					<div class="card-body">
