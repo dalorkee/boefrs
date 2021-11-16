@@ -14,7 +14,7 @@ class HomeController extends BoeFrsController
 {
 	public function __construct(){
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab|dmsc']);
+		$this->middleware(['role:admin|hospital|lab|dmsc|hosp-group']);
 		$this->middleware('page_session');
 
 		$this->yesterday = date('Y-m-d', strtotime("-1 day"));
@@ -42,14 +42,28 @@ class HomeController extends BoeFrsController
 
 		/* check permission and redirect */
 		$roleArr = auth()->user()->roles->pluck('name');
-		$userRole = $roleArr[0];
-		if ($userRole == 'admin') {
-			return redirect()->route('dashboard.index');
-		} elseif ($userRole == 'hospital' || $userRole == 'lab' || $userRole == 'dmsc') {
-			return redirect()->route('dashboard.index');
-		} else {
-			return redirect()->route('logout');
+		switch ($roleArr[0]) {
+			case 'admin':
+				return redirect()->route('dashboard.index');
+				break;
+			case 'hospital':
+			case 'lab':
+			case 'dmsc':
+			case 'hosp-group':
+				return redirect()->route('dashboard.index');
+				break;
+			default:
+				return redirect()->route('logout');
+				break;
 		}
+		// $userRole = $roleArr[0];
+		// if ($userRole == 'admin') {
+		// 	return redirect()->route('dashboard.index');
+		// } elseif ($userRole == 'hospital' || $userRole == 'lab' || $userRole == 'dmsc') {
+		// 	return redirect()->route('dashboard.index');
+		// } else {
+		// 	return redirect()->route('logout');
+		// }
 	}
 
 	private function addTodayToDb() {

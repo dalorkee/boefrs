@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use App\Provinces;
 use App\District;
 use App\SubDistrict;
@@ -17,18 +18,20 @@ use App\Patients;
 use App\Clinical;
 use App\Specimen;
 use App\Lab;
-use Redirect;
+use App\User;
 
 class PatientsController extends BoeFrsController
 {
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware(['role:admin|hospital|lab|hosp-group']);
 		$this->middleware('page_session');
 	}
-
-	public function create(Request $request) {
+	protected function index(Request $request) {
+		return $this->create($request);
+	}
+	protected function create(Request $request) {
 		$patient = parent::patientsById($request->id);
 		$nationality = parent::nationality()->keyBy('id');
 		$occupation = Occupation::all()->keyBy('id')->toArray();
@@ -43,7 +46,7 @@ class PatientsController extends BoeFrsController
 		if (empty($patient[0]->district) || is_null($patient[0]->district) || $patient[0]->district == '0') {
 			$district = null;
 		} else {
-			$district = District::where('district_id', '=', $patient[0]->district)->get()->toArray();
+			$district = District::whereDistrict_id($patient[0]->district)->get()->toArray();
 			if (count($district) <= 0) {
 				Log::warning('District field not match - uid:  '.auth()->user()->id.' - pid: '.$request->id);
 			}
@@ -52,20 +55,18 @@ class PatientsController extends BoeFrsController
 		if (empty($patient[0]->sub_district) || is_null($patient[0]->sub_district) || $patient[0]->sub_district == '0') {
 			$sub_district = null;
 		} else {
-			$sub_district = SubDistrict::where('sub_district_id', '=', $patient[0]->sub_district)->get()->toArray();
+			$sub_district = SubDistrict::whereSub_district_id($patient[0]->sub_district)->get()->toArray();
 			if (count($sub_district) <= 0) {
 				Log::warning('Sub_district field not match - uid: '.auth()->user()->id.' - pid: '.$request->id);
 			}
 		}
-
 		/* get patient clinical */
-		$clinical_query = Clinical::where('ref_pt_id', '=', $request->id)->get()->toArray();
+		$clinical_query = Clinical::whereRef_pt_id($request->id)->get()->toArray();
 		if (count($clinical_query) > 0) {
 			$clinical = $clinical_query[0];
 		} else {
 			$clinical = null;
 		}
-
 		$data['date_of_birth'] = parent::convertMySQLDateFormat($patient[0]->date_of_birth) ?? null;
 		$data['date_sick'] = parent::convertMySQLDateFormat($clinical['date_sick']) ?? null;
 		$data['date_define'] = parent::convertMySQLDateFormat($clinical['date_define']) ?? null;
@@ -74,16 +75,14 @@ class PatientsController extends BoeFrsController
 		$data['cbc_date'] = parent::convertMySQLDateFormat($clinical['cbc_date']) ?? null;
 		$data['flu_vaccine_date'] = parent::convertMySQLDateFormat($clinical['flu_vaccine_date']) ?? null;
 		$data['antiviral_date'] = parent::convertMySQLDateFormat($clinical['antiviral_date']) ?? null;
-
 		$rapid_result = explode(',', $clinical['rapid_test_result']);
 		/* get patient specimen */
-		$specimen_query = Specimen::where('ref_pt_id', '=', $request->id)->whereNull('deleted_at')->get()->keyBy('specimen_type_id')->toArray();
+		$specimen_query = Specimen::whereRef_pt_id($request->id)->get()->keyBy('specimen_type_id')->toArray();
 		if (count($specimen_query) > 0) {
 			$specimen = $specimen_query;
 		} else {
 			$specimen = null;
 		}
-
 		$specimen_data = collect();
 		foreach ($ref_specimen as $key => $value) {
 			$tmp['sp_id'] = $value->id;
@@ -117,29 +116,24 @@ class PatientsController extends BoeFrsController
 			}
 			$specimen_data->put($key, $tmp);
 		}
-
-		return view(
-			'patients.index', [
-				'titleName' => $this->title_name,
-				'refGender' => $refGender,
-				'nationality' => $nationality,
-				'occupation' => $occupation,
-				'symptoms' => $symptoms,
-				'user_hospital' => $user_hospital,
-				'hospital' => $hospital,
-				'patient' => $patient,
-				'clinical' => $clinical,
-				'specimen_data' => $specimen_data,
-				'provinces' => $provinces,
-				'district' => $district,
-				'sub_district' => $sub_district,
-				'data' => $data,
-				'rapid_result' => $rapid_result
-			]
-		);
+		return view('patients.index', [
+			'titleName' => $this->title_name,
+			'refGender' => $refGender,
+			'nationality' => $nationality,
+			'occupation' => $occupation,
+			'symptoms' => $symptoms,
+			'user_hospital' => $user_hospital,
+			'hospital' => $hospital,
+			'patient' => $patient,
+			'clinical' => $clinical,
+			'specimen_data' => $specimen_data,
+			'provinces' => $provinces,
+			'district' => $district,
+			'sub_district' => $sub_district,
+			'data' => $data,
+			'rapid_result' => $rapid_result
+		]);
 	}
-
-
 	public function addPatient(Request $request) {
 		/* find patient by id */
 		$patient = Patients::find($request->pid);
@@ -147,7 +141,6 @@ class PatientsController extends BoeFrsController
 			$message = collect(['status'=>500, 'msg'=>'ไม่พบข้อมูลรหัสนี้ โปรดตรวจสอบ!', 'title'=>'Error!']);
 			return redirect()->route('list-data.index')->with('message', $message);
 		} else {
-
 			/* validation */
 			$this->validate($request, [
 				'titleNameInput' => 'required',
@@ -162,14 +155,13 @@ class PatientsController extends BoeFrsController
 				'patientType' => 'required',
 				'sickDateInput' => 'required',
 				'treatDateInput' => 'required'
-
 			],[
 				'titleNameInput.required' => 'Title name field is required.',
 				'firstNameInput.required' => 'Firstname field is required',
 				'lastNameInput.required' => 'Lastname field is required',
 				'hnInput.required' => 'HN field is required',
 				'sexInput.required' => 'Gender field is required.',
-				'hospitalInput.required' => 'Hospital field is required',
+				'hospitalInput.required' => 'Hospital field is require',
 				'provinceInput.required' => 'Province field is required',
 				'districtInput.required' => 'District field is required',
 				'subDistrictInput.required' => 'Sub-district field is required',
@@ -177,7 +169,6 @@ class PatientsController extends BoeFrsController
 				'sickDateInput.required' => 'Sick date field is required',
 				'treatDateInput.required' => 'Date define field is required'
 			]);
-
 			/* General section */
 			if ($request->titleNameInput == -6) {
 				$patient->title_name = 6;
@@ -224,7 +215,6 @@ class PatientsController extends BoeFrsController
 				->first();
 			if (is_null($clinical)) {
 				$clinical = new Clinical;
-
 			}
 			$clinical->pt_type = $request->patientType;
 			$clinical->date_sick = parent::convertDateToMySQL($request->sickDateInput);
@@ -319,7 +309,6 @@ class PatientsController extends BoeFrsController
 			$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
 			//$clinical->ref_user_id = $request->userIdInput;
 
-
 			/* get specimen ref data from ref_specimen table  */
 			$specimen_data = parent::specimen()->keyBy('id');
 
@@ -402,11 +391,9 @@ class PatientsController extends BoeFrsController
 				//return redirect()->route('list')->with('message', $message);
 			}
 		}
-
 	}
 
-	public function show($id)
-	{
+	public function show($id) {
 		/* prepare data */
 		$titleName = parent::titleName();
 		$title_name = $titleName->keyBy('id');
@@ -418,19 +405,13 @@ class PatientsController extends BoeFrsController
 		$pathogen = $pathogen->keyBy('id');
 
 		/* get patient */
-		$patient = Patients::where('id', '=', $id)
-		->whereNull('deleted_at')
-		->get();
+		$patient = Patients::whereId($id)->get();
 
 		/* get patient clinical */
-		$clinical = Clinical::where('ref_pt_id', '=', $id)
-		->whereNull('deleted_at')
-		->get();
+		$clinical = Clinical::whereRef_pt_id($id)->get();
 
 		/* get patient specimen */
-		$patient_specimen = Specimen::where('ref_pt_id', '=', $id)
-		->whereNull('deleted_at')
-		->get()->keyBy('specimen_type_id');
+		$patient_specimen = Specimen::whereRef_pt_id($id)->get()->keyBy('specimen_type_id');
 
 		$specimen_rs = collect();
 		$rs = $specimen->each(function($item, $key) use ($specimen_rs, $patient_specimen) {
@@ -473,34 +454,34 @@ class PatientsController extends BoeFrsController
 		$specimen_rs->all();
 
 		/* get patient lab result */
-		$patient_lab = Lab::where('ref_patient_id', $id)
-			->whereNull('deleted_at')
-			->get();
-		$patient_lab = $patient_lab->toArray();
+		$patient_lab = Lab::whereRef_patient_id($id)->get()->toArray();
 
 		/* *** set data to array *** */
+		$ref_user = User::find($patient[0]->ref_user_id)->toArray();
+
 		/* user full name */
-		$utn_key = auth()->user()->title_name;
+		$utn_key = $ref_user['title_name'];
 		if ($utn_key == 6) {
-			$utn = auth()->user()->title_name_other;
+			$utn = $ref_user['title_name_other'];
 		} else {
 			$utn = $titleName[$utn_key]->title_name;
 		}
-		$uFullName = $utn.auth()->user()->name." ".auth()->user()->lastname;
+
+		$uFullName = $utn.$ref_user['name']." ".$ref_user['lastname'];
 		$data['user_fullname'] = $uFullName;
 
 		/* user office */
-		$user_office = parent::hospitalByCode(auth()->user()->hospcode);
+		$user_office = parent::hospitalByCode($ref_user['hospcode']);
 		$uOffice = $user_office[0]->hosp_name;
 		$data['user_office'] = $uOffice;
 
 		/* user province */
-		$uProvince = $provinces[auth()->user()->province]->province_name;
+		$uProvince = $provinces[$ref_user['province']]->province_name;
 		$data['user_province'] = $uProvince;
 
 		/* user phone/fax */
-		$data['user_phone'] = auth()->user()->phone;
-		$data['user_fax'] = auth()->user()->fax;
+		$data['user_phone'] = $ref_user['phone'];
+		$data['user_fax'] = $ref_user['fax'];
 
 		/* patient data */
 		$data['patient_id'] = $patient[0]->id;
@@ -608,41 +589,21 @@ class PatientsController extends BoeFrsController
 		$data['patient_first_diag'] = $clinical[0]->first_diag;
 		$data['patient_specimen'] = $specimen_rs;
 
-		//dd($patient_lab);
-		return view('patients.show',
-			[
+		return view('patients.show', [
 				'symptoms' => $symptoms,
 				'specimen' => $specimen,
 				'pathogen' => $pathogen,
-				/*'specimen_data' => $specimen_data,*/
 				'patient_lab' => $patient_lab,
 				'data' => $data
 			]
 		);
 	}
 
-	/**
-	* Display a listing of the resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
-	public function index(Request $request) {
-		return $this->create($request);
-	}
-
 	public function editPatient(Request $request) {
 		return 'Comming soon !!';
 	}
 
-	/**
-	* Store a newly created resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @return \Illuminate\Http\Response
-	*/
-	public function store(Request $request) {
-		//$input = $request->all();
-	}
+	public function store(Request $request) {}
 
 	public function storePatient($data) {
 		try {
@@ -653,41 +614,6 @@ class PatientsController extends BoeFrsController
 			return $e->getMessage();
 		}
 	}
-
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-	/**
-	* Update the specified resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @param  int  $id
-	* @return \Illuminate\Http\Response
-	*/
-	public function update(Request $request, $id) {
-		$input = $request->all();
-	}
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 
 	public function districtFetch(Request $request) {
 		$coll = parent::districtByProv($request->id);
@@ -708,5 +634,4 @@ class PatientsController extends BoeFrsController
 		}
 		return $htm;
 	}
-
 }

@@ -60,7 +60,7 @@ input[type=text], input[type=password] {
 					<div class="d-md-flex align-items-center" style="border-bottom:1px solid #EAEAEA">
 						<div>
 							<h4 class="card-title">ลงทะเบียนผู้ใช้งานระบบ</h4>
-							<h5 class="card-subtitle">Flu Right Size</h5>
+							<h5 class="card-subtitle">Flu Right Site</h5>
 						</div>
 					</div>
 					<div class="my-4">

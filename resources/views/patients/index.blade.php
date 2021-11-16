@@ -4,54 +4,21 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
 <style>
-label {
-	font-weight: 600;
-	color: #000 !important;
-}
-.page-wrapper {
-	background-color: #ffffff !important;
-}
-input:-moz-read-only { /* For Firefox */
-	background-color: #fafafa !important;
-}
-input:read-only {
-	background-color: #fafafa !important;
-}
-.frmCode {
-	font-family: 'Fira-code', tahoma !important;
-}
-.select-custom select option {
-	padding: 18px!important;
-}
-.font-fira {
-	font-family: 'Fira-code' !important;
-}
-.input-group .bootstrap-select.form-control {
-	z-index: 0;
-}
-button {
-	cursor: pointer;
-}
-.has-error input[type="text"], .has-error input[type="email"], .has-error select {
-	border: 1px solid #a94442;
-}
-ul.err-msg {
-	list-style-type: none;
-	padding: 0;
-}
-ul.err-msg li {
-	margin-left: 20px;
-}
-ul.err-msg li > i {
-	padding-right: 8px;
-}
-.span-80 {
-	width: 80px !important;
-	display: inline-block;
-}
-.child-box {
-	margin: 5px 0;
-}
+label {font-weight: 600;color: #000 !important;}
+.page-wrapper {background-color: #ffffff !important;}
+input:-moz-read-only {background-color: #fafafa !important;}
+input:read-only {background-color: #fafafa !important;}
+.frmCode {font-family: 'Fira-code', tahoma !important;}
+.select-custom select option {padding: 18px!important;}
+.font-fira {font-family: 'Fira-code' !important;}
+.input-group .bootstrap-select.form-control {z-index: 0;}
+button {cursor: pointer;}
+.has-error input[type="text"], .has-error input[type="email"], .has-error select {border: 1px solid #a94442;}
+ul.err-msg {list-style-type: none;padding: 0;}
+ul.err-msg li {margin-left: 20px;}
+ul.err-msg li > i {padding-right: 8px;}
+.span-80 {width: 80px !important;display: inline-block;}
+.child-box {margin: 5px 0;}
 </style>
 @endsection
 @section('meta-token')
@@ -77,16 +44,12 @@ ul.err-msg li > i {
 	@if(Session::has('success'))
 		<div class="alert alert-success">
 			<i class="fas fa-check-circle"></i> {{ Session::get('success') }}
-			@php
-				Session::forget('success');
-			@endphp
+			@php Session::forget('success'); @endphp
 		</div>
 	@elseif(Session::has('error'))
 		<div class="alert alert-danger">
 			<i class="fas fa-times-circle"></i> {{ Session::get('error') }}
-			@php
-				Session::forget('error');
-			@endphp
+			@php Session::forget('error'); @endphp
 		</div>
 	@endif
 	@if (count($errors) > 0)
@@ -131,6 +94,7 @@ ul.err-msg li > i {
 						<div class="border-top">
 							<div class="card-body">
 								<button type="submit" class="btn btn-info">บันทึกข้อมูล</button>
+								<a href="{{ route('code.index') }}" class="btn btn-primary">ปิดหน้านี้</a>
 							</div>
 						</div>
 					</form>
@@ -154,7 +118,6 @@ $(document).ready(function() {
 		echo "alertMessage(500, 'ko', 'nok');";
 	}
 	@endphp
-
 	/* title name */
 	$('#title_name_input').change(function() {
 		var id = $('#title_name_input').val();
@@ -166,7 +129,6 @@ $(document).ready(function() {
 			$('#other_title_name_input').prop('disabled', true);
 		}
 	});
-
 	/* date of birth */
 	$('#cls_date_of_birth').click(function() {
 		$('#date_of_birth').val("");
@@ -174,14 +136,12 @@ $(document).ready(function() {
 		$('#age_month_input').val("0");
 		$('#age_day_input').val("0");
 	});
-
 	$('#date_of_birth').datepicker({
 		format: 'dd/mm/yyyy',
 		todayHighlight: true,
 		todayBtn: true,
 		autoclose: true
 	});
-
 	/* sick date input */
 	$('#cls_sick_date').click(function() {
 		$('#sick_date').val("");
@@ -192,7 +152,6 @@ $(document).ready(function() {
 		todayBtn: true,
 		autoclose: true
 	});
-
 	/* treat date input */
 	$('#cls_treat_date').click(function() {
 		$('#treat_date').val("");
@@ -203,7 +162,6 @@ $(document).ready(function() {
 		todayBtn: true,
 		autoclose: true
 	});
-
 	/* admit date input */
 	$('#cls_admit_date').click(function() {
 		$('#admit_date').val("");
@@ -214,7 +172,6 @@ $(document).ready(function() {
 		todayBtn: true,
 		autoclose: true
 	});
-
 	/* xray date input */
 	$('#cls_lung_date').click(function() {
 		$('#xRayDate').val("");
@@ -225,7 +182,6 @@ $(document).ready(function() {
 		todayBtn: true,
 		autoclose: true
 	});
-
 	/* xray check */
 	$('input.lungXray').on('change', function() {
 		$('input.lungXray').not(this).prop('checked', false);
@@ -237,7 +193,6 @@ $(document).ready(function() {
 			$('#xRayRs').prop('disabled', true);
 		}
 	});
-
 	/* cbc date input */
 	$('#cls_cbc_date').click(function() {
 		$('#cbcDateInput').val("");
@@ -248,7 +203,6 @@ $(document).ready(function() {
 		todayBtn: true,
 		autoclose: true
 	});
-
 	/* influ vaccine date input */
 	$('#cls_influVaccineDate').click(function() {
 		$('#influVaccineDate').val("");
@@ -259,7 +213,6 @@ $(document).ready(function() {
 		todayBtn: true,
 		autoclose: true
 	});
-
 	/* medicine date input */
 	$('#cls_medicineDate').click(function() {
 		$('#medicineDate').val("");
@@ -270,7 +223,6 @@ $(document).ready(function() {
 		todayBtn: true,
 		autoclose: true
 	});
-
 	/* calc age year */
 	$('#date_of_birth').datepicker().on('changeDate', function(e){
 		var
@@ -288,26 +240,6 @@ $(document).ready(function() {
 			$('#age_month_input').val(Math.floor(months));
 			$('#age_day_input').val(Math.floor(days));
 	});
-
-	/* calc new date of birth */
-	/*
-	$("#calc_new_age").on('click', function(e) {
-		e.preventDefault();
-		var inputYear = $('#age_year_input').val();
-		var input_month = $('#age_month_input').val();
-		var input_day = $('#age_day_input').val();
-
-		var today = new Date();
-		var curYear = (today.getFullYear()-1);
-		var bornYear = (curYear-inputYear);
-
-		var date = bornYear + '-' + input_month + '-' + input_day;
-		var date = new Date(bornYear + '-' + input_month + '-' + input_day);
-		var now = ((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000);
-		$("#date_of_birth").datepicker().datepicker("setDate", new Date(new_year, input_month, input_day));
-	});
-	*/
-
 	/* nationallity */
 	$('#select_nationality').change(function() {
 		var id = $('#select_nationality').val();
@@ -318,7 +250,6 @@ $(document).ready(function() {
 			$('#other_nationality_input').prop('disabled', true);
 		}
 	});
-
 	/* district */
 	$('#select_province').change(function() {
 		if ($(this).val() != '') {
@@ -338,7 +269,6 @@ $(document).ready(function() {
 			});
 		}
 	});
-
 	/* sub district */
 	$('#select_district').change(function() {
 		if ($(this).val() != '') {
@@ -358,7 +288,6 @@ $(document).ready(function() {
 			});
 		}
 	});
-
 	/* select occupation */
 	$('#select_occupation').change(function() {
 		var id = $('#select_occupation').val();
@@ -369,13 +298,10 @@ $(document).ready(function() {
 			$('#occupation_other_input').prop('disabled', true);
 		}
 	});
-
 	/* patient type */
 	$('.pt-type').click(function() {
 		$('.pt-type').not(this).prop('checked', false);
 	});
-
-
 	@php
 	/* symptoms */
 	$symptoms->each(function ($item, $key) {
@@ -410,7 +336,6 @@ $(document).ready(function() {
 			});
 		\n";
 	});
-
 	/* specimen table && checkbox */
 	foreach ($specimen_data as $key => $val) {
 		echo "
@@ -422,7 +347,6 @@ $(document).ready(function() {
 				}
 			}
 		\n";
-
 		echo "
 		$('.specimen-chk-".$val['sp_id']."').click(function() {
 			$('.specimen-chk-".$val['sp_id']."').not(this).prop('checked', false);
@@ -435,7 +359,6 @@ $(document).ready(function() {
 			} else {
 				$('#specimen_tr".$val['sp_id']."').removeClass('highlight');
 			}";
-
 			if ($val['sp_other_field'] == 'Yes') {
 				echo "
 					if ($('#specimen_chk_".$val['sp_id']."').prop('checked') == true) {
@@ -469,7 +392,6 @@ $(document).ready(function() {
 			});";
 	}
 	@endphp
-
 	/* influ Rapid test */
 	$('.influRapid').on('change', function() {
 		$('.influRapid').not(this).prop('checked', false);
@@ -480,7 +402,6 @@ $(document).ready(function() {
 			$('#influRapidTestName').prop('disabled', true);
 		}
 	});
-
 	/* influ Rapid test Result => Nagative */
 	$('#rapidTestNagative').on('change', function() {
 		if ($("#rapidTestNagative").prop("checked")) {
@@ -488,21 +409,18 @@ $(document).ready(function() {
 			$("#rapidTestPositiveFluB").prop('checked', false);
 		}
 	});
-
 	/* influ Rapid test Result => FluA */
 	$('#rapidTestPositiveFluA').on('change', function() {
 		if ($("#rapidTestPositiveFluA").prop("checked")) {
 			$("#rapidTestNagative").prop('checked', false);
 		}
 	});
-
 	/* influ Rapid test Result => FluB */
 	$('#rapidTestPositiveFluB').on('change', function() {
 		if ($("#rapidTestPositiveFluB").prop("checked")) {
 			$("#rapidTestNagative").prop('checked', false);
 		}
 	});
-
 	/* influ Vaccine */
 	$('.influVaccineRc').on('change', function() {
 		$('.influVaccineRc').not(this).prop('checked', false);
@@ -513,7 +431,6 @@ $(document).ready(function() {
 			$('#influVaccineDate').prop('disabled', true);
 		}
 	});
-
 	/* influ Rapid Result */
 	$('input.virusMedic').on('change', function() {
 		$('input.virusMedic').not(this).prop('checked', false);
@@ -527,7 +444,6 @@ $(document).ready(function() {
 			$('#medicineDate').prop('disabled', true);
 		}
 	});
-
 	/* chekc health tbl hightlight */
 	@php
 	for ($i=1; $i<=14; $i++) {
@@ -541,7 +457,6 @@ $(document).ready(function() {
 		}\n";
 	}
 	@endphp
-
 	/* health checkbox */
 	$('.health-1').click(function() {
 		$('.health-1').not(this).prop('checked', false);
@@ -561,7 +476,6 @@ $(document).ready(function() {
 			$('#pregnant_age_week').prop('disabled', true);
 		}
 	});
-
 	$('.health-2').click(function() {
 		$('.health-2').not(this).prop('checked', false);
 		let number = $('.health-2').filter(':checked').length;
@@ -574,7 +488,6 @@ $(document).ready(function() {
 			$('#health_table_tr2').removeClass('highlight');
 		}
 	});
-
 	$('.health-3').click(function() {
 		$('.health-3').not(this).prop('checked', false);
 		let number = $('.health-3').filter(':checked').length;
@@ -596,7 +509,6 @@ $(document).ready(function() {
 			$('#fat-weight-input').prop('disabled', true);
 		}
 	});
-
 	$('.health-4').click(function() {
 		$('.health-4').not(this).prop('checked', false);
 		let number = $('.health-4').filter(':checked').length;
@@ -609,7 +521,6 @@ $(document).ready(function() {
 			$('#health_table_tr4').removeClass('highlight');
 		}
 	});
-
 	$('.health-5').click(function() {
 		$('.health-5').not(this).prop('checked', false);
 		let number = $('.health-5').filter(':checked').length;
@@ -628,7 +539,6 @@ $(document).ready(function() {
 			$('#immune_specify').prop('disabled', true);
 		}
 	});
-
 	$('.health-6').click(function() {
 		$('.health-6').not(this).prop('checked', false);
 		let number = $('.health-6').filter(':checked').length;
@@ -647,7 +557,6 @@ $(document).ready(function() {
 			$('#preterm-infant-week').prop('disabled', true);
 		}
 	});
-
 	$('.health-7').click(function() {
 		$('.health-7').not(this).prop('checked', false);
 		let number = $('.health-7').filter(':checked').length;
@@ -660,7 +569,6 @@ $(document).ready(function() {
 			$('#health_table_tr7').removeClass('highlight');
 		}
 	});
-
 	$('.health-8').click(function() {
 		$('.health-8').not(this).prop('checked', false);
 		let number = $('.health-8').filter(':checked').length;
@@ -673,7 +581,6 @@ $(document).ready(function() {
 			$('#health_table_tr8').removeClass('highlight');
 		}
 	});
-
 	$('.health-9').click(function() {
 		$('.health-9').not(this).prop('checked', false);
 		let number = $('.health-9').filter(':checked').length;
@@ -686,7 +593,6 @@ $(document).ready(function() {
 			$('#health_table_tr9').removeClass('highlight');
 		}
 	});
-
 	$('.health-10').click(function() {
 		$('.health-10').not(this).prop('checked', false);
 		let number = $('.health-10').filter(':checked').length;
@@ -699,7 +605,6 @@ $(document).ready(function() {
 			$('#health_table_tr10').removeClass('highlight');
 		}
 	});
-
 	$('.health-11').click(function() {
 		$('.health-11').not(this).prop('checked', false);
 		let number = $('.health-11').filter(':checked').length;
@@ -712,7 +617,6 @@ $(document).ready(function() {
 			$('#health_table_tr11').removeClass('highlight');
 		}
 	});
-
 	$('.health-12').click(function() {
 		$('.health-12').not(this).prop('checked', false);
 		let number = $('.health-12').filter(':checked').length;
@@ -725,7 +629,6 @@ $(document).ready(function() {
 			$('#health_table_tr12').removeClass('highlight');
 		}
 	});
-
 	$('.health-13').click(function() {
 		$('.health-13').not(this).prop('checked', false);
 		let number = $('.health-13').filter(':checked').length;
@@ -744,7 +647,6 @@ $(document).ready(function() {
 			$('#cancer-input').prop('disabled', true);
 		}
 	});
-
 	$('.health-14').click(function() {
 		$('.health-14').not(this).prop('checked', false);
 		let number = $('.health-14').filter(':checked').length;
@@ -763,7 +665,6 @@ $(document).ready(function() {
 			$('#other-disease-input').prop('disabled', true);
 		}
 	});
-
 	/* chekc risk-history tbl hightlight */
 	@php
 	for ($i=1; $i<=9; $i++) {
@@ -777,7 +678,6 @@ $(document).ready(function() {
 		}\n";
 	}
 	@endphp
-
 	/* risk-history */
 	$('.risk-1').click(function() {
 		$('.risk-1').not(this).prop('checked', false);
@@ -791,7 +691,6 @@ $(document).ready(function() {
 			$('#risk_table_tr1').removeClass('highlight');
 		}
 	});
-
 	$('.risk-2').click(function() {
 		$('.risk-2').not(this).prop('checked', false);
 		let number = $('.risk-2').filter(':checked').length;
@@ -810,7 +709,6 @@ $(document).ready(function() {
 			$('#pet_touch_name').prop('disabled', true);
 		}
 	});
-
 	$('.risk-3').click(function() {
 		$('.risk-3').not(this).prop('checked', false);
 		let number = $('.risk-3').filter(':checked').length;
@@ -823,7 +721,6 @@ $(document).ready(function() {
 			$('#risk_table_tr3').removeClass('highlight');
 		}
 	});
-
 	$('.risk-4').click(function() {
 		$('.risk-4').not(this).prop('checked', false);
 		let number = $('.risk-4').filter(':checked').length;
@@ -842,7 +739,6 @@ $(document).ready(function() {
 			$('#stay_outbreak_input').prop('disabled', true);
 		}
 	});
-
 	$('.risk-5').click(function() {
 		$('.risk-5').not(this).prop('checked', false);
 		let number = $('.risk-5').filter(':checked').length;
@@ -855,7 +751,6 @@ $(document).ready(function() {
 			$('#risk_table_tr5').removeClass('highlight');
 		}
 	});
-
 	$('.risk-6').click(function() {
 		$('.risk-6').not(this).prop('checked', false);
 		let number = $('.risk-6').filter(':checked').length;
@@ -868,7 +763,6 @@ $(document).ready(function() {
 			$('#risk_table_tr6').removeClass('highlight');
 		}
 	});
-
 	$('.risk-7').click(function() {
 		$('.risk-7').not(this).prop('checked', false);
 		let number = $('.risk-7').filter(':checked').length;
@@ -881,7 +775,6 @@ $(document).ready(function() {
 			$('#risk_table_tr7').removeClass('highlight');
 		}
 	});
-
 	$('.risk-8').click(function() {
 		$('.risk-8').not(this).prop('checked', false);
 		let number = $('.risk-8').filter(':checked').length;
@@ -894,7 +787,6 @@ $(document).ready(function() {
 			$('#risk_table_tr8').removeClass('highlight');
 		}
 	});
-
 	$('.risk-9').click(function() {
 		$('.risk-9').not(this).prop('checked', false);
 		let number = $('.risk-9').filter(':checked').length;
@@ -913,7 +805,6 @@ $(document).ready(function() {
 			$('#other_risk_input').prop('disabled', true);
 		}
 	});
-
 	/* treatment */
 	$('.treatment-1').click(function() {
 		$('.treatment-1').not(this).prop('checked', false);
@@ -924,7 +815,6 @@ $(document).ready(function() {
 			$('#treatment_refer_at').prop('disabled', true);
 		}
 	});
-
 	/* report date input */
 	$('#report_date').datepicker({
 		format: 'dd/mm/yyyy',
@@ -968,6 +858,4 @@ function alertMessage(status, message, title) {
 	}
 }
 </script>
-
-
 @endsection

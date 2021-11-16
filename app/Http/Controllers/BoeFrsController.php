@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+//use Illuminate\Support\Str;
 use App\Symptoms;
 use App\Patients;
-use App\Hospitals;
+//use App\Hospitals;
 
 
 class BoeFrsController extends Controller implements BoeFrs
@@ -97,10 +97,15 @@ class BoeFrsController extends Controller implements BoeFrs
 	}
 
 	protected function patientAllByUserHospcode($hospcode=null) {
-		$patients = Patients::where('ref_user_hospcode', '=', $hospcode)
+		return Patients::where('ref_user_hospcode', '=', $hospcode)
 			->whereNull('deleted_at')
 			->get();
-		return $patients;
+	}
+
+	protected function patientByUserHospGroup($hospGroup=array(0), $hosp_status='new') {
+		return Patients::whereIn('ref_user_hospcode', $hospGroup)
+			->where('hosp_status', '=', $hosp_status)
+			->get();
 	}
 
 	public function provinces() {

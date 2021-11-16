@@ -2,8 +2,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+//use App\Http\Controllers\Controller;
+//use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\BoeFrsController;
 use App\User;
@@ -15,20 +15,18 @@ class UserController extends BoeFrsController
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware(['role:admin|hospital|lab|hosp-group']);
 		$this->middleware('permission:manageuser|list|create|edit|delete', ['only' => ['index','store']]);
 	}
 
 	public function index(Request $request) {
 		$data = User::orderBy('id', 'DESC')->paginate(5);
-		return view('users.index', compact('data'))
-				->with('i', ($request->input('page', 1) - 1) * 5);
+		return view('users.index', compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
 	}
 
 	public function create() {
 		$roles = Role::pluck('name', 'name')->all();
-		return view('users.create', compact('roles'))
-				->with('titleName', $this->title_name);
+		return view('users.create', compact('roles'))->with('titleName', $this->title_name);
 	}
 
 	public function store(Request $request) {
@@ -67,7 +65,6 @@ class UserController extends BoeFrsController
 		$user = User::find($id);
 		$roles = Role::pluck('name', 'name')->all();
 		$userRole = $user->roles->pluck('name', 'name')->all();
-
 		return view('users.edit', compact('user', 'roles', 'userRole'));
 	}
 

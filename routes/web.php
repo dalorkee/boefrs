@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Auth::routes();
 
 /* Home */
@@ -43,12 +42,26 @@ Route::get('/getHospByProv', '\App\Http\Controllers\Auth\RegisterController@getH
 /* Logout */
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-/* CodeGen :: Ajax request for generate lab code */
-Route::post('ajaxRequest', 'CodeController@ajaxRequestPost')->name('ajaxRequest');
-Route::get('/ajaxRequestTable', 'CodeController@ajaxRequestTable')->name('ajaxRequestTable');
+Route::group(['middleware' => ['auth']], function() {
+	/* CodeGen :: Ajax request for generate lab code */
+	Route::post('ajaxRequest', 'CodeController@ajaxRequestPost')->name('ajaxRequest');
+	Route::get('/ajaxRequestTable', 'CodeController@ajaxRequestTable')->name('ajaxRequestTable');
 
-/* Ajax select */
-Route::post('ajaxSelect', 'CodeController@ajaxRequestSelect')->name('ajaxSelect');
+	/* Ajax select */
+	Route::post('ajaxSelect', 'CodeController@ajaxRequestSelect')->name('ajaxSelect');
+
+	/* list data */
+	Route::get('list', 'ListDataController@listToDatatable')->name('list');
+	//Route::post('data/list', 'ListDataController@listData')->name('list-data');
+	Route::post('data/search', 'ListDataController@ajaxListData')->name('ajaxSearchData');
+	Route::post('data/patients', 'ListDataController@ajaxListDataAfterDeleted')->name('ajaxListDataAfterDel');
+
+	/* patient */
+	Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
+	Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
+	Route::get('patient/edit/{id}', 'PatientsController@editPatient')->name('editPatient');
+	Route::get('/patient/show/{id}', 'PatientsController@show')->name('viewPatient');
+});
 
 /* Ajax request hosp */
 Route::get('/ajaxGetHospByProv', 'UserController@ajaxGetHospByProv')->name('ajaxGetHospByProv');
@@ -61,8 +74,8 @@ Route::get('/refreshcaptcha', 'CaptchaController@refreshCaptcha');
 
 /* Sample Submission Form */
 Route::get('/sample-submissions-form', array(
-			'as'   => 'sample-submission.form',
-			'uses' => 'SampleSubmissionsController@Form_Sample_Submissions'
+	'as' => 'sample-submission.form',
+	'uses' => 'SampleSubmissionsController@Form_Sample_Submissions'
 ));
 
 /* delete */
@@ -72,18 +85,6 @@ Route::get('/code/delete/{id}','CodeController@destroy')->name('codeSoftDelete')
 /* fetch district, fetch sub-district */
 Route::post('province/district', 'PatientsController@districtFetch')->name('districtFetch');
 Route::post('province/district/sub-district', 'PatientsController@subDistrictFetch')->name('subDistrictFetch');
-
-/* patient */
-Route::get('/patient/create/{id}', 'PatientsController@create')->name('createPatient');
-Route::post('patient/add', 'PatientsController@addPatient')->name('addPatient');
-Route::get('patient/edit/{id}', 'PatientsController@editPatient')->name('editPatient');
-Route::get('/patient/show/{id}', 'PatientsController@show')->name('viewPatient');
-
-/* list data */
-Route::get('list', 'ListDataController@listToDatatable')->name('list');
-//Route::post('data/list', 'ListDataController@listData')->name('list-data');
-Route::post('data/search', 'ListDataController@ajaxListData')->name('ajaxSearchData');
-Route::post('data/patients', 'ListDataController@ajaxListDataAfterDeleted')->name('ajaxListDataAfterDel');
 
 /* lab data */
 Route::get('lab', 'LabController@listToDatatable')->name('lab');

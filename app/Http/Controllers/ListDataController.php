@@ -15,7 +15,7 @@ class ListDataController extends BoeFrsController
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab|dmsc']);
+		$this->middleware(['role:admin|hospital|lab|dmsc|hosp-group']);
 		$this->middleware('page_session');
 	}
 

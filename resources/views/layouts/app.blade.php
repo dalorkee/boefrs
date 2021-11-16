@@ -11,7 +11,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<!-- Favicon icon -->
 	<link rel="icon" type="image/png" sizes="16x16" href="{{ URL::asset('assets/images/small-moph-logo.png') }}">
-	<title>Flu Rigit Size</title>
+	<title>Flu Rigit Site</title>
 	<!-- Custom CSS -->
 	@yield('custom-style')
 	<style>
@@ -48,7 +48,7 @@
 					<b class="logo-icon p-l-10">
 						<img src="{{ URL::asset('assets/images/small-moph-logo.png') }}" alt="BOE" class="light-logo">
 					</b>
-					<span class="logo-text" style="display:block;font-size:1.175em;color:white;">Flu Right Size</span>
+					<span class="logo-text" style="display:block;font-size:1.175em;color:white;">Flu Right Site</span>
 				</a>
 				<!-- Toggle which is visible on mobile only -->
 				<a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

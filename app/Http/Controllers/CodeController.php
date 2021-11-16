@@ -3,57 +3,66 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BoeFrsController;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\BoeFrsController;
 use App\Code;
 use App\Clinical;
 use App\Specimen;
+use App\UserBundleHosp;
 
 class CodeController extends BoeFrsController {
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab']);
+		$this->middleware(['role:admin|hospital|lab|hosp-group']);
 		$this->middleware('page_session');
 	}
 
-	public function index(Request $request) {
-		if (!Session::has('provinces')) {
-			$provinces = BoeFrsController::provinceList();
-			Session::put('provinces', $provinces);
+	protected function index(Request $request) {
+		try {
+			if (!Session::has('provinces')) {
+				$provinces = BoeFrsController::provinceList();
+				Session::put('provinces', $provinces);
+			}
+			$specimen = parent::specimen();
+			$roleArr = auth()->user()->getRoleNames();
+			switch ($roleArr[0]) {
+				case 'admin':
+					$patients = parent::patientByAdmin('new');
+					break;
+				case 'hospital':
+					$hospital = auth()->user()->hospcode;
+					$patients = parent::patientByUserHospcode($hospital, 'new');
+					break;
+				case 'lab':
+					$hospital = auth()->user()->hospcode;
+					$patients = parent::patientByUserHospcode($hospital, 'new');
+					break;
+				case 'hosp-group':
+					$hospGroup = UserBundleHosp::select('hosp_bundle')->whereUser_id(auth()->user()->id)->get();
+					$hospGroupArr = explode(',', $hospGroup[0]->hosp_bundle);
+					$patients = parent::patientByUserHospGroup($hospGroupArr, 'new');
+					break;
+				default:
+					return redirect()->route('logout');
+					break;
+			}
+			return view('code.index', [
+					'specimen'=> $specimen,
+					'titleName' => $this->title_name,
+					'patients' => $patients
+				]
+			);
+		} catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return redirect()->route('logout');
 		}
-		$specimen = parent::specimen();
-
-		$roleArr = auth()->user()->getRoleNames();
-		switch ($roleArr[0]) {
-			case 'admin':
-				$patients = parent::patientByAdmin('new');
-				break;
-			case 'hospital':
-				$hospital = auth()->user()->hospcode;
-				$patients = parent::patientByUserHospcode($hospital, 'new');
-				break;
-			case 'lab':
-				$hospital = auth()->user()->hospcode;
-				$patients = parent::patientByUserHospcode($hospital, 'new');
-				break;
-			default:
-				return redirect()->route('logout');
-		}
-
-		return view('code.index',
-			[
-				'specimen'=> $specimen,
-				'titleName' => $this->title_name,
-				'patients' => $patients
-			]
-		);
 	}
 
 	public function ajaxRequestPost(Request $request) {
@@ -182,13 +191,23 @@ class CodeController extends BoeFrsController {
 
 	public function ajaxRequestTable() {
 		$roleArr = auth()->user()->getRoleNames();
-		if ($roleArr[0] == 'admin') {
-			$patients = parent::patientByAdmin('new');
-		} elseif ($roleArr[0] == 'hospital' || $roleArr[0] == 'lab') {
-			$user_hospcode = auth()->user()->hospcode;
-			$patients = parent::patientByUserHospcode($user_hospcode, 'new');
-		} else {
-			return redirect()->route('logout');
+		switch ($roleArr[0]) {
+			case 'admin':
+				$patients = parent::patientByAdmin('new');
+				break;
+			case 'hospital':
+			case 'lab':
+				$user_hospcode = auth()->user()->hospcode;
+				$patients = parent::patientByUserHospcode($user_hospcode, 'new');
+				break;
+			case 'hosp-group':
+				$hospGroup = UserBundleHosp::select('hosp_bundle')->whereUser_id(auth()->user()->id)->get();
+				$hospGroupArr = explode(',', $hospGroup[0]->hosp_bundle);
+				$patients = parent::patientByUserHospGroup($hospGroupArr, 'new');
+				break;
+			default:
+				return redirect()->route('logout');
+				break;
 		}
 		$htm = "
 		<table class=\"table display mT-2 mb-4\" id=\"code_table1\" role=\"table\">

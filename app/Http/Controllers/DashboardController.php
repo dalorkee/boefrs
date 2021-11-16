@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\HelperClass\Helper as CmsHelper;
 use App\RapidGraph;
 use App\MonthGraph;
-use DB;
-use App\HelperClass\Helper as CmsHelper;
 use App\Provinces;
 use App\MonthMedian;
 use App\WeekMedian;
@@ -22,7 +22,7 @@ class DashboardController extends Controller
 {
 	public function __construct() {
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab|dmsc']);
+		$this->middleware(['role:admin|hospital|lab|dmsc|hosp-group']);
 		$this->middleware('page_session');
 		$this->middleware(function ($request, $next) {
 			$this->user = Auth::user();
@@ -39,63 +39,69 @@ class DashboardController extends Controller
 		$provinces = Provinces::all()->sortBy('province_name')->keyBy('province_id')->toArray();
 		$list_year = CmsHelper::List_year();
 
+		switch ($userRole) {
+			case 'admin':
+				$case_gen_code = DB::table('first_dash')->sum('case_gen_code');
+				$case_hos_send = DB::table('first_dash')->sum('case_hos_send');
+				$case_lab_confirm = DB::table('first_dash')->sum('case_lab_confirm');
+				$case_male = DB::table('first_dash')->sum('case_male');
+				$case_female = DB::table('first_dash')->sum('case_female');
 
-		if ($userRole == 'admin') {
-			$case_gen_code = DB::table('first_dash')->sum('case_gen_code');
-			$case_hos_send = DB::table('first_dash')->sum('case_hos_send');
-			$case_lab_confirm = DB::table('first_dash')->sum('case_lab_confirm');
-			$case_male = DB::table('first_dash')->sum('case_male');
-			$case_female = DB::table('first_dash')->sum('case_female');
+				/* month graph */
+				$month_graph = MonthGraph::all();
+				$month_graph = $month_graph->keyBy('hospital')->toArray();
 
-			/* month graph */
-			$month_graph = MonthGraph::all();
-			$month_graph = $month_graph->keyBy('hospital')->toArray();
-
-			/* rapid test data for graph */
-			$rapid = RapidGraph::all();
-			$rapid = $rapid->keyBy('hospital')->toArray();
-			$rapidResult = array('flua'=>0, 'flub'=>0, 'nagative'=>0, 'unknown'=>0);
-			foreach ($rapid as $key => $value) {
-				$rapidResult['flua'] += $value['rapid_flua'];
-				$rapidResult['flub'] += $value['rapid_flub'];
-				$rapidResult['nagative'] += $value['rapid_nagative'];
-				$rapidResult['unknown'] += $value['rapid_unknow'];
-			}
-
-			$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
-			foreach ($rapid as $key => $value) {
-				$antiResult['anti_arv'] += $value['anti_arv'];
-				$antiResult['anti_osel'] += $value['anti_osel'];
-				$antiResult['anti_tamiflu'] += $value['anti_tamiflu'];
-				$antiResult['anti_unknown'] += $value['anti_unknow'];
-			}
-
-		} elseif ($userRole=='hospital' || $userRole=='lab' || $userRole == 'dmsc') {
-			$case_gen_code = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_gen_code');
-			$case_hos_send = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_hos_send');
-			$case_lab_confirm = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_lab_confirm');
-			$case_male = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_male');
-			$case_female = DB::table('first_dash')->where('hospital',$hospcode)->sum('case_female');
-
-			/* rapid test data for graph */
-			$rapid = RapidGraph::where('hospital', '=', $hospcode)->get();
-			if (count($rapid) > 0) {
+				/* rapid test data for graph */
+				$rapid = RapidGraph::all();
 				$rapid = $rapid->keyBy('hospital')->toArray();
-				$rapidResult['flua'] = $rapid[$hospcode]['rapid_flua'];
-				$rapidResult['flub'] = $rapid[$hospcode]['rapid_flub'];
-				$rapidResult['nagative'] = $rapid[$hospcode]['rapid_nagative'];
-				$rapidResult['unknown'] = $rapid[$hospcode]['rapid_unknow'];
+				$rapidResult = array('flua'=>0, 'flub'=>0, 'nagative'=>0, 'unknown'=>0);
+				foreach ($rapid as $key => $value) {
+					$rapidResult['flua'] += $value['rapid_flua'];
+					$rapidResult['flub'] += $value['rapid_flub'];
+					$rapidResult['nagative'] += $value['rapid_nagative'];
+					$rapidResult['unknown'] += $value['rapid_unknow'];
+				}
 
-				/* anti */
-				$antiResult['anti_arv'] = $rapid[$hospcode]['anti_arv'];
-				$antiResult['anti_osel'] = $rapid[$hospcode]['anti_osel'];
-				$antiResult['anti_tamiflu'] = $rapid[$hospcode]['anti_tamiflu'];
-				$antiResult['anti_unknown'] = $rapid[$hospcode]['anti_unknow'];
-			} else {
-				$rapidResult = array('flua' => 0, 'flub' => 0, 'nagative' => 0, 'unknown' => 0);
 				$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
-			}
+				foreach ($rapid as $key => $value) {
+					$antiResult['anti_arv'] += $value['anti_arv'];
+					$antiResult['anti_osel'] += $value['anti_osel'];
+					$antiResult['anti_tamiflu'] += $value['anti_tamiflu'];
+					$antiResult['anti_unknown'] += $value['anti_unknow'];
+				}
+				break;
+			case 'hospital':
+			case 'lab':
+			case 'dmsc':
+			case 'hosp-group':
+				$case_gen_code = DB::table('first_dash')->where('hospital', $hospcode)->sum('case_gen_code');
+				$case_hos_send = DB::table('first_dash')->where('hospital', $hospcode)->sum('case_hos_send');
+				$case_lab_confirm = DB::table('first_dash')->where('hospital', $hospcode)->sum('case_lab_confirm');
+				$case_male = DB::table('first_dash')->where('hospital', $hospcode)->sum('case_male');
+				$case_female = DB::table('first_dash')->where('hospital', $hospcode)->sum('case_female');
 
+				/* rapid test data for graph */
+				$rapid = RapidGraph::where('hospital', '=', $hospcode)->get();
+				if (count($rapid) > 0) {
+					$rapid = $rapid->keyBy('hospital')->toArray();
+					$rapidResult['flua'] = $rapid[$hospcode]['rapid_flua'];
+					$rapidResult['flub'] = $rapid[$hospcode]['rapid_flub'];
+					$rapidResult['nagative'] = $rapid[$hospcode]['rapid_nagative'];
+					$rapidResult['unknown'] = $rapid[$hospcode]['rapid_unknow'];
+
+					/* anti */
+					$antiResult['anti_arv'] = $rapid[$hospcode]['anti_arv'];
+					$antiResult['anti_osel'] = $rapid[$hospcode]['anti_osel'];
+					$antiResult['anti_tamiflu'] = $rapid[$hospcode]['anti_tamiflu'];
+					$antiResult['anti_unknown'] = $rapid[$hospcode]['anti_unknow'];
+				} else {
+					$rapidResult = array('flua' => 0, 'flub' => 0, 'nagative' => 0, 'unknown' => 0);
+					$antiResult = array('anti_arv'=>0, 'anti_osel'=>0, 'anti_tamiflu'=>0, 'anti_unknown'=>0);
+				}
+				break;
+			default:
+				return redirect()->route('logout');
+				break;
 		}
 
 		$case_all = $case_gen_code+$case_hos_send+$case_lab_confirm;

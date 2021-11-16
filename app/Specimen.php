@@ -11,7 +11,6 @@ class Specimen extends Model
 
 	protected $table = 'specimen';
 	protected $primaryKey = 'id';
-
 	protected $fillable = [
 		'ref_pt_id',
 		'specimen_type_id',

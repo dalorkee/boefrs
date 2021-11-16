@@ -5,14 +5,8 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-table/dist/bootstrap-table.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
 <style>
-input:-moz-read-only { /* For Firefox */
-	background-color: #fafafa !important;
-}
-input:read-only {
-	background-color: #fafafa !important;
-}
-
-/* inner table */
+input:-moz-read-only {background-color: #fafafa !important;}
+input:read-only {background-color: #fafafa !important;}
 .table1 {
 	width: 100%;
 	max-width: 100%;
@@ -46,9 +40,7 @@ input:read-only {
 	display: inline-block;
 	background: #F9FAFB;
 }
-.tb-callout-1 {
-	border-left-color: #FF2E96;
-}
+.tb-callout-1 {border-left-color: #FF2E96;}
 </style>
 @endsection
 @section('meta-token')
@@ -598,7 +590,7 @@ input:read-only {
 						</div><!-- card -->
 						<div class="border-top">
 							<div class="card-body">
-								<button class="btn btn-primary" onclick="window.open('', '_self', ''); window.close();">ปิดหน้านี้</button>
+								<a href="{{ route('list') }}" class="btn btn-primary">ปิดหน้านี้</a>
 							</div>
 						</div>
 					</form>
@@ -619,10 +611,7 @@ input:read-only {
 <script>
 $(document).ready(function() {
 	$.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')} });
-
-	//$(function() {
-		$('#specimen_table').bootstrapTable();
-	//})
+	$('#specimen_table').bootstrapTable();
 });
 </script>
 @endsection

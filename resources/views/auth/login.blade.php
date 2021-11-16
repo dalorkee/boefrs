@@ -7,7 +7,7 @@
 	<div class="auth-box bg-dark border-top border-secondary">
 		<div id="loginform">
 			<div class="text-center p-t-20 p-b-20">
-				<span class="db" style="display:block;font-size:1.675em;color:white;">Flu Right Size Project</span>
+				<span class="db" style="display:block;font-size:1.675em;color:white;">Flu Right Site Project</span>
 				<span class="db" style="font-size:1.375em;color:white;">DDC MOPH</span>
 			</div>
 			<!-- Form -->

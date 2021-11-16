@@ -1,6 +1,6 @@
 @extends('layouts.index')
 @section('custom-style')
-<link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 <link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.20/DataTables-1.10.20/css/jquery.dataTables.min.css') }}">
 <link rel='stylesheet' href="{{ URL::asset('assets/libs/datatables-1.10.20/Responsive-2.2.3/css/responsive.dataTables.min.css') }}">
 <link rel="stylesheet" href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
@@ -8,38 +8,17 @@
 @endsection
 @section('internal-style')
 <style type="text/css">
-.page-wrapper {
-	background: white !important;
-}
-.dataTables_wrapper {
-	width: 100% !important;
-	font-family: 'Fira-code' !important;
-}
-#code-table {
-	width: 100% !important;
-}
+.page-wrapper {background: white !important;}
+.dataTables_wrapper {width: 100% !important;font-family: 'Fira-code' !important;}
+#code-table {width: 100% !important;}
 table.dataTable tr.odd { background-color: #F6F6F6;  border:1px lightgrey;}
 table.dataTable tr.even{ background-color: white; border:1px lightgrey; }
-.error {
-	display: none;
-	margin-left: 10px;
-}
-.error_show {
-	color: red;
-	margin-left: 10px;
-}
-input.invalid, textarea.invalid {
-	border: 2px solid red;
-}
-input.valid, textarea.valid {
-	border: 2px solid green;
-}
-.toast {
-	opacity: 1 !important;
-}
-#toast-container > div {
-	opacity: 1 !important;
-}
+.error {display: none;margin-left: 10px;}
+.error_show {color: red;margin-left: 10px;}
+input.invalid, textarea.invalid {border: 2px solid red;}
+input.valid, textarea.valid {border: 2px solid green;}
+.toast {opacity: 1 !important;}
+#toast-container > div {opacity: 1 !important;}
 </style>
 @endsection
 @section('meta-token')
@@ -97,7 +76,7 @@ input.valid, textarea.valid {
 					<div class="d-md-flex align-items-center">
 						<div>
 							<h4 class="card-title">สร้างรหัสแบบฟอร์มเก็บข้อมูล</h4>
-							<h5 class="card-subtitle">ID Flu-BOE</h5>
+							<h5 class="card-subtitle">Flu-ID</h5>
 						</div>
 					</div>
 					<div class="alert" role="alert" style="border:1px solid #ccc;">

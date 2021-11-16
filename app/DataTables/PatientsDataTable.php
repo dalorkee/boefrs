@@ -1,8 +1,6 @@
 <?php
 namespace App\DataTables;
 
-use App\Patients;
-use App\User;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Fields;
@@ -11,6 +9,10 @@ use Yajra\DataTables\Services\DataTable;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Session;
+use App\Patients;
+use App\User;
+use App\UserBundleHosp;
+
 
 class PatientsDataTable extends DataTable
 {
@@ -62,13 +64,19 @@ class PatientsDataTable extends DataTable
 		$hospcode = auth()->user()->hospcode;
 		switch ($roleArr[0]) {
 			case 'admin':
-				return $model->newQuery()->orderBy('id', 'DESC');
+				return $model->newQuery();
 				break;
 			case 'hospital':
-				return $model->newQuery()->where('ref_user_hospcode', '=', $hospcode)->orderBy('id', 'DESC');
+				return $model->newQuery()->where('ref_user_hospcode', '=', $hospcode);
+				break;
+			case 'hosp-group':
+				$hospGroup = UserBundleHosp::select('hosp_bundle')->whereUser_id(auth()->user()->id)->get();
+				$hospGroupArr = explode(',', $hospGroup[0]->hosp_bundle);
+				return $model->newQuery()->whereIn('ref_user_hospcode', $hospGroupArr);
 				break;
 			default:
 				return redirect()->route('logout');
+				break;
 		}
 	}
 
