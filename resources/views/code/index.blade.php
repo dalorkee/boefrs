@@ -75,8 +75,8 @@ input.valid, textarea.valid {border: 2px solid green;}
 				<div class="card-body">
 					<div class="d-md-flex align-items-center">
 						<div>
-							<h4 class="card-title">สร้างรหัสแบบฟอร์มเก็บข้อมูล</h4>
-							<h5 class="card-subtitle">Flu-ID</h5>
+							<h4 class="card-title">สร้างแบบฟอร์มบันทึกข้อมูลใหม่</h4>
+							<h5 class="card-subtitle">Create new form</h5>
 						</div>
 					</div>
 					<div class="alert" role="alert" style="border:1px solid #ccc;">
@@ -86,7 +86,7 @@ input.valid, textarea.valid {border: 2px solid green;}
 								<div class="form-row">
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 										<div class="form-group">
-											<label for="province">จังหวัด (ผู้กรอกข้อมูล)</label>
+											<label for="province">จังหวัด <span class="text-danger">&#42;</span></label>
 											<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true" data-style="btn-danger" >
 												<option value="0">-- เลือกจังหวัด --</option>
 												@php
@@ -100,9 +100,35 @@ input.valid, textarea.valid {border: 2px solid green;}
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 										<div class="form-group">
-											<label for="hospital">โรงพยาบาล (ผู้กรอกข้อมูล)</label>
+											<label for="hospital">โรงพยาบาล <span class="text-danger">&#42;</span></label>
 											<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true" data-style="btn-danger" disabled>
 												<option value="0">-- เลือกโรงพยาบาล --</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								@endrole
+								@role('hosp-group')
+								<div class="form-row">
+									{{-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+										<div class="form-group">
+											<label for="province">จังหวัด <span class="text-danger">&#42;</span></label>
+											<select name="province" class="form-control selectpicker show-tick" id="select_province" data-live-search="true">
+												<option value="0">-- เลือกจังหวัด --</option>
+												@foreach ($hospLst as $key => $value)
+													<option value="{{ $value['prov_code'] }}">{{ $value['prov_name'] }}</option>
+												@endforeach
+											</select>
+										</div>
+									</div> --}}
+									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
+										<div class="form-group">
+											<label for="hospital">โรงพยาบาล <span class="text-danger">&#42;</span></label>
+											<select name="hospcode" class="form-control selectpicker show-tick" id="select_hospital" data-live-search="true">
+												<option value="0">-- เลือกโรงพยาบาล --</option>
+												@foreach ($hospLst as $key1 => $value1)
+													<option value="{{ $value1['hospcode'] }}">{{ $value1['hosp_name'] }}</option>
+												@endforeach
 											</select>
 										</div>
 									</div>
@@ -111,7 +137,7 @@ input.valid, textarea.valid {border: 2px solid green;}
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 									<div class="form-group">
-										<label for="titleName">คำนำหน้าชื่อ</label>
+										<label for="titleName">คำนำหน้าชื่อ <span class="text-danger">&#42;</span></label>
 										<select name="titleNameInput" class="form-control selectpicker show-tick select-title-name" id="title_name_input">
 											<option value="0">-- โปรดเลือก --</option>
 											@php
@@ -127,11 +153,11 @@ input.valid, textarea.valid {border: 2px solid green;}
 									<input type="text" name="otherTitleNameInput" class="form-control" id="other_title_name_input" placeholder="คำนำหน้าชื่ออื่นๆ" disabled>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-									<label for="firstNameInput">ชื่อจริง</label>
+									<label for="firstNameInput">ชื่อจริง <span class="text-danger">&#42;</span></label>
 									<input type="text" name="firstNameInput" class="form-control" id="first_name_input" placeholder="ชื่อ">
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-									<label for="lastNameInput">นามสกุล</label>
+									<label for="lastNameInput">นามสกุล <span class="text-danger">&#42;</span></label>
 									<input type="text" name="lastNameInput" class="form-control" id="last_name_input" placeholder="นามสกุล">
 								</div>
 							</div>
@@ -139,7 +165,7 @@ input.valid, textarea.valid {border: 2px solid green;}
 							</div>
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-									<label for="hnInput">HN</label>
+									<label for="hnInput">HN <span class="text-danger">&#42;</span></label>
 									<input type="text" name="hnInput" class="form-control" id="hn_input" placeholder="HN">
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
@@ -150,7 +176,7 @@ input.valid, textarea.valid {border: 2px solid green;}
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3 {{ $errors->has('patientType') ? 'border-danger' : '' }}">
 									<div class="form-group">
-										<label for="patient">ประเภทผู้ป่วย</label>
+										<label for="patient">ประเภทผู้ป่วย <span class="text-danger">&#42;</span></label>
 										<div>
 											<div class="custom-control custom-checkbox custom-control-inline">
 												<input type="checkbox" name="patientType" value="opd" @if (old('patientType') == 'opd') checked @endif class="custom-control-input pt-type" id="opdCheckbox">
@@ -172,7 +198,7 @@ input.valid, textarea.valid {border: 2px solid green;}
 							<!-- specimen -->
 							<div class="form-row">
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
-									<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
+									<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ <span class="text-danger">&#42;</span></label>
 									<div class="table-responsive">
 										<table class="table" id="specimen_table">
 											<thead class="bg-custom-1 text-light">
@@ -393,7 +419,7 @@ $(document).ready(function() {
 					$('#select_hospital').selectpicker("refresh");
 				},
 				error: function(xhr, status, error) {
-					alertMessage(xhr.status, error, 'Flu Right Size');
+					alertMessage(xhr.status, error, 'Flu Right Site');
 				}
 			});
 		} else {
@@ -426,7 +452,7 @@ $(document).ready(function() {
 			$('#btn_delete".$value->id."').click(function(e) {
 				toastr.warning(
 					'Are you sure to delete? <br><br><button class=\"btn btn-cyan btc\" value=\"0\">Cancel</button> <button class=\"btn btn-danger btk\" value=\"".$value->id."\">Delete</button>',
-					'Flu Right Size',
+					'Flu Right Site',
 					{
 						'closeButton': true,
 						'positionClass': 'toast-top-center',
@@ -505,7 +531,7 @@ $(document).ready(function() {
 			data: input,
 			success: function(data) {
 				if (data.status == 204) {
-					toastr.warning(data.msg, "Flu Right Size",
+					toastr.warning(data.msg, "Flu Right Site",
 						{
 							"closeButton": true,
 							"positionClass": "toast-top-center",
@@ -524,7 +550,7 @@ $(document).ready(function() {
 							$("#select_hospital").val('0').selectpicker("refresh");
 							$("#title_name_input").val('0').selectpicker("refresh");
 							$('#patient_form').find('input:text').val('');
-							toastr.success(data.msg, "Flu Right Size",
+							toastr.success(data.msg, "Flu Right Site",
 								{
 									"closeButton": true,
 									"positionClass": "toast-top-center",
@@ -539,7 +565,7 @@ $(document).ready(function() {
 							$("#select_hospital").val('0').selectpicker("refresh");
 							$("#title_name_input").val('0').selectpicker("refresh");
 							$('#patient_form').find('input:text').val('');
-							toastr.error(jqXhr.status + " " + textStatus + " " + errorMessage, " Flu Right Size",
+							toastr.error(jqXhr.status + " " + textStatus + " " + errorMessage, " Flu Right Site",
 								{
 									"closeButton": true,
 									"positionClass": "toast-top-center",
@@ -559,7 +585,7 @@ $(document).ready(function() {
 				$("#select_hospital").val('0').selectpicker("refresh");
 				$("#title_name_input").val('0').selectpicker("refresh");
 				$('#patient_form').find('input:text').val('');
-				toastr.error(data.status + " " + status + " " + error, " Flu Right Size",
+				toastr.error(data.status + " " + status + " " + error, " Flu Right Site",
 					{
 						"closeButton": true,
 						"positionClass": "toast-top-center",
@@ -627,7 +653,7 @@ function alertMessage(status, message, title) {
 		toastr.success(message, title,
 			{
 				'closeButton': true,
-				'positionClass': 'toast-top-center',
+				'positionClass': 'toast-top-right',
 				'progressBar': true,
 				'showDuration': '600'
 			}
@@ -636,7 +662,7 @@ function alertMessage(status, message, title) {
 		toastr.warning(message, title,
 			{
 				'closeButton': true,
-				'positionClass': 'toast-top-center',
+				'positionClass': 'toast-top-right',
 				'progressBar': true,
 				'showDuration': '800'
 			}
@@ -645,15 +671,13 @@ function alertMessage(status, message, title) {
 		toastr.error(message, title,
 			{
 				'closeButton': true,
-				'positionClass': 'toast-top-center',
+				'positionClass': 'toast-top-right',
 				'progressBar': true,
 				'showDuration': '800'
 			}
 		);
 	}
 }
-function cleartoasts() {
-	toastr.clear();
-}
+function cleartoasts() {toastr.clear();}
 </script>
 @endsection

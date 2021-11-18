@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\DB;
 //use Illuminate\Support\Str;
 use App\Symptoms;
 use App\Patients;
-//use App\Hospitals;
-
+use App\Hospitals;
 
 class BoeFrsController extends Controller implements BoeFrs
 {
@@ -42,11 +41,10 @@ class BoeFrsController extends Controller implements BoeFrs
 	public function patientsById($id=0) {
 		return DB::connection('mysql')
 			->table('patients')
-			->where([
-				['id', '=', $id]
-			])
+			->where([['id', '=', $id]])
 			->whereNull('deleted_at')
-			->orderBy('id', 'desc')->get();
+			->orderBy('id', 'desc')
+			->get();
 	}
 
 	public function patientByField($field=null, $value=null) {
@@ -102,10 +100,16 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
-	protected function patientByUserHospGroup($hospGroup=array(0), $hosp_status='new') {
-		return Patients::whereIn('ref_user_hospcode', $hospGroup)
-			->where('hosp_status', '=', $hosp_status)
-			->get();
+	protected function patientByUserHospGroup($hospGroup=array(0), $hosp_status='new'): object {
+		return Patients::whereIn('ref_user_hospcode', $hospGroup)->whereHosp_status($hosp_status)->get();
+	}
+
+	protected function listHospByGroup($hospGroup=array()): array {
+		return Hospitals::select('hospcode', 'hosp_name')->whereIn('hospcode', $hospGroup)->get()->toArray();
+	}
+
+	protected function getProvCodeByHospCode($hospcode='0'): array {
+		return Hospitals::select('prov_code')->whereHospcode($hospcode)->get()->toArray();
 	}
 
 	public function provinces() {
@@ -174,46 +178,30 @@ class BoeFrsController extends Controller implements BoeFrs
 			->get();
 	}
 
-	public function hospitals() {
-		return DB::connection('mysql')
-			->table('hospitals')
+	public function hospitals(): object {
+		return Hospitals::orderBy('id', 'asc')->limit(100)->get();
+	}
+
+	public function hospitalByActive(): object {
+		return Hospitals::whereBoefrs_active(1)
 			->orderBy('id', 'asc')
 			->limit(100)
 			->get();
 	}
 
-	public function hospitalByActive() {
-		return DB::connection('mysql')
-			->table('hospitals')
-			->where('boefrs_active', '=', 1)
-			->orderBy('id', 'asc')
-			->limit(100)
-			->get();
-	}
-
-	public function hospitalByProv($prov_code=0) {
-		return DB::connection('mysql')
-			->table('hospitals')
-			->where('prov_code', '=', $prov_code)
+	public function hospitalByProv($prov_code=0): object {
+		return Hospitals::whereProv_code($prov_code)
 			->whereIn('hosp_type_code', ['05', '06', '07', '10', '11'])
 			->orderBy('id', 'asc')
 			->get();
 	}
 
-	public function hospitalByCode($hosp_code=0) {
-		return DB::connection('mysql')
-			->table('hospitals')
-			->where('hospcode', '=', $hosp_code)
-			->limit(1)
-			->get();
+	public function hospitalByCode($hosp_code=0): object {
+		return Hospitals::whereHospcode($hosp_code)->limit(1)->get();
 	}
 
-	public function hospitalByBoeFrsActive() {
-		return DB::connection('mysql')
-			->table('hospitals')
-			->where('boefrs_active', '=', '1')
-			->orderBy('hosp_name', 'asc')
-			->get();
+	public function hospitalByBoeFrsActive(): object {
+		return Hospitals::whereBoefrs_active('1')->orderBy('hosp_name', 'asc')->get();
 	}
 
 	public function nationality() {

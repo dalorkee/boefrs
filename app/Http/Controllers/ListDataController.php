@@ -23,7 +23,6 @@ class ListDataController extends BoeFrsController
 		return $dataTable->render('list-data.list');
 	}
 
-
 	public function index() {
 		$roleArr = auth()->user()->getRoleNames();
 		switch ($roleArr[0]) {

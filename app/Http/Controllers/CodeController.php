@@ -22,6 +22,7 @@ class CodeController extends BoeFrsController {
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab|hosp-group']);
 		$this->middleware('page_session');
+		$hospLst = null;
 	}
 
 	protected function index(Request $request) {
@@ -47,6 +48,7 @@ class CodeController extends BoeFrsController {
 				case 'hosp-group':
 					$hospGroup = UserBundleHosp::select('hosp_bundle')->whereUser_id(auth()->user()->id)->get();
 					$hospGroupArr = explode(',', $hospGroup[0]->hosp_bundle);
+					$this->hospLst = parent::listHospByGroup($hospGroupArr);
 					$patients = parent::patientByUserHospGroup($hospGroupArr, 'new');
 					break;
 				default:
@@ -56,7 +58,8 @@ class CodeController extends BoeFrsController {
 			return view('code.index', [
 					'specimen'=> $specimen,
 					'titleName' => $this->title_name,
-					'patients' => $patients
+					'patients' => $patients,
+					'hospLst' => $this->hospLst
 				]
 			);
 		} catch (\Exception $e) {
@@ -71,16 +74,26 @@ class CodeController extends BoeFrsController {
 				return response()->json(['status' => 204, 'msg' => 'โปรดกรอกข้อมูลให้ครบทุกช่อง']);
 			} else {
 				$roleArr = auth()->user()->getRoleNames();
-				if ($roleArr[0] == 'admin') {
-					$province = $request->province;
-					$hospcode = $request->hospcode;
-					$hospital = $request->hospcode;
-					$created_by = 'admin';
-				} else {
-					$province = auth()->user()->province;
-					$hospcode = auth()->user()->hospcode;
-					$hospital = auth()->user()->hospcode;
-					$created_by = 'user';
+				switch ($roleArr[0]) {
+					case 'admin':
+						$province = $request->province;
+						$hospcode = $request->hospcode;
+						$hospital = $request->hospcode;
+						$created_by = 'admin';
+						break;
+					case 'hosp-group':
+						$prov_arr = parent::getProvCodeByHospCode($request->hospcode);
+						$province = $prov_arr[0]['prov_code'];
+						$hospcode = $request->hospcode;
+						$hospital = $request->hospcode;
+						$created_by = 'user-group';
+						break;
+					default:
+						$province = auth()->user()->province;
+						$hospcode = auth()->user()->hospcode;
+						$hospital = auth()->user()->hospcode;
+						$created_by = 'user';
+						break;
 				}
 
 				/* get defalut specimen data */

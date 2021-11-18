@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/libs/toastr/build/toastr.min.css') }}">
 <style>
-label {font-weight: 600;color: #000 !important;}
+/* label {font-weight: 600;color: #000000 !important;} */
 .page-wrapper {background-color: #ffffff !important;}
 input:-moz-read-only {background-color: #fafafa !important;}
 input:read-only {background-color: #fafafa !important;}
@@ -814,7 +814,14 @@ $(document).ready(function() {
 			$('#treatment_refer_at').val('');
 			$('#treatment_refer_at').prop('disabled', true);
 		}
+		if ($('#treatment_other').prop('checked') == true) {
+			$('#treatment_other_txt').prop('disabled', false);
+		} else {
+			$('#treatment_other_txt').val('');
+			$('#treatment_other_txt').prop('disabled', true);
+		}
 	});
+
 	/* report date input */
 	$('#report_date').datepicker({
 		format: 'dd/mm/yyyy',

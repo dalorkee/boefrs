@@ -306,6 +306,7 @@ class PatientsController extends BoeFrsController
 			$clinical->other_risk_specify = $request->otherRiskInputSpecify;
 			$clinical->result_cli = $request->resultCliInput;
 			$clinical->result_cli_refer = $request->resultCliReferInput;
+			$clinical->result_cli_other = $request->resultOtherCliInput;
 			$clinical->reported_at = parent::convertDateToMySQL($request->reportDateInput);
 			//$clinical->ref_user_id = $request->userIdInput;
 

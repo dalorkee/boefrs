@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Rap2hpoutre\FastExcel\FastExcel;
 use App\Exports\LogExport;
 use App\Patients;
 use App\TitleName;
@@ -20,15 +21,17 @@ use App\District;
 use App\SubDistrict;
 use App\Occupation;
 use App\RefSpecimen;
-use Rap2hpoutre\FastExcel\FastExcel;
+use App\Traits\UserGroup;
 use Carbon\Carbon;
 
 class ExportsController extends BoeFrsController
 {
+	use UserGroup;
+
 	public function __construct() {
 		parent::__construct();
 		$this->middleware('auth');
-		$this->middleware(['role:admin|hospital|lab|dmsc']);
+		$this->middleware(['role:admin|hospital|lab|dmsc|hosp-group']);
 		$this->middleware('page_session');
 	}
 
@@ -128,6 +131,10 @@ class ExportsController extends BoeFrsController
 					break;
 				case 'dmsc':
 					$total = Patients::whereRaw("(DATE(created_at) BETWEEN '".$start_date."' AND '".$end_date."')")->count();
+					break;
+				case 'hosp-group':
+					$hospGroupArr = $this->getUserHospcodeToArr($user);
+					$total = Patients::whereRaw("(DATE(created_at) BETWEEN '".$start_date."' AND '".$end_date."')")->whereIn('hospital', $hospGroupArr)->count();
 					break;
 				default:
 					return redirect()->route('logout');
@@ -537,6 +544,18 @@ class ExportsController extends BoeFrsController
 				case 'dmsc':
 					foreach (Patients::select($fields)
 						->whereRaw("(DATE(patients.created_at) BETWEEN '".$start_date."' AND '".$end_date."')")
+						->leftJoin('hospitals', 'patients.hospital', '=', 'hospitals.hospcode')
+						->leftJoin('clinical', 'patients.id', '=', 'clinical.ref_pt_id')
+						->leftJoin('specimen', 'patients.id', '=', 'specimen.ref_pt_id')
+						->cursor() as $data) {
+							yield $data;
+					}
+					break;
+				case 'hosp-group':
+					$hospGroupArr = $this->getUserHospcodeToArr($user);
+					foreach (Patients::select($fields)
+						->whereRaw("(DATE(patients.created_at) BETWEEN '".$start_date."' AND '".$end_date."')")
+						->whereIn('hospital', $hospGroupArr)
 						->leftJoin('hospitals', 'patients.hospital', '=', 'hospitals.hospcode')
 						->leftJoin('clinical', 'patients.id', '=', 'clinical.ref_pt_id')
 						->leftJoin('specimen', 'patients.id', '=', 'specimen.ref_pt_id')

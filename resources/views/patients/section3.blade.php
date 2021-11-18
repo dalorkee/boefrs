@@ -1,11 +1,11 @@
 <div class="card">
 	<div class="card-body">
-		<h1>3. ประวัติเสี่ยง</h1>
+		<h1 class="text-info">3. ประวัติเสี่ยง</h1>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
 				<div class="table-responsive">
 					<table class="table">
-						<thead class="bg-warning text-light">
+						<thead class="bg-primary text-light">
 							<tr>
 								<th scope="col">รายการ</th>
 								<th scope="col">#</th>
@@ -185,7 +185,7 @@
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-				<label for="treatment">ผลการรักษา</label>
+				<label for="treatment" class="text-info">ผลการรักษา</label>
 				<div>
 					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="resultCliInput" value="cured" @if ($clinical['result_cli'] == 'cured' || old('resultCliInput') == 'cured') checked @endif class="custom-control-input treatment-1" id="treatment_cured">
@@ -195,10 +195,20 @@
 						<input type="checkbox" name="resultCliInput" value="treat" @if ($clinical['result_cli'] == 'treat' || old('resultCliInput') == 'treat') checked @endif class="custom-control-input treatment-1" id="treatment_treat">
 						<label for="treatment_treat" class="custom-control-label normal-label">อยู่ระหว่างการรักษา</label>
 					</div>
+				</div>
+				<div>
 					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="resultCliInput" value="refer" @if ($clinical['result_cli'] == 'refer' || old('resultCliInput') == 'refer') checked @endif class="custom-control-input treatment-1" id="treatment_refer">
 						<label for="treatment_refer" class="custom-control-label normal-label">ส่งต่อไปรักษา</label>
 					</div>
+				</div>
+				<div class="form-group pt-2 pr-2 pb-0 pl-4">
+					<label for="refer_place" class="text-info">ระบุสถานที่ส่งต่อ</label>
+					<div class="input-group">
+						<input type="text" name="resultCliReferInput" value="{{ old('resultCliReferInput') ?? $clinical['result_cli_refer'] }}" class="form-control form-control-sm ml-2" id="treatment_refer_at">
+					</div>
+				</div>
+				<div>
 					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="resultCliInput" value="dead" @if ($clinical['result_cli'] == 'dead' || old('resultCliInput') == 'dead') checked @endif class="custom-control-input treatment-1" id="treatment_dead">
 						<label for="treatment_dead" class="custom-control-label normal-label">เสียชีวิต</label>
@@ -208,15 +218,27 @@
 						<label for="treatment_unknown" class="custom-control-label normal-label">ไม่ทราบ</label>
 					</div>
 				</div>
+				<div>
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" name="resultCliInput" value="other" @if ($clinical['result_cli'] == 'other' || old('resultCliInput') == 'other') checked @endif class="custom-control-input treatment-1" id="treatment_other">
+						<label for="treatment_other" class="custom-control-label normal-label">อื่นๆ</label>
+					</div>
+					<div class="form-group pt-2 pr-2 pb-0 pl-4">
+						<label for="refer_place" class="text-info">โปรดระบุ</label>
+						<div class="input-group">
+							<input type="text" name="resultOtherCliInput" value="{{ old('resultOtherCliInput') ?? $clinical['result_cli_other'] }}" class="form-control form-control-sm ml-2" id="treatment_other_txt">
+						</div>
+					</div>
+				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+			{{-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 				<div class="form-group">
-					<label for="refer_place">กรณีส่งต่อไปรักษา โปรดระบุสถานที่ส่งต่อ</label>
+					<label for="refer_place" class="text-info">กรณีส่งต่อไปรักษา โปรดระบุสถานที่ส่งต่อ</label>
 					<div class="input-group">
 						<input type="text" name="resultCliReferInput" value="{{ old('resultCliReferInput') ?? $clinical['result_cli_refer'] }}" class="form-control form-control-sm ml-2" id="treatment_refer_at">
 					</div>
 				</div>
-			</div>
+			</div> --}}
 		</div>
 	</div><!-- card body -->
 </div><!-- card -->

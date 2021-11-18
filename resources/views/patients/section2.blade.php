@@ -4,7 +4,7 @@
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3 {{ $errors->has('patientType') ? 'border-danger' : '' }}">
 				<div class="form-group">
-					<label for="patient">ผู้ป่วย</label>
+					<label for="patient" class="text-info">2.1 ประเภทผู้ป่วย</label>
 					<div>
 						<div class="custom-control custom-checkbox custom-control-inline">
 							<input type="checkbox" name="patientType" value="opd" class="custom-control-input pt-type" id="opdCheckbox" @if (old('patientType') == 'opd' || $clinical['pt_type'] == 'opd') checked @endif>
@@ -26,7 +26,7 @@
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 				<div class="form-group">
-					<label for="date">วันที่เริ่มป่วย</label>
+					<label for="date" class="text-info">2.2 วันที่เริ่มป่วย</label>
 					<div class="input-group date">
 						<div class="input-group-append">
 							<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -41,7 +41,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 				<div class="form-group">
-					<label for="date">วันที่รักษาครั้งแรก</label>
+					<label for="date" class="text-info">2.3 วันที่รักษาครั้งแรก</label>
 					<div class="input-group date">
 						<div class="input-group-append">
 							<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -56,7 +56,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 				<div class="form-group">
-					<label for="date">วันที่นอนโรงพยาบาล</label>
+					<label for="date" class="text-info">2.4 วันที่นอนโรงพยาบาล</label>
 					<div class="input-group date">
 						<div class="input-group-append">
 							<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -70,7 +70,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 				<div class="form-group">
-					<label for="sickDateInput">อุณหภูมิร่างกายแรกรับ</label>
+					<label for="sickDateInput" class="text-info">2.5 อุณหภูมิร่างกายแรกรับ</label>
 					<div class="input-group">
 						<input type="text" name="temperatureInput" value="{{ old('temperatureInput') ?? $clinical['pt_temperature'] }}" class="form-control">
 						<div class="input-group-append">
@@ -82,7 +82,7 @@
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-				<label for="sickDateInput">อาการและอาการแสดง</label>
+				<label for="sickDateInput" class="text-info">2.6 อาการและอาการแสดง</label>
 				<div class="table-responsive">
 					<table class="table" id="symptoms_table">
 						<thead class="bg-custom-1 text-light">
@@ -129,21 +129,21 @@
 			</div>
 		</div>
 		<div class="form-row border-top pt-3">
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="firstXrayInput">เอกซเรย์ปอด (ครั้งแรก)</label>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+				<label for="firstXrayInput" class="text-info">2.7 เอกซเรย์ปอด (ครั้งแรก)</label>
 				<div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="lungXrayInput" value="n" @if ($clinical['lung'] == 'n' || old('lungXrayInput') == 'n') checked @endif class="custom-control-input lungXray" id="lungXrayNo">
 						<label for="lungXrayNo" class="custom-control-label normal-label">ไม่ได้ทำ</label>
 					</div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="lungXrayInput" value="y" @if ($clinical['lung'] == 'y' || old('lungXrayInput') == 'y') checked @endif class="custom-control-input lungXray" id="lungXrayYes">
 						<label for="lungXrayYes" class="custom-control-label normal-label">ทำ</label>
 					</div>
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl- mb-3">
-				<label for="date">ระบุวันที่</label>
+				<label for="date" class="text-info">2.8 ระบุวันที่เอกซเรย์ปอด</label>
 				<div class="input-group date">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -155,13 +155,13 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
-				<label for="xRayResult">ระบุผล</label>
+				<label for="xRayResult" class="text-info">2.9 ระบุผลเอกซเรย์ปอด</label>
 				<input type="text" name="xRayResultInput" value="{{ old('xRayResultInput') ?? $clinical['lung_result'] }}" class="form-control" id="xRayRs">
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="date">CBC (ครั้งแรก): วันที่</label>
+				<label for="date" class="text-info">2.10 CBC (ครั้งแรก): วันที่</label>
 				<div class="input-group date">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -173,7 +173,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="hbInput">ผล Hb</label>
+				<label for="hbInput" class="text-info">2.11 ผล Hb</label>
 				<div class="input-group">
 					<input type="text" name="hbInput" value="{{ old('hbInput') ?? $clinical['hb'] }}" class="form-control">
 					<div class="input-group-append">
@@ -182,7 +182,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="htcInput">Hct</label>
+				<label for="htcInput" class="text-info">2.12 Hct</label>
 				<div class="input-group">
 					<input type="text" name="htcInput" value="{{ old('htcInput') ?? $clinical['hct'] }}" class="form-control">
 					<div class="input-group-append">
@@ -191,7 +191,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="plateletCountInput">Plate count</label>
+				<label for="plateletCountInput" class="text-info">2.13 Plate count</label>
 				<div class="input-group">
 					<input type="text" name="plateletInput" value="{{ old('plateletInput') ?? $clinical['platelet_count'] }}" class="form-control">
 					<div class="input-group-append">
@@ -202,11 +202,11 @@
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="wbcInput">WBC</label>
+				<label for="wbcInput" class="text-info">2.14 WBC</label>
 				<input type="text" name="wbcInput" value="{{ old('wbcInput') ?? $clinical['wbc'] }}" class="form-control">
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="nInput">N</label>
+				<label for="nInput" class="text-info">2.15 N</label>
 				<div class="input-group">
 					<input type="text" name="nInput" value="{{ old('nInput') ?? $clinical['n'] }}" class="form-control">
 					<div class="input-group-append">
@@ -215,7 +215,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="lInput">L</label>
+				<label for="lInput" class="text-info">2.16 L</label>
 				<div class="input-group">
 					<input type="text" name="lInput" value="{{ old('lInput') ?? $clinical['l'] }}" class="form-control">
 					<div class="input-group-append">
@@ -224,7 +224,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="atypLymphInput">Atyp lymph</label>
+				<label for="atypLymphInput" class="text-info">2.17 Atyp lymph</label>
 				<div class="input-group">
 					<input type="text" name="atypLymphInput" value="{{ old('atypLymphInput') ?? $clinical['atyp_lymph'] }}" class="form-control">
 					<div class="input-group-append">
@@ -235,7 +235,7 @@
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="monoInput">Mono</label>
+				<label for="monoInput" class="text-info">2.18 Mono</label>
 				<div class="input-group">
 					<input type="text" name="monoInput" value="{{ old('monoInput') ?? $clinical['mono'] }}" class="form-control">
 					<div class="input-group-append">
@@ -244,7 +244,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="basoInput">Baso</label>
+				<label for="basoInput" class="text-info">2.19 Baso</label>
 				<div class="input-group">
 					<input type="text" name="basoInput" value="{{ old('basoInput') ?? $clinical['baso'] }}" class="form-control">
 					<div class="input-group-append">
@@ -253,7 +253,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="eoInput">Eo</label>
+				<label for="eoInput" class="text-info">2.20 Eo</label>
 				<div class="input-group">
 					<input type="text" name="eoInput" value="{{ old('eoInput') ?? $clinical['eo'] }}" class="form-control">
 					<div class="input-group-append">
@@ -262,7 +262,7 @@
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="bandInput">Band</label>
+				<label for="bandInput" class="text-info">2.21 Band</label>
 				<div class="input-group">
 					<input type="text" name="bandInput" value="{{ old('bandInput') ?? $clinical['band'] }}" class="form-control">
 					<div class="input-group-append">
@@ -273,42 +273,42 @@
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-				<label for="firstDiagnosis">การวินิจฉัยเบื้องต้น</label>
+				<label for="firstDiagnosis" class="text-info">2.22 การวินิจฉัยเบื้องต้น</label>
 				<input type="text" name="firstDiagnosisInput" value="{{ old('firstDiagnosisInput') ?? $clinical['first_diag'] }}" class="form-control" placeholder="การวินิจฉัยเบื้องต้น">
 			</div>
 		</div>
 		<div class="form-row">
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="influenzaRapid">มีการตรวจ Influenza Rapid test</label>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+				<label for="influenzaRapid" class="text-info">2.23 มีการตรวจ Influenza Rapid test</label>
 				<div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="influRapidInput" value="n" @if ($clinical['rapid_test'] == 'n' || old('influRapidInput') == 'n') checked @endif class="custom-control-input influRapid" id="influRapidUnChecked">
 						<label for="influRapidUnChecked" class="custom-control-label normal-label">ไม่ตรวจ</label>
 					</div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="influRapidInput" value="y" @if ($clinical['rapid_test'] == 'y' || old('influRapidInput') == 'y') checked @endif class="custom-control-input influRapid" id="influRaidCheckd">
 						<label for="influRaidCheckd" class="custom-control-label normal-label">ตรวจ</label>
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-				<label for="influTestName">ระบุชื่อ test</label>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+				<label for="influTestName" class="text-info">2.24 กรณีตรวจ ระบุชื่อ test</label>
 				<input type="text" name="influRapidtestName" value="{{ old('influRapidtestName') ?? $clinical['rapid_test_name'] }}" class="form-control" placeholder="ระบุชื่อ test" id="influRapidTestName" @if (empty(old('influRapidtestName')) && empty($clinical['rapid_test_name']) ) disabled @else "" @endif>
 			</div>
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-				<label for="rapidTestResult">ผล Rapid test</label>
+				<label for="rapidTestResult" class="text-info">2.25 ผล Rapid test</label>
 				<div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="rapidTestResultInput[]" value="nagative" @if((is_array(old('rapidTestResultInput')) && in_array('nagative', old('rapidTestResultInput'))) || in_array('nagative', $rapid_result)) checked @endif class="custom-control-input influRapidRs" id="rapidTestNagative">
 						<label for="rapidTestNagative" class="custom-control-label normal-label">Nagative</label>
 					</div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="rapidTestResultInput[]" value="positive-flu-a" @if((is_array(old('rapidTestResultInput')) && in_array('positive-flu-a', old('rapidTestResultInput'))) || in_array('positive-flu-a', $rapid_result)) checked @endif class="custom-control-input influRapidRs" id="rapidTestPositiveFluA">
 						<label for="rapidTestPositiveFluA" class="custom-control-label normal-label">Positive Flu A</label>
 					</div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="rapidTestResultInput[]" value="positive-flu-b" @if((is_array(old('rapidTestResultInput')) && in_array('positive-flu-b', old('rapidTestResultInput'))) || in_array('positive-flu-b', $rapid_result)) checked @endif class="custom-control-input influRapidRs" id="rapidTestPositiveFluB">
 						<label for="rapidTestPositiveFluB" class="custom-control-label normal-label">Positive Flu B</label>
 					</div>
@@ -316,6 +316,37 @@
 			</div>
 		</div>
 		<div class="form-row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+				<label for="influVaccineReceive" class="text-info">2.26 ผู้ป่วยเคยได้รับวัคซีนไข้หวัดใหญ่หรือไม่</label>
+				<div>
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" name="influVaccineInput" value="n" @if ($clinical['flu_vaccine'] == 'n'|| old('influVaccineInput') == 'n') checked @endif class="custom-control-input influVaccineRc" id="influVaccineNo">
+						<label for="influVaccineNo" class="custom-control-label normal-label">ไม่เคย</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" name="influVaccineInput" value="u" @if ($clinical['flu_vaccine'] == 'u'|| old('influVaccineInput') == 'u') checked @endif class="custom-control-input influVaccineRc" id="influVaccineUnknown">
+						<label for="influVaccineUnknown" class="custom-control-label normal-label">เคยได้รับแต่ไม่ทราบวันที่</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" name="influVaccineInput" value="y" @if ($clinical['flu_vaccine'] == 'y'|| old('influVaccineInput') == 'y') checked @endif class="custom-control-input influVaccineRc" id="influVaccineYes">
+						<label for="influVaccineYes" class="custom-control-label normal-label">เคย</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+				<label for="date" class="text-info">2.27 เคยได้รับเมื่อวันที่</label>
+				<div class="input-group date">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+					</div>
+					<input type="text" name="influVaccineDateInput" value="{{ old('influVaccineDateInput') ?? $data['flu_vaccine_date'] }}" data-provide="datepicker" class="form-control" id="influVaccineDate" readonly>
+					<div class="input-group-append">
+						<button type="button" class="input-group-text text-danger" id="cls_influVaccineDate"><i class="fas fa-times"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{-- <div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
 				<label for="influVaccineReceive">ผู้ป่วยเคยได้รับวัคซีนไข้หวัดใหญ่หรือไม่</label>
 				<div>
@@ -341,27 +372,27 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> --}}
 		<div class="form-row">
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="virusMedicine">การให้ยาต้านไวรัส</label>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+				<label for="virusMedicine" class="text-info">2.28 การให้ยาต้านไวรัส</label>
 				<div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="virusMedicineInput" value="n" @if ($clinical['antiviral'] == 'n' || old('virusMedicineInput') == 'n') checked @endif class="custom-control-input virusMedic" id="virusMedicineNo">
 						<label for="virusMedicineNo" class="custom-control-label normal-label">ไม่ให้</label>
 					</div>
-					<div class="custom-control custom-checkbox custom-control-inline">
+					<div class="custom-control custom-checkbox">
 						<input type="checkbox" name="virusMedicineInput" value="y" @if ($clinical['antiviral'] == 'y' || old('virusMedicineInput') == 'y') checked @endif class="custom-control-input virusMedic" id="virusMedicineYes">
 						<label for="virusMedicineYes" class="custom-control-label normal-label">ให้</label>
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-				<label for="medicineName">ชื่อยา</label>
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+				<label for="medicineName" class="text-info">2.29 ชื่อยา</label>
 				<input type="text" name="medicineNameInput" value="{{ old('medicineNameInput') ?? $clinical['antiviral_name']}}" class="form-control" id="medicineName" placeholder="ชื่อยา">
 			</div>
-			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-3">
-				<label for="date">วันที่เริ่มให้ยา</label>
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+				<label for="date" class="text-info">2.30 วันที่เริ่มให้ยา</label>
 				<div class="input-group date">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
@@ -375,7 +406,7 @@
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-3">
-				<label for="specimenInput">ชนิดของตัวอย่างที่ส่งตรวจ</label>
+				<label for="specimenInput" class="text-info">2.31 ชนิดของตัวอย่างที่ส่งตรวจ</label>
 				<div class="table-responsive">
 					<table class="table" id="specimen_table">
 						<thead class="bg-danger text-light">
@@ -429,7 +460,7 @@
 		</div>
 		<div class="form-row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-				<label for="sickDateInput">ภาวะสุขภาพ หรือ โรคประจำตัว</label>
+				<label for="sickDateInput" class="text-info">2.32 ภาวะสุขภาพ หรือ โรคประจำตัว</label>
 				<div class="table-responsive">
 					<table class="table" id="health_table">
 						<thead class="bg-info text-light">

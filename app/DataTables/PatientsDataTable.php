@@ -12,18 +12,22 @@ use Illuminate\Support\Facades\Session;
 use App\Patients;
 use App\User;
 use App\UserBundleHosp;
-
+use App\Hospitals;
 
 class PatientsDataTable extends DataTable
 {
 	public function dataTable($query) {
+		$hospitals = array();
+		Hospitals::select('hospcode', 'hosp_name')->whereBoefrs_active(1)->get()->each(function($value, $key) use (&$hospitals) {
+			$hospitals[$value->hospcode] = $value->hosp_name;
+		});
 		return datatables()
 		->eloquent($query)
 		->editColumn('lab_code', function($code) {
 			return '<span class="font-1">'.$code->lab_code.'</span>';
 		})
-		->editColumn('hospital', function($hosp) {
-			return $hosp->hospital ?? '-';
+		->editColumn('hospital', function($hosp) use ($hospitals) {
+			return $hospitals[$hosp->hospital] ?? '-';
 		})
 		->editColumn('hosp_status', function($hosp_s) {
 			switch ($hosp_s->hosp_status) {
@@ -72,7 +76,7 @@ class PatientsDataTable extends DataTable
 			case 'hosp-group':
 				$hospGroup = UserBundleHosp::select('hosp_bundle')->whereUser_id(auth()->user()->id)->get();
 				$hospGroupArr = explode(',', $hospGroup[0]->hosp_bundle);
-				return $model->newQuery()->whereIn('ref_user_hospcode', $hospGroupArr);
+				return $model->newQuery()->whereIn('hospital', $hospGroupArr);
 				break;
 			default:
 				return redirect()->route('logout');
@@ -107,7 +111,7 @@ class PatientsDataTable extends DataTable
 			Column::make('first_name')->title('ชื่อ'),
 			Column::make('last_name')->title('นามสกุล'),
 			Column::make('hn')->title('HN'),
-			Column::make('hospital')->title('รหัส รพ.'),
+			Column::make('hospital')->title('โรงพยาบาล'),
 			Column::make('hosp_status')->title('สถานะ รพ.'),
 			Column::make('lab_status')->title('สถานะ แลป'),
 			Column::make('created_at')->title('วันที่'),

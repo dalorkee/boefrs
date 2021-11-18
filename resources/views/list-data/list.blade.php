@@ -114,10 +114,12 @@ $(document).ready(function() {
 					window.open(eurl, '_self');
 					break;
 				case 'upload':
-						break;
+					alert('ยังไม่เปิดใช้ Feature นี้');
+					break;
 				case 'delete':
-				//		$('#fid').val(id);
-				//		$('.delete-context').modal('show');
+					alert('ยังไม่เปิดใช้ Feature นี้');
+				//	$('#fid').val(id);
+				//	$('.delete-context').modal('show');
 					break;
 				default:
 					break;
