@@ -22,7 +22,6 @@ class CodeController extends BoeFrsController {
 		$this->middleware('auth');
 		$this->middleware(['role:admin|hospital|lab|hosp-group']);
 		$this->middleware('page_session');
-		$hospLst = null;
 	}
 
 	protected function index(Request $request) {

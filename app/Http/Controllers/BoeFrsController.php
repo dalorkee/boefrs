@@ -14,11 +14,13 @@ class BoeFrsController extends Controller implements BoeFrs
 {
 	public $result;
 	public $title_name;
+	public $hospLst;
 
 	public function __construct() {
 		$titleName = $this->titleName();
 		$this->title_name = $titleName->keyBy('id');
 		$this->result = null;
+		$this->hospLst = null;
 	}
 
 	public function titleName() {
