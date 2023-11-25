@@ -132,13 +132,16 @@ class InitialController extends Controller
 
 		for($i=1; $i<=12; $i++){
 			$result1 = MonthMedian::selectRaw('year_result,month_result,sum(totals) AS totals')
-			->whereBetween('year_result',[$year_back_3,$year_last_med])
-			->where('month_result',str_pad($i,2,"0",STR_PAD_LEFT))
-			->groupBy('year_result','month_result')
-			->orderBy('totals','ASC')
-			->limit(1,1)
+			->whereBetween('year_result', [$year_back_3, $year_last_med])
+			->where('month_result', str_pad($i, 2, "0", STR_PAD_LEFT))
+			->groupBy('year_result', 'month_result')
+			->orderBy('totals', 'ASC')
+			->limit(1, 1)
 			->first();
-			$data_three_year_median[] = array("label" => $arr_month[str_pad($i,2,"0",STR_PAD_LEFT)],"y" => $result1['totals']);
+			$data_three_year_median[] = array(
+				"label" => $arr_month[str_pad($i, 2, "0", STR_PAD_LEFT)],
+				"y" => $result1['totals'] ?? 0
+			);
 		}
 
 		for($i=1; $i<=12; $i++){
@@ -149,7 +152,7 @@ class InitialController extends Controller
 			->orderBy('totals','ASC')
 			->first();
 
-			$arr_now_year_median[] = $result2;
+			$arr_now_year_median[] = $result2 ?? 0;
 		}
 
 		foreach($arr_now_year_median as $val){
@@ -226,14 +229,17 @@ class InitialController extends Controller
 
 		for($i=1; $i<=52; $i++){
 			$result3 = WeekMedian::selectRaw('week_result,year_result,sum(totals) AS totals')
-			->whereBetween('year_result',[$year_back_3,$year_last_med])
-			->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
-			->groupBy('year_result','week_result')
-			->orderBy('totals','ASC')
-			->limit(1,1)
+			->whereBetween('year_result', [$year_back_3,$year_last_med])
+			->where("week_result", "=", str_pad($i,2,"0",STR_PAD_LEFT))
+			->groupBy('year_result', 'week_result')
+			->orderBy('totals', 'ASC')
+			->limit(1, 1)
 			->first();
 
-			$data_week_median[] = array("label" => $arr_week[str_pad($i,2,"0",STR_PAD_LEFT)],"y" => $result3['totals']);
+			$data_week_median[] = array(
+				"label" => $arr_week[str_pad($i, 2, "0", STR_PAD_LEFT)],
+				"y" => $result3['totals'] ?? 0
+			);
 		}
 
 
@@ -245,7 +251,7 @@ class InitialController extends Controller
 			->orderBy('totals','ASC')
 			->first();
 
-			$arr_now_week_median[] = $result4;
+			$arr_now_week_median[] = $result4 ?? 0;
 		}
 
 		foreach($arr_now_week_median as $val){

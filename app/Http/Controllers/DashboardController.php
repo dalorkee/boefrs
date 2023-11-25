@@ -184,23 +184,26 @@ class DashboardController extends Controller
 
 		for ($i=1; $i<=12; $i++) {
 			$result1 = MonthMedian::selectRaw('year_result,month_result,sum(totals) AS totals')
-			->whereBetween('year_result',[$year_back_3,$year_last_med])
-			->where('month_result',str_pad($i,2,"0",STR_PAD_LEFT))
-			->groupBy('year_result','month_result')
-			->orderBy('totals','ASC')
-			->limit(1,1)
+			->whereBetween('year_result', [$year_back_3, $year_last_med])
+			->where('month_result', str_pad($i, 2, "0", STR_PAD_LEFT))
+			->groupBy('year_result', 'month_result')
+			->orderBy('totals', 'ASC')
+			->limit(1, 1)
 			->first();
-			$data_three_year_median[] = array("label" => $arr_month[str_pad($i,2,"0",STR_PAD_LEFT)],"y" => $result1['totals']);
+			$data_three_year_median[] = array(
+				"label" => $arr_month[str_pad($i, 2, "0", STR_PAD_LEFT)],
+				"y" => $result1['totals'] ?? 0
+			);
 		}
 
 		for($i=1; $i<=12; $i++){
 			$result2 = MonthMedian::selectRaw('year_result,month_result,sum(totals) AS totals')
-			->where('year_result',$year_now)
-			->where('month_result',$i)
-			->groupBy('year_result','month_result')
-			->orderBy('totals','ASC')
+			->where('year_result', $year_now)
+			->where('month_result', $i)
+			->groupBy('year_result', 'month_result')
+			->orderBy('totals', 'ASC')
 			->first();
-			$arr_now_year_median[] = $result2;
+			$arr_now_year_median[] = $result2 ?? 0;
 		}
 
 		foreach($arr_now_year_median as $val){
@@ -277,25 +280,28 @@ class DashboardController extends Controller
 
 		for($i=1; $i<=52; $i++){
 			$result3 = WeekMedian::selectRaw('week_result,year_result,sum(totals) AS totals')
-			->whereBetween('year_result',[$year_back_3,$year_last_med])
-			->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
-			->groupBy('year_result','week_result')
-			->orderBy('totals','ASC')
-			->limit(1,1)
+			->whereBetween('year_result',[$year_back_3, $year_last_med])
+			->where("week_result", "=", str_pad($i, 2, "0", STR_PAD_LEFT))
+			->groupBy('year_result', 'week_result')
+			->orderBy('totals', 'ASC')
+			->limit(1, 1)
 			->first();
 
-			$data_week_median[] = array("label" => $arr_week[str_pad($i,2,"0",STR_PAD_LEFT)],"y" => $result3['totals']);
+			$data_week_median[] = array(
+				"label" => $arr_week[str_pad($i, 2, "0", STR_PAD_LEFT)],
+				"y" => $result3['totals'] ?? 0
+			);
 		}
 
 		for($i=1; $i<=52; $i++){
 			$result4 = WeekMedian::selectRaw('week_result,year_result,sum(totals) AS totals')
-			->where('year_result',$year_now)
-			->where("week_result" ,"=" ,str_pad($i,2,"0",STR_PAD_LEFT))
-			->groupBy('year_result','week_result')
-			->orderBy('totals','ASC')
+			->where('year_result', $year_now)
+			->where("week_result", "=", str_pad($i, 2, "0", STR_PAD_LEFT))
+			->groupBy('year_result', 'week_result')
+			->orderBy('totals', 'ASC')
 			->first();
 
-			$arr_now_week_median[] = $result4;
+			$arr_now_week_median[] = $result4 ?? 0;
 		}
 
 		foreach($arr_now_week_median as $val){
@@ -521,61 +527,61 @@ class DashboardController extends Controller
 	}
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		//
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function show($id)
+	{
+		//
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id)
+	{
+		//
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id)
+	{
+		//
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id)
+	{
+		//
+	}
 
 		public function Dashboard_Card(){
 
